@@ -91,6 +91,8 @@ The current surface includes:
 - a project-authored Tiled-compatible pixel map with generated tiles, buildings,
   agents, and interior anchors
 - agent marks, role colors, status markers, bubbles, and handoff/message edges
+- replay-derived relationship state for social runs, surfaced in Run Summary
+  and Detail without renderer-owned facts
 - a Timeline with playback, cursor jumping, and current-event selection
 - a Detail panel for the selected event and run summary
 - an Import Source panel for mock, Town day, Cognitive, Social day,
@@ -141,7 +143,8 @@ Quick path:
 8. Use Import Source -> Social day to inspect the 25-agent invitation diffusion
    fixture: a user-seeded Valentine's gathering spreads through relationships
    as canonical observation, retrieval, reflection, planning, message, and
-   attendance events.
+   attendance events. Run Summary and Detail expose replay-derived relationship
+   strength and evidence IDs from `WorldState.relationships`.
 9. Use Import Source -> Routine day to inspect the 25-agent routine scheduler
    fixture: every agent observes an intention, retrieves memory, reflects on
    schedule fit, resolves deterministic crowding conflicts, plans, acts, and

@@ -40,8 +40,9 @@ intact.
    shape for observation, memory retrieval, reflection, planning, social
    diffusion, routine scheduling, deterministic routine-conflict resolution,
    natural-language intervention, durable memory recall, agent-addressable
-   memory planning, model-planner contract parsing/quarantine, and action at
-   25-agent scale. The next Smallville-oriented runtime session should choose
+   memory planning, model-planner contract parsing/quarantine, replay-derived
+   relationship state, and action at 25-agent scale. The next
+   Smallville-oriented runtime session should choose
    exactly one of:
 
    - connect a real provider-backed LLM call behind the existing LLM planner
@@ -53,6 +54,8 @@ intact.
      that can be validated and replayed as canonical events
    - move durable memory from browser-local storage to a real world-state
      backing store
+   - promote `WorldState.relationships` into a dedicated Graph view for
+     relationship inspection, filtering, and evidence jumps
    - profile replay/rendering for 25-agent and larger cognitive/routine
      fixtures
 

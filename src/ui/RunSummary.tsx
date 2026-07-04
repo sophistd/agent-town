@@ -5,9 +5,11 @@ import {
   selectFirstBlockedEvent,
   selectFirstErrorEvent,
   selectPreviousEvent,
+  selectRelationshipCount,
   selectRunSummary,
+  selectTopRelationships,
 } from "../events/selectors";
-import type { AgentEvent, WorldState } from "../events/types";
+import type { AgentEvent, RelationshipState, WorldState } from "../events/types";
 
 type RunSummaryProps = {
   events: readonly AgentEvent[];
@@ -83,6 +85,36 @@ const disabledButtonStyle = {
   cursor: "not-allowed",
 } satisfies CSSProperties;
 
+const relationshipListStyle = {
+  display: "grid",
+  gap: "6px",
+  marginTop: "12px",
+} satisfies CSSProperties;
+
+const relationshipRowStyle = {
+  display: "grid",
+  gridTemplateColumns: "minmax(0, 1fr) auto",
+  gap: "8px",
+  alignItems: "center",
+  borderTop: "1px solid rgba(143, 170, 157, 0.16)",
+  paddingTop: "7px",
+  color: "#d8e2dc",
+  fontSize: "12px",
+  lineHeight: 1.35,
+} satisfies CSSProperties;
+
+const relationshipMetaStyle = {
+  color: "#95aaa0",
+  fontSize: "11px",
+  overflowWrap: "anywhere",
+} satisfies CSSProperties;
+
+const relationshipStrengthStyle = {
+  color: "#edf6ef",
+  fontSize: "12px",
+  fontWeight: 750,
+} satisfies CSSProperties;
+
 function ShortcutButton({
   event,
   label,
@@ -108,15 +140,46 @@ function ShortcutButton({
   );
 }
 
+function formatAgentName(worldState: WorldState, agentId: string): string {
+  return worldState.agents[agentId]?.agentName ?? agentId;
+}
+
+function RelationshipRow({
+  relationship,
+  worldState,
+}: {
+  relationship: RelationshipState;
+  worldState: WorldState;
+}) {
+  const [leftAgentId, rightAgentId] = relationship.agentIds;
+
+  return (
+    <div style={relationshipRowStyle}>
+      <div>
+        <strong>
+          {formatAgentName(worldState, leftAgentId)} / {formatAgentName(worldState, rightAgentId)}
+        </strong>
+        <div style={relationshipMetaStyle}>
+          {relationship.lastInteractionKind}; events={relationship.interactionCount}; evidence=
+          {relationship.evidenceEventIds.length}
+        </div>
+      </div>
+      <span style={relationshipStrengthStyle}>{relationship.strength}</span>
+    </div>
+  );
+}
+
 export function RunSummary({ events, onJumpToEvent, worldState }: RunSummaryProps) {
   const summary = selectRunSummary(worldState);
   const firstBlockedEvent = selectFirstBlockedEvent(events);
   const firstErrorEvent = selectFirstErrorEvent(events);
   const previousErrorContext = selectPreviousEvent(events, firstErrorEvent?.id);
+  const topRelationships = selectTopRelationships(worldState, 4);
 
   const metrics = [
     ["Events", summary.totalEvents],
     ["Agents", selectActiveAgentCount(worldState)],
+    ["Relationships", selectRelationshipCount(worldState)],
     ["Handoffs", summary.handoffCount],
     ["Tool calls", summary.toolCallCount],
     ["Memory actions", summary.memoryActionCount],
@@ -152,6 +215,16 @@ export function RunSummary({ events, onJumpToEvent, worldState }: RunSummaryProp
           label="Before error"
           onJumpToEvent={onJumpToEvent}
         />
+      </div>
+
+      <div style={relationshipListStyle} aria-label="Top relationships">
+        {topRelationships.map((relationship) => (
+          <RelationshipRow
+            key={relationship.relationshipId}
+            relationship={relationship}
+            worldState={worldState}
+          />
+        ))}
       </div>
     </section>
   );

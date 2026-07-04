@@ -42,7 +42,7 @@ runtime facts.
 | Capability | Stanford Smallville bar | Agent Town current state | Status |
 | --- | --- | --- | --- |
 | Top-down town | Small town with homes/workplaces and many agents | Original generated pixel town, stable zones, interior anchors, sprites, bubbles, edges | Partial |
-| Agent identity | Persona, routine, relationships, and memory history | Agent role/name from `AgentEvent`; cognitive/social/routine seed personas, relationship IDs, daily intentions, and routine segments now present in deterministic fixture metadata | Partial |
+| Agent identity | Persona, routine, relationships, and memory history | Agent role/name from `AgentEvent`; cognitive/social/routine seed personas, daily intentions, routine segments, and replay-derived `WorldState.relationships` now present | Partial |
 | Daily routines | Agents follow and revise believable daily schedules across places and time | `Routine day` deterministically emits six routine phases for each of 25 agents, including memory retrieval, crowding conflict resolution, action, and memory writeback | Initial |
 | Observation | Agents perceive events and environment changes | `generativeRuntime.ts` emits observation-stage `memory_write` events | Initial |
 | Memory stream | Chronological natural-language record of experiences | `MemoryRecord` stream exists inside deterministic generator; browser-persisted Memory source now recalls extracted `memory_read` / `memory_write` evidence across imported runs | Initial |
@@ -50,7 +50,7 @@ runtime facts.
 | Reflection | Higher-level synthesis from memories | Generator emits reflection-stage `thinking` events with source memory IDs | Initial |
 | Planning | Higher-level plans decomposed into actions | Generator emits planning-stage `decision` events with `planStep` and routine segment metadata | Initial |
 | Action/conversation | Agents act, talk, coordinate | Generator emits `handoff`, `message`, `tool_call`, and `done` events through the existing projection path; Social day emits 25 invitation messages | Partial |
-| Emergent social behavior | Information spreads and coordination emerges from agent interaction over time | `Social day` deterministically models a user-seeded Valentine's invitation spreading through a 25-agent relationship graph | Initial |
+| Emergent social behavior | Information spreads and coordination emerges from agent interaction over time | `Social day` deterministically models a user-seeded Valentine's invitation spreading through a 25-agent relationship graph, and replay now derives inspectable relationship state from messages, handoffs, declarations, and diffusion metadata | Initial |
 | LLM behavior generation | LLM produces observations/reflections/plans/actions | `LLM plan` builds a model-ready request, parses a model-shaped response into canonical events, and quarantines invalid output; current UI source uses a deterministic fixture and no live provider call | Initial |
 | Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, recalls it as `memory_read` events, and feeds agent-addressable planning events; not yet a server-backed world database or autonomous memory engine | Initial |
 | Many agents | Reference environment used 25 agents | `Social day` and `Routine day` fixtures use 25 agents and 150 canonical events each | Initial |
@@ -93,6 +93,12 @@ The current slice adds deterministic cognitive evidence:
   - versioned browser storage for durable memory records
 - UI sources: `Cognitive`, `Social day`, `Routine day`, `Intervention`,
   `Memory`, `Memory plan`, `LLM plan`
+- Replay-derived social projection:
+  - `WorldState.relationships`
+  - `selectRelationships`
+  - `selectTopRelationships`
+  - `selectAgentRelationships`
+  - `selectRelationshipCount`
 - Metadata stages:
   - `observation`
   - `retrieval`
@@ -194,6 +200,8 @@ This slice can pass if:
 - a model-planner contract can build a JSON request from prior events and
   durable memory records, parse a model-shaped response into canonical events,
   and quarantine invalid model output before replay
+- social relationship state is derived from canonical event evidence and remains
+  deterministic across replay
 - the existing town projection can render the run without source-specific
   renderer branches
 - docs and evidence state that full Stanford parity is still incomplete
@@ -218,6 +226,5 @@ The next meaningful move is not more labels. It is one of:
 - turn routine schedules into adapter-produced daily plans that can revise
   themselves from observation and memory evidence
 - persist the intervention memory stream beyond browser-local storage
-- add relationship state as derived projection evidence, not renderer-owned
-  state
+- promote replay-derived relationship state into a dedicated Graph view
 - profile replay/rendering for 25-agent and larger fixtures

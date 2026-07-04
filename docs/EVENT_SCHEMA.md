@@ -207,9 +207,32 @@ WorldState is the derived projection state:
 - `agents`
 - `visibleBubbles`
 - `edges`
+- `relationships`
 - `runSummary`
 - `warnings`
 - `quarantinedEvents`
+
+## Relationship State
+
+`WorldState.relationships` is derived during replay. It is not source input and
+not renderer state.
+
+The reducer creates relationship records from canonical event evidence:
+
+- `message` and `handoff` events with `targetAgentId`
+- `metadata.relationships` arrays used by deterministic social/routine fixtures
+- `metadata.socialDiffusion.heardFromAgentId`
+- `metadata.socialDiffusion.spreadsToAgentIds`
+
+Each relationship stores the stable pair of agent IDs, strength, interaction
+counts, message/handoff/declaration/diffusion counts, last evidence event, and a
+bounded list of evidence event IDs. The IDs are stable and deterministic for a
+given replay input. The UI may display this state as social proof, but Phaser,
+sprites, Tiled objects, and local UI selection must not create relationship
+facts.
+
+This makes Social day relationship evidence inspectable without introducing an
+autonomous social simulation claim.
 
 ## Boundary
 

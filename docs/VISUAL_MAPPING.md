@@ -94,6 +94,12 @@ chain as canonical `AgentEvent[]`. Relationship IDs, invite waves, source
 agents, and attendance evidence live in event metadata for inspection; the town
 canvas still only projects the replayed `WorldState`.
 
+Replay now derives `WorldState.relationships` from social metadata plus
+`message` / `handoff` targets. Run Summary and Detail may display relationship
+strength, interaction counts, and evidence event IDs, but those facts still come
+from canonical events reduced into `WorldState`. Phaser proximity, sprite
+choice, map objects, and selected UI state must not create relationships.
+
 The same module also provides the deterministic "Routine day" run. It keeps the
 same 25-agent population and emits routine phases, memory retrieval,
 deterministic crowding conflicts, plans, actions, and routine memory writeback

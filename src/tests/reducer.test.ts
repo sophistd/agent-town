@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { mockEvents } from "../events/mockEvents";
 import { mockFailureRun } from "../events/mockFailureRun";
+import { mockSmallvilleSocialRun } from "../events/generativeRuntime";
 import { mockSmallvilleDayRun } from "../events/mockSmallvilleDayRun";
 import { mockStressRun } from "../events/mockStressRun";
 import { createInitialWorldState, reduceEvent, replay } from "../events/reducer";
@@ -9,6 +10,7 @@ import { LOCATION_COORDINATES } from "../events/routing";
 import {
   selectAgentState,
   selectActiveAgentCount,
+  selectAgentRelationships,
   selectBlockedEvents,
   selectCurrentEvent,
   selectEdges,
@@ -16,8 +18,11 @@ import {
   selectFirstBlockedEvent,
   selectFirstErrorEvent,
   selectPreviousEvent,
+  selectRelationshipCount,
+  selectRelationships,
   selectRunSummary,
   selectSelectedEvent,
+  selectTopRelationships,
   selectVisibleBubbles,
 } from "../events/selectors";
 import type { AgentEvent, AgentEventType } from "../events/types";
@@ -58,6 +63,7 @@ describe("event reducer", () => {
     expect(state.runId).toBe("run-empty");
     expect(state.cursor).toBe(-1);
     expect(state.runSummary.totalEvents).toBe(0);
+    expect(state.relationships).toEqual({});
   });
 
   it("updates status, bubble, and summary for every event type", () => {
@@ -126,6 +132,61 @@ describe("event reducer", () => {
         kind: "handoff",
       },
     ]);
+    expect(selectRelationshipCount(state)).toBe(2);
+    expect(state.relationships["agent-coder__agent-planner"]).toMatchObject({
+      agentIds: ["agent-coder", "agent-planner"],
+      strength: 4,
+      interactionCount: 1,
+      messageCount: 1,
+      handoffCount: 0,
+      lastEventId: "unit-message",
+      lastInteractionKind: "message",
+    });
+    expect(state.relationships["agent-planner__agent-reviewer"]).toMatchObject({
+      agentIds: ["agent-planner", "agent-reviewer"],
+      strength: 3,
+      interactionCount: 1,
+      messageCount: 0,
+      handoffCount: 1,
+      lastEventId: "unit-handoff-2",
+      lastInteractionKind: "handoff",
+    });
+  });
+
+  it("derives relationships from metadata and social diffusion evidence", () => {
+    const event = eventOf("memory_write", {
+      id: "unit-social-evidence",
+      metadata: {
+        source: "mock",
+        relationships: ["agent-coder"],
+        socialDiffusion: {
+          heardFromAgentId: "agent-memory",
+          spreadsToAgentIds: ["agent-reviewer"],
+        },
+        tags: ["smallville-social", "relationship-proof"],
+      },
+    });
+
+    const state = reduceEvent(createInitialWorldState("run-unit"), event);
+
+    expect(selectRelationshipCount(state)).toBe(3);
+    expect(state.relationships["agent-coder__agent-planner"]).toMatchObject({
+      declaredCount: 1,
+      diffusionCount: 0,
+      lastInteractionKind: "declared",
+      strength: 1,
+      tags: ["relationship-proof", "smallville-social"],
+    });
+    expect(state.relationships["agent-memory__agent-planner"]).toMatchObject({
+      declaredCount: 0,
+      diffusionCount: 1,
+      lastInteractionKind: "diffusion",
+      strength: 2,
+    });
+    expect(state.relationships["agent-planner__agent-reviewer"]).toMatchObject({
+      diffusionCount: 1,
+      evidenceEventIds: ["unit-social-evidence"],
+    });
   });
 
   it("sorts by sequence and records an ordering warning", () => {
@@ -202,6 +263,9 @@ describe("event reducer", () => {
     expect(replay(mockSmallvilleDayRun, mockSmallvilleDayRun.length - 1)).toEqual(
       replay(mockSmallvilleDayRun, mockSmallvilleDayRun.length - 1),
     );
+    expect(replay(mockSmallvilleSocialRun, mockSmallvilleSocialRun.length - 1)).toEqual(
+      replay(mockSmallvilleSocialRun, mockSmallvilleSocialRun.length - 1),
+    );
     expect(replay(mockStressRun, mockStressRun.length - 1).runSummary.totalEvents).toBe(200);
   });
 
@@ -219,7 +283,28 @@ describe("event reducer", () => {
     });
   });
 
-  it("selects current, selected, agent, summary, bubbles, edges, blocked, and error views", () => {
+  it("projects the Social day relationship graph as replay-derived WorldState", () => {
+    const state = replay(mockSmallvilleSocialRun, mockSmallvilleSocialRun.length - 1);
+    const relationships = selectRelationships(state);
+    const topRelationships = selectTopRelationships(state, 3);
+    const isabellaRelationships = selectAgentRelationships(state, "agent-isabella");
+
+    expect(state.warnings).toHaveLength(0);
+    expect(selectRelationshipCount(state)).toBeGreaterThanOrEqual(40);
+    expect(relationships[0]?.strength).toBeGreaterThanOrEqual(relationships[1]?.strength ?? 0);
+    expect(topRelationships).toHaveLength(3);
+    expect(isabellaRelationships.length).toBeGreaterThan(0);
+    expect(
+      isabellaRelationships.some((relationship) =>
+        relationship.agentIds.includes("agent-klaus"),
+      ),
+    ).toBe(true);
+    expect(
+      relationships.every((relationship) => relationship.evidenceEventIds.length <= 12),
+    ).toBe(true);
+  });
+
+  it("selects current, selected, agent, summary, bubbles, edges, relationships, blocked, and error views", () => {
     const state = replay(mockFailureRun, mockFailureRun.length - 1);
 
     expect(selectCurrentEvent(state, mockFailureRun)?.id).toBe("failure-029");
@@ -234,6 +319,8 @@ describe("event reducer", () => {
     expect(state.quarantinedEvents).toHaveLength(0);
     expect(Object.keys(selectVisibleBubbles(state))).toHaveLength(5);
     expect(selectEdges(state)).toHaveLength(10);
+    expect(selectRelationshipCount(state)).toBeGreaterThan(0);
+    expect(selectTopRelationships(state, 2)).toHaveLength(2);
     expect(selectBlockedEvents(mockFailureRun)).toHaveLength(2);
     expect(selectErrorEvents(mockFailureRun)).toHaveLength(1);
     expect(selectActiveAgentCount(state)).toBe(5);
