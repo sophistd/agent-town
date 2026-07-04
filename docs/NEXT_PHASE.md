@@ -35,16 +35,16 @@ intact.
 
 4. Cognitive runtime hardening
 
-   The deterministic `Cognitive` and `Social day` sources now prove the event
-   shape for observation, memory retrieval, reflection, planning, social
-   diffusion, and action at 25-agent scale. The next Smallville-oriented runtime
-   session should choose exactly one of:
+   The deterministic `Cognitive`, `Social day`, and `Intervention` sources now
+   prove the event shape for observation, memory retrieval, reflection,
+   planning, social diffusion, natural-language intervention, and action at
+   25-agent scale. The next Smallville-oriented runtime session should choose
+   exactly one of:
 
    - persist memory streams across imported runs
-   - add a natural-language intervention adapter that emits canonical
-     `AgentEvent`
    - add an LLM-backed reflection/planning adapter behind the same event
      contract
+   - make intervention memory durable across browser sessions
    - profile replay/rendering for 25-agent and larger social fixtures
 
    Do not let the LLM, adapter, or renderer bypass `AgentEvent`.

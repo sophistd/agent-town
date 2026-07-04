@@ -58,11 +58,16 @@ metadata. This raises the implementation from town visual projection toward the
 Generative Agents architecture shape, but it is still not autonomous LLM-backed
 social emergence.
 
-The latest Social day continuation adds a deterministic 25-agent Valentine
+The Social day continuation adds a deterministic 25-agent Valentine
 invitation diffusion fixture. It represents intervention, social memory,
 retrieval, reflection, planning, invitation messages, and party attendance as
 150 canonical `AgentEvent` records. This closes a larger-scale social-spread
 slice, but it still does not claim unscripted or LLM-autonomous emergence.
+
+The latest Intervention continuation adds a deterministic natural-language
+intervention adapter. It lets an operator prompt become canonical
+`AgentEvent` evidence with prior-run context, but it still does not claim
+LLM-grade free-form language understanding or persistent cross-session memory.
 
 ## Implementation Decision
 
@@ -128,6 +133,8 @@ The map object layer preserves:
 - `src/game/renderAgents.ts`
 - `src/game/renderBubbles.ts`
 - `src/game/renderEdges.ts`
+- `src/adapters/interventionAdapter.ts`
+- `src/events/constants.ts`
 - `src/events/types.ts`
 - `src/events/reducer.ts`
 - `src/events/mockSmallvilleDayRun.ts`
@@ -171,6 +178,12 @@ The map object layer preserves:
 - `docs/evidence/M5/smallville-social-interaction.png`
 - `docs/evidence/M5/smallville-social-mobile.png`
 - `docs/evidence/M5/smallville-social-mobile-map.png`
+- `docs/evidence/M5/smallville-intervention-qa.json`
+- `docs/evidence/M5/smallville-intervention-pixel-check.json`
+- `docs/evidence/M5/smallville-intervention-desktop.png`
+- `docs/evidence/M5/smallville-intervention-interaction.png`
+- `docs/evidence/M5/smallville-intervention-mobile.png`
+- `docs/evidence/M5/smallville-intervention-mobile-map.png`
 
 ## Verification Commands
 
@@ -232,6 +245,34 @@ Results:
 
 - `pnpm typecheck`: passed.
 - `pnpm test`: passed, 9 files / 48 tests.
+- `pnpm build`: passed.
+- `git diff --check`: passed.
+
+Latest Intervention continuation targeted checks before final verification:
+
+```text
+pnpm typecheck
+pnpm test -- src/tests/adapters.test.ts
+```
+
+Results:
+
+- `pnpm typecheck`: passed.
+- `pnpm test -- src/tests/adapters.test.ts`: passed, 9 files / 50 tests.
+
+Latest Intervention continuation full checks after final docs/evidence edits:
+
+```text
+pnpm typecheck
+pnpm test
+pnpm build
+git diff --check
+```
+
+Results:
+
+- `pnpm typecheck`: passed.
+- `pnpm test`: passed, 9 files / 50 tests.
 - `pnpm build`: passed.
 - `git diff --check`: passed.
 
@@ -582,6 +623,109 @@ docs/evidence/M5/smallville-social-mobile.png: size=780x1688 unique_colors_64x64
 docs/evidence/M5/smallville-social-mobile-map.png: size=780x1688 unique_colors_64x64=151 nonblank=true
 ```
 
+## Intervention Browser Evidence
+
+The latest QA targeted the deterministic natural-language Intervention source.
+The flow under test was:
+
+```text
+app -> Social day prior run -> fill natural-language intervention -> Intervention source -> 8-event canonical run
+```
+
+Prompt:
+
+```text
+Move the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.
+```
+
+Browser path:
+
+- Browser plugin connected to `http://127.0.0.1:5173/`, returned page title
+  `Agent Town`, loaded `Social day`, filled the natural-language intervention
+  input, clicked the scoped `Intervention` source button, and read
+  `intervention · 8 events` from the page.
+- Browser `domSnapshot()` still failed with plugin-side error:
+  `TypeError: o.incrementalAriaSnapshot is not a function`.
+- Browser dev logs for the long-lived tab contained stale pre-existing errors
+  from earlier tab lifetime, so a fresh Playwright context was used as the
+  authoritative console-health check.
+- Regular Playwright fallback used bundled Codex runtime Playwright for clean
+  screenshot, console, asset, interaction, mobile, and pixel proof.
+- QA result JSON:
+  `docs/evidence/M5/smallville-intervention-qa.json`.
+- Pixel check JSON:
+  `docs/evidence/M5/smallville-intervention-pixel-check.json`.
+
+Screenshots:
+
+```text
+docs/evidence/M5/smallville-intervention-desktop.png
+docs/evidence/M5/smallville-intervention-interaction.png
+docs/evidence/M5/smallville-intervention-mobile.png
+docs/evidence/M5/smallville-intervention-mobile-map.png
+```
+
+Desktop 1440x960:
+
+- Page title: `Agent Town`.
+- Active source: `intervention · 8 events`.
+- Status copy: `Intervention import: 8 events accepted.`
+- Run ID starts with `run-intervention-`.
+- Town toolbar: `cursor 0`, `visible 8/8`, `balanced`, `100%`.
+- Run summary: 8 events, 2 agents, 0 handoffs, 1 tool call, 2 memory actions,
+  0 blocked, 0 errors.
+- Detail panel exposes the raw prompt, previous run id
+  `run-smallville-social-001`, prior event/memory counts, target location
+  `library_reading_nook`, and generator
+  `deterministic-intervention-adapter`.
+- Canvas count: `1`.
+- Canvas rect: about `773 x 669`.
+- Horizontal overflow: `0`.
+- Framework overlay: absent.
+- Asset HTTP responses all returned `200`:
+  - `/maps/town-v1.tiled.json`
+  - `/maps/town-v1-preview.png`
+  - `/tilesets/agent-town-v1.png`
+  - `/sprites/agent-roles-v1.png`
+  - `/sprites/buildings-v1.png`
+
+Interaction checks:
+
+- Intervention source loaded: `true`.
+- Expanded density applied: `aria-pressed=true`.
+- Zoom in changed toolbar from `100%` to `105%`.
+- Bubbles toggle changed `aria-pressed` from `true` to `false`.
+- Handoff edges toggle changed `aria-pressed` from `true` to `false`.
+- Critical filter changed visible event count to `2/8`.
+- Next changed header cursor to `2 / 8`.
+- Play changed the timeline control state to `Pause` and header status to
+  `running`.
+
+Console health:
+
+- Page errors: none in the fresh Playwright context.
+- Relevant app console errors/warnings: none in the fresh Playwright context.
+- Chromium emitted four WebGL `ReadPixels` performance warnings during
+  screenshot capture; these are recorded in the QA JSON and classified as
+  screenshot GPU warnings, not application errors.
+
+Mobile 390x844:
+
+- First mobile screenshot verifies the responsive control stack with
+  Intervention loaded.
+- Scrolled mobile map screenshot verifies the town canvas in viewport.
+- Horizontal overflow: `0`.
+- Mobile map canvas rect after scrolling: about `372 x 322`.
+
+Intervention PNG nonblank sampling:
+
+```text
+docs/evidence/M5/smallville-intervention-desktop.png: size=1440x960 unique_colors_64x64=281 nonblank=true
+docs/evidence/M5/smallville-intervention-interaction.png: size=1440x960 unique_colors_64x64=269 nonblank=true
+docs/evidence/M5/smallville-intervention-mobile.png: size=780x1688 unique_colors_64x64=128 nonblank=true
+docs/evidence/M5/smallville-intervention-mobile-map.png: size=780x1688 unique_colors_64x64=147 nonblank=true
+```
+
 ## Asset License Status
 
 - External visual assets imported: none.
@@ -628,6 +772,12 @@ license boundary.
 - Social day tests also prove every invitation message target is present in the
   sender's `relationships` metadata, so the deterministic diffusion path is
   inspectable as relationship evidence.
+- `src/adapters/interventionAdapter.ts` turns a natural-language prompt plus
+  prior run context into validated canonical `AgentEvent[]`; the UI text area
+  never becomes runtime state.
+- `src/tests/adapters.test.ts` proves empty intervention prompts quarantine,
+  accepted prompts generate 8 canonical events, prior Social day context is
+  recorded in `metadata.intervention`, and replay stays warning-free.
 - No adapter-specific logic was added to `src/game/*`.
 
 ## Notion / Linear Sync
@@ -728,11 +878,12 @@ Scope truth:
 
 - This is now an original pixel asset pipeline with generated room/interior
   anchors, a deterministic day-run fixture, a deterministic cognitive-loop
-  fixture, and a deterministic 25-agent social-diffusion fixture, but it is not
-  yet a complete Stanford Generative Agents town: there are no autonomous
-  schedules, persistent cross-session agent memories, LLM-backed
-  reflection/planning calls, many-building interior layouts, animated walking
-  cycles, live human intervention loop, rigorous social diffusion evaluation, or
+  fixture, a deterministic 25-agent social-diffusion fixture, and a
+  deterministic natural-language intervention adapter, but it is not yet a
+  complete Stanford Generative Agents town: there are no autonomous schedules,
+  persistent cross-session agent memories, LLM-backed reflection/planning calls,
+  many-building interior layouts, animated walking cycles, LLM-grade
+  intervention understanding, rigorous social diffusion evaluation, or
   full-world Tiled editing workflow.
 - The map is denser and materially closer to a Smallville-like top-down town,
   but it remains a compact prototype projection for runtime events.
@@ -749,6 +900,7 @@ Deepen the original generator rather than importing unknown art:
 - denser props and readable districts
 - persistent memory streams across imported runs
 - LLM-backed reflection/planning adapter behind the same `AgentEvent` contract
+- durable intervention memory across browser sessions
 - 25-agent cognitive fixture with routine conflicts, persistent memories, and
   evaluated social diffusion
 - optional true Phaser tilemap render path

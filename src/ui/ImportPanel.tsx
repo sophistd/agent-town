@@ -4,6 +4,7 @@ import type { AdapterQuarantinedEvent, AdapterWarning } from "../adapters/types"
 
 export type ImportSourceKind =
   | "cognitive"
+  | "intervention"
   | "jsonl"
   | "mock"
   | "smallville"
@@ -19,9 +20,11 @@ export type ImportPanelStatus = {
 type ImportPanelProps = {
   activeSource: ImportSourceKind;
   eventCount: number;
+  initialInterventionPrompt: string;
   initialJsonlInput: string;
   onConnectWebSocket: (url: string) => void;
   onDisconnectWebSocket: () => void;
+  onImportIntervention: (prompt: string) => void;
   onImportJsonl: (input: string) => void;
   onLoadCognitiveRun: () => void;
   onLoadMock: () => void;
@@ -161,9 +164,11 @@ function buttonStyleFor(source: ImportSourceKind, activeSource: ImportSourceKind
 export function ImportPanel({
   activeSource,
   eventCount,
+  initialInterventionPrompt,
   initialJsonlInput,
   onConnectWebSocket,
   onDisconnectWebSocket,
+  onImportIntervention,
   onImportJsonl,
   onLoadCognitiveRun,
   onLoadMock,
@@ -175,6 +180,7 @@ export function ImportPanel({
   warnings,
   webSocketUrl,
 }: ImportPanelProps) {
+  const [interventionPrompt, setInterventionPrompt] = useState(initialInterventionPrompt);
   const [jsonlInput, setJsonlInput] = useState(initialJsonlInput);
   const [urlInput, setUrlInput] = useState(webSocketUrl);
 
@@ -230,6 +236,14 @@ export function ImportPanel({
         </button>
         <button
           type="button"
+          style={buttonStyleFor("intervention", activeSource)}
+          onClick={() => onImportIntervention(interventionPrompt)}
+          aria-pressed={activeSource === "intervention"}
+        >
+          Intervention
+        </button>
+        <button
+          type="button"
           style={buttonStyleFor("websocket", activeSource)}
           onClick={onLoadWebSocketSample}
           aria-pressed={activeSource === "websocket"}
@@ -237,6 +251,14 @@ export function ImportPanel({
           WS sample
         </button>
       </div>
+
+      <textarea
+        style={textareaStyle}
+        value={interventionPrompt}
+        onChange={(event) => setInterventionPrompt(event.currentTarget.value)}
+        aria-label="Natural language intervention input"
+        spellCheck={true}
+      />
 
       <textarea
         style={textareaStyle}

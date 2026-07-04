@@ -58,6 +58,7 @@ export type ProjectionEdgeKind =
   | "dependency";
 
 export type AgentEventSource =
+  | "intervention"
   | "mock"
   | "jsonl"
   | "websocket"

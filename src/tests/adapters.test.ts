@@ -4,11 +4,13 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { parseNativeJsonl } from "../adapters/jsonlAdapter";
+import { parseNaturalLanguageIntervention } from "../adapters/interventionAdapter";
 import {
   connectWebSocketIngest,
   parseWebSocketMessages,
   type WebSocketLike,
 } from "../adapters/websocketAdapter";
+import { mockSmallvilleSocialRun } from "../events/generativeRuntime";
 import type { AgentEvent } from "../events/types";
 import { replay } from "../events/reducer";
 
@@ -118,6 +120,77 @@ describe("jsonl adapter", () => {
     expect(result.quarantinedEvents).toHaveLength(0);
     expect(finalState.runSummary.totalEvents).toBe(25);
     expect(finalState).toEqual(replay(result.events, result.events.length - 1));
+  });
+});
+
+describe("natural-language intervention adapter", () => {
+  it("quarantines empty intervention prompts", () => {
+    const result = parseNaturalLanguageIntervention({ prompt: "   " });
+
+    expect(result.source).toBe("intervention");
+    expect(result.events).toHaveLength(0);
+    expect(result.quarantinedEvents).toEqual([
+      expect.objectContaining({
+        code: "invalid_intervention_prompt",
+        source: "intervention",
+      }),
+    ]);
+  });
+
+  it("normalizes a user intervention into canonical AgentEvent evidence", () => {
+    const result = parseNaturalLanguageIntervention({
+      now: "2026-07-04T17:30:00.000Z",
+      previousEvents: mockSmallvilleSocialRun,
+      prompt:
+        "Move the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.",
+    });
+    const finalState = replay(result.events, result.events.length - 1);
+
+    expect(result.source).toBe("intervention");
+    expect(result.quarantinedEvents).toHaveLength(0);
+    expect(result.events).toHaveLength(8);
+    expect(result.events.map((event) => event.type)).toEqual([
+      "memory_write",
+      "memory_read",
+      "thinking",
+      "decision",
+      "message",
+      "tool_call",
+      "done",
+      "done",
+    ]);
+    expect(result.events[0]?.metadata?.source).toBe("intervention");
+    expect(result.events[0]?.metadata?.intervention).toMatchObject({
+      source: "user",
+      intentId: "memory_update",
+      previousRunId: "run-smallville-social-001",
+      previousEventCount: 150,
+      previousMemoryActionCount: 50,
+      previousAgentCount: 25,
+      targetLocation: "library",
+      targetSubLocationId: "library_reading_nook",
+      generatedBy: "deterministic-intervention-adapter",
+    });
+    expect(result.events[4]).toMatchObject({
+      type: "message",
+      targetAgentId: "agent-isabella",
+    });
+    expect(result.events[5]).toMatchObject({
+      agentId: "agent-isabella",
+      locationHint: "library",
+      metadata: expect.objectContaining({
+        subLocationId: "library_reading_nook",
+      }),
+      toolName: "apply_natural_language_intervention",
+    });
+    expect(finalState.warnings).toHaveLength(0);
+    expect(finalState.runSummary).toMatchObject({
+      totalEvents: 8,
+      memoryActionCount: 2,
+      toolCallCount: 1,
+      blockedCount: 0,
+      errorCount: 0,
+    });
   });
 });
 

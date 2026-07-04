@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-07-04T19:29:15.441Z",
+  "screenshots": [
+    {
+      "path": "docs/evidence/M5/smallville-intervention-desktop.png",
+      "width": 1440,
+      "height": 960,
+      "uniqueColors64x64": 281,
+      "nonWhiteRatio": 1,
+      "transparentRatio": 0,
+      "nonblank": true
+    },
+    {
+      "path": "docs/evidence/M5/smallville-intervention-interaction.png",
+      "width": 1440,
+      "height": 960,
+      "uniqueColors64x64": 269,
+      "nonWhiteRatio": 1,
+      "transparentRatio": 0,
+      "nonblank": true
+    },
+    {
+      "path": "docs/evidence/M5/smallville-intervention-mobile.png",
+      "width": 780,
+      "height": 1688,
+      "uniqueColors64x64": 128,
+      "nonWhiteRatio": 1,
+      "transparentRatio": 0,
+      "nonblank": true
+    },
+    {
+      "path": "docs/evidence/M5/smallville-intervention-mobile-map.png",
+      "width": 780,
+      "height": 1688,
+      "uniqueColors64x64": 147,
+      "nonWhiteRatio": 1,
+      "transparentRatio": 0,
+      "nonblank": true
+    }
+  ]
+}

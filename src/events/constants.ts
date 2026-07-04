@@ -81,6 +81,7 @@ export const PROJECTION_EDGE_KINDS = [
 ] as const satisfies readonly ProjectionEdgeKind[];
 
 export const AGENT_EVENT_SOURCES = [
+  "intervention",
   "mock",
   "jsonl",
   "websocket",

@@ -136,7 +136,7 @@ Common fields:
 | `derivedFromMemoryIds` | Memory IDs synthesized into a reflection |
 | `planStep` | Planned goal, next action, and expected projection target |
 | `relationships` | Agent IDs used by deterministic social fixtures to expose relationship graph evidence |
-| `intervention` | User-seeded social premise that became an `AgentEvent`, not renderer state |
+| `intervention` | User-seeded social premise or natural-language operator prompt that became an `AgentEvent`, not renderer state |
 | `socialDiffusion` | Object describing event id, invite wave, source agent, targets, knowledge, and attendance |
 
 These fields are projection and inspection evidence. The renderer may display
@@ -148,6 +148,13 @@ The deterministic `Social day` source uses these social metadata fields to
 model a 25-agent Valentine's invitation diffusion chain. The metadata is not a
 separate simulation state: it is evidence carried by canonical `AgentEvent`
 records and replayed into `WorldState` like any other source.
+
+The deterministic `Intervention` adapter uses the same metadata path for a live
+operator prompt. It records the raw prompt, inferred intent, prior run id,
+prior event/memory counts, target location, and generator name under
+`metadata.intervention`. That record is inspection evidence carried by the
+event stream; the UI text area and Phaser renderer do not own the intervention
+state.
 
 ## WorldState
 

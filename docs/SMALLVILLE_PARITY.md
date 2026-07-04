@@ -53,7 +53,7 @@ runtime facts.
 | LLM behavior generation | LLM produces observations/reflections/plans/actions | Not implemented; deterministic generator is a scaffold for testable event shape | Missing |
 | Persistent world/memory | Memory survives across simulation days | Not implemented beyond committed fixtures and evidence | Missing |
 | Many agents | Reference environment used 25 agents | `Social day` fixture uses 25 agents and 150 canonical events | Initial |
-| Human intervention | User can inject natural-language changes into the town | JSONL/WebSocket import paths exist, but no live natural-language intervention loop | Missing |
+| Human intervention | User can inject natural-language changes into the town | `Intervention` source turns an operator prompt into canonical observation/retrieval/reflection/planning/action/closure events with prior-run context | Initial |
 | Evaluation | Believability and ablation evidence | Local type/test/build/Playwright evidence exists; no believability evaluation | Missing |
 
 ## Current Implementation Slice
@@ -69,7 +69,10 @@ The current slice adds deterministic cognitive evidence:
   - `generateSmallvilleSocialRun`
   - `summarizeSocialDiffusion`
   - `mockSmallvilleSocialRun`
-- UI sources: `Cognitive`, `Social day`
+- `src/adapters/interventionAdapter.ts`
+  - `parseNaturalLanguageIntervention`
+  - `naturalLanguageInterventionAdapter`
+- UI sources: `Cognitive`, `Social day`, `Intervention`
 - Metadata stages:
   - `observation`
   - `retrieval`
@@ -86,6 +89,14 @@ The current slice adds deterministic cognitive evidence:
   - `socialDiffusion.heardFromAgentId`
   - `socialDiffusion.spreadsToAgentIds`
   - `socialDiffusion.attended`
+- Natural-language intervention metadata:
+  - `intervention.prompt`
+  - `intervention.intentId`
+  - `intervention.previousRunId`
+  - `intervention.previousEventCount`
+  - `intervention.previousMemoryActionCount`
+  - `intervention.targetLocation`
+  - `intervention.generatedBy`
 
 This is intentionally not a free-running agent simulation. It is a deterministic
 contract test for the cognitive evidence shape that a future LLM-backed adapter
@@ -102,6 +113,8 @@ This slice can pass if:
 - plans record their next action
 - the 25-agent social run shows the Valentine's invitation reaching every agent
   through inspectable message events
+- a natural-language intervention prompt becomes canonical events through an
+  adapter, not through renderer or UI-owned facts
 - the existing town projection can render the run without source-specific
   renderer branches
 - docs and evidence state that full Stanford parity is still incomplete
@@ -111,6 +124,7 @@ This slice cannot claim:
 - autonomous social emergence
 - persistent agent memory across sessions
 - LLM-generated behavior
+- free-form natural-language understanding beyond deterministic intent routing
 - unscripted 25-agent-scale simulation
 - final Stanford Smallville parity
 
@@ -119,9 +133,9 @@ This slice cannot claim:
 The next meaningful move is not more labels. It is one of:
 
 - persist the memory stream across imported runs
-- add a natural-language intervention adapter that becomes `AgentEvent`
 - add an LLM-backed reflection/planning adapter behind the same deterministic
   event contract
+- persist the intervention memory stream across sessions
 - add relationship state as derived projection evidence, not renderer-owned
   state
 - profile replay/rendering for 25-agent and larger fixtures

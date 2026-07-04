@@ -13,6 +13,7 @@ import {
   parseWebSocketMessages,
   type WebSocketIngestConnection,
 } from "../adapters/websocketAdapter";
+import { parseNaturalLanguageIntervention } from "../adapters/interventionAdapter";
 import {
   mockSmallvilleCognitiveRun,
   mockSmallvilleSocialRun,
@@ -58,6 +59,9 @@ const jsonlSampleEvents = mockEvents.slice(0, 3).map((event) => ({
 })) satisfies AgentEvent[];
 
 const INITIAL_JSONL_INPUT = jsonlSampleEvents.map((event) => JSON.stringify(event)).join("\n");
+
+const INITIAL_INTERVENTION_PROMPT =
+  "Move the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.";
 
 const websocketSampleMessages = [
   JSON.stringify({
@@ -322,6 +326,21 @@ export function App() {
     [applyAdapterResult, disconnectWebSocket],
   );
 
+  const importIntervention = useCallback(
+    (prompt: string) => {
+      disconnectWebSocket();
+      applyAdapterResult(
+        "intervention",
+        parseNaturalLanguageIntervention({
+          prompt,
+          previousEvents: eventsRef.current,
+        }),
+        "Intervention import",
+      );
+    },
+    [applyAdapterResult, disconnectWebSocket],
+  );
+
   const loadWebSocketSample = useCallback(() => {
     disconnectWebSocket();
     applyAdapterResult(
@@ -414,9 +433,11 @@ export function App() {
           <ImportPanel
             activeSource={activeSource}
             eventCount={events.length}
+            initialInterventionPrompt={INITIAL_INTERVENTION_PROMPT}
             initialJsonlInput={INITIAL_JSONL_INPUT}
             onConnectWebSocket={connectWebSocket}
             onDisconnectWebSocket={disconnectWebSocket}
+            onImportIntervention={importIntervention}
             onImportJsonl={importJsonl}
             onLoadCognitiveRun={loadCognitiveRun}
             onLoadMock={loadMock}

@@ -94,6 +94,13 @@ chain as canonical `AgentEvent[]`. Relationship IDs, invite waves, source
 agents, and attendance evidence live in event metadata for inspection; the town
 canvas still only projects the replayed `WorldState`.
 
+`src/adapters/interventionAdapter.ts` provides the deterministic
+natural-language "Intervention" source. It converts an operator prompt plus the
+currently loaded run summary into canonical `AgentEvent[]` before replay. The
+prompt text, inferred intent, prior run evidence, and target projection anchor
+live in event metadata; the text area and renderer do not own intervention
+facts.
+
 | Role | Default visible identity |
 | --- | --- |
 | `planner` | Planner |
