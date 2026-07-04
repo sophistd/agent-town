@@ -42,17 +42,18 @@ runtime facts.
 | Capability | Stanford Smallville bar | Agent Town current state | Status |
 | --- | --- | --- | --- |
 | Top-down town | Small town with homes/workplaces and many agents | Original generated pixel town, stable zones, interior anchors, sprites, bubbles, edges | Partial |
-| Agent identity | Persona, routine, relationships, and memory history | Agent role/name from `AgentEvent`; cognitive/social seed personas and relationship IDs now present in deterministic fixture metadata | Partial |
+| Agent identity | Persona, routine, relationships, and memory history | Agent role/name from `AgentEvent`; cognitive/social/routine seed personas, relationship IDs, daily intentions, and routine segments now present in deterministic fixture metadata | Partial |
+| Daily routines | Agents follow and revise believable daily schedules across places and time | `Routine day` deterministically emits six routine phases for each of 25 agents, including memory retrieval, crowding conflict resolution, action, and memory writeback | Initial |
 | Observation | Agents perceive events and environment changes | `generativeRuntime.ts` emits observation-stage `memory_write` events | Initial |
 | Memory stream | Chronological natural-language record of experiences | `MemoryRecord` stream exists inside deterministic generator; browser-persisted Memory source now recalls extracted `memory_read` / `memory_write` evidence across imported runs | Initial |
 | Retrieval | Dynamic memory retrieval by relevance, importance, recency | `retrieveMemories` scores fixture memory; persistent `Memory plan` now retrieves durable records per agent by relevance, importance, recency, and agent affinity | Initial |
 | Reflection | Higher-level synthesis from memories | Generator emits reflection-stage `thinking` events with source memory IDs | Initial |
-| Planning | Higher-level plans decomposed into actions | Generator emits planning-stage `decision` events with `planStep` metadata | Initial |
+| Planning | Higher-level plans decomposed into actions | Generator emits planning-stage `decision` events with `planStep` and routine segment metadata | Initial |
 | Action/conversation | Agents act, talk, coordinate | Generator emits `handoff`, `message`, `tool_call`, and `done` events through the existing projection path; Social day emits 25 invitation messages | Partial |
 | Emergent social behavior | Information spreads and coordination emerges from agent interaction over time | `Social day` deterministically models a user-seeded Valentine's invitation spreading through a 25-agent relationship graph | Initial |
 | LLM behavior generation | LLM produces observations/reflections/plans/actions | Not implemented; deterministic generator is a scaffold for testable event shape | Missing |
 | Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, recalls it as `memory_read` events, and feeds agent-addressable planning events; not yet a server-backed world database or autonomous memory engine | Initial |
-| Many agents | Reference environment used 25 agents | `Social day` fixture uses 25 agents and 150 canonical events | Initial |
+| Many agents | Reference environment used 25 agents | `Social day` and `Routine day` fixtures use 25 agents and 150 canonical events each | Initial |
 | Human intervention | User can inject natural-language changes into the town | `Intervention` source turns an operator prompt into canonical observation/retrieval/reflection/planning/action/closure events with prior-run context | Initial |
 | Evaluation | Believability and ablation evidence | Local type/test/build/Playwright evidence exists; no believability evaluation | Missing |
 
@@ -69,6 +70,9 @@ The current slice adds deterministic cognitive evidence:
   - `generateSmallvilleSocialRun`
   - `summarizeSocialDiffusion`
   - `mockSmallvilleSocialRun`
+  - `generateSmallvilleRoutineRun`
+  - `summarizeRoutineDay`
+  - `mockSmallvilleRoutineRun`
 - `src/adapters/interventionAdapter.ts`
   - `parseNaturalLanguageIntervention`
   - `naturalLanguageInterventionAdapter`
@@ -82,7 +86,8 @@ The current slice adds deterministic cognitive evidence:
   - `persistentMemoryAdapter`
 - `src/state/persistentMemoryStore.ts`
   - versioned browser storage for durable memory records
-- UI sources: `Cognitive`, `Social day`, `Intervention`, `Memory`, `Memory plan`
+- UI sources: `Cognitive`, `Social day`, `Routine day`, `Intervention`,
+  `Memory`, `Memory plan`
 - Metadata stages:
   - `observation`
   - `retrieval`
@@ -99,6 +104,24 @@ The current slice adds deterministic cognitive evidence:
   - `socialDiffusion.heardFromAgentId`
   - `socialDiffusion.spreadsToAgentIds`
   - `socialDiffusion.attended`
+- Routine metadata:
+  - `routine.dayId`
+  - `routine.phase`
+  - `routine.segmentId`
+  - `routine.startMinute`
+  - `routine.endMinute`
+  - `routine.scheduledLocation`
+  - `routine.scheduledSubLocationId`
+  - `routine.plannedActivity`
+  - `routine.intention`
+  - `routine.conflictId`
+  - `routineConflict.conflictId`
+  - `routineConflict.capacity`
+  - `routineConflict.crowdedSubLocationId`
+  - `routineConflict.involvedAgentIds`
+  - `routineConflict.shiftedToLocation`
+  - `routineConflict.shiftedToSubLocationId`
+  - `routineConflict.resolution`
 - Natural-language intervention metadata:
   - `intervention.prompt`
   - `intervention.intentId`
@@ -141,6 +164,9 @@ This slice can pass if:
 - plans record their next action
 - the 25-agent social run shows the Valentine's invitation reaching every agent
   through inspectable message events
+- the 25-agent routine run shows six routine phases per agent, 50 memory-write
+  events, 25 memory-read events, deterministic crowding conflicts, and
+  warning-free replay
 - a natural-language intervention prompt becomes canonical events through an
   adapter, not through renderer or UI-owned facts
 - memory events from imported runs persist into a versioned browser memory bank
@@ -155,6 +181,7 @@ This slice can pass if:
 This slice cannot claim:
 
 - autonomous social emergence
+- autonomous/adaptive daily scheduling
 - complete persistent agent memory across devices or server sessions
 - LLM-generated behavior
 - free-form natural-language understanding beyond deterministic intent routing
@@ -168,6 +195,8 @@ The next meaningful move is not more labels. It is one of:
 - add an LLM-backed reflection/planning adapter behind the same deterministic
   event contract
 - use agent-addressable memory retrieval inside LLM-backed planning
+- turn routine schedules into adapter-produced daily plans that can revise
+  themselves from observation and memory evidence
 - persist the intervention memory stream beyond browser-local storage
 - add relationship state as derived projection evidence, not renderer-owned
   state

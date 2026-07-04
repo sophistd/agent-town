@@ -75,6 +75,12 @@ stores versioned memory records, and recalls them as new canonical
 `memory_read` events. This is the first persistent memory slice, not a complete
 agent memory database or autonomous long-term world model.
 
+The Routine day continuation adds a deterministic 25-agent daily scheduler
+fixture. Each agent emits wake, retrieve, work, plan, act, and close phases as
+canonical events; routine crowding conflicts become blocked reflection events
+with inspectable `metadata.routineConflict`. This is schedule evidence, not a
+claim of adaptive autonomous scheduling.
+
 ## Implementation Decision
 
 Adopt an original generated asset pipeline:
@@ -200,6 +206,12 @@ The map object layer preserves:
 - `docs/evidence/M5/smallville-memory-interaction.png`
 - `docs/evidence/M5/smallville-memory-mobile.png`
 - `docs/evidence/M5/smallville-memory-mobile-map.png`
+- `docs/evidence/M5/smallville-routine-qa.json`
+- `docs/evidence/M5/smallville-routine-pixel-check.json`
+- `docs/evidence/M5/smallville-routine-desktop.png`
+- `docs/evidence/M5/smallville-routine-interaction.png`
+- `docs/evidence/M5/smallville-routine-mobile.png`
+- `docs/evidence/M5/smallville-routine-mobile-map.png`
 
 ## Verification Commands
 
@@ -319,6 +331,35 @@ Results:
 - `pnpm typecheck`: passed.
 - `pnpm test`: passed, 10 files / 55 tests.
 - `pnpm build`: passed.
+- `git diff --check`: passed.
+
+Latest Routine day continuation targeted checks before final verification:
+
+```text
+pnpm typecheck
+pnpm test -- src/tests/generative-runtime.test.ts
+```
+
+Results:
+
+- `pnpm typecheck`: passed.
+- `pnpm test -- src/tests/generative-runtime.test.ts`: passed; the repo script
+  ran all 10 files / 61 tests.
+
+Latest Routine day continuation full checks after final docs/evidence edits:
+
+```text
+pnpm typecheck
+pnpm test
+pnpm build
+git diff --check
+```
+
+Results:
+
+- `pnpm typecheck`: passed.
+- `pnpm test`: passed, 10 files / 61 tests.
+- `pnpm build`: passed with the existing Phaser/Vite large chunk warning.
 - `git diff --check`: passed.
 
 Build warning:
@@ -869,6 +910,96 @@ docs/evidence/M5/smallville-memory-mobile.png: size=780x1688 unique_colors_64x64
 docs/evidence/M5/smallville-memory-mobile-map.png: size=780x1688 unique_colors_64x64=172 nonblank=true
 ```
 
+## Routine Day Browser Evidence
+
+The latest QA targeted the deterministic 25-agent Routine day source. The flow
+under test was:
+
+```text
+app -> Routine day source -> 150 canonical routine events -> projection controls -> Timeline filter/playback checks
+```
+
+Browser path:
+
+- Local dev server started with `pnpm dev --host 127.0.0.1`; port 5173 was
+  already in use, so Vite served this run at `http://127.0.0.1:5174/`.
+- Browser plugin connected to `http://127.0.0.1:5174/`, returned page title
+  `Agent Town`, clicked `Routine day`, and read `routine · 150 events`,
+  `run-smallville-routine-001`, 25 agents, 75 memory actions, 6 blocked
+  routine-conflict events, and 0 quarantine events from the page text.
+- Browser `domSnapshot()` still failed with plugin-side error:
+  `TypeError: o.incrementalAriaSnapshot is not a function`.
+- Browser dev logs for the long-lived tab contained stale prior `localhost:5173`
+  errors, so a fresh Playwright context was used as the authoritative
+  console-health check.
+- Fresh Playwright QA result JSON:
+  `docs/evidence/M5/smallville-routine-qa.json`.
+- Pixel check JSON:
+  `docs/evidence/M5/smallville-routine-pixel-check.json`.
+
+Screenshots:
+
+```text
+docs/evidence/M5/smallville-routine-desktop.png
+docs/evidence/M5/smallville-routine-interaction.png
+docs/evidence/M5/smallville-routine-mobile.png
+docs/evidence/M5/smallville-routine-mobile-map.png
+```
+
+Desktop 1440x960:
+
+- Page title: `Agent Town`.
+- Active source: `routine · 150 events`.
+- Status copy: `Routine day run loaded.`
+- Run ID: `run-smallville-routine-001`.
+- Town toolbar: `cursor 0`, `visible 150/150`, `expanded`, `100%`.
+- Run summary: 150 events, 25 agents, 5 handoffs, 3 tool calls, 75 memory
+  actions, 6 blocked, 0 errors.
+- Detail panel exposes routine metadata including `cognitiveStage`,
+  `subLocationId`, `activity`, `routine`, `memoryKind`, `memoryId`, and
+  retrieval records.
+- Canvas count: `1`.
+- Canvas rect: visible and nonblank.
+- Horizontal overflow: `0`.
+- Asset HTTP responses for map, tileset, agent sprites, and building sprites
+  returned successfully.
+
+Interaction checks:
+
+- Routine day source loaded: `true`.
+- Expanded density applied: `aria-pressed=true`.
+- Zoom in changed the range value from `1` to `1.05`.
+- Bubbles toggle changed `aria-pressed` from `true` to `false`.
+- Handoff edges toggle changed `aria-pressed` from `true` to `false`.
+- Critical filter changed visible event count to `11/150`, matching 6 blocked
+  and 5 handoff events.
+- Next changed header cursor to `2 / 150`.
+- Play changed the header status to `running`.
+
+Console health:
+
+- Page errors: none in the fresh Playwright context.
+- Relevant app console errors/warnings: none in the fresh Playwright context.
+- Chromium WebGL screenshot-capture warnings, if emitted, are excluded from
+  relevant app issues and recorded in raw console counts.
+
+Mobile 390x844:
+
+- First mobile screenshot verifies the responsive control stack with Routine
+  day loaded.
+- Scrolled mobile map screenshot verifies the town canvas in viewport.
+- Horizontal overflow: `0`.
+- Mobile map canvas rect is visible and larger than the acceptance threshold.
+
+Routine day PNG nonblank sampling:
+
+```text
+docs/evidence/M5/smallville-routine-desktop.png: size=1440x960 sampled_unique_colors=343 non_white_ratio=1.0000 transparent_ratio=0.0000 nonblank=true
+docs/evidence/M5/smallville-routine-interaction.png: size=1440x960 sampled_unique_colors=297 non_white_ratio=1.0000 transparent_ratio=0.0000 nonblank=true
+docs/evidence/M5/smallville-routine-mobile.png: size=780x1688 sampled_unique_colors=138 non_white_ratio=1.0000 transparent_ratio=0.0000 nonblank=true
+docs/evidence/M5/smallville-routine-mobile-map.png: size=780x1688 sampled_unique_colors=170 non_white_ratio=1.0000 transparent_ratio=0.0000 nonblank=true
+```
+
 ## Asset License Status
 
 - External visual assets imported: none.
@@ -915,6 +1046,15 @@ license boundary.
 - Social day tests also prove every invitation message target is present in the
   sender's `relationships` metadata, so the deterministic diffusion path is
   inspectable as relationship evidence.
+- `generateSmallvilleRoutineRun` emits six routine phases for each of 25 agents
+  as canonical `AgentEvent` records: wake, retrieve, work, plan, act, and
+  close.
+- Routine crowding conflicts are represented as `blocked` reflection events
+  with `metadata.routineConflict`; Phaser does not infer conflicts from agent
+  sprite positions or map occupancy.
+- `summarizeRoutineDay` and `src/tests/generative-runtime.test.ts` prove the
+  Routine day run has 150 events, 25 agents, 25 actions, 25 memory reads, 50
+  memory writes, deterministic conflict evidence, and warning-free replay.
 - `src/adapters/interventionAdapter.ts` turns a natural-language prompt plus
   prior run context into validated canonical `AgentEvent[]`; the UI text area
   never becomes runtime state.
@@ -1198,12 +1338,12 @@ Scope truth:
   anchors, a deterministic day-run fixture, a deterministic cognitive-loop
   fixture, a deterministic 25-agent social-diffusion fixture, and a
   deterministic natural-language intervention adapter plus browser-local
-  durable memory recall and agent-addressable memory planning, but it is not
-  yet a complete Stanford Generative Agents town: there are no autonomous
-  schedules, server-backed world memory, LLM-backed reflection/planning calls,
-  many-building interior layouts, animated walking cycles, LLM-grade
-  intervention understanding, rigorous social diffusion evaluation, or
-  full-world Tiled editing workflow.
+  durable memory recall, agent-addressable memory planning, and a deterministic
+  25-agent routine scheduler, but it is not yet a complete Stanford Generative
+  Agents town: there are no adaptive autonomous schedules, server-backed world
+  memory, LLM-backed reflection/planning calls, many-building interior layouts,
+  animated walking cycles, LLM-grade intervention understanding, rigorous
+  social diffusion evaluation, or full-world Tiled editing workflow.
 - The map is denser and materially closer to a Smallville-like top-down town,
   but it remains a compact prototype projection for runtime events.
 - Browser frame-rate profiling is still future work.
@@ -1221,8 +1361,9 @@ Deepen the original generator rather than importing unknown art:
 - use agent-addressable persistent memory retrieval inside an LLM-backed planner
   or a server-backed world-memory store
 - durable intervention memory beyond browser-local storage
-- 25-agent cognitive fixture with routine conflicts, persistent memories, and
-  evaluated social diffusion
+- adapter-produced routine plans that revise themselves from observation,
+  memory, and intervention evidence
+- evaluated social diffusion and believability checks
 - optional true Phaser tilemap render path
 - same stable object layer IDs
 - same explicit license/rights entry before any external asset enters the repo

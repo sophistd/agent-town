@@ -94,8 +94,8 @@ The current surface includes:
 - a Timeline with playback, cursor jumping, and current-event selection
 - a Detail panel for the selected event and run summary
 - an Import Source panel for mock, Town day, Cognitive, Social day,
-  natural-language Intervention, persistent Memory, native JSONL, and
-  WebSocket-shaped input
+  Routine day, natural-language Intervention, persistent Memory, Memory plan,
+  native JSONL, and WebSocket-shaped input
 - adapter warnings and quarantine counts
 
 ## Architecture
@@ -142,21 +142,25 @@ Quick path:
    fixture: a user-seeded Valentine's gathering spreads through relationships
    as canonical observation, retrieval, reflection, planning, message, and
    attendance events.
-9. Use Import Source -> Intervention to turn a natural-language operator
+9. Use Import Source -> Routine day to inspect the 25-agent routine scheduler
+   fixture: every agent observes an intention, retrieves memory, reflects on
+   schedule fit, resolves deterministic crowding conflicts, plans, acts, and
+   writes back routine memory as canonical `AgentEvent` evidence.
+10. Use Import Source -> Intervention to turn a natural-language operator
    prompt into canonical `AgentEvent` evidence. The adapter uses the current run
    as prior context, then emits observation, retrieval, reflection, planning,
    message, action, and closure events.
-10. Use Import Source -> Memory to recall the memory stream persisted from
+11. Use Import Source -> Memory to recall the memory stream persisted from
    previous imported runs. The browser store is a source boundary; recall still
    becomes canonical `memory_read` events before projection.
-11. Use Import Source -> Memory plan to let each durable-memory agent retrieve
+12. Use Import Source -> Memory plan to let each durable-memory agent retrieve
    relevant records by agent identity, query relevance, importance, and
    recency, then emit retrieval, reflection, and planning evidence as canonical
    events.
-12. Use Detail to inspect the selected event fields.
-13. Use Import Source -> JSONL to import the native JSONL sample in the text
+13. Use Detail to inspect the selected event fields.
+14. Use Import Source -> JSONL to import the native JSONL sample in the text
    area.
-14. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
+15. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
    the same projection pipeline.
 
 Relevant screenshots and evidence:
@@ -268,13 +272,15 @@ from the event stream and derived `WorldState`.
 ## Moving Toward Smallville
 
 `docs/SMALLVILLE_PARITY.md` tracks the actual gap to Stanford Smallville-style
-generative agents. The current `Cognitive`, `Social day`, `Intervention`,
-`Memory`, and `Memory plan` sources are deterministic: they emit observation,
-memory retrieval, reflection, planning, action/conversation, social diffusion,
+generative agents. The current `Cognitive`, `Social day`, `Routine day`,
+`Intervention`, `Memory`, and `Memory plan` sources are deterministic: they emit
+observation, memory retrieval, reflection, planning, action/conversation, social
+diffusion, routine scheduling, deterministic routine-conflict resolution,
 natural-language intervention, durable memory recall, agent-addressable memory
 planning, and closure as canonical `AgentEvent` records. They are testable
 event contracts for future LLM-backed behavior, not a claim that the app
-already has autonomous social emergence or complete persistent agent cognition.
+already has autonomous social emergence, adaptive schedules, or complete
+persistent agent cognition.
 
 ## Adding An Adapter
 
@@ -324,6 +330,9 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
   `Memory plan` source can retrieve those records per agent by query relevance,
   importance, recency, and agent affinity, but it is not yet a server-backed
   world database or full autonomous memory engine.
+- Routine scheduling is currently deterministic fixture evidence. The app can
+  show routine phases and crowding-resolution events for 25 agents, but it is
+  not yet an adaptive autonomous scheduler.
 - The graph and memory views are represented through current projection data,
   detail, summary, edges, persistent memory recall, and memory events; separate
   dedicated tabs are future work.

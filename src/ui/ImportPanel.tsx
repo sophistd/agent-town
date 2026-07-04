@@ -9,6 +9,7 @@ export type ImportSourceKind =
   | "memory"
   | "memory-plan"
   | "mock"
+  | "routine"
   | "smallville"
   | "social"
   | "websocket";
@@ -32,6 +33,7 @@ type ImportPanelProps = {
   onLoadAgentMemoryPlan: () => void;
   onLoadPersistentMemory: () => void;
   onLoadMock: () => void;
+  onLoadRoutineRun: () => void;
   onLoadSocialRun: () => void;
   onLoadSmallvilleDay: () => void;
   onLoadWebSocketSample: () => void;
@@ -179,6 +181,7 @@ export function ImportPanel({
   onLoadAgentMemoryPlan,
   onLoadPersistentMemory,
   onLoadMock,
+  onLoadRoutineRun,
   onLoadSocialRun,
   onLoadSmallvilleDay,
   onLoadWebSocketSample,
@@ -241,6 +244,14 @@ export function ImportPanel({
           aria-pressed={activeSource === "social"}
         >
           Social day
+        </button>
+        <button
+          type="button"
+          style={buttonStyleFor("routine", activeSource)}
+          onClick={onLoadRoutineRun}
+          aria-pressed={activeSource === "routine"}
+        >
+          Routine day
         </button>
         <button
           type="button"

@@ -79,11 +79,52 @@ type SocialAgentSeed = Omit<CognitiveAgentSeed, "memories"> & {
   relationshipIds: string[];
 };
 
+export type RoutinePhase =
+  | "wake"
+  | "retrieve"
+  | "work"
+  | "plan"
+  | "act"
+  | "close";
+
+type RoutineSegment = {
+  dayId: string;
+  phase: RoutinePhase;
+  segmentId: string;
+  startMinute: number;
+  endMinute: number;
+  scheduledLocation: AgentLocation;
+  scheduledSubLocationId: string;
+  plannedActivity: string;
+  intention: string;
+  conflictId?: string;
+};
+
+type RoutineConflict = {
+  conflictId: string;
+  capacity: number;
+  crowdedSubLocationId: string;
+  resolution: string;
+  shiftedToLocation: AgentLocation;
+  shiftedToSubLocationId: string;
+  involvedAgentIds: string[];
+};
+
 export type SocialDiffusionSummary = {
   agentCount: number;
   informedAgentIds: string[];
   invitationMessageCount: number;
   maxWave: number;
+};
+
+export type RoutineDaySummary = {
+  agentCount: number;
+  actionCount: number;
+  conflictCount: number;
+  memoryReadCount: number;
+  memoryWriteCount: number;
+  phaseCounts: Record<RoutinePhase, number>;
+  scheduledAgentIds: string[];
 };
 
 const runId = "run-smallville-cognitive-001";
@@ -705,6 +746,10 @@ export function generateSmallvilleCognitiveRun(): AgentEvent[] {
 const socialRunId = "run-smallville-social-001";
 const socialTaskId = "task-valentine-social-diffusion";
 const socialBaseTimestamp = "2026-07-04T16:00:00.000Z";
+const routineRunId = "run-smallville-routine-001";
+const routineTaskId = "task-smallville-routine-scheduler";
+const routineDayId = "smallville-routine-day-2026-07-04";
+const routineBaseTimestamp = "2026-07-04T17:00:00.000Z";
 
 const socialAgentSeeds: readonly SocialAgentSeed[] = [
   {
@@ -1063,6 +1108,10 @@ function socialTimestamp(sequence: number): string {
   return timestampAt(socialBaseTimestamp, sequence);
 }
 
+function routineTimestamp(sequence: number): string {
+  return timestampAt(routineBaseTimestamp, sequence);
+}
+
 function getSocialAgent(agentId: string): SocialAgentSeed {
   const agent = socialAgentSeeds.find((candidate) => candidate.agentId === agentId);
 
@@ -1165,6 +1214,231 @@ function makeSocialEvent(input: {
   };
 }
 
+function makeRoutineSegment(input: {
+  agent: SocialAgentSeed;
+  phase: RoutinePhase;
+  sequence: number;
+  location: AgentLocation;
+  subLocationId: string;
+  activity: string;
+  conflictId?: string;
+}): RoutineSegment {
+  const startMinute = 480 + input.sequence * 5;
+
+  return {
+    dayId: routineDayId,
+    phase: input.phase,
+    segmentId: `${input.agent.agentId}-${input.phase}`,
+    startMinute,
+    endMinute: startMinute + 5,
+    scheduledLocation: input.location,
+    scheduledSubLocationId: input.subLocationId,
+    plannedActivity: input.activity,
+    intention: input.agent.dailyIntention,
+    conflictId: input.conflictId,
+  };
+}
+
+function makeRoutineEvent(input: {
+  agent: SocialAgentSeed;
+  sequence: number;
+  type: AgentEventType;
+  summary: string;
+  content: string;
+  locationHint: AgentLocation;
+  subLocationId: string;
+  activity: string;
+  cognitiveStage: CognitiveStage;
+  phase: RoutinePhase;
+  targetAgentId?: string;
+  status?: AgentEventStatus;
+  toolName?: string;
+  toolInput?: unknown;
+  toolOutputSummary?: string;
+  metadata?: Record<string, unknown>;
+  conflict?: RoutineConflict;
+}): AgentEvent {
+  const routine = makeRoutineSegment({
+    agent: input.agent,
+    phase: input.phase,
+    sequence: input.sequence,
+    location: input.locationHint,
+    subLocationId: input.subLocationId,
+    activity: input.activity,
+    conflictId: input.conflict?.conflictId,
+  });
+
+  return {
+    id: `routine-${String(input.sequence).padStart(3, "0")}`,
+    runId: routineRunId,
+    taskId: routineTaskId,
+    timestamp: routineTimestamp(input.sequence),
+    sequence: input.sequence,
+    agentId: input.agent.agentId,
+    agentName: input.agent.agentName,
+    agentRole: input.agent.agentRole,
+    type: input.type,
+    content: input.content,
+    summary: input.summary,
+    targetAgentId: input.targetAgentId,
+    targetTaskId: routineTaskId,
+    toolName: input.toolName,
+    toolInput: input.toolInput,
+    toolOutputSummary: input.toolOutputSummary,
+    locationHint: input.locationHint,
+    status: input.status ?? "running",
+    metadata: {
+      source: "mock",
+      tags: [
+        "smallville-routine",
+        input.cognitiveStage,
+        input.phase,
+        input.subLocationId,
+        ...(input.conflict === undefined ? [] : ["routine-conflict"]),
+      ],
+      cognitiveStage: input.cognitiveStage,
+      subLocationId: input.subLocationId,
+      activity: input.activity,
+      persona: input.agent.persona,
+      relationships: input.agent.relationshipIds,
+      routine,
+      routineConflict: input.conflict,
+      ...input.metadata,
+    },
+  };
+}
+
+function fallbackLocationForRoutineConflict(
+  agent: SocialAgentSeed,
+): Pick<RoutineConflict, "shiftedToLocation" | "shiftedToSubLocationId"> {
+  switch (agent.agentRole) {
+    case "planner":
+    case "orchestrator":
+      return {
+        shiftedToLocation: "dispatch_board",
+        shiftedToSubLocationId: "dispatch_queue",
+      };
+    case "researcher":
+    case "critic":
+      return {
+        shiftedToLocation: "library",
+        shiftedToSubLocationId: "library_stacks",
+      };
+    case "coder":
+      return {
+        shiftedToLocation: "workshop",
+        shiftedToSubLocationId: "workshop_bench",
+      };
+    case "memory":
+      return {
+        shiftedToLocation: "archive",
+        shiftedToSubLocationId: "archive_shelves",
+      };
+    case "reviewer":
+      return {
+        shiftedToLocation: "review_room",
+        shiftedToSubLocationId: "review_table",
+      };
+    case "custom":
+      return {
+        shiftedToLocation: "square",
+        shiftedToSubLocationId: "square_fountain_edge",
+      };
+  }
+}
+
+function buildRoutineConflicts(
+  agents: readonly SocialAgentSeed[],
+): Map<string, RoutineConflict> {
+  const bySubLocation = new Map<string, SocialAgentSeed[]>();
+  const conflicts = new Map<string, RoutineConflict>();
+  const capacity = 2;
+
+  for (const agent of agents) {
+    bySubLocation.set(agent.workSubLocationId, [
+      ...(bySubLocation.get(agent.workSubLocationId) ?? []),
+      agent,
+    ]);
+  }
+
+  for (const [subLocationId, crowdedAgents] of bySubLocation) {
+    if (crowdedAgents.length <= capacity) {
+      continue;
+    }
+
+    crowdedAgents.slice(capacity).forEach((agent, index) => {
+      const fallback = fallbackLocationForRoutineConflict(agent);
+      const conflictId = `routine-conflict-${subLocationId}-${index + 1}`;
+      conflicts.set(agent.agentId, {
+        conflictId,
+        capacity,
+        crowdedSubLocationId: subLocationId,
+        resolution: `${agent.agentName} shifts the routine to ${fallback.shiftedToSubLocationId} while preserving the same intention.`,
+        ...fallback,
+        involvedAgentIds: crowdedAgents.map((candidate) => candidate.agentId),
+      });
+    });
+  }
+
+  return conflicts;
+}
+
+function routineActionFor(
+  agent: SocialAgentSeed,
+  conflict: RoutineConflict | undefined,
+): {
+  type: Extract<AgentEventType, "handoff" | "message" | "tool_call">;
+  activity: string;
+  content: string;
+  locationHint: AgentLocation;
+  subLocationId: string;
+  targetAgentId?: string;
+  toolName?: string;
+  toolInput?: unknown;
+  toolOutputSummary?: string;
+} {
+  const targetAgent = getSocialAgent(agent.relationshipIds[0]);
+  const locationHint = conflict?.shiftedToLocation ?? agent.workLocation;
+  const subLocationId = conflict?.shiftedToSubLocationId ?? agent.workSubLocationId;
+
+  if (agent.agentRole === "coder") {
+    return {
+      type: "tool_call",
+      activity: agent.workActivity,
+      content: `${agent.agentName} works on ${agent.workActivity} for the daily routine.`,
+      locationHint,
+      subLocationId,
+      toolName: "routine_task",
+      toolInput: {
+        agentId: agent.agentId,
+        intention: agent.dailyIntention,
+        subLocationId,
+      },
+      toolOutputSummary: `${agent.agentName}'s routine task becomes visible as AgentEvent evidence.`,
+    };
+  }
+
+  if (agent.agentRole === "planner" || agent.agentRole === "orchestrator") {
+    return {
+      type: "handoff",
+      activity: "routes routine step",
+      content: `${agent.agentName} routes the next routine step to ${targetAgent.agentName}.`,
+      locationHint,
+      subLocationId,
+      targetAgentId: targetAgent.agentId,
+    };
+  }
+
+  return {
+    type: "message",
+    activity: "coordinates routine",
+    content: `${agent.agentName} tells ${targetAgent.agentName} how today's routine affects ${agent.dailyIntention}.`,
+    locationHint,
+    subLocationId,
+    targetAgentId: targetAgent.agentId,
+  };
+}
+
 export function summarizeSocialDiffusion(
   events: readonly AgentEvent[],
 ): SocialDiffusionSummary {
@@ -1198,6 +1472,287 @@ export function summarizeSocialDiffusion(
     invitationMessageCount,
     maxWave,
   };
+}
+
+function isRoutinePhase(value: unknown): value is RoutinePhase {
+  return (
+    value === "wake" ||
+    value === "retrieve" ||
+    value === "work" ||
+    value === "plan" ||
+    value === "act" ||
+    value === "close"
+  );
+}
+
+export function summarizeRoutineDay(events: readonly AgentEvent[]): RoutineDaySummary {
+  const agentIds = new Set<string>();
+  const phaseCounts: Record<RoutinePhase, number> = {
+    wake: 0,
+    retrieve: 0,
+    work: 0,
+    plan: 0,
+    act: 0,
+    close: 0,
+  };
+  let actionCount = 0;
+  let conflictCount = 0;
+  let memoryReadCount = 0;
+  let memoryWriteCount = 0;
+
+  for (const event of events) {
+    const routine = event.metadata?.routine;
+
+    if (typeof routine === "object" && routine !== null && !Array.isArray(routine)) {
+      agentIds.add(event.agentId);
+      const phase = (routine as Record<string, unknown>).phase;
+
+      if (isRoutinePhase(phase)) {
+        phaseCounts[phase] += 1;
+      }
+    }
+
+    if (event.metadata?.routineConflict !== undefined) {
+      conflictCount += 1;
+    }
+
+    if (event.type === "handoff" || event.type === "message" || event.type === "tool_call") {
+      actionCount += 1;
+    }
+
+    if (event.type === "memory_read") {
+      memoryReadCount += 1;
+    }
+
+    if (event.type === "memory_write") {
+      memoryWriteCount += 1;
+    }
+  }
+
+  return {
+    agentCount: agentIds.size,
+    actionCount,
+    conflictCount,
+    memoryReadCount,
+    memoryWriteCount,
+    phaseCounts,
+    scheduledAgentIds: [...agentIds].sort(),
+  };
+}
+
+export function generateSmallvilleRoutineRun(): AgentEvent[] {
+  const streams = seedSocialMemoryStream(socialAgentSeeds);
+  const conflicts = buildRoutineConflicts(socialAgentSeeds);
+  const events: AgentEvent[] = [];
+  let sequence = 0;
+
+  for (const agent of socialAgentSeeds) {
+    const conflict = conflicts.get(agent.agentId);
+    const action = routineActionFor(agent, conflict);
+
+    const observationContent = `${agent.agentName} starts the day intending to ${agent.dailyIntention}.`;
+    const observation = makeRoutineEvent({
+      agent,
+      sequence,
+      type: "memory_write",
+      summary: "Observe daily intention",
+      content: observationContent,
+      locationHint: agent.homeLocation,
+      subLocationId: agent.homeSubLocationId,
+      activity: "checks daily routine",
+      cognitiveStage: "observation",
+      phase: "wake",
+      metadata: {
+        memoryKind: "observation",
+      },
+    });
+    const observationRecord = remember(
+      streams,
+      observation,
+      "observation",
+      observationContent,
+      8,
+      ["routine", "observation", agent.workSubLocationId],
+    );
+    observation.metadata = {
+      ...observation.metadata,
+      memoryId: observationRecord.id,
+      importance: observationRecord.importance,
+    };
+    events.push(observation);
+    sequence += 1;
+
+    const query = `${agent.dailyIntention} ${agent.workActivity} ${agent.workSubLocationId}`;
+    const stream = streams.get(agent.agentId) ?? [];
+    const retrievedMemories = retrieveMemories(stream, query, sequence, 3);
+    const retrievedIds = new Set(retrievedMemories.map((memory) => memory.memoryId));
+    streams.set(
+      agent.agentId,
+      stream.map((memory) =>
+        retrievedIds.has(memory.id)
+          ? { ...memory, lastAccessedSequence: sequence }
+          : memory,
+      ),
+    );
+
+    events.push(
+      makeRoutineEvent({
+        agent,
+        sequence,
+        type: "memory_read",
+        summary: "Retrieve routine memory",
+        content: `${agent.agentName} retrieves memories before leaving for ${agent.workSubLocationId}.`,
+        locationHint: "archive",
+        subLocationId: "archive_shelves",
+        activity: "retrieves routine memory",
+        cognitiveStage: "retrieval",
+        phase: "retrieve",
+        metadata: {
+          retrievalQuery: query,
+          retrievedMemories,
+        },
+      }),
+    );
+    sequence += 1;
+
+    const conflictPhrase =
+      conflict === undefined
+        ? `${agent.agentName}'s planned location has room for the routine.`
+        : conflict.resolution;
+    const reflectionContent = `${agent.agentName} reflects on the retrieved routine memory. ${conflictPhrase}`;
+    const reflection = makeRoutineEvent({
+      agent,
+      sequence,
+      type: conflict === undefined ? "thinking" : "blocked",
+      summary: conflict === undefined ? "Reflect on routine fit" : "Resolve routine conflict",
+      content: reflectionContent,
+      locationHint: conflict?.shiftedToLocation ?? agent.workLocation,
+      subLocationId: conflict?.shiftedToSubLocationId ?? agent.workSubLocationId,
+      activity: conflict === undefined ? "reflects on schedule" : "resolves crowding",
+      cognitiveStage: "reflection",
+      phase: "work",
+      status: conflict === undefined ? "running" : "blocked",
+      conflict,
+      metadata: {
+        derivedFromMemoryIds: retrievedMemories.map((memory) => memory.memoryId),
+        averageRetrievedScore: roundScore(
+          retrievedMemories.reduce((sum, memory) => sum + memory.score, 0) /
+            Math.max(1, retrievedMemories.length),
+        ),
+      },
+    });
+    const reflectionRecord = remember(
+      streams,
+      reflection,
+      "reflection",
+      reflectionContent,
+      conflict === undefined ? 7 : 9,
+      ["routine", "reflection", conflict === undefined ? "open-slot" : "conflict"],
+    );
+    reflection.metadata = {
+      ...reflection.metadata,
+      memoryId: reflectionRecord.id,
+    };
+    events.push(reflection);
+    sequence += 1;
+
+    const planContent = `${agent.agentName} plans to ${agent.dailyIntention} by ${action.activity} at ${action.subLocationId}.`;
+    const plan = makeRoutineEvent({
+      agent,
+      sequence,
+      type: "decision",
+      summary: "Plan routine segment",
+      content: planContent,
+      locationHint: "town_hall",
+      subLocationId: "town_hall_table",
+      activity: "plans routine",
+      cognitiveStage: "planning",
+      phase: "plan",
+      metadata: {
+        planStep: {
+          goal: agent.dailyIntention,
+          nextAction: action.content,
+          targetAgentId: action.targetAgentId,
+          expectedLocation: action.subLocationId,
+          conflictId: conflict?.conflictId,
+        },
+      },
+    });
+    const planRecord = remember(
+      streams,
+      plan,
+      "plan",
+      planContent,
+      8,
+      ["routine", "plan", action.subLocationId],
+    );
+    plan.metadata = {
+      ...plan.metadata,
+      memoryId: planRecord.id,
+    };
+    events.push(plan);
+    sequence += 1;
+
+    events.push(
+      makeRoutineEvent({
+        agent,
+        sequence,
+        type: action.type,
+        summary: "Act on routine plan",
+        content: action.content,
+        locationHint: action.locationHint,
+        subLocationId: action.subLocationId,
+        activity: action.activity,
+        cognitiveStage: action.type === "message" ? "conversation" : "action",
+        phase: "act",
+        targetAgentId: action.targetAgentId,
+        toolName: action.toolName,
+        toolInput: action.toolInput,
+        toolOutputSummary: action.toolOutputSummary,
+        metadata: {
+          executedPlanMemoryId: planRecord.id,
+          actionSource: "deterministic-routine-scheduler",
+        },
+      }),
+    );
+    sequence += 1;
+
+    const closeContent = `${agent.agentName} writes back how the routine moved through ${action.subLocationId}.`;
+    const close = makeRoutineEvent({
+      agent,
+      sequence,
+      type: "memory_write",
+      summary: "Write routine memory",
+      content: closeContent,
+      locationHint: action.locationHint,
+      subLocationId: action.subLocationId,
+      activity: "writes routine memory",
+      cognitiveStage: "closure",
+      phase: "close",
+      status: "done",
+      metadata: {
+        memoryKind: "plan",
+        closedPlanMemoryId: planRecord.id,
+        resolvedConflictId: conflict?.conflictId,
+      },
+    });
+    const closeRecord = remember(
+      streams,
+      close,
+      "plan",
+      closeContent,
+      8,
+      ["routine", "closure", action.subLocationId],
+    );
+    close.metadata = {
+      ...close.metadata,
+      memoryId: closeRecord.id,
+    };
+    events.push(close);
+    sequence += 1;
+  }
+
+  return events;
 }
 
 export function generateSmallvilleSocialRun(): AgentEvent[] {
@@ -1414,4 +1969,5 @@ export function generateSmallvilleSocialRun(): AgentEvent[] {
 }
 
 export const mockSmallvilleCognitiveRun: AgentEvent[] = generateSmallvilleCognitiveRun();
+export const mockSmallvilleRoutineRun: AgentEvent[] = generateSmallvilleRoutineRun();
 export const mockSmallvilleSocialRun: AgentEvent[] = generateSmallvilleSocialRun();

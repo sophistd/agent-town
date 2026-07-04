@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 
 import {
   mockSmallvilleCognitiveRun,
+  mockSmallvilleRoutineRun,
   mockSmallvilleSocialRun,
   retrieveMemories,
   scoreMemoryRecord,
+  summarizeRoutineDay,
   summarizeSocialDiffusion,
   type MemoryRecord,
 } from "../events/generativeRuntime";
@@ -178,6 +180,73 @@ describe("deterministic generative runtime", () => {
     ).toBe(true);
     expect(
       messageEvents.some((event) => event.targetAgentId === "agent-isabella"),
+    ).toBe(true);
+  });
+
+  it("generates a 25-agent routine day with memory and schedule evidence", () => {
+    const validation = validateEventStream(mockSmallvilleRoutineRun);
+    const agentIds = new Set(validation.events.map((event) => event.agentId));
+    const summary = summarizeRoutineDay(validation.events);
+
+    expect(validation.quarantinedEvents).toHaveLength(0);
+    expect(validation.events).toHaveLength(150);
+    expect(agentIds.size).toBe(25);
+    expect(summary.agentCount).toBe(25);
+    expect(summary.actionCount).toBe(25);
+    expect(summary.memoryReadCount).toBe(25);
+    expect(summary.memoryWriteCount).toBe(50);
+    expect(summary.conflictCount).toBeGreaterThan(0);
+    expect(summary.phaseCounts).toEqual({
+      wake: 25,
+      retrieve: 25,
+      work: 25,
+      plan: 25,
+      act: 25,
+      close: 25,
+    });
+  });
+
+  it("keeps routine conflicts inspectable and replay-safe", () => {
+    const conflictEvents = mockSmallvilleRoutineRun.filter(
+      (event) => event.metadata?.routineConflict !== undefined,
+    );
+    const state = replay(mockSmallvilleRoutineRun, mockSmallvilleRoutineRun.length - 1);
+
+    expect(conflictEvents.length).toBeGreaterThan(0);
+    expect(
+      conflictEvents.every((event) =>
+        event.type === "blocked" &&
+        event.metadata?.routine !== undefined &&
+        event.metadata?.cognitiveStage === "reflection",
+      ),
+    ).toBe(true);
+    expect(state.warnings).toHaveLength(0);
+    expect(state.runSummary).toMatchObject({
+      totalEvents: 150,
+      memoryActionCount: 75,
+      blockedCount: conflictEvents.length,
+      errorCount: 0,
+    });
+    expect(Object.keys(state.agents)).toHaveLength(25);
+    expect(Object.values(state.agents).every((agent) => agent.status === "done")).toBe(true);
+    expect(state.agents["agent-diego"]?.subLocationId).toBe("square_fountain_edge");
+  });
+
+  it("keeps every routine event tied to AgentEvent-owned location metadata", () => {
+    expect(
+      mockSmallvilleRoutineRun.every((event) => {
+        const routine = event.metadata?.routine;
+
+        return (
+          typeof routine === "object" &&
+          routine !== null &&
+          !Array.isArray(routine) &&
+          typeof (routine as Record<string, unknown>).scheduledLocation === "string" &&
+          typeof (routine as Record<string, unknown>).scheduledSubLocationId === "string" &&
+          (routine as Record<string, unknown>).scheduledSubLocationId ===
+            event.metadata?.subLocationId
+        );
+      }),
     ).toBe(true);
   });
 });

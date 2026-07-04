@@ -77,6 +77,13 @@ existing screenshot set and command output.
 The demo can switch among:
 
 - mock failure run
+- Town day fixture
+- Cognitive loop fixture
+- Social day fixture
+- Routine day fixture
+- natural-language Intervention source
+- persistent Memory recall source
+- agent-addressable Memory plan source
 - native JSONL sample
 - WebSocket sample
 

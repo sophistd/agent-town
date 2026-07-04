@@ -20,6 +20,7 @@ import {
 import { parseNaturalLanguageIntervention } from "../adapters/interventionAdapter";
 import {
   mockSmallvilleCognitiveRun,
+  mockSmallvilleRoutineRun,
   mockSmallvilleSocialRun,
 } from "../events/generativeRuntime";
 import { mockFailureRun } from "../events/mockFailureRun";
@@ -122,6 +123,11 @@ const cognitiveRunStatus = {
 const socialRunStatus = {
   level: "ok",
   message: "Social diffusion run loaded.",
+} satisfies ImportPanelStatus;
+
+const routineRunStatus = {
+  level: "ok",
+  message: "Routine day run loaded.",
 } satisfies ImportPanelStatus;
 
 function getBrowserMemoryStorage(): StorageLike | undefined {
@@ -374,6 +380,11 @@ export function App() {
     commitEventSource("social", mockSmallvilleSocialRun, socialRunStatus);
   }, [commitEventSource, disconnectWebSocket]);
 
+  const loadRoutineRun = useCallback(() => {
+    disconnectWebSocket();
+    commitEventSource("routine", mockSmallvilleRoutineRun, routineRunStatus);
+  }, [commitEventSource, disconnectWebSocket]);
+
   const importJsonl = useCallback(
     (input: string) => {
       disconnectWebSocket();
@@ -520,6 +531,7 @@ export function App() {
             onLoadAgentMemoryPlan={loadAgentMemoryPlan}
             onLoadPersistentMemory={loadPersistentMemory}
             onLoadMock={loadMock}
+            onLoadRoutineRun={loadRoutineRun}
             onLoadSocialRun={loadSocialRun}
             onLoadSmallvilleDay={loadSmallvilleDay}
             onLoadWebSocketSample={loadWebSocketSample}

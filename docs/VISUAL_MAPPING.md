@@ -94,6 +94,14 @@ chain as canonical `AgentEvent[]`. Relationship IDs, invite waves, source
 agents, and attendance evidence live in event metadata for inspection; the town
 canvas still only projects the replayed `WorldState`.
 
+The same module also provides the deterministic "Routine day" run. It keeps the
+same 25-agent population and emits routine phases, memory retrieval,
+deterministic crowding conflicts, plans, actions, and routine memory writeback
+as canonical `AgentEvent[]`. `metadata.routine` and
+`metadata.routineConflict` are inspection evidence; the map and renderer only
+consume the resulting `WorldState` location, sub-location, status, bubble, and
+edge projections.
+
 `src/adapters/interventionAdapter.ts` provides the deterministic
 natural-language "Intervention" source. It converts an operator prompt plus the
 currently loaded run summary into canonical `AgentEvent[]` before replay. The
@@ -212,8 +220,8 @@ Current limitations:
 - The map is visually closer to a Smallville-like projection and now includes
   interior anchors plus a deterministic day-run fixture, but it is still a
   compact prototype map rather than a complete generative-agents world with
-  autonomous schedules, persistent memories, animation cycles, or editable
-  large-world Tiled authoring.
+  autonomous/adaptive schedules, server-backed persistent memories, animation
+  cycles, or editable large-world Tiled authoring.
 - There is no dedicated search/filter input yet. S15 records the rule and
   preserves Timeline/detail-based inspection; a later session can add filter UI
   if product review makes that the highest-risk gap.

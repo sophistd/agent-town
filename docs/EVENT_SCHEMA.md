@@ -140,6 +140,8 @@ Common fields:
 | `relationships` | Agent IDs used by deterministic social fixtures to expose relationship graph evidence |
 | `intervention` | User-seeded social premise or natural-language operator prompt that became an `AgentEvent`, not renderer state |
 | `socialDiffusion` | Object describing event id, invite wave, source agent, targets, knowledge, and attendance |
+| `routine` | Deterministic daily routine segment with day id, phase, time window, stable location, sub-location, planned activity, and intention |
+| `routineConflict` | Deterministic routine crowding record with conflict id, capacity, involved agents, shifted location, shifted sub-location, and resolution |
 | `durableMemory` | Versioned record showing which persisted memory record was recalled into the current event stream |
 | `agentAddressableMemory` | Agent-scoped persistent-memory query, selected records, scores, and retrieval weights used to create planning evidence |
 
@@ -152,6 +154,14 @@ The deterministic `Social day` source uses these social metadata fields to
 model a 25-agent Valentine's invitation diffusion chain. The metadata is not a
 separate simulation state: it is evidence carried by canonical `AgentEvent`
 records and replayed into `WorldState` like any other source.
+
+The deterministic `Routine day` source uses `metadata.routine` to expose six
+routine phases for each of 25 agents: wake, retrieve, work, plan, act, and
+close. It uses `metadata.routineConflict` on blocked reflection events when a
+work sub-location exceeds deterministic capacity and the agent shifts to a
+stable fallback anchor. These records are schedule evidence carried by
+canonical `AgentEvent` records; they are not Phaser map state, Tiled object
+state, or autonomous scheduling claims.
 
 The deterministic `Intervention` adapter uses the same metadata path for a live
 operator prompt. It records the raw prompt, inferred intent, prior run id,
