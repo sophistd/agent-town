@@ -143,6 +143,7 @@ Common fields:
 | `socialDiffusion` | Object describing event id, invite wave, source agent, targets, knowledge, and attendance |
 | `routine` | Deterministic daily routine segment with day id, phase, time window, stable location, sub-location, planned activity, and intention |
 | `routineConflict` | Deterministic routine crowding record with conflict id, capacity, involved agents, shifted location, shifted sub-location, and resolution |
+| `routineRevision` | Adaptive routine record with revision id, source observation, previous routine evidence, selected memory evidence, previous location, revised location, and generator boundary |
 | `durableMemory` | Versioned record showing which persisted memory record was recalled into the current event stream |
 | `agentAddressableMemory` | Agent-scoped persistent-memory query, selected records, scores, and retrieval weights used to create planning evidence |
 | `llmPlanner` | Model-planner contract evidence showing request id, prompt hash, model role, response step id, selected memory record IDs, and prior-run context |
@@ -164,6 +165,16 @@ work sub-location exceeds deterministic capacity and the agent shifts to a
 stable fallback anchor. These records are schedule evidence carried by
 canonical `AgentEvent` records; they are not Phaser map state, Tiled object
 state, or autonomous scheduling claims.
+
+The deterministic `Adaptive routine` source is adapter-produced rather than a
+renderer behavior. It reads prior canonical routine evidence plus new town
+observations, then emits revised observation, retrieval, reflection, planning,
+action, and closure events with `metadata.routineRevision`. Each revision records
+the previous run/event evidence, selected memory event IDs, the old projection
+anchor, the revised projection anchor, and the deterministic adapter name. This
+is stronger than a static routine fixture because schedule changes are
+inspectable event evidence, but it is still not an autonomous free-running
+Smallville simulation.
 
 The deterministic `Intervention` adapter uses the same metadata path for a live
 operator prompt. It records the raw prompt, inferred intent, prior run id,
@@ -213,10 +224,12 @@ The report includes:
 - overall structural score
 - capability scores for identity, observation, retrieval, reflection, planning,
   action/conversation, social coordination, relationship graph, routine
-  schedule, persistent memory, and LLM contract evidence
+  schedule, adaptive routine revision, persistent memory, and LLM contract
+  evidence
 - top missing or partial gaps
 - ablation checks for observation, retrieval, reflection, planning,
-  relationship graph, routine schedule, and LLM planner contract
+  relationship graph, routine schedule, adaptive routine revision, and LLM
+  planner contract
 - event, agent, relationship, social, and routine evidence counts
 
 This evaluator is a projection/inspection helper. It does not create

@@ -36,9 +36,10 @@ intact.
 4. Cognitive runtime hardening
 
    The deterministic `Cognitive`, `Social day`, `Routine day`,
-   `Intervention`, `Memory`, `Memory plan`, and `LLM plan` sources now prove the event
+   `Adaptive routine`, `Intervention`, `Memory`, `Memory plan`, and `LLM plan` sources now prove the event
    shape for observation, memory retrieval, reflection, planning, social
    diffusion, routine scheduling, deterministic routine-conflict resolution,
+   adapter-produced routine revision from observation and memory evidence,
    natural-language intervention, durable memory recall, agent-addressable
    memory planning, model-planner contract parsing/quarantine, OpenAI Responses
    provider-boundary request/parse coverage, replay-derived relationship state,
@@ -51,8 +52,8 @@ intact.
      fixtures preserved for tests
    - use the agent-addressable memory retrieval stream inside provider-backed
      planning while preserving parser quarantine and replay validation
-   - turn deterministic routine schedules into adapter-produced daily plans
-     that can be validated and replayed as canonical events
+   - turn adaptive routine revision into provider-backed planning while
+     preserving parser quarantine and replay validation
    - move durable memory from browser-local storage to a real world-state
      backing store
    - promote `WorldState.relationships` into a dedicated Graph view for

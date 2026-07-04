@@ -43,7 +43,7 @@ runtime facts.
 | --- | --- | --- | --- |
 | Top-down town | Small town with homes/workplaces and many agents | Original generated pixel town, stable zones, interior anchors, sprites, bubbles, edges | Partial |
 | Agent identity | Persona, routine, relationships, and memory history | Agent role/name from `AgentEvent`; cognitive/social/routine seed personas, daily intentions, routine segments, and replay-derived `WorldState.relationships` now present | Partial |
-| Daily routines | Agents follow and revise believable daily schedules across places and time | `Routine day` deterministically emits six routine phases for each of 25 agents, including memory retrieval, crowding conflict resolution, action, and memory writeback | Initial |
+| Daily routines | Agents follow and revise believable daily schedules across places and time | `Routine day` deterministically emits six routine phases for each of 25 agents; `Adaptive routine` now revises those schedules from new observations plus prior memory/routine evidence, then writes revised plans back as canonical events | Initial |
 | Observation | Agents perceive events and environment changes | `generativeRuntime.ts` emits observation-stage `memory_write` events | Initial |
 | Memory stream | Chronological natural-language record of experiences | `MemoryRecord` stream exists inside deterministic generator; browser-persisted Memory source now recalls extracted `memory_read` / `memory_write` evidence across imported runs | Initial |
 | Retrieval | Dynamic memory retrieval by relevance, importance, recency | `retrieveMemories` scores fixture memory; persistent `Memory plan` now retrieves durable records per agent by relevance, importance, recency, and agent affinity | Initial |
@@ -84,6 +84,10 @@ The current slice adds deterministic cognitive evidence:
   - `buildPersistentMemoryRecallResult`
   - `buildAgentAddressableMemoryPlanResult`
   - `persistentMemoryAdapter`
+- `src/adapters/adaptiveRoutineAdapter.ts`
+  - `buildAdaptiveRoutinePlanResult`
+  - `summarizeAdaptiveRoutineRevisions`
+  - `adaptiveRoutineAdapter`
 - `src/adapters/llmPlannerAdapter.ts`
   - `buildSmallvilleLlmPlannerRequest`
   - `buildOpenAiResponsesPlannerBody`
@@ -99,7 +103,7 @@ The current slice adds deterministic cognitive evidence:
 - `src/state/persistentMemoryStore.ts`
   - versioned browser storage for durable memory records
 - UI sources: `Cognitive`, `Social day`, `Routine day`, `Intervention`,
-  `Memory`, `Memory plan`, `LLM plan`
+  `Adaptive routine`, `Memory`, `Memory plan`, `LLM plan`
 - Replay-derived social projection:
   - `WorldState.relationships`
   - `selectRelationships`
@@ -140,6 +144,23 @@ The current slice adds deterministic cognitive evidence:
   - `routineConflict.shiftedToLocation`
   - `routineConflict.shiftedToSubLocationId`
   - `routineConflict.resolution`
+- Adaptive routine revision metadata:
+  - `routineRevision.schemaVersion`
+  - `routineRevision.revisionId`
+  - `routineRevision.observationId`
+  - `routineRevision.observationContent`
+  - `routineRevision.observationImportance`
+  - `routineRevision.reason`
+  - `routineRevision.previousRunId`
+  - `routineRevision.previousTaskId`
+  - `routineRevision.previousEventId`
+  - `routineRevision.previousRoutineEventIds`
+  - `routineRevision.selectedMemoryEventIds`
+  - `routineRevision.previousLocation`
+  - `routineRevision.previousSubLocationId`
+  - `routineRevision.revisedLocation`
+  - `routineRevision.revisedSubLocationId`
+  - `routineRevision.generatedBy`
 - Natural-language intervention metadata:
   - `intervention.prompt`
   - `intervention.intentId`
@@ -183,6 +204,7 @@ The current slice adds deterministic cognitive evidence:
   - overall structural score
   - top gaps
   - ablation coverage count
+  - adaptive routine revision count
   - event, agent, relationship, social, and routine evidence counts
 
 This is intentionally not a free-running agent simulation. It is a deterministic
@@ -210,6 +232,9 @@ This slice can pass if:
 - each durable-memory agent can retrieve persistent records by persona/query,
   importance, recency, and agent affinity, then emit canonical retrieval,
   reflection, and planning evidence
+- prior routine evidence can be adapted into 25 revised daily plans from new
+  observation and memory evidence, with old/revised projection anchors and
+  selected memory event IDs inspectable in `metadata.routineRevision`
 - a model-planner contract can build a JSON request from prior events and
   durable memory records, parse a model-shaped response into canonical events,
   and quarantine invalid model output before replay
@@ -222,6 +247,8 @@ This slice can pass if:
   from canonical `AgentEvent[]` plus replayed `WorldState`
 - the evaluation report surfaces top gaps and ablation coverage without letting
   the renderer invent behavioral facts
+- the evaluation report recognizes adaptive routine revision as schedule
+  evidence without treating it as autonomous simulation
 - the existing town projection can render the run without source-specific
   renderer branches
 - docs and evidence state that full Stanford parity is still incomplete
@@ -229,7 +256,7 @@ This slice can pass if:
 This slice cannot claim:
 
 - autonomous social emergence
-- autonomous/adaptive daily scheduling
+- autonomous daily scheduling
 - complete persistent agent memory across devices or server sessions
 - live-verified provider-backed autonomous LLM-generated behavior
 - human believability ratings or empirical ablation-study results
@@ -244,8 +271,6 @@ The next meaningful move is not more labels. It is one of:
 - run and evidence a real provider-backed LLM call with a local/server-side API
   key while keeping keys out of browser code
 - use agent-addressable memory retrieval inside live provider-backed planning
-- turn routine schedules into adapter-produced daily plans that can revise
-  themselves from observation and memory evidence
 - persist the intervention memory stream beyond browser-local storage
 - promote replay-derived relationship state into a dedicated Graph view
 - turn the structural evaluator into a human-review rubric or provider-backed

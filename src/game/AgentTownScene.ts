@@ -174,6 +174,18 @@ export class AgentTownScene extends Phaser.Scene {
     this.townLayer?.setPosition(offsetX, offsetY);
   }
 
+  private createTownLayer(): Phaser.GameObjects.Container | undefined {
+    if (!this.canRender()) {
+      return undefined;
+    }
+
+    try {
+      return this.add.container(0, 0);
+    } catch {
+      return undefined;
+    }
+  }
+
   private renderWorldState(): void {
     if (!this.canRender()) {
       return;
@@ -184,7 +196,10 @@ export class AgentTownScene extends Phaser.Scene {
     if (!this.canRender()) {
       return;
     }
-    this.townLayer = this.add.container(0, 0);
+    this.townLayer = this.createTownLayer();
+    if (this.townLayer === undefined) {
+      return;
+    }
 
     renderTownMap(this, this.townLayer, this.townMap);
 

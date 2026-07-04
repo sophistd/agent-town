@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { buildAdaptiveRoutinePlanResult } from "../adapters/adaptiveRoutineAdapter";
 import { buildDeterministicLlmPlannerResult } from "../adapters/llmPlannerAdapter";
 import {
   mockSmallvilleRoutineRun,
@@ -78,5 +79,22 @@ describe("Smallville evaluation report", () => {
     expect(
       report.ablationChecks.find((check) => check.component === "LLM planner contract"),
     ).toMatchObject({ status: "passed", evidenceCount: 8 });
+  });
+
+  it("recognizes adaptive routine revisions as schedule evidence", () => {
+    const result = buildAdaptiveRoutinePlanResult({
+      previousEvents: mockSmallvilleRoutineRun,
+    });
+    const state = replay(result.events, result.events.length - 1);
+    const report = evaluateSmallvilleRun(result.events, state);
+
+    expect(report.isSmallvilleLike).toBe(true);
+    expect(report.evidenceSummary.adaptiveRoutineRevisionCount).toBe(25);
+    expect(
+      report.capabilityScores.find((score) => score.key === "adaptive_routine"),
+    ).toMatchObject({ status: "passed", score: 100 });
+    expect(
+      report.ablationChecks.find((check) => check.component === "Adaptive routine"),
+    ).toMatchObject({ status: "passed", evidenceCount: 25 });
   });
 });

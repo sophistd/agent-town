@@ -108,6 +108,15 @@ as canonical `AgentEvent[]`. `metadata.routine` and
 consume the resulting `WorldState` location, sub-location, status, bubble, and
 edge projections.
 
+`src/adapters/adaptiveRoutineAdapter.ts` provides the deterministic "Adaptive
+routine" source. It reads prior routine evidence plus new town observations and
+emits revised schedule evidence as canonical `AgentEvent[]` with
+`metadata.routineRevision`. The old location, revised location, selected memory
+event IDs, and observation reason are available to Detail and Run Summary, but
+the renderer still only consumes replayed `WorldState`. The source intentionally
+does not make Phaser, Tiled objects, sprite names, or local UI state responsible
+for schedule revision.
+
 `src/adapters/interventionAdapter.ts` provides the deterministic
 natural-language "Intervention" source. It converts an operator prompt plus the
 currently loaded run summary into canonical `AgentEvent[]` before replay. The
@@ -234,8 +243,9 @@ Current limitations:
 - The map is visually closer to a Smallville-like projection and now includes
   interior anchors plus a deterministic day-run fixture, but it is still a
   compact prototype map rather than a complete generative-agents world with
-  autonomous/adaptive schedules, server-backed persistent memories, animation
-  cycles, or editable large-world Tiled authoring.
+  autonomous schedules, server-backed persistent memories, animation cycles, or
+  editable large-world Tiled authoring. Adaptive routine revision now exists as
+  adapter-produced event evidence, not as autonomous live simulation.
 - The `LLM plan` source proves model-output parsing and projection through
   canonical events, but it is not a live provider-backed behavior generator.
 - There is no dedicated search/filter input yet. S15 records the rule and

@@ -7,6 +7,7 @@ import {
 } from "react";
 
 import { parseNativeJsonl } from "../adapters/jsonlAdapter";
+import { buildAdaptiveRoutinePlanResult } from "../adapters/adaptiveRoutineAdapter";
 import type { AdapterQuarantinedEvent, AdapterResult, AdapterWarning } from "../adapters/types";
 import {
   connectWebSocketIngest,
@@ -386,6 +387,17 @@ export function App() {
     commitEventSource("routine", mockSmallvilleRoutineRun, routineRunStatus);
   }, [commitEventSource, disconnectWebSocket]);
 
+  const loadAdaptiveRoutineRun = useCallback(() => {
+    disconnectWebSocket();
+    applyAdapterResult(
+      "adaptive-routine",
+      buildAdaptiveRoutinePlanResult({
+        previousEvents: eventsRef.current,
+      }),
+      "Adaptive routine plan",
+    );
+  }, [applyAdapterResult, disconnectWebSocket]);
+
   const importJsonl = useCallback(
     (input: string) => {
       disconnectWebSocket();
@@ -542,6 +554,7 @@ export function App() {
             onImportJsonl={importJsonl}
             onLoadCognitiveRun={loadCognitiveRun}
             onLoadAgentMemoryPlan={loadAgentMemoryPlan}
+            onLoadAdaptiveRoutineRun={loadAdaptiveRoutineRun}
             onLoadLlmPlannerRun={loadLlmPlannerRun}
             onLoadPersistentMemory={loadPersistentMemory}
             onLoadMock={loadMock}

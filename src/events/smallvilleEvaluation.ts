@@ -10,6 +10,7 @@ export type SmallvilleCapabilityKey =
   | "social_coordination"
   | "relationship_graph"
   | "routine_schedule"
+  | "adaptive_routine"
   | "persistent_memory"
   | "llm_contract";
 
@@ -44,6 +45,7 @@ export type SmallvilleEvaluationReport = {
     relationshipCount: number;
     socialInformedAgentCount: number;
     routinePhaseCount: number;
+    adaptiveRoutineRevisionCount: number;
   };
 };
 
@@ -70,6 +72,7 @@ function hasSmallvilleEvidence(event: AgentEvent): boolean {
     event.metadata?.socialDiffusion !== undefined ||
     event.metadata?.routine !== undefined ||
     event.metadata?.routineConflict !== undefined ||
+    event.metadata?.routineRevision !== undefined ||
     event.metadata?.agentAddressableMemory !== undefined ||
     event.metadata?.llmPlanner !== undefined
   );
@@ -165,6 +168,25 @@ function socialDiffusionFor(event: AgentEvent): Record<string, unknown> | undefi
   return isRecord(diffusion) ? diffusion : undefined;
 }
 
+function adaptiveRoutineRevisionIds(events: readonly AgentEvent[]): Set<string> {
+  const revisionIds = new Set<string>();
+
+  for (const event of events) {
+    const revision = event.metadata?.routineRevision;
+
+    if (!isRecord(revision)) {
+      continue;
+    }
+
+    const revisionId = revision.revisionId;
+    if (typeof revisionId === "string" && revisionId.length > 0) {
+      revisionIds.add(revisionId);
+    }
+  }
+
+  return revisionIds;
+}
+
 function ablationStatus(evidenceCount: number, strongThreshold = 1): SmallvilleEvaluationStatus {
   if (evidenceCount <= 0) {
     return "missing";
@@ -203,6 +225,7 @@ export function evaluateSmallvilleRun(
     (event) => event.type === "message" && socialDiffusionFor(event)?.eventId === "valentine-party",
   );
   const routinePhases = countRoutinePhases(events);
+  const adaptiveRevisionIds = adaptiveRoutineRevisionIds(events);
   const durableMemoryCount = countEvents(
     events,
     (event) =>
@@ -277,6 +300,13 @@ export function evaluateSmallvilleRun(
       summary: "Routine evidence covers wake, retrieval, work, planning, action, and closure phases.",
     }),
     makeCapability({
+      key: "adaptive_routine",
+      label: "Adaptive routine",
+      evidenceCount: adaptiveRevisionIds.size,
+      targetCount: targetAgents,
+      summary: "Routine plans revise from observation and memory evidence before action.",
+    }),
+    makeCapability({
       key: "persistent_memory",
       label: "Persistent memory",
       evidenceCount: durableMemoryCount,
@@ -347,6 +377,12 @@ export function evaluateSmallvilleRun(
         impact: "Without routines, the town cannot show day-scale behavioral continuity.",
       },
       {
+        component: "Adaptive routine",
+        status: ablationStatus(adaptiveRevisionIds.size, targetAgents),
+        evidenceCount: adaptiveRevisionIds.size,
+        impact: "Without adaptive revision, schedules remain scripted and cannot respond to new observations.",
+      },
+      {
         component: "LLM planner contract",
         status: ablationStatus(llmPlannerCount),
         evidenceCount: llmPlannerCount,
@@ -360,6 +396,7 @@ export function evaluateSmallvilleRun(
       relationshipCount,
       socialInformedAgentCount: informedAgentIds.size,
       routinePhaseCount: routinePhases.size,
+      adaptiveRoutineRevisionCount: adaptiveRevisionIds.size,
     },
   };
 }

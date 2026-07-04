@@ -3,6 +3,7 @@ import { useState, type CSSProperties } from "react";
 import type { AdapterQuarantinedEvent, AdapterWarning } from "../adapters/types";
 
 export type ImportSourceKind =
+  | "adaptive-routine"
   | "cognitive"
   | "intervention"
   | "jsonl"
@@ -32,6 +33,7 @@ type ImportPanelProps = {
   onImportJsonl: (input: string) => void;
   onLoadCognitiveRun: () => void;
   onLoadAgentMemoryPlan: () => void;
+  onLoadAdaptiveRoutineRun: () => void;
   onLoadLlmPlannerRun: () => void;
   onLoadPersistentMemory: () => void;
   onLoadMock: () => void;
@@ -181,6 +183,7 @@ export function ImportPanel({
   onImportJsonl,
   onLoadCognitiveRun,
   onLoadAgentMemoryPlan,
+  onLoadAdaptiveRoutineRun,
   onLoadLlmPlannerRun,
   onLoadPersistentMemory,
   onLoadMock,
@@ -255,6 +258,14 @@ export function ImportPanel({
           aria-pressed={activeSource === "routine"}
         >
           Routine day
+        </button>
+        <button
+          type="button"
+          style={buttonStyleFor("adaptive-routine", activeSource)}
+          onClick={onLoadAdaptiveRoutineRun}
+          aria-pressed={activeSource === "adaptive-routine"}
+        >
+          Adaptive routine
         </button>
         <button
           type="button"

@@ -182,15 +182,16 @@ function statusLabel(capability: SmallvilleCapabilityScore): string {
 const evidencePriority: Record<string, number> = {
   llm_contract: 0,
   routine_schedule: 1,
-  relationship_graph: 2,
-  social_coordination: 3,
-  persistent_memory: 4,
-  planning: 5,
-  reflection: 6,
-  memory_retrieval: 7,
-  observation: 8,
-  action_conversation: 9,
-  agent_identity: 10,
+  adaptive_routine: 2,
+  relationship_graph: 3,
+  social_coordination: 4,
+  persistent_memory: 5,
+  planning: 6,
+  reflection: 7,
+  memory_retrieval: 8,
+  observation: 9,
+  action_conversation: 10,
+  agent_identity: 11,
 };
 
 function topPassedCapabilities(
@@ -313,7 +314,8 @@ export function RunSummary({ events, onJumpToEvent, worldState }: RunSummaryProp
 
           <div style={evaluationMetaStyle}>
             Ablations covered {coveredAblations}/{smallvilleEvaluation.ablationChecks.length};
-            routine phases {smallvilleEvaluation.evidenceSummary.routinePhaseCount}/6
+            routine phases {smallvilleEvaluation.evidenceSummary.routinePhaseCount}/6;
+            revisions {smallvilleEvaluation.evidenceSummary.adaptiveRoutineRevisionCount}
           </div>
 
           {topEvidence.length > 0 ? (

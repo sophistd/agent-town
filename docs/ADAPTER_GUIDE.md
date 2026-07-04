@@ -183,6 +183,32 @@ Rules:
   provider output parsing. A live provider call requires `OPENAI_API_KEY` in the
   local runtime.
 
+## Adaptive Routine Adapter
+
+`src/adapters/adaptiveRoutineAdapter.ts` implements the current adaptive daily
+plan path.
+
+Rules:
+
+- The adapter reads prior canonical routine events and external town
+  observations.
+- If the supplied stream has no `metadata.routine` evidence, it returns a
+  warning and uses the deterministic Routine day seed so the UI source remains
+  runnable without silently claiming current-run provenance.
+- It emits revised observation, memory retrieval, reflection, planning, action,
+  and memory writeback events for up to 25 agents.
+- Accepted events use `metadata.source = "custom"` and carry
+  `metadata.routine`, `metadata.routineRevision`, `metadata.cognitiveStage`,
+  `metadata.subLocationId`, and `metadata.activity`.
+- `metadata.routineRevision` records the previous run id, previous event id,
+  prior routine event ids, selected memory event ids, previous location,
+  revised location, source observation, reason, schema version, and generator
+  boundary.
+- The adapter validates generated events before replay and quarantines invalid
+  generated events instead of letting them enter `WorldState`.
+- Phaser, map objects, sprites, and React state do not revise schedules. They
+  only project the accepted `AgentEvent -> WorldState` result.
+
 ## Adding Another Source
 
 1. Create `src/adapters/<source>Adapter.ts`.
