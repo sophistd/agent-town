@@ -11,6 +11,8 @@ export type PlaybackSnapshot = {
 type PlaybackListener = () => void;
 
 const DEFAULT_INTERVAL_MS = 900;
+const MIN_INTERVAL_MS = 250;
+const MAX_INTERVAL_MS = 2400;
 
 let playbackSnapshot: PlaybackSnapshot = {
   cursor: 0,
@@ -90,6 +92,15 @@ export function playPlayback(eventCount: number): void {
 
 export function pausePlayback(): void {
   commitPlayback({ ...playbackSnapshot, isPlaying: false });
+}
+
+export function setPlaybackInterval(intervalMs: number): void {
+  const clampedIntervalMs = Math.min(
+    MAX_INTERVAL_MS,
+    Math.max(MIN_INTERVAL_MS, intervalMs),
+  );
+
+  commitPlayback({ ...playbackSnapshot, intervalMs: clampedIntervalMs });
 }
 
 export function stepPrevious(eventCount: number): void {

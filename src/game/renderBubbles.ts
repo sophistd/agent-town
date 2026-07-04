@@ -2,11 +2,13 @@ import Phaser from "phaser";
 
 import type { AgentBubble, AgentState, WorldState } from "../events/types";
 import { selectEvent } from "../state/selectionStore";
+import type { TownProjectionSettings } from "./projectionSettings";
 import { getAgentRenderPositions } from "./renderAgents";
 import { BUBBLE_VISUALS } from "./visualMapping";
 
-function truncateBubbleText(text: string): string {
-  return text.length > 48 ? `${text.slice(0, 45)}...` : text;
+function truncateBubbleText(text: string, settings: TownProjectionSettings): string {
+  const limit = settings.density === "expanded" ? 74 : 48;
+  return text.length > limit ? `${text.slice(0, limit - 3)}...` : text;
 }
 
 function renderBubble(
@@ -16,12 +18,16 @@ function renderBubble(
   bubble: AgentBubble,
   x: number,
   y: number,
+  settings: TownProjectionSettings,
 ): void {
   const visual = BUBBLE_VISUALS[bubble.kind];
-  const text = truncateBubbleText(bubble.text);
-  const width = Math.min(210, Math.max(112, text.length * 7 + 34));
-  const height = 44;
-  const bubbleX = Math.max(24, Math.min(936 - width, x - width / 2));
+  const text = truncateBubbleText(bubble.text, settings);
+  const width = Math.min(
+    settings.density === "expanded" ? 274 : 210,
+    Math.max(112, text.length * 7 + 34),
+  );
+  const height = settings.density === "expanded" ? 52 : 44;
+  const bubbleX = Math.max(24, Math.min(scene.scale.width - 24 - width, x - width / 2));
   const bubbleY = Math.max(38, y - 96);
 
   const box = scene.add.graphics();
@@ -68,6 +74,7 @@ export function renderBubbles(
   scene: Phaser.Scene,
   layer: Phaser.GameObjects.Container,
   worldState: WorldState,
+  settings: TownProjectionSettings,
 ): void {
   const positions = getAgentRenderPositions(worldState);
 
@@ -81,6 +88,6 @@ export function renderBubbles(
       continue;
     }
 
-    renderBubble(scene, layer, agent, agent.bubble, position.x, position.y);
+    renderBubble(scene, layer, agent, agent.bubble, position.x, position.y, settings);
   }
 }

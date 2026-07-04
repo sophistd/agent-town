@@ -9,6 +9,7 @@ export type LocationVisual = {
   label: string;
   shortLabel: string;
   fill: number;
+  roof: number;
   stroke: number;
 };
 
@@ -38,42 +39,49 @@ export const LOCATION_VISUALS: Record<Exclude<AgentLocation, "unknown">, Locatio
     label: "Town Hall",
     shortLabel: "Planning",
     fill: 0xf5ead5,
+    roof: 0xdabf83,
     stroke: 0xb88a3d,
   },
   library: {
     label: "Library",
     shortLabel: "Research",
     fill: 0xe2eef7,
+    roof: 0x9dbdd7,
     stroke: 0x527f9f,
   },
   workshop: {
     label: "Workshop",
     shortLabel: "Build",
     fill: 0xeee7f6,
+    roof: 0xb7a3d6,
     stroke: 0x7a639d,
   },
   archive: {
     label: "Archive",
     shortLabel: "Memory",
     fill: 0xe5f0df,
+    roof: 0xa8c99b,
     stroke: 0x6d8e5b,
   },
   review_room: {
     label: "Review Room",
     shortLabel: "Review",
     fill: 0xf6e2df,
+    roof: 0xd89a90,
     stroke: 0xa65f57,
   },
   dispatch_board: {
     label: "Dispatch Board",
     shortLabel: "Queue",
     fill: 0xf1eddc,
+    roof: 0xd5c17e,
     stroke: 0x958254,
   },
   square: {
     label: "Square",
-    shortLabel: "Current",
+    shortLabel: "Current / Done",
     fill: 0xe8f0ec,
+    roof: 0x96c1af,
     stroke: 0x4d8873,
   },
 };

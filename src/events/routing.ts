@@ -12,14 +12,14 @@ type RoutableEvent = Partial<Omit<AgentEvent, "type" | "locationHint">> & {
 };
 
 export const LOCATION_COORDINATES: Record<AgentLocation, Coordinates> = {
-  town_hall: { x: 240, y: 160 },
-  library: { x: 520, y: 160 },
-  workshop: { x: 520, y: 360 },
-  archive: { x: 240, y: 360 },
-  review_room: { x: 760, y: 260 },
-  dispatch_board: { x: 400, y: 80 },
-  square: { x: 400, y: 260 },
-  unknown: { x: 80, y: 80 },
+  town_hall: { x: 250, y: 280 },
+  library: { x: 560, y: 250 },
+  workshop: { x: 585, y: 680 },
+  archive: { x: 260, y: 650 },
+  review_room: { x: 840, y: 500 },
+  dispatch_board: { x: 505, y: 120 },
+  square: { x: 505, y: 445 },
+  unknown: { x: 84, y: 110 },
 };
 
 export function isKnownLocation(input: unknown): input is AgentLocation {

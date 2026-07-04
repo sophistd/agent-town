@@ -3,41 +3,46 @@ import Phaser from "phaser";
 import {
   AgentTownScene,
   AGENT_TOWN_SCENE_KEY,
+  PROJECTION_SETTINGS_REGISTRY_KEY,
   WORLD_STATE_REGISTRY_KEY,
 } from "./AgentTownScene";
 import type { WorldState } from "../events/types";
+import type { TownProjectionSettings } from "./projectionSettings";
 
 export type AgentTownPhaserGame = Phaser.Game & {
   registry: Phaser.Data.DataManager;
 };
 
 type CreatePhaserGameOptions = {
-  parent: HTMLElement;
   initialWorldState: WorldState;
+  parent: HTMLElement;
+  projectionSettings: TownProjectionSettings;
 };
 
 export function createPhaserGame({
-  parent,
   initialWorldState,
+  parent,
+  projectionSettings,
 }: CreatePhaserGameOptions): AgentTownPhaserGame {
   const game = new Phaser.Game({
     type: Phaser.AUTO,
     parent,
-    backgroundColor: "#e9eee8",
-    width: 960,
-    height: 540,
+    backgroundColor: "#dbe8d4",
+    width: 1040,
+    height: 900,
     scale: {
       mode: Phaser.Scale.FIT,
-      autoCenter: Phaser.Scale.CENTER_BOTH,
+      autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
     },
     render: {
-      antialias: true,
-      pixelArt: false,
+      antialias: false,
+      pixelArt: true,
     },
     scene: [AgentTownScene],
   }) as AgentTownPhaserGame;
 
   game.registry.set(WORLD_STATE_REGISTRY_KEY, initialWorldState);
+  game.registry.set(PROJECTION_SETTINGS_REGISTRY_KEY, projectionSettings);
 
   return game;
 }
@@ -51,6 +56,18 @@ export function updatePhaserWorldState(
   const scene = game.scene.getScene(AGENT_TOWN_SCENE_KEY);
   if (scene instanceof AgentTownScene) {
     scene.setWorldState(worldState);
+  }
+}
+
+export function updatePhaserProjectionSettings(
+  game: AgentTownPhaserGame,
+  projectionSettings: TownProjectionSettings,
+): void {
+  game.registry.set(PROJECTION_SETTINGS_REGISTRY_KEY, projectionSettings);
+
+  const scene = game.scene.getScene(AGENT_TOWN_SCENE_KEY);
+  if (scene instanceof AgentTownScene) {
+    scene.setProjectionSettings(projectionSettings);
   }
 }
 

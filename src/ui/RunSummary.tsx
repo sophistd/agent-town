@@ -17,12 +17,15 @@ type RunSummaryProps = {
 
 const sectionStyle = {
   paddingBottom: "16px",
-  borderBottom: "1px solid #e2e2db",
+  borderBottom: "1px solid rgba(157, 181, 166, 0.2)",
 } satisfies CSSProperties;
 
 const titleStyle = {
   margin: "0 0 12px",
-  fontSize: "16px",
+  color: "#dce8df",
+  fontSize: "12px",
+  fontWeight: 800,
+  textTransform: "uppercase",
 } satisfies CSSProperties;
 
 const metricGridStyle = {
@@ -32,15 +35,15 @@ const metricGridStyle = {
 } satisfies CSSProperties;
 
 const metricStyle = {
-  border: "1px solid #deded7",
+  border: "1px solid rgba(143, 170, 157, 0.22)",
   borderRadius: "6px",
   padding: "8px",
-  background: "#f7f7f4",
+  background: "#101a1d",
 } satisfies CSSProperties;
 
 const metricLabelStyle = {
   display: "block",
-  color: "#62625b",
+  color: "#95aaa0",
   fontSize: "11px",
   lineHeight: 1.35,
 } satisfies CSSProperties;
@@ -48,7 +51,7 @@ const metricLabelStyle = {
 const metricValueStyle = {
   display: "block",
   marginTop: "2px",
-  color: "#202124",
+  color: "#edf6ef",
   fontSize: "17px",
   fontWeight: 750,
   lineHeight: 1.2,
@@ -63,10 +66,10 @@ const shortcutRowStyle = {
 
 const buttonStyle = {
   minHeight: "34px",
-  border: "1px solid #cfcfc8",
+  border: "1px solid rgba(143, 170, 157, 0.24)",
   borderRadius: "6px",
-  background: "#fffdfa",
-  color: "#202124",
+  background: "#162427",
+  color: "#d9e4de",
   cursor: "pointer",
   fontSize: "13px",
   fontWeight: 700,

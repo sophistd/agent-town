@@ -4,7 +4,6 @@ import {
   useMemo,
   useRef,
   useState,
-  type CSSProperties,
 } from "react";
 
 import { parseNativeJsonl } from "../adapters/jsonlAdapter";
@@ -19,21 +18,25 @@ import { mockEvents } from "../events/mockEvents";
 import { replay } from "../events/reducer";
 import { selectCurrentEvent } from "../events/selectors";
 import type { AgentEvent } from "../events/types";
+import { DEFAULT_TOWN_PROJECTION_SETTINGS } from "../game/projectionSettings";
 import { advancePlayback, setPlaybackCursor, usePlayback } from "../state/playbackStore";
-import { selectAgent, selectEvent } from "../state/selectionStore";
+import { selectAgent, selectEvent, useSelection } from "../state/selectionStore";
 import { DetailPanel } from "./DetailPanel";
 import { ImportPanel, type ImportPanelStatus, type ImportSourceKind } from "./ImportPanel";
 import { Layout } from "./Layout";
+import {
+  AgentFocusPanel,
+  EventFilterPanel,
+  ProjectionControls,
+} from "./ProjectionControls";
 import { RunSummary } from "./RunSummary";
 import { Timeline } from "./Timeline";
 import { TownCanvas } from "./TownCanvas";
-
-const compactTextStyle = {
-  margin: 0,
-  fontSize: "13px",
-  lineHeight: 1.45,
-  color: "#42423d",
-} satisfies CSSProperties;
+import {
+  DEFAULT_EVENT_TYPE_FILTERS,
+  matchesEventTypeFilter,
+  type EventTypeFilterMap,
+} from "./projectionFilters";
 
 const DEFAULT_WEBSOCKET_URL = "ws://localhost:8765/events";
 
@@ -83,6 +86,23 @@ const mockStatus = {
   message: "Mock failure run loaded.",
 } satisfies ImportPanelStatus;
 
+function HeaderMetric({
+  label,
+  tone,
+  value,
+}: {
+  label: string;
+  tone?: "danger" | "running" | "warning";
+  value: string;
+}) {
+  return (
+    <div className="header-metric">
+      <span>{label}</span>
+      <strong data-tone={tone}>{value}</strong>
+    </div>
+  );
+}
+
 function statusLevelFor(result: AdapterResult): ImportPanelStatus["level"] {
   if (result.quarantinedEvents.length > 0) {
     return result.events.length > 0 ? "warning" : "error";
@@ -122,9 +142,16 @@ function mergeEvents(
 
 export function App() {
   const playback = usePlayback();
+  const selection = useSelection();
   const [activeSource, setActiveSource] = useState<ImportSourceKind>("mock");
   const [events, setEvents] = useState<readonly AgentEvent[]>(mockFailureRun);
+  const [eventTypeFilters, setEventTypeFilters] = useState<EventTypeFilterMap>(
+    DEFAULT_EVENT_TYPE_FILTERS,
+  );
   const [importStatus, setImportStatus] = useState<ImportPanelStatus>(mockStatus);
+  const [projectionSettings, setProjectionSettings] = useState(
+    DEFAULT_TOWN_PROJECTION_SETTINGS,
+  );
   const [warnings, setWarnings] = useState<readonly AdapterWarning[]>([]);
   const [quarantinedEvents, setQuarantinedEvents] = useState<
     readonly AdapterQuarantinedEvent[]
@@ -132,15 +159,24 @@ export function App() {
   const eventsRef = useRef<readonly AgentEvent[]>(mockFailureRun);
   const activeSourceRef = useRef<ImportSourceKind>("mock");
   const websocketConnectionRef = useRef<WebSocketIngestConnection | null>(null);
-  const currentState = useMemo(
-    () => replay(events, playback.cursor),
-    [events, playback.cursor],
-  );
+  const currentState = useMemo(() => {
+    const replayState = replay(events, playback.cursor);
+
+    return {
+      ...replayState,
+      selectedAgentId: selection.selectedAgentId ?? replayState.selectedAgentId,
+      selectedEventId: selection.selectedEventId ?? replayState.selectedEventId,
+    };
+  }, [events, playback.cursor, selection.selectedAgentId, selection.selectedEventId]);
   const summaryState = useMemo(
     () => replay(events, events.length - 1),
     [events],
   );
   const currentEvent = selectCurrentEvent(currentState, events);
+  const visibleEventCount = useMemo(
+    () => events.filter((event) => matchesEventTypeFilter(event, eventTypeFilters)).length,
+    [eventTypeFilters, events],
+  );
   const agents = Object.values(currentState.agents).sort((left, right) =>
     left.agentId.localeCompare(right.agentId),
   );
@@ -316,22 +352,30 @@ export function App() {
 
   return (
     <Layout
+      headerMetrics={
+        <>
+          <HeaderMetric label="Run ID" value={currentState.runId} />
+          <HeaderMetric
+            label="Status"
+            tone={playback.isPlaying ? "running" : undefined}
+            value={playback.isPlaying ? "running" : "paused"}
+          />
+          <HeaderMetric label="Cursor" value={`${Math.max(0, playback.cursor + 1)} / ${events.length}`} />
+          <HeaderMetric label="Events" value={String(events.length)} />
+          <HeaderMetric
+            label="Warnings"
+            tone={warnings.length > 0 ? "warning" : undefined}
+            value={String(warnings.length)}
+          />
+          <HeaderMetric
+            label="Quarantine"
+            tone={quarantinedEvents.length > 0 ? "danger" : undefined}
+            value={String(quarantinedEvents.length)}
+          />
+        </>
+      }
       sidebar={
         <>
-          <h2 style={{ margin: "0 0 12px", fontSize: "16px" }}>Session / Agents</h2>
-          <p style={{ ...compactTextStyle, marginBottom: "16px" }}>
-            React owns playback state and derives WorldState from AgentEvent.
-          </p>
-          <ul style={{ display: "grid", gap: "10px", margin: 0, padding: 0, listStyle: "none" }}>
-            {agents.map((agent) => (
-              <li key={agent.agentId} style={{ borderTop: "1px solid #e2e2db", paddingTop: "10px" }}>
-                <strong>{agent.agentName}</strong>
-                <p style={compactTextStyle}>
-                  {agent.role} · {agent.status} · {agent.location}
-                </p>
-              </li>
-            ))}
-          </ul>
           <ImportPanel
             activeSource={activeSource}
             eventCount={events.length}
@@ -346,9 +390,30 @@ export function App() {
             warnings={warnings}
             webSocketUrl={DEFAULT_WEBSOCKET_URL}
           />
+          <ProjectionControls
+            settings={projectionSettings}
+            onChange={setProjectionSettings}
+          />
+          <AgentFocusPanel
+            agents={agents}
+            selectedAgentId={selection.selectedAgentId}
+          />
+          <EventFilterPanel
+            events={events}
+            filters={eventTypeFilters}
+            onChange={setEventTypeFilters}
+          />
         </>
       }
-      town={<TownCanvas worldState={currentState} />}
+      town={
+        <TownCanvas
+          currentEvent={currentEvent}
+          settings={projectionSettings}
+          totalEventCount={events.length}
+          visibleEventCount={visibleEventCount}
+          worldState={currentState}
+        />
+      }
       detail={
         <>
           <RunSummary
@@ -364,7 +429,11 @@ export function App() {
         </>
       }
       timeline={
-        <Timeline events={events} playback={playback} />
+        <Timeline
+          eventTypeFilters={eventTypeFilters}
+          events={events}
+          playback={playback}
+        />
       }
     />
   );

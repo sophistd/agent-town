@@ -28,19 +28,22 @@ type ImportPanelProps = {
 const sectionStyle = {
   display: "grid",
   gap: "10px",
-  marginTop: "16px",
-  paddingTop: "16px",
-  borderTop: "1px solid #e2e2db",
+  marginTop: 0,
+  paddingTop: 0,
 } satisfies CSSProperties;
 
 const titleStyle = {
   margin: 0,
-  fontSize: "16px",
+  color: "#dce8df",
+  fontSize: "12px",
+  fontWeight: 800,
+  lineHeight: 1.2,
+  textTransform: "uppercase",
 } satisfies CSSProperties;
 
 const mutedTextStyle = {
   margin: 0,
-  color: "#62625b",
+  color: "#95aaa0",
   fontSize: "12px",
   lineHeight: 1.4,
 } satisfies CSSProperties;
@@ -53,10 +56,10 @@ const sourceGridStyle = {
 
 const buttonStyle = {
   minHeight: "32px",
-  border: "1px solid #cfcfc8",
+  border: "1px solid rgba(143, 170, 157, 0.24)",
   borderRadius: "6px",
-  background: "#fffdfa",
-  color: "#202124",
+  background: "#162427",
+  color: "#d9e4de",
   cursor: "pointer",
   fontSize: "12px",
   fontWeight: 700,
@@ -64,18 +67,19 @@ const buttonStyle = {
 
 const activeButtonStyle = {
   ...buttonStyle,
-  borderColor: "#1b6f6a",
-  background: "#eaf4f2",
+  borderColor: "rgba(117, 201, 164, 0.72)",
+  background: "#18352c",
+  color: "#ecfff4",
 } satisfies CSSProperties;
 
 const inputStyle = {
   width: "100%",
   minWidth: 0,
   boxSizing: "border-box",
-  border: "1px solid #d8d8d2",
+  border: "1px solid rgba(143, 170, 157, 0.24)",
   borderRadius: "6px",
-  background: "#fffdfa",
-  color: "#202124",
+  background: "#0f181b",
+  color: "#d9e4de",
   font: "inherit",
   fontSize: "12px",
   padding: "8px",
@@ -98,24 +102,24 @@ const actionRowStyle = {
 
 const statusStyleByLevel: Record<ImportStatusLevel, CSSProperties> = {
   error: {
-    borderColor: "#c25f5f",
-    background: "#fff1f1",
-    color: "#7d2020",
+    borderColor: "rgba(255, 141, 120, 0.52)",
+    background: "#321c1a",
+    color: "#ffb5a6",
   },
   idle: {
-    borderColor: "#d8d8d2",
-    background: "#f7f7f4",
-    color: "#62625b",
+    borderColor: "rgba(143, 170, 157, 0.24)",
+    background: "#101a1d",
+    color: "#95aaa0",
   },
   ok: {
-    borderColor: "#86aaa4",
-    background: "#eef8f6",
-    color: "#174f4b",
+    borderColor: "rgba(117, 201, 164, 0.54)",
+    background: "#163027",
+    color: "#9ae6b5",
   },
   warning: {
-    borderColor: "#d0ae64",
-    background: "#fff8e7",
-    color: "#765315",
+    borderColor: "rgba(240, 195, 90, 0.54)",
+    background: "#332915",
+    color: "#f0d585",
   },
 };
 

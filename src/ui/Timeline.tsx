@@ -6,12 +6,18 @@ import {
   pausePlayback,
   playPlayback,
   setPlaybackCursor,
+  setPlaybackInterval,
   stepNext,
   stepPrevious,
 } from "../state/playbackStore";
 import { selectAgent, selectEvent, useSelection } from "../state/selectionStore";
+import {
+  matchesEventTypeFilter,
+  type EventTypeFilterMap,
+} from "./projectionFilters";
 
 type TimelineProps = {
+  eventTypeFilters: EventTypeFilterMap;
   events: readonly AgentEvent[];
   playback: PlaybackSnapshot;
 };
@@ -19,7 +25,7 @@ type TimelineProps = {
 const rootStyle = {
   display: "grid",
   gridTemplateRows: "auto minmax(0, 1fr)",
-  gap: "10px",
+  gap: "8px",
   minHeight: 0,
 } satisfies CSSProperties;
 
@@ -28,17 +34,18 @@ const controlsStyle = {
   alignItems: "center",
   gap: "8px",
   minWidth: 0,
+  color: "#dce8df",
 } satisfies CSSProperties;
 
 const controlButtonStyle = {
-  minWidth: "74px",
-  minHeight: "32px",
-  border: "1px solid #cfcfc8",
+  minWidth: "58px",
+  minHeight: "30px",
+  border: "1px solid rgba(143, 170, 157, 0.3)",
   borderRadius: "6px",
-  background: "#fffdfa",
-  color: "#202124",
+  background: "#162427",
+  color: "#d9e4de",
   cursor: "pointer",
-  fontSize: "13px",
+  fontSize: "12px",
   fontWeight: 700,
 } satisfies CSSProperties;
 
@@ -50,23 +57,24 @@ const disabledButtonStyle = {
 
 const eventListStyle = {
   display: "flex",
-  gap: "8px",
+  alignItems: "stretch",
+  gap: "6px",
   margin: 0,
-  padding: 0,
+  padding: "2px 0 4px",
   listStyle: "none",
   overflowX: "auto",
   minHeight: 0,
 } satisfies CSSProperties;
 
 const eventButtonStyle = {
-  width: "188px",
-  minWidth: "188px",
-  height: "66px",
-  border: "1px solid #d8d8d2",
+  width: "168px",
+  minWidth: "168px",
+  height: "78px",
+  border: "1px solid rgba(143, 170, 157, 0.26)",
   borderRadius: "6px",
   padding: "8px",
-  background: "#fffdfa",
-  color: "#202124",
+  background: "#132225",
+  color: "#eaf2ec",
   textAlign: "left",
   cursor: "pointer",
   display: "grid",
@@ -77,14 +85,14 @@ const eventButtonStyle = {
 
 const currentEventButtonStyle = {
   ...eventButtonStyle,
-  borderColor: "#1b6f6a",
-  background: "#eaf4f2",
+  borderColor: "#75c9a4",
+  background: "#18352c",
 } satisfies CSSProperties;
 
 const selectedEventButtonStyle = {
   ...eventButtonStyle,
-  borderColor: "#7a639d",
-  boxShadow: "inset 0 0 0 2px rgba(122, 99, 157, 0.24)",
+  borderColor: "#7dc6c7",
+  boxShadow: "inset 0 0 0 2px rgba(125, 198, 199, 0.2)",
 } satisfies CSSProperties;
 
 const currentSelectedEventButtonStyle = {
@@ -95,7 +103,7 @@ const currentSelectedEventButtonStyle = {
 const metaStyle = {
   display: "block",
   fontSize: "11px",
-  color: "#62625b",
+  color: "#95aaa0",
   whiteSpace: "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",
@@ -104,7 +112,7 @@ const metaStyle = {
 const labelStyle = {
   display: "block",
   fontSize: "12px",
-  color: "#202124",
+  color: "#eff6ef",
   whiteSpace: "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",
@@ -136,16 +144,21 @@ function eventButtonStyleFor(isCurrent: boolean, isSelected: boolean): CSSProper
   return eventButtonStyle;
 }
 
-export function Timeline({ events, playback }: TimelineProps) {
+export function Timeline({ eventTypeFilters, events, playback }: TimelineProps) {
   const selection = useSelection();
   const currentEvent = events[playback.cursor];
   const atStart = playback.cursor <= 0;
   const atEnd = playback.cursor >= events.length - 1;
+  const visibleEvents = events
+    .map((event, index) => ({ event, index }))
+    .filter(({ event }) => matchesEventTypeFilter(event, eventTypeFilters));
 
   return (
     <div style={rootStyle}>
       <div style={controlsStyle}>
-        <h2 style={{ margin: 0, fontSize: "16px" }}>Timeline</h2>
+        <h2 style={{ margin: 0, fontSize: "14px", textTransform: "uppercase" }}>
+          Timeline
+        </h2>
         <button
           type="button"
           style={atStart ? disabledButtonStyle : controlButtonStyle}
@@ -171,14 +184,43 @@ export function Timeline({ events, playback }: TimelineProps) {
         >
           Next
         </button>
-        <span style={{ marginLeft: "4px", fontSize: "12px", color: "#62625b" }}>
+        <label
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            fontSize: "12px",
+            color: "#95aaa0",
+          }}
+        >
+          Speed
+          <select
+            value={playback.intervalMs}
+            onChange={(event) => setPlaybackInterval(Number(event.currentTarget.value))}
+            style={{
+              minHeight: "30px",
+              border: "1px solid rgba(143, 170, 157, 0.3)",
+              borderRadius: "6px",
+              background: "#162427",
+              color: "#d9e4de",
+              fontSize: "12px",
+              fontWeight: 700,
+              padding: "4px 7px",
+            }}
+          >
+            <option value={1400}>0.7x</option>
+            <option value={900}>1x</option>
+            <option value={450}>2x</option>
+          </select>
+        </label>
+        <span style={{ marginLeft: "4px", fontSize: "12px", color: "#95aaa0" }}>
           {events.length === 0 ? "0 / 0" : `${playback.cursor + 1} / ${events.length}`}
           {currentEvent === undefined ? "" : ` · ${currentEvent.id}`}
         </span>
       </div>
 
       <ol style={eventListStyle}>
-        {events.map((event, index) => {
+        {visibleEvents.map(({ event, index }) => {
           const isCurrent = index === playback.cursor;
           const isSelected = event.id === selection.selectedEventId;
 
@@ -206,6 +248,11 @@ export function Timeline({ events, playback }: TimelineProps) {
             </li>
           );
         })}
+        {visibleEvents.length === 0 ? (
+          <li style={{ color: "#95aaa0", fontSize: "12px", padding: "16px 4px" }}>
+            No events match the active filters.
+          </li>
+        ) : null}
       </ol>
     </div>
   );

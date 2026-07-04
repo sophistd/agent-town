@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 
 import type { ProjectionEdge, WorldState } from "../events/types";
+import type { TownProjectionSettings } from "./projectionSettings";
 import { getAgentRenderPositions } from "./renderAgents";
 
 function edgeColor(edge: ProjectionEdge): number {
@@ -41,13 +42,54 @@ function drawArrowHead(
   );
 }
 
+function drawDashedLine(
+  graphics: Phaser.GameObjects.Graphics,
+  fromX: number,
+  fromY: number,
+  toX: number,
+  toY: number,
+): void {
+  const totalDistance = Phaser.Math.Distance.Between(fromX, fromY, toX, toY);
+  const dash = 12;
+  const gap = 8;
+  const segment = dash + gap;
+
+  if (totalDistance <= 0) {
+    graphics.fillCircle(fromX, fromY, 4);
+    return;
+  }
+
+  const steps = Math.max(1, Math.floor(totalDistance / segment));
+
+  for (let index = 0; index <= steps; index += 1) {
+    const startDistance = index * segment;
+    const endDistance = Math.min(startDistance + dash, totalDistance);
+    const startT = startDistance / totalDistance;
+    const endT = endDistance / totalDistance;
+
+    graphics.beginPath();
+    graphics.moveTo(
+      Phaser.Math.Linear(fromX, toX, startT),
+      Phaser.Math.Linear(fromY, toY, startT),
+    );
+    graphics.lineTo(
+      Phaser.Math.Linear(fromX, toX, endT),
+      Phaser.Math.Linear(fromY, toY, endT),
+    );
+    graphics.strokePath();
+  }
+}
+
 export function renderEdges(
   scene: Phaser.Scene,
   layer: Phaser.GameObjects.Container,
   worldState: WorldState,
+  settings: TownProjectionSettings,
 ): void {
   const positions = getAgentRenderPositions(worldState);
-  const edges = worldState.edges.slice(-12);
+  const edgeLimit =
+    settings.density === "compact" ? 5 : settings.density === "expanded" ? 18 : 12;
+  const edges = worldState.edges.slice(-edgeLimit);
 
   for (const edge of edges) {
     const from = positions.get(edge.fromAgentId);
@@ -59,17 +101,18 @@ export function renderEdges(
 
     const color = edgeColor(edge);
     const graphics = scene.add.graphics();
-    graphics.lineStyle(edge.kind === "handoff" ? 4 : 2, color, edge.kind === "handoff" ? 0.82 : 0.45);
-    graphics.beginPath();
-    graphics.moveTo(from.x, from.y);
-    graphics.lineTo(to.x, to.y);
-    graphics.strokePath();
+    graphics.lineStyle(
+      edge.kind === "handoff" ? 4 : 3,
+      color,
+      edge.kind === "handoff" ? 0.86 : 0.58,
+    );
+    drawDashedLine(graphics, from.x, from.y, to.x, to.y);
     graphics.fillStyle(color, edge.kind === "handoff" ? 0.9 : 0.55);
     drawArrowHead(graphics, from.x, from.y, to.x, to.y);
 
     layer.add(graphics);
 
-    if (edge.kind === "handoff") {
+    if (edge.kind === "handoff" && settings.density !== "compact") {
       const midX = (from.x + to.x) / 2;
       const midY = (from.y + to.y) / 2;
       const label = scene.add

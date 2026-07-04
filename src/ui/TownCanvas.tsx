@@ -1,27 +1,30 @@
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useRef } from "react";
 
 import {
   createPhaserGame,
   destroyPhaserGame,
+  updatePhaserProjectionSettings,
   updatePhaserWorldState,
   type AgentTownPhaserGame,
 } from "../game/createPhaserGame";
-import type { WorldState } from "../events/types";
-
-const hostStyle = {
-  position: "relative",
-  width: "100%",
-  height: "clamp(420px, 56vh, 560px)",
-  minHeight: "420px",
-  overflow: "hidden",
-  background: "#e9eee8",
-} satisfies CSSProperties;
+import type { AgentEvent, WorldState } from "../events/types";
+import type { TownProjectionSettings } from "../game/projectionSettings";
 
 type TownCanvasProps = {
+  currentEvent?: AgentEvent;
+  settings: TownProjectionSettings;
+  totalEventCount: number;
+  visibleEventCount: number;
   worldState: WorldState;
 };
 
-export function TownCanvas({ worldState }: TownCanvasProps) {
+export function TownCanvas({
+  currentEvent,
+  settings,
+  totalEventCount,
+  visibleEventCount,
+  worldState,
+}: TownCanvasProps) {
   const hostRef = useRef<HTMLDivElement | null>(null);
   const gameRef = useRef<AgentTownPhaserGame | null>(null);
 
@@ -32,6 +35,7 @@ export function TownCanvas({ worldState }: TownCanvasProps) {
 
     gameRef.current = createPhaserGame({
       parent: hostRef.current,
+      projectionSettings: settings,
       initialWorldState: worldState,
     });
 
@@ -41,7 +45,7 @@ export function TownCanvas({ worldState }: TownCanvasProps) {
         gameRef.current = null;
       }
     };
-  }, [worldState]);
+  }, []);
 
   useEffect(() => {
     if (gameRef.current === null) {
@@ -51,5 +55,32 @@ export function TownCanvas({ worldState }: TownCanvasProps) {
     updatePhaserWorldState(gameRef.current, worldState);
   }, [worldState]);
 
-  return <div ref={hostRef} data-testid="town-canvas-host" style={hostStyle} />;
+  useEffect(() => {
+    if (gameRef.current === null) {
+      return;
+    }
+
+    updatePhaserProjectionSettings(gameRef.current, settings);
+  }, [settings]);
+
+  return (
+    <div className="town-shell">
+      <div className="town-toolbar">
+        <p className="town-toolbar-title">
+          {currentEvent === undefined
+            ? "Waiting for AgentEvent"
+            : `${currentEvent.agentName} / ${currentEvent.type} / ${currentEvent.summary ?? currentEvent.content}`}
+        </p>
+        <div className="town-toolbar-meta" aria-label="Town projection status">
+          <span className="town-chip">cursor {worldState.cursor}</span>
+          <span className="town-chip">
+            visible {visibleEventCount}/{totalEventCount}
+          </span>
+          <span className="town-chip">{settings.density}</span>
+          <span className="town-chip">{Math.round(settings.townZoom * 100)}%</span>
+        </div>
+      </div>
+      <div ref={hostRef} data-testid="town-canvas-host" className="town-canvas-host" />
+    </div>
+  );
 }

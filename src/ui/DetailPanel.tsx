@@ -5,14 +5,17 @@ import { useSelection } from "../state/selectionStore";
 
 const sectionTitleStyle = {
   margin: "0 0 12px",
-  fontSize: "16px",
+  color: "#dce8df",
+  fontSize: "12px",
+  fontWeight: 800,
+  textTransform: "uppercase",
 } satisfies CSSProperties;
 
 const mutedTextStyle = {
   margin: 0,
-  fontSize: "13px",
+  fontSize: "12px",
   lineHeight: 1.45,
-  color: "#62625b",
+  color: "#95aaa0",
 } satisfies CSSProperties;
 
 const dataRowStyle = {
@@ -20,21 +23,23 @@ const dataRowStyle = {
   gridTemplateColumns: "112px minmax(0, 1fr)",
   gap: "8px",
   margin: "8px 0",
-  fontSize: "13px",
+  color: "#d8e2dc",
+  fontSize: "12px",
 } satisfies CSSProperties;
 
 const valueStyle = {
   minWidth: 0,
+  color: "#edf6ef",
   overflowWrap: "anywhere",
 } satisfies CSSProperties;
 
 const preStyle = {
   margin: "10px 0 0",
   padding: "10px",
-  border: "1px solid #d8d8d2",
+  border: "1px solid rgba(143, 170, 157, 0.24)",
   borderRadius: "6px",
-  background: "#22231f",
-  color: "#f7f7f4",
+  background: "#0a1012",
+  color: "#e6f0e9",
   fontSize: "11px",
   lineHeight: 1.45,
   overflow: "auto",
@@ -81,7 +86,7 @@ export function DetailPanel({ currentEvent, events, worldState }: DetailPanelPro
       <h2 style={sectionTitleStyle}>Event / Agent Detail</h2>
 
       <section aria-label="Playback state">
-        <h3 style={{ margin: "0 0 8px", fontSize: "14px" }}>Playback</h3>
+        <h3 style={{ margin: "0 0 8px", color: "#e8efe9", fontSize: "13px" }}>Playback</h3>
         <p style={mutedTextStyle}>
           Current event: {currentEvent?.id ?? "none"}
           <br />
@@ -90,7 +95,9 @@ export function DetailPanel({ currentEvent, events, worldState }: DetailPanelPro
       </section>
 
       <section style={{ marginTop: "18px" }} aria-label="Selected agent">
-        <h3 style={{ margin: "0 0 8px", fontSize: "14px" }}>Selected Agent</h3>
+        <h3 style={{ margin: "0 0 8px", color: "#e8efe9", fontSize: "13px" }}>
+          Selected Agent
+        </h3>
         {selectedAgent === undefined ? (
           <p style={mutedTextStyle}>Click an agent in Town View.</p>
         ) : (
@@ -116,7 +123,9 @@ export function DetailPanel({ currentEvent, events, worldState }: DetailPanelPro
       </section>
 
       <section style={{ marginTop: "18px" }} aria-label="Selected event">
-        <h3 style={{ margin: "0 0 8px", fontSize: "14px" }}>Selected Event</h3>
+        <h3 style={{ margin: "0 0 8px", color: "#e8efe9", fontSize: "13px" }}>
+          Selected Event
+        </h3>
         {selectedEvent === undefined ? (
           <p style={mutedTextStyle}>Click a bubble or timeline event.</p>
         ) : (
