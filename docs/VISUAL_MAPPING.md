@@ -40,6 +40,33 @@ The object layer must preserve these `locationId` values:
 - `unknown` remains a routing fallback and is not rendered as a normal town
   building.
 
+## Interior Anchor Mapping
+
+The current map also contains an `interiors` object layer. Interior objects are
+projection targets inside stable zones; they do not introduce new runtime
+locations and they do not change the canonical `AgentLocation` vocabulary.
+
+`AgentEvent.metadata.subLocationId` may point to one of these generated
+interior anchors. The reducer preserves that value as `AgentState.subLocationId`
+and the renderer resolves it against `town-v1.tiled.json` when drawing agents,
+bubbles, edges, and movement trails. If an event omits `subLocationId` or points
+to an unknown anchor, the renderer falls back to the stable zone anchor from
+`src/events/routing.ts`.
+
+| Stable zone | Interior IDs |
+| --- | --- |
+| `dispatch_board` | `dispatch_queue`, `dispatch_notice_wall` |
+| `town_hall` | `town_hall_table`, `town_hall_office` |
+| `library` | `library_stacks`, `library_reading_nook` |
+| `archive` | `archive_shelves`, `archive_writing_desk` |
+| `square` | `square_cafe`, `square_fountain_edge` |
+| `workshop` | `workshop_bench`, `workshop_debug_desk` |
+| `review_room` | `review_table`, `review_evidence_wall` |
+
+`AgentEvent.metadata.activity` may be displayed as an activity label in expanded
+density. It is descriptive event metadata, not a renderer-inferred business
+fact.
+
 ## Agent Mapping
 
 Agent identity comes from `WorldState.agents`.
@@ -49,6 +76,11 @@ sprite sheet. Sprite columns follow the role order below. Sprite rows represent
 visual status families: idle/waiting, active, blocked/error, and done. The
 renderer chooses a frame from `AgentState.role` and `AgentState.status`; it does
 not infer those values from the sprite.
+
+`src/events/mockSmallvilleDayRun.ts` provides a deterministic "Town day" run
+that exercises the interior anchors with five named agents and day-phase event
+metadata. It is still a canonical `AgentEvent` fixture; selecting it in the UI
+does not activate a separate simulation engine.
 
 | Role | Default visible identity |
 | --- | --- |
@@ -113,7 +145,10 @@ S08 includes a status legend for idle, thinking, waiting, blocked, error, and do
   baked map, or building sprites / generated footprints in fallback paths,
   while tests keep map anchors aligned with `LOCATION_COORDINATES`.
 - `src/game/renderAgents.ts` renders agent sprites, status marker, selected
-  state, and label from `WorldState`.
+  state, activity label, movement trail, and label from `WorldState`.
+- `src/events/reducer.ts` preserves `subLocationId`, `activity`, and previous
+  route coordinates from event metadata so the renderer can project interior
+  activity without inventing runtime facts.
 - `src/game/visualMapping.ts` contains visual labels/colors only. It does not route events.
 - `src/events/routing.ts` remains the source of event-to-location routing.
 - Generated rendering remains the fallback. It uses local Phaser shapes, labels,
@@ -140,9 +175,11 @@ Current limitations:
 
 - The assets are original and generated for this repository; they are not copied
   Stanford Smallville art and not a third-party asset pack.
-- The map is visually closer to a Smallville-like projection, but it is still a
+- The map is visually closer to a Smallville-like projection and now includes
+  interior anchors plus a deterministic day-run fixture, but it is still a
   compact prototype map rather than a complete generative-agents world with
-  many interiors, occupations, and day-long character routines.
+  autonomous schedules, persistent memories, animation cycles, or editable
+  large-world Tiled authoring.
 - There is no dedicated search/filter input yet. S15 records the rule and
   preserves Timeline/detail-based inspection; a later session can add filter UI
   if product review makes that the highest-risk gap.

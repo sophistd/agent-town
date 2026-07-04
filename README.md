@@ -88,10 +88,13 @@ The current surface includes:
 - a Phaser town canvas that renders `WorldState`
 - stable town zones for planning, research, production, memory, review, queue,
   and final state
+- a project-authored Tiled-compatible pixel map with generated tiles, buildings,
+  agents, and interior anchors
 - agent marks, role colors, status markers, bubbles, and handoff/message edges
 - a Timeline with playback, cursor jumping, and current-event selection
 - a Detail panel for the selected event and run summary
-- an Import Source panel for mock, native JSONL, and WebSocket-shaped input
+- an Import Source panel for mock, Town day, native JSONL, and
+  WebSocket-shaped input
 - adapter warnings and quarantine counts
 
 ## Architecture
@@ -128,10 +131,13 @@ Quick path:
 4. Start from the default mock failure run.
 5. Use Timeline to jump through planning, research, coding, error, blocked,
    repair, review, memory write, and done events.
-6. Use Detail to inspect the selected event fields.
-7. Use Import Source -> JSONL to import the native JSONL sample in the text
+6. Use Import Source -> Town day to inspect the Smallville-like day fixture:
+   five agents moving through stable zones, interior anchors, bubbles, handoff
+   edges, and activity labels.
+7. Use Detail to inspect the selected event fields.
+8. Use Import Source -> JSONL to import the native JSONL sample in the text
    area.
-8. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
+9. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
    the same projection pipeline.
 
 Relevant screenshots and evidence:
@@ -216,6 +222,12 @@ The current Tiled-compatible object map must preserve the stable location IDs
 documented in `docs/VISUAL_MAPPING.md`. Map object names, sprite names, and
 building labels are projection metadata only; they must not create runtime
 facts.
+
+Interior anchors follow the same rule. `public/maps/town-v1.tiled.json` may
+define generated objects such as `library_stacks` or `workshop_bench`, but an
+agent only renders there when an `AgentEvent` carries matching
+`metadata.subLocationId`. The renderer must fall back to the stable zone when
+that metadata is missing or unknown.
 
 ## Adding An Agent Role
 

@@ -134,7 +134,16 @@ export class AgentTownScene extends Phaser.Scene {
   }
 
   private canRender(): boolean {
-    return !this.isShutdown && this.sys.isActive();
+    const gameObjectFactory = this.add as Phaser.GameObjects.GameObjectFactory & {
+      displayList?: unknown;
+    };
+
+    return (
+      !this.isShutdown &&
+      this.sys.isActive() &&
+      gameObjectFactory.displayList !== undefined &&
+      gameObjectFactory.displayList !== null
+    );
   }
 
   private applyProjectionScale(): void {
@@ -170,11 +179,11 @@ export class AgentTownScene extends Phaser.Scene {
 
     renderLocations(this, this.townLayer, this.projectionSettings, this.townMap);
     if (this.projectionSettings.showEdges) {
-      renderEdges(this, this.townLayer, state, this.projectionSettings);
+      renderEdges(this, this.townLayer, state, this.projectionSettings, this.townMap);
     }
-    renderAgents(this, this.townLayer, state, this.projectionSettings);
+    renderAgents(this, this.townLayer, state, this.projectionSettings, this.townMap);
     if (this.projectionSettings.showBubbles) {
-      renderBubbles(this, this.townLayer, state, this.projectionSettings);
+      renderBubbles(this, this.townLayer, state, this.projectionSettings, this.townMap);
     }
 
     const footer = this.add.text(

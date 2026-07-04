@@ -9,7 +9,7 @@
   "tilewidth": 16,
   "tileheight": 16,
   "infinite": false,
-  "nextlayerid": 8,
+  "nextlayerid": 9,
   "nextobjectid": 200,
   "properties": [
     {
@@ -11529,279 +11529,652 @@
     },
     {
       "id": 7,
-      "name": "decor",
+      "name": "interiors",
       "type": "objectgroup",
       "visible": true,
       "opacity": 1,
       "objects": [
         {
           "id": 70,
+          "name": "Queue Desk",
+          "type": "interior",
+          "x": 452,
+          "y": 112,
+          "width": 48,
+          "height": 28,
+          "properties": [
+            {
+              "name": "interiorId",
+              "type": "string",
+              "value": "dispatch_queue"
+            },
+            {
+              "name": "locationId",
+              "type": "string",
+              "value": "dispatch_board"
+            },
+            {
+              "name": "activityRole",
+              "type": "string",
+              "value": "handoff intake"
+            }
+          ]
+        },
+        {
+          "id": 71,
+          "name": "Notice Wall",
+          "type": "interior",
+          "x": 520,
+          "y": 112,
+          "width": 50,
+          "height": 28,
+          "properties": [
+            {
+              "name": "interiorId",
+              "type": "string",
+              "value": "dispatch_notice_wall"
+            },
+            {
+              "name": "locationId",
+              "type": "string",
+              "value": "dispatch_board"
+            },
+            {
+              "name": "activityRole",
+              "type": "string",
+              "value": "town bulletin"
+            }
+          ]
+        },
+        {
+          "id": 72,
+          "name": "Planning Table",
+          "type": "interior",
+          "x": 188,
+          "y": 296,
+          "width": 58,
+          "height": 34,
+          "properties": [
+            {
+              "name": "interiorId",
+              "type": "string",
+              "value": "town_hall_table"
+            },
+            {
+              "name": "locationId",
+              "type": "string",
+              "value": "town_hall"
+            },
+            {
+              "name": "activityRole",
+              "type": "string",
+              "value": "daily plan"
+            }
+          ]
+        },
+        {
+          "id": 73,
+          "name": "Mayor Desk",
+          "type": "interior",
+          "x": 268,
+          "y": 294,
+          "width": 52,
+          "height": 32,
+          "properties": [
+            {
+              "name": "interiorId",
+              "type": "string",
+              "value": "town_hall_office"
+            },
+            {
+              "name": "locationId",
+              "type": "string",
+              "value": "town_hall"
+            },
+            {
+              "name": "activityRole",
+              "type": "string",
+              "value": "decision"
+            }
+          ]
+        },
+        {
+          "id": 74,
+          "name": "Stacks",
+          "type": "interior",
+          "x": 492,
+          "y": 274,
+          "width": 52,
+          "height": 34,
+          "properties": [
+            {
+              "name": "interiorId",
+              "type": "string",
+              "value": "library_stacks"
+            },
+            {
+              "name": "locationId",
+              "type": "string",
+              "value": "library"
+            },
+            {
+              "name": "activityRole",
+              "type": "string",
+              "value": "reading"
+            }
+          ]
+        },
+        {
+          "id": 75,
+          "name": "Reading Nook",
+          "type": "interior",
+          "x": 574,
+          "y": 270,
+          "width": 50,
+          "height": 34,
+          "properties": [
+            {
+              "name": "interiorId",
+              "type": "string",
+              "value": "library_reading_nook"
+            },
+            {
+              "name": "locationId",
+              "type": "string",
+              "value": "library"
+            },
+            {
+              "name": "activityRole",
+              "type": "string",
+              "value": "research talk"
+            }
+          ]
+        },
+        {
+          "id": 76,
+          "name": "Memory Shelves",
+          "type": "interior",
+          "x": 188,
+          "y": 660,
+          "width": 58,
+          "height": 34,
+          "properties": [
+            {
+              "name": "interiorId",
+              "type": "string",
+              "value": "archive_shelves"
+            },
+            {
+              "name": "locationId",
+              "type": "string",
+              "value": "archive"
+            },
+            {
+              "name": "activityRole",
+              "type": "string",
+              "value": "memory read"
+            }
+          ]
+        },
+        {
+          "id": 77,
+          "name": "Writing Desk",
+          "type": "interior",
+          "x": 272,
+          "y": 658,
+          "width": 52,
+          "height": 34,
+          "properties": [
+            {
+              "name": "interiorId",
+              "type": "string",
+              "value": "archive_writing_desk"
+            },
+            {
+              "name": "locationId",
+              "type": "string",
+              "value": "archive"
+            },
+            {
+              "name": "activityRole",
+              "type": "string",
+              "value": "memory write"
+            }
+          ]
+        },
+        {
+          "id": 78,
+          "name": "Cafe Tables",
+          "type": "interior",
+          "x": 446,
+          "y": 474,
+          "width": 58,
+          "height": 34,
+          "properties": [
+            {
+              "name": "interiorId",
+              "type": "string",
+              "value": "square_cafe"
+            },
+            {
+              "name": "locationId",
+              "type": "string",
+              "value": "square"
+            },
+            {
+              "name": "activityRole",
+              "type": "string",
+              "value": "social plan"
+            }
+          ]
+        },
+        {
+          "id": 79,
+          "name": "Fountain Edge",
+          "type": "interior",
+          "x": 528,
+          "y": 412,
+          "width": 50,
+          "height": 30,
+          "properties": [
+            {
+              "name": "interiorId",
+              "type": "string",
+              "value": "square_fountain_edge"
+            },
+            {
+              "name": "locationId",
+              "type": "string",
+              "value": "square"
+            },
+            {
+              "name": "activityRole",
+              "type": "string",
+              "value": "meetup"
+            }
+          ]
+        },
+        {
+          "id": 80,
+          "name": "Workbench",
+          "type": "interior",
+          "x": 522,
+          "y": 704,
+          "width": 58,
+          "height": 34,
+          "properties": [
+            {
+              "name": "interiorId",
+              "type": "string",
+              "value": "workshop_bench"
+            },
+            {
+              "name": "locationId",
+              "type": "string",
+              "value": "workshop"
+            },
+            {
+              "name": "activityRole",
+              "type": "string",
+              "value": "build"
+            }
+          ]
+        },
+        {
+          "id": 81,
+          "name": "Debug Desk",
+          "type": "interior",
+          "x": 608,
+          "y": 704,
+          "width": 52,
+          "height": 34,
+          "properties": [
+            {
+              "name": "interiorId",
+              "type": "string",
+              "value": "workshop_debug_desk"
+            },
+            {
+              "name": "locationId",
+              "type": "string",
+              "value": "workshop"
+            },
+            {
+              "name": "activityRole",
+              "type": "string",
+              "value": "repair"
+            }
+          ]
+        },
+        {
+          "id": 82,
+          "name": "Review Table",
+          "type": "interior",
+          "x": 778,
+          "y": 520,
+          "width": 58,
+          "height": 34,
+          "properties": [
+            {
+              "name": "interiorId",
+              "type": "string",
+              "value": "review_table"
+            },
+            {
+              "name": "locationId",
+              "type": "string",
+              "value": "review_room"
+            },
+            {
+              "name": "activityRole",
+              "type": "string",
+              "value": "critique"
+            }
+          ]
+        },
+        {
+          "id": 83,
+          "name": "Evidence Wall",
+          "type": "interior",
+          "x": 862,
+          "y": 518,
+          "width": 50,
+          "height": 34,
+          "properties": [
+            {
+              "name": "interiorId",
+              "type": "string",
+              "value": "review_evidence_wall"
+            },
+            {
+              "name": "locationId",
+              "type": "string",
+              "value": "review_room"
+            },
+            {
+              "name": "activityRole",
+              "type": "string",
+              "value": "evidence"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "decor",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "objects": [
+        {
+          "id": 110,
           "name": "tree",
           "type": "tree",
           "x": 92,
           "y": 190
         },
         {
-          "id": 71,
+          "id": 111,
           "name": "tree",
           "type": "tree",
           "x": 122,
           "y": 740
         },
         {
-          "id": 72,
+          "id": 112,
           "name": "tree",
           "type": "tree",
           "x": 172,
           "y": 112
         },
         {
-          "id": 73,
+          "id": 113,
           "name": "tree",
           "type": "tree",
           "x": 198,
           "y": 808
         },
         {
-          "id": 74,
+          "id": 114,
           "name": "tree",
           "type": "tree",
           "x": 328,
           "y": 120
         },
         {
-          "id": 75,
+          "id": 115,
           "name": "tree",
           "type": "tree",
           "x": 358,
           "y": 750
         },
         {
-          "id": 76,
+          "id": 116,
           "name": "tree",
           "type": "tree",
           "x": 438,
           "y": 780
         },
         {
-          "id": 77,
+          "id": 117,
           "name": "tree",
           "type": "tree",
           "x": 726,
           "y": 146
         },
         {
-          "id": 78,
+          "id": 118,
           "name": "tree",
           "type": "tree",
           "x": 770,
           "y": 754
         },
         {
-          "id": 79,
+          "id": 119,
           "name": "tree",
           "type": "tree",
           "x": 902,
           "y": 210
         },
         {
-          "id": 80,
+          "id": 120,
           "name": "tree",
           "type": "tree",
           "x": 922,
           "y": 694
         },
         {
-          "id": 81,
+          "id": 121,
           "name": "tree",
           "type": "tree",
           "x": 968,
           "y": 374
         },
         {
-          "id": 82,
+          "id": 122,
           "name": "tree",
           "type": "tree",
           "x": 84,
           "y": 476
         },
         {
-          "id": 83,
+          "id": 123,
           "name": "tree",
           "type": "tree",
           "x": 706,
           "y": 218
         },
         {
-          "id": 84,
+          "id": 124,
           "name": "tree",
           "type": "tree",
           "x": 810,
           "y": 274
         },
         {
-          "id": 85,
+          "id": 125,
           "name": "tree",
           "type": "tree",
           "x": 116,
           "y": 392
         },
         {
-          "id": 86,
+          "id": 126,
           "name": "tree",
           "type": "tree",
           "x": 608,
           "y": 822
         },
         {
-          "id": 87,
+          "id": 127,
           "name": "tree",
           "type": "tree",
           "x": 968,
           "y": 604
         },
         {
-          "id": 88,
+          "id": 128,
           "name": "tree",
           "type": "tree",
           "x": 402,
           "y": 114
         },
         {
-          "id": 89,
+          "id": 129,
           "name": "tree",
           "type": "tree",
           "x": 670,
           "y": 96
         },
         {
-          "id": 90,
+          "id": 130,
           "name": "tree",
           "type": "tree",
           "x": 780,
           "y": 682
         },
         {
-          "id": 91,
+          "id": 131,
           "name": "tree",
           "type": "tree",
           "x": 300,
           "y": 818
         },
         {
-          "id": 92,
+          "id": 132,
           "name": "tree",
           "type": "tree",
           "x": 64,
           "y": 820
         },
         {
-          "id": 93,
+          "id": 133,
           "name": "tree",
           "type": "tree",
           "x": 980,
           "y": 782
         },
         {
-          "id": 94,
+          "id": 134,
           "name": "lamp",
           "type": "lamp",
           "x": 382,
           "y": 348
         },
         {
-          "id": 95,
+          "id": 135,
           "name": "lamp",
           "type": "lamp",
           "x": 620,
           "y": 392
         },
         {
-          "id": 96,
+          "id": 136,
           "name": "lamp",
           "type": "lamp",
           "x": 438,
           "y": 590
         },
         {
-          "id": 97,
+          "id": 137,
           "name": "lamp",
           "type": "lamp",
           "x": 704,
           "y": 574
         },
         {
-          "id": 98,
+          "id": 138,
           "name": "lamp",
           "type": "lamp",
           "x": 556,
           "y": 162
         },
         {
-          "id": 99,
+          "id": 139,
           "name": "lamp",
           "type": "lamp",
           "x": 836,
           "y": 398
         },
         {
-          "id": 100,
+          "id": 140,
           "name": "lamp",
           "type": "lamp",
           "x": 350,
           "y": 520
         },
         {
-          "id": 101,
+          "id": 141,
           "name": "bench",
           "type": "bench",
           "x": 478,
           "y": 522
         },
         {
-          "id": 102,
+          "id": 142,
           "name": "bench",
           "type": "bench",
           "x": 550,
           "y": 522
         },
         {
-          "id": 103,
+          "id": 143,
           "name": "bench",
           "type": "bench",
           "x": 346,
           "y": 432
         },
         {
-          "id": 104,
+          "id": 144,
           "name": "bench",
           "type": "bench",
           "x": 676,
           "y": 468
         },
         {
-          "id": 105,
+          "id": 145,
           "name": "bench",
           "type": "bench",
           "x": 536,
           "y": 358
         },
         {
-          "id": 106,
+          "id": 146,
           "name": "sign",
           "type": "sign",
           "x": 622,
           "y": 124
         },
         {
-          "id": 107,
+          "id": 147,
           "name": "sign",
           "type": "sign",
           "x": 314,
           "y": 596
         },
         {
-          "id": 108,
+          "id": 148,
           "name": "sign",
           "type": "sign",
           "x": 738,

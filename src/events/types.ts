@@ -130,6 +130,10 @@ export type AgentState = {
   role: AgentRole;
   status: AgentStateStatus;
   location: AgentLocation;
+  subLocationId?: string;
+  activity?: string;
+  previousX?: number;
+  previousY?: number;
   x: number;
   y: number;
   currentTaskId?: string;

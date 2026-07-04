@@ -63,6 +63,23 @@ LAMPS = [(382, 348), (620, 392), (438, 590), (704, 574), (556, 162), (836, 398),
 BENCHES = [(478, 522), (550, 522), (346, 432), (676, 468), (536, 358)]
 SIGNS = [(622, 124), (314, 596), (738, 642)]
 
+INTERIORS = [
+    ("dispatch_queue", "dispatch_board", "Queue Desk", "handoff intake", 452, 112, 48, 28),
+    ("dispatch_notice_wall", "dispatch_board", "Notice Wall", "town bulletin", 520, 112, 50, 28),
+    ("town_hall_table", "town_hall", "Planning Table", "daily plan", 188, 296, 58, 34),
+    ("town_hall_office", "town_hall", "Mayor Desk", "decision", 268, 294, 52, 32),
+    ("library_stacks", "library", "Stacks", "reading", 492, 274, 52, 34),
+    ("library_reading_nook", "library", "Reading Nook", "research talk", 574, 270, 50, 34),
+    ("archive_shelves", "archive", "Memory Shelves", "memory read", 188, 660, 58, 34),
+    ("archive_writing_desk", "archive", "Writing Desk", "memory write", 272, 658, 52, 34),
+    ("square_cafe", "square", "Cafe Tables", "social plan", 446, 474, 58, 34),
+    ("square_fountain_edge", "square", "Fountain Edge", "meetup", 528, 412, 50, 30),
+    ("workshop_bench", "workshop", "Workbench", "build", 522, 704, 58, 34),
+    ("workshop_debug_desk", "workshop", "Debug Desk", "repair", 608, 704, 52, 34),
+    ("review_table", "review_room", "Review Table", "critique", 778, 520, 58, 34),
+    ("review_evidence_wall", "review_room", "Evidence Wall", "evidence", 862, 518, 50, 34),
+]
+
 
 def ensure_dirs() -> None:
     for path in [TILESET_PATH, AGENT_SPRITES_PATH, BUILDING_SPRITES_PATH, BACKGROUND_PATH, MAP_PATH]:
@@ -227,6 +244,21 @@ def draw_bench(draw: ImageDraw.ImageDraw, x: int, y: int) -> None:
     draw.rectangle([x + 10, y + 8, x + 14, y + 17], fill="#4f371f")
 
 
+def draw_interior(draw: ImageDraw.ImageDraw, x: int, y: int, w: int, h: int, location_id: str, label: str) -> None:
+    p = PALETTES[location_id]
+    draw.rounded_rectangle([x, y, x + w, y + h], radius=4, fill=lighten(p["wall"], 18), outline=p["dark"], width=1)
+    draw.rectangle([x + 5, y + h - 9, x + w - 5, y + h - 5], fill=darken(p["wall"], 28))
+    draw.rectangle([x + 9, y + 7, x + 21, y + 17], fill=p["trim"], outline=p["dark"])
+    draw.rectangle([x + w - 22, y + 7, x + w - 10, y + 17], fill=lighten(p["roof"], 18), outline=p["dark"])
+    if "Table" in label or "Cafe" in label:
+        draw.ellipse([x + w // 2 - 8, y + 9, x + w // 2 + 8, y + 24], fill=p["roof"], outline=p["dark"])
+    elif "Shelves" in label or "Stacks" in label:
+        for offset in [9, 18, 27]:
+            draw.rectangle([x + offset, y + 5, x + offset + 4, y + h - 7], fill=darken(p["roof"], 10))
+    elif "Wall" in label:
+        draw.rectangle([x + 12, y + 5, x + w - 12, y + 19], fill="#fff6cf", outline=p["dark"])
+
+
 def create_background() -> None:
     random.seed(42)
     image = Image.new("RGBA", (PIXEL_W, PIXEL_H), "#cfe2bd")
@@ -252,6 +284,8 @@ def create_background() -> None:
     for index, (location_id, _label, _role, x, y, w, h) in enumerate(LOCATIONS):
         sprite = building_sheet.crop((index * sprite_w, 0, (index + 1) * sprite_w, sprite_h))
         image.alpha_composite(sprite, (int(x + w / 2 - sprite_w / 2), int(y + h - sprite_h + 20)))
+    for interior_id, location_id, label, _role, x, y, w, h in INTERIORS:
+        draw_interior(draw, x, y, w, h, location_id, label)
     for x, y in TREES:
         draw_tree(draw, x, y)
     for x, y in LAMPS:
@@ -366,6 +400,26 @@ def location_objects(start_id: int) -> list[dict]:
     return objects
 
 
+def interior_objects(start_id: int) -> list[dict]:
+    objects = []
+    for offset, (interior_id, location_id, label, role, x, y, w, h) in enumerate(INTERIORS):
+        objects.append({
+            "id": start_id + offset,
+            "name": label,
+            "type": "interior",
+            "x": x,
+            "y": y,
+            "width": w,
+            "height": h,
+            "properties": [
+                {"name": "interiorId", "type": "string", "value": interior_id},
+                {"name": "locationId", "type": "string", "value": location_id},
+                {"name": "activityRole", "type": "string", "value": role},
+            ],
+        })
+    return objects
+
+
 def decor_objects(start_id: int) -> list[dict]:
     objects = []
     next_id = start_id
@@ -385,7 +439,8 @@ def create_map_json() -> None:
         {"id": 4, "name": "terrain", "type": "objectgroup", "visible": True, "opacity": 1, "objects": terrain_objects()},
         {"id": 5, "name": "routes", "type": "objectgroup", "visible": True, "opacity": 1, "objects": route_objects(20)},
         {"id": 6, "name": "locations", "type": "objectgroup", "visible": True, "opacity": 1, "objects": location_objects(40)},
-        {"id": 7, "name": "decor", "type": "objectgroup", "visible": True, "opacity": 1, "objects": decor_objects(70)},
+        {"id": 7, "name": "interiors", "type": "objectgroup", "visible": True, "opacity": 1, "objects": interior_objects(70)},
+        {"id": 8, "name": "decor", "type": "objectgroup", "visible": True, "opacity": 1, "objects": decor_objects(110)},
     ]
     data = {
         "type": "map",
@@ -398,7 +453,7 @@ def create_map_json() -> None:
         "tilewidth": TILE,
         "tileheight": TILE,
         "infinite": False,
-        "nextlayerid": 8,
+        "nextlayerid": 9,
         "nextobjectid": 200,
         "properties": [
             {"name": "mapId", "type": "string", "value": "town-v1-original-pixel-town"},

@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import { mockEvents } from "../events/mockEvents";
 import { mockFailureRun } from "../events/mockFailureRun";
+import { mockSmallvilleDayRun } from "../events/mockSmallvilleDayRun";
 import { mockStressRun } from "../events/mockStressRun";
 import { createInitialWorldState, reduceEvent, replay } from "../events/reducer";
+import { LOCATION_COORDINATES } from "../events/routing";
 import {
   selectAgentState,
   selectActiveAgentCount,
@@ -156,7 +158,38 @@ describe("event reducer", () => {
     expect(state.agents["agent-planner"]?.location).toBe("unknown");
   });
 
-  it("replays happy, failure, and stress fixtures deterministically", () => {
+  it("projects sub-location and activity metadata into agent state", () => {
+    const first = eventOf("thinking", {
+      id: "unit-interior-0",
+      locationHint: "library",
+      metadata: {
+        source: "mock",
+        subLocationId: "library_stacks",
+        activity: "reads stacks",
+      },
+    });
+    const second = eventOf("tool_call", {
+      id: "unit-interior-1",
+      sequence: 1,
+      locationHint: "workshop",
+      metadata: {
+        source: "mock",
+        subLocationId: "workshop_bench",
+        activity: "assembles sprites",
+      },
+    });
+
+    const state = replay([first, second], 1);
+    const agent = state.agents["agent-planner"];
+
+    expect(agent?.location).toBe("workshop");
+    expect(agent?.subLocationId).toBe("workshop_bench");
+    expect(agent?.activity).toBe("assembles sprites");
+    expect(agent?.previousX).toBe(LOCATION_COORDINATES.library.x);
+    expect(agent?.previousY).toBe(LOCATION_COORDINATES.library.y);
+  });
+
+  it("replays happy, failure, Smallville day, and stress fixtures deterministically", () => {
     expect(replay(mockEvents, mockEvents.length - 1)).toEqual(
       replay(mockEvents, mockEvents.length - 1),
     );
@@ -166,7 +199,24 @@ describe("event reducer", () => {
     expect(replay(mockStressRun, mockStressRun.length - 1)).toEqual(
       replay(mockStressRun, mockStressRun.length - 1),
     );
+    expect(replay(mockSmallvilleDayRun, mockSmallvilleDayRun.length - 1)).toEqual(
+      replay(mockSmallvilleDayRun, mockSmallvilleDayRun.length - 1),
+    );
     expect(replay(mockStressRun, mockStressRun.length - 1).runSummary.totalEvents).toBe(200);
+  });
+
+  it("keeps the Smallville day run event-driven and warning-free", () => {
+    const state = replay(mockSmallvilleDayRun, mockSmallvilleDayRun.length - 1);
+
+    expect(state.runSummary.totalEvents).toBe(37);
+    expect(state.warnings).toHaveLength(0);
+    expect(Object.keys(state.agents)).toHaveLength(5);
+    expect(state.agents["agent-isabella"]).toMatchObject({
+      activity: "closes day",
+      location: "town_hall",
+      status: "done",
+      subLocationId: "town_hall_table",
+    });
   });
 
   it("selects current, selected, agent, summary, bubbles, edges, blocked, and error views", () => {

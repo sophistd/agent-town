@@ -46,6 +46,19 @@ export type TownLocationObject = {
   anchorY: number;
 };
 
+export type TownInteriorObject = {
+  interiorId: string;
+  locationId: RenderedLocationId;
+  label: string;
+  activityRole: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  anchorX: number;
+  anchorY: number;
+};
+
 export type TownDecorObject = {
   kind: TownDecorKind;
   x: number;
@@ -87,6 +100,7 @@ export type TownMapDefinition = {
   terrain: TownTerrainObject[];
   routes: TownRouteObject[];
   locations: TownLocationObject[];
+  interiors: TownInteriorObject[];
   decor: TownDecorObject[];
 };
 
@@ -213,6 +227,7 @@ export const DEFAULT_TOWN_MAP: TownMapDefinition = {
     },
   ],
   locations: RENDERED_LOCATION_ORDER.map(createFallbackLocation),
+  interiors: [],
   decor: [
     { kind: "tree", x: 92, y: 190 },
     { kind: "tree", x: 122, y: 740 },
@@ -493,6 +508,47 @@ function parseLocationObjects(objects: JsonRecord[]): TownLocationObject[] {
   );
 }
 
+function parseInteriorObjects(objects: JsonRecord[]): TownInteriorObject[] {
+  return objects.flatMap((object) => {
+    if (object.type !== "interior") {
+      return [];
+    }
+
+    const properties = readProperties(object.properties);
+    const locationId = readStringProperty(properties, "locationId");
+    const interiorId = readStringProperty(properties, "interiorId");
+
+    if (!isRenderedLocationId(locationId) || interiorId === undefined) {
+      return [];
+    }
+
+    const width = readNumber(object, "width");
+    const height = readNumber(object, "height");
+
+    if (width <= 0 || height <= 0) {
+      return [];
+    }
+
+    const x = readNumber(object, "x");
+    const y = readNumber(object, "y");
+
+    return [
+      {
+        interiorId,
+        locationId,
+        label: readString(object, "name", interiorId),
+        activityRole: readStringProperty(properties, "activityRole") ?? "routine",
+        x,
+        y,
+        width,
+        height,
+        anchorX: x + width / 2,
+        anchorY: y + height / 2,
+      },
+    ];
+  });
+}
+
 function parseDecorObjects(objects: JsonRecord[]): TownDecorObject[] {
   return objects.flatMap((object) => {
     const kind = object.type;
@@ -540,6 +596,7 @@ export function parseTiledTownMap(input: unknown): TownMapDefinition | undefined
   const terrain = parseTerrainObjects(readObjectLayer(input, "terrain"));
   const routes = parseRouteObjects(readObjectLayer(input, "routes"));
   const locations = parseLocationObjects(readObjectLayer(input, "locations"));
+  const interiors = parseInteriorObjects(readObjectLayer(input, "interiors"));
   const decor = parseDecorObjects(readObjectLayer(input, "decor"));
 
   if (
@@ -565,6 +622,7 @@ export function parseTiledTownMap(input: unknown): TownMapDefinition | undefined
     terrain: terrain.length > 0 ? terrain : DEFAULT_TOWN_MAP.terrain,
     routes: routes.length > 0 ? routes : DEFAULT_TOWN_MAP.routes,
     locations,
+    interiors,
     decor: decor.length > 0 ? decor : DEFAULT_TOWN_MAP.decor,
   };
 

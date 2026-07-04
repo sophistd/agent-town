@@ -3,7 +3,7 @@ import Phaser from "phaser";
 import type { AgentRole, AgentState, AgentStateStatus, WorldState } from "../events/types";
 import { selectAgent } from "../state/selectionStore";
 import type { TownProjectionSettings } from "./projectionSettings";
-import { AGENT_SPRITESHEET_KEY } from "./townMap";
+import { AGENT_SPRITESHEET_KEY, type TownMapDefinition } from "./townMap";
 import {
   ROLE_VISUALS,
   STATUS_LEGEND_ORDER,
@@ -69,7 +69,31 @@ function getAgentOffsets(agents: AgentState[]): Map<string, RenderPosition> {
   return offsets;
 }
 
-export function getAgentRenderPositions(worldState: WorldState): Map<string, RenderPosition> {
+function resolveInteriorPosition(
+  agent: AgentState,
+  townMap?: TownMapDefinition,
+): RenderPosition | undefined {
+  if (agent.subLocationId === undefined || townMap === undefined) {
+    return undefined;
+  }
+
+  const interior = townMap.interiors.find(
+    (candidate) =>
+      candidate.interiorId === agent.subLocationId &&
+      candidate.locationId === agent.location,
+  );
+
+  if (interior === undefined) {
+    return undefined;
+  }
+
+  return { x: interior.anchorX, y: interior.anchorY };
+}
+
+export function getAgentRenderPositions(
+  worldState: WorldState,
+  townMap?: TownMapDefinition,
+): Map<string, RenderPosition> {
   const agents = Object.values(worldState.agents).sort((left, right) =>
     left.agentId.localeCompare(right.agentId),
   );
@@ -78,13 +102,53 @@ export function getAgentRenderPositions(worldState: WorldState): Map<string, Ren
 
   for (const agent of agents) {
     const offset = offsets.get(agent.agentId) ?? { x: 0, y: 0 };
+    const basePosition = resolveInteriorPosition(agent, townMap) ?? { x: agent.x, y: agent.y };
     positions.set(agent.agentId, {
-      x: agent.x + offset.x,
-      y: agent.y + offset.y,
+      x: basePosition.x + offset.x,
+      y: basePosition.y + offset.y,
     });
   }
 
   return positions;
+}
+
+function renderMovementTrail(
+  scene: Phaser.Scene,
+  layer: Phaser.GameObjects.Container,
+  agent: AgentState,
+  x: number,
+  y: number,
+): void {
+  if (agent.previousX === undefined || agent.previousY === undefined) {
+    return;
+  }
+
+  const distance = Phaser.Math.Distance.Between(agent.previousX, agent.previousY, x, y);
+
+  if (distance < 18) {
+    return;
+  }
+
+  const trail = scene.add.graphics();
+  trail.lineStyle(3, 0x37584f, 0.26);
+  const steps = Math.max(4, Math.floor(distance / 42));
+
+  for (let index = 0; index < steps; index += 1) {
+    const t0 = index / steps;
+    const t1 = Math.min(1, t0 + 0.42 / steps);
+    trail.beginPath();
+    trail.moveTo(
+      Phaser.Math.Linear(agent.previousX, x, t0),
+      Phaser.Math.Linear(agent.previousY, y, t0),
+    );
+    trail.lineTo(
+      Phaser.Math.Linear(agent.previousX, x, t1),
+      Phaser.Math.Linear(agent.previousY, y, t1),
+    );
+    trail.strokePath();
+  }
+
+  layer.add(trail);
 }
 
 function renderStatusBadge(
@@ -128,6 +192,8 @@ function renderAgent(
   const y = agent.y + offset.y;
   const isCompact = settings.density === "compact";
   const isExpanded = settings.density === "expanded";
+
+  renderMovementTrail(scene, layer, agent, x, y);
 
   const shadow = scene.add.graphics();
   shadow.fillStyle(0x000000, 0.16);
@@ -185,7 +251,7 @@ function renderAgent(
 
     if (isExpanded) {
       const statusLabel = scene.add
-        .text(x, y + 59, statusVisual.label, {
+        .text(x, y + 59, agent.activity ?? statusVisual.label, {
           color: "#b8c8be",
           fontFamily: "Inter, Arial, sans-serif",
           fontSize: "10px",
@@ -249,11 +315,12 @@ export function renderAgents(
   layer: Phaser.GameObjects.Container,
   worldState: WorldState,
   settings: TownProjectionSettings,
+  townMap?: TownMapDefinition,
 ): void {
   const agents = Object.values(worldState.agents).sort((left, right) =>
     left.agentId.localeCompare(right.agentId),
   );
-  const positions = getAgentRenderPositions(worldState);
+  const positions = getAgentRenderPositions(worldState, townMap);
 
   for (const agent of agents) {
     const position = positions.get(agent.agentId) ?? { x: agent.x, y: agent.y };

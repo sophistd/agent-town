@@ -2,7 +2,7 @@ import { useState, type CSSProperties } from "react";
 
 import type { AdapterQuarantinedEvent, AdapterWarning } from "../adapters/types";
 
-export type ImportSourceKind = "jsonl" | "mock" | "websocket";
+export type ImportSourceKind = "jsonl" | "mock" | "smallville" | "websocket";
 export type ImportStatusLevel = "error" | "idle" | "ok" | "warning";
 
 export type ImportPanelStatus = {
@@ -18,6 +18,7 @@ type ImportPanelProps = {
   onDisconnectWebSocket: () => void;
   onImportJsonl: (input: string) => void;
   onLoadMock: () => void;
+  onLoadSmallvilleDay: () => void;
   onLoadWebSocketSample: () => void;
   quarantinedEvents: readonly AdapterQuarantinedEvent[];
   status: ImportPanelStatus;
@@ -50,13 +51,15 @@ const mutedTextStyle = {
 
 const sourceGridStyle = {
   display: "grid",
-  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
   gap: "6px",
 } satisfies CSSProperties;
 
 const buttonStyle = {
   minHeight: "32px",
-  border: "1px solid rgba(143, 170, 157, 0.24)",
+  borderStyle: "solid",
+  borderWidth: "1px",
+  borderColor: "rgba(143, 170, 157, 0.24)",
   borderRadius: "6px",
   background: "#162427",
   color: "#d9e4de",
@@ -76,7 +79,9 @@ const inputStyle = {
   width: "100%",
   minWidth: 0,
   boxSizing: "border-box",
-  border: "1px solid rgba(143, 170, 157, 0.24)",
+  borderStyle: "solid",
+  borderWidth: "1px",
+  borderColor: "rgba(143, 170, 157, 0.24)",
   borderRadius: "6px",
   background: "#0f181b",
   color: "#d9e4de",
@@ -125,7 +130,8 @@ const statusStyleByLevel: Record<ImportStatusLevel, CSSProperties> = {
 
 function statusBoxStyle(level: ImportStatusLevel): CSSProperties {
   return {
-    border: "1px solid",
+    borderStyle: "solid",
+    borderWidth: "1px",
     borderRadius: "6px",
     padding: "8px",
     fontSize: "12px",
@@ -146,6 +152,7 @@ export function ImportPanel({
   onDisconnectWebSocket,
   onImportJsonl,
   onLoadMock,
+  onLoadSmallvilleDay,
   onLoadWebSocketSample,
   quarantinedEvents,
   status,
@@ -180,6 +187,14 @@ export function ImportPanel({
           aria-pressed={activeSource === "jsonl"}
         >
           JSONL
+        </button>
+        <button
+          type="button"
+          style={buttonStyleFor("smallville", activeSource)}
+          onClick={onLoadSmallvilleDay}
+          aria-pressed={activeSource === "smallville"}
+        >
+          Town day
         </button>
         <button
           type="button"

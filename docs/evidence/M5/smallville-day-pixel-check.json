@@ -1,0 +1,84 @@
+{
+  "checks": [
+    {
+      "path": "docs/evidence/M5/smallville-day-desktop.png",
+      "size": {
+        "width": 1440,
+        "height": 960
+      },
+      "sampledUniqueColors": 360,
+      "nonWhiteRatio": 1.0,
+      "transparentRatio": 0.0
+    },
+    {
+      "path": "docs/evidence/M5/smallville-day-interaction.png",
+      "size": {
+        "width": 1440,
+        "height": 960
+      },
+      "sampledUniqueColors": 324,
+      "nonWhiteRatio": 1.0,
+      "transparentRatio": 0.0
+    },
+    {
+      "path": "docs/evidence/M5/smallville-day-mobile.png",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "sampledUniqueColors": 383,
+      "nonWhiteRatio": 1.0,
+      "transparentRatio": 0.0
+    },
+    {
+      "path": "docs/evidence/M5/smallville-day-mobile-map.png",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "sampledUniqueColors": 306,
+      "nonWhiteRatio": 1.0,
+      "transparentRatio": 0.0
+    },
+    {
+      "path": "public/maps/town-v1-preview.png",
+      "size": {
+        "width": 1040,
+        "height": 896
+      },
+      "sampledUniqueColors": 105,
+      "nonWhiteRatio": 1.0,
+      "transparentRatio": 0.0
+    },
+    {
+      "path": "public/tilesets/agent-town-v1.png",
+      "size": {
+        "width": 128,
+        "height": 128
+      },
+      "sampledUniqueColors": 49,
+      "nonWhiteRatio": 0.25,
+      "transparentRatio": 0.75
+    },
+    {
+      "path": "public/sprites/agent-roles-v1.png",
+      "size": {
+        "width": 192,
+        "height": 128
+      },
+      "sampledUniqueColors": 44,
+      "nonWhiteRatio": 0.4453,
+      "transparentRatio": 0.5547
+    },
+    {
+      "path": "public/sprites/buildings-v1.png",
+      "size": {
+        "width": 1120,
+        "height": 112
+      },
+      "sampledUniqueColors": 55,
+      "nonWhiteRatio": 0.5588,
+      "transparentRatio": 0.4412
+    }
+  ]
+}

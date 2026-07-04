@@ -46,6 +46,11 @@ This revision is a direct response to the product bar being raised from "asset
 pipeline minimal loop" to "materially closer to Stanford Smallville-level
 pixel-town experience."
 
+The latest continuation adds an event-driven "Town day" slice: generated
+interior anchors, a deterministic Smallville-like day fixture, activity labels,
+and movement trails. This still does not claim autonomous generative-agent
+simulation; the routine is an `AgentEvent` stream projected through `WorldState`.
+
 ## Implementation Decision
 
 Adopt an original generated asset pipeline:
@@ -60,13 +65,22 @@ Adopt an original generated asset pipeline:
 - Generate `public/sprites/agent-roles-v1.png` as the role/status agent sprite
   sheet.
 - Generate `public/sprites/buildings-v1.png` as the building sprite sheet.
+- Generate interior anchor art and an `interiors` object layer in
+  `public/maps/town-v1.tiled.json`.
 - Parse map properties, tilesets, tile layers, and object layers in
   `src/game/townMap.ts`.
+- Preserve `AgentEvent.metadata.subLocationId` and `metadata.activity` in
+  `WorldState` as projection hints.
+- Add `src/events/mockSmallvilleDayRun.ts` as a canonical event stream with 37
+  events, five agents, 14 interior anchors, and morning/midday/afternoon/evening
+  metadata.
 - Preload the map background, tileset, agent sprite sheet, and building sprite
   sheet in `AgentTownScene`.
 - Render the baked pixel map first, with tile/vector fallback paths preserved.
 - Render agents from sprite frames selected by `AgentState.role` and
   `AgentState.status`, with generated geometry fallback preserved.
+- Render interior-positioned agents, bubbles, edges, activity labels, and
+  movement trails from `WorldState`.
 - Keep event routing and stable location IDs in `src/events/routing.ts`.
 
 This gives the repo a real asset/map pipeline without allowing Tiled objects,
@@ -99,7 +113,16 @@ The map object layer preserves:
 - `src/game/renderTownMap.ts`
 - `src/game/renderLocations.ts`
 - `src/game/renderAgents.ts`
+- `src/game/renderBubbles.ts`
+- `src/game/renderEdges.ts`
+- `src/events/types.ts`
+- `src/events/reducer.ts`
+- `src/events/mockSmallvilleDayRun.ts`
 - `src/ui/App.css`
+- `src/ui/App.tsx`
+- `src/ui/ImportPanel.tsx`
+- `src/tests/reducer.test.ts`
+- `src/tests/replay.test.ts`
 - `src/tests/town-map.test.ts`
 - `README.md`
 - `docs/VISUAL_MAPPING.md`
@@ -107,11 +130,17 @@ The map object layer preserves:
 - `docs/NEXT_PHASE.md`
 - `docs/evidence/M5/final-demo-notes.md`
 - `docs/evidence/M5/smallville-assets-qa.json`
+- `docs/evidence/M5/smallville-day-qa.json`
+- `docs/evidence/M5/smallville-day-pixel-check.json`
 - `docs/evidence/M5/smallville-asset-pipeline.md`
 - `docs/evidence/M5/smallville-asset-pipeline-desktop.png`
 - `docs/evidence/M5/smallville-asset-pipeline-interaction.png`
 - `docs/evidence/M5/smallville-asset-pipeline-mobile.png`
 - `docs/evidence/M5/smallville-asset-pipeline-mobile-map.png`
+- `docs/evidence/M5/smallville-day-desktop.png`
+- `docs/evidence/M5/smallville-day-interaction.png`
+- `docs/evidence/M5/smallville-day-mobile.png`
+- `docs/evidence/M5/smallville-day-mobile-map.png`
 
 ## Verification Commands
 
@@ -126,6 +155,7 @@ Results:
 
 - `pnpm typecheck`: passed.
 - `pnpm test -- src/tests/town-map.test.ts`: passed, 8 files / 35 tests.
+- `pnpm test`: passed after Town day fixture work, 8 files / 38 tests.
 
 Full required checks after final docs/evidence edits:
 
@@ -139,7 +169,7 @@ git diff --check
 Results:
 
 - `pnpm typecheck`: passed.
-- `pnpm test`: passed, 8 files / 35 tests.
+- `pnpm test`: passed, 8 files / 38 tests.
 - `pnpm build`: passed.
 - `git diff --check`: passed.
 
@@ -230,6 +260,90 @@ public/sprites/agent-roles-v1.png: size=192x128 sampled_unique_colors=44 non_whi
 public/sprites/buildings-v1.png: size=1120x112 sampled_unique_colors=53 non_white_ratio=0.5516 transparent_ratio=0.4484
 ```
 
+## Town Day Browser Evidence
+
+The continuation QA targeted the event-driven Town day run and the new interior
+anchors.
+
+Browser path:
+
+- Browser plugin was attempted first.
+- Browser `domSnapshot()` still failed with plugin-side error:
+  `incrementalAriaSnapshot is not a function`.
+- Regular Playwright fallback used bundled Codex runtime Playwright 1.61.1 for
+  clean console capture, screenshots, asset response checks, and interaction
+  proof.
+- QA result JSON:
+  `docs/evidence/M5/smallville-day-qa.json`.
+- Pixel check JSON:
+  `docs/evidence/M5/smallville-day-pixel-check.json`.
+
+Screenshots:
+
+```text
+docs/evidence/M5/smallville-day-desktop.png
+docs/evidence/M5/smallville-day-interaction.png
+docs/evidence/M5/smallville-day-mobile.png
+docs/evidence/M5/smallville-day-mobile-map.png
+```
+
+Desktop 1440x960:
+
+- Page title: `Agent Town`.
+- Active source: `smallville · 37 events`.
+- Status copy: `Town day run loaded.`
+- Town toolbar: `cursor 0`, `visible 37/37`, `expanded`, `100%`.
+- Canvas count: `1`.
+- Canvas rect: about `773 x 669`.
+- Horizontal overflow: `0`.
+- Framework overlay: absent.
+- Asset HTTP responses all returned `200`:
+  - `/maps/town-v1.tiled.json`
+  - `/maps/town-v1-preview.png`
+  - `/tilesets/agent-town-v1.png`
+  - `/sprites/agent-roles-v1.png`
+  - `/sprites/buildings-v1.png`
+
+Interaction checks:
+
+- Town day source loaded: `true`.
+- Expanded density applied: `true`.
+- Zoom in changed toolbar from `100%` to `105%`.
+- Bubbles toggle changed `aria-pressed` from `true` to `false`.
+- Handoff edges toggle changed `aria-pressed` from `true` to `false`.
+- Critical filter changed visible event count to `9/37`.
+- Next changed header cursor to `2 / 37`.
+- Play changed header status to `running`.
+
+Console health:
+
+- Page errors: none.
+- Relevant app console errors/warnings: none.
+- Chromium emitted WebGL `ReadPixels` performance warnings during screenshot
+  capture; these are recorded in the QA JSON and classified as screenshot GPU
+  warnings, not application errors.
+
+Mobile 390x844:
+
+- First mobile screenshot verifies the responsive control stack with Town day
+  loaded.
+- Scrolled mobile map screenshot verifies the town canvas in viewport.
+- Horizontal overflow: `0`.
+- Mobile map canvas rect after scrolling: about `372 x 322`.
+
+Town day PNG nonblank sampling:
+
+```text
+docs/evidence/M5/smallville-day-desktop.png: size=1440x960 sampled_unique_colors=360 non_white_ratio=1.0000 transparent_ratio=0.0000
+docs/evidence/M5/smallville-day-interaction.png: size=1440x960 sampled_unique_colors=324 non_white_ratio=1.0000 transparent_ratio=0.0000
+docs/evidence/M5/smallville-day-mobile.png: size=390x844 sampled_unique_colors=383 non_white_ratio=1.0000 transparent_ratio=0.0000
+docs/evidence/M5/smallville-day-mobile-map.png: size=390x844 sampled_unique_colors=306 non_white_ratio=1.0000 transparent_ratio=0.0000
+public/maps/town-v1-preview.png: size=1040x896 sampled_unique_colors=105 non_white_ratio=1.0000 transparent_ratio=0.0000
+public/tilesets/agent-town-v1.png: size=128x128 sampled_unique_colors=49 non_white_ratio=0.2500 transparent_ratio=0.7500
+public/sprites/agent-roles-v1.png: size=192x128 sampled_unique_colors=44 non_white_ratio=0.4453 transparent_ratio=0.5547
+public/sprites/buildings-v1.png: size=1120x112 sampled_unique_colors=55 non_white_ratio=0.5588 transparent_ratio=0.4412
+```
+
 ## Asset License Status
 
 - External visual assets imported: none.
@@ -252,12 +366,18 @@ license boundary.
 - Agent roles, statuses, event types, selected event, selected agent, and replay
   cursor still come from `AgentEvent -> WorldState`.
 - The map object layer supplies projection terrain, route, decor, building
-  footprint, and location-anchor metadata only.
+- footprint, location-anchor, and interior-anchor metadata only.
 - Tile IDs and sprite frames are presentation metadata only.
+- `AgentEvent.metadata.subLocationId` and `metadata.activity` are preserved by
+  the reducer and consumed by renderers as projection hints; the renderer still
+  falls back to stable `locationHint` routing when they are missing or unknown.
 - `src/tests/town-map.test.ts` proves the public map preserves all rendered
   stable location IDs, exposes tile layers/tileset metadata, points to generated
-  PNG assets, and keeps map anchors aligned with `src/events/routing.ts`.
-- `src/events/reducer.ts` was not changed.
+  PNG assets, exposes all 14 interior anchors, and keeps map anchors aligned
+  with `src/events/routing.ts`.
+- `src/tests/reducer.test.ts` proves sub-location/activity metadata projects
+  into `WorldState`, and the Smallville day run is deterministic and
+  warning-free.
 - No adapter-specific logic was added to `src/game/*`.
 
 ## Notion / Linear Sync
@@ -302,10 +422,11 @@ Scope truth:
 
 ## Remaining Limitations
 
-- This is now an original pixel asset pipeline, but it is not yet a complete
-  Stanford Generative Agents town: there are no many-building interiors,
-  animated day schedules, complex character routines, or full-world Tiled
-  editing workflow.
+- This is now an original pixel asset pipeline with generated room/interior
+  anchors and a deterministic day-run fixture, but it is not yet a complete
+  Stanford Generative Agents town: there are no autonomous schedules, persistent
+  agent memories, many-building interior layouts, animated walking cycles, or
+  full-world Tiled editing workflow.
 - The map is denser and materially closer to a Smallville-like top-down town,
   but it remains a compact prototype projection for runtime events.
 - Browser frame-rate profiling is still future work.
@@ -316,9 +437,10 @@ Scope truth:
 Deepen the original generator rather than importing unknown art:
 
 - richer terrain tile variation
-- interior rooms and doorway anchors
+- more interior rooms and doorway relationships
 - animated agent walk/idle frames
 - denser props and readable districts
+- longer event traces with routine conflicts and memory recall
 - optional true Phaser tilemap render path
 - same stable object layer IDs
 - same explicit license/rights entry before any external asset enters the repo

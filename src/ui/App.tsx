@@ -15,6 +15,7 @@ import {
 } from "../adapters/websocketAdapter";
 import { mockFailureRun } from "../events/mockFailureRun";
 import { mockEvents } from "../events/mockEvents";
+import { mockSmallvilleDayRun } from "../events/mockSmallvilleDayRun";
 import { replay } from "../events/reducer";
 import { selectCurrentEvent } from "../events/selectors";
 import type { AgentEvent } from "../events/types";
@@ -84,6 +85,11 @@ const websocketSampleMessages = [
 const mockStatus = {
   level: "idle",
   message: "Mock failure run loaded.",
+} satisfies ImportPanelStatus;
+
+const smallvilleDayStatus = {
+  level: "ok",
+  message: "Town day run loaded.",
 } satisfies ImportPanelStatus;
 
 function HeaderMetric({
@@ -279,6 +285,11 @@ export function App() {
     commitEventSource("mock", mockFailureRun, mockStatus);
   }, [commitEventSource, disconnectWebSocket]);
 
+  const loadSmallvilleDay = useCallback(() => {
+    disconnectWebSocket();
+    commitEventSource("smallville", mockSmallvilleDayRun, smallvilleDayStatus);
+  }, [commitEventSource, disconnectWebSocket]);
+
   const importJsonl = useCallback(
     (input: string) => {
       disconnectWebSocket();
@@ -384,6 +395,7 @@ export function App() {
             onDisconnectWebSocket={disconnectWebSocket}
             onImportJsonl={importJsonl}
             onLoadMock={loadMock}
+            onLoadSmallvilleDay={loadSmallvilleDay}
             onLoadWebSocketSample={loadWebSocketSample}
             quarantinedEvents={quarantinedEvents}
             status={importStatus}

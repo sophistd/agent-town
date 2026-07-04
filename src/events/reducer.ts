@@ -165,12 +165,20 @@ function appendDefined<T>(items: T[], item: T | undefined): T[] {
   return item === undefined ? items : [...items, item];
 }
 
+function readStringMetadata(event: AgentEvent, key: string): string | undefined {
+  const value = event.metadata?.[key];
+
+  return typeof value === "string" && value.trim().length > 0 ? value : undefined;
+}
+
 export function reduceEvent(prev: WorldState, event: AgentEvent): WorldState {
   const location = routeEventToLocation(event);
   const coordinates = getLocationCoordinates(location);
   const status = toAgentStatus(event);
   const bubble = toBubble(event);
   const previousAgent = prev.agents[event.agentId];
+  const subLocationId = readStringMetadata(event, "subLocationId");
+  const activity = readStringMetadata(event, "activity");
   const nextAgent: AgentState = {
     ...previousAgent,
     agentId: event.agentId,
@@ -178,6 +186,10 @@ export function reduceEvent(prev: WorldState, event: AgentEvent): WorldState {
     role: event.agentRole,
     status,
     location,
+    subLocationId,
+    activity,
+    previousX: previousAgent?.x,
+    previousY: previousAgent?.y,
     x: coordinates.x,
     y: coordinates.y,
     currentTaskId: event.targetTaskId ?? event.taskId,

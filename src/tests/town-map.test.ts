@@ -24,6 +24,23 @@ const expectedLocationIds: RenderedLocationId[] = [
   "review_room",
 ];
 
+const expectedInteriorIds = [
+  "dispatch_queue",
+  "dispatch_notice_wall",
+  "town_hall_table",
+  "town_hall_office",
+  "library_stacks",
+  "library_reading_nook",
+  "archive_shelves",
+  "archive_writing_desk",
+  "square_cafe",
+  "square_fountain_edge",
+  "workshop_bench",
+  "workshop_debug_desk",
+  "review_table",
+  "review_evidence_wall",
+];
+
 function readTownMapFixture(): unknown {
   return JSON.parse(
     readFileSync(
@@ -60,8 +77,28 @@ describe("town map asset", () => {
     ]);
     expect(map === undefined ? [] : getTownMapLocationIds(map)).toEqual(expectedLocationIds);
     expect(map === undefined ? false : hasCompleteTownMapLocations(map)).toBe(true);
+    expect(map?.interiors.map((interior) => interior.interiorId)).toEqual(expectedInteriorIds);
     expect(map?.routes).toHaveLength(6);
     expect(map?.decor.length).toBeGreaterThan(DEFAULT_TOWN_MAP.decor.length);
+  });
+
+  it("keeps interior anchors as projection targets for stable locations", () => {
+    const map = parseTiledTownMap(readTownMapFixture());
+
+    if (map === undefined) {
+      throw new Error("town-v1.tiled.json did not parse");
+    }
+
+    const locationIds = new Set(getTownMapLocationIds(map));
+
+    for (const interior of map.interiors) {
+      expect(locationIds.has(interior.locationId)).toBe(true);
+      expect(interior.activityRole.length).toBeGreaterThan(0);
+      expect(interior.anchorX).toBeGreaterThan(interior.x);
+      expect(interior.anchorX).toBeLessThan(interior.x + interior.width);
+      expect(interior.anchorY).toBeGreaterThan(interior.y);
+      expect(interior.anchorY).toBeLessThan(interior.y + interior.height);
+    }
   });
 
   it("keeps the generated project-authored PNG assets readable", () => {
