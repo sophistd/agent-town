@@ -149,10 +149,14 @@ Quick path:
 10. Use Import Source -> Memory to recall the memory stream persisted from
    previous imported runs. The browser store is a source boundary; recall still
    becomes canonical `memory_read` events before projection.
-11. Use Detail to inspect the selected event fields.
-12. Use Import Source -> JSONL to import the native JSONL sample in the text
+11. Use Import Source -> Memory plan to let each durable-memory agent retrieve
+   relevant records by agent identity, query relevance, importance, and
+   recency, then emit retrieval, reflection, and planning evidence as canonical
+   events.
+12. Use Detail to inspect the selected event fields.
+13. Use Import Source -> JSONL to import the native JSONL sample in the text
    area.
-13. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
+14. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
    the same projection pipeline.
 
 Relevant screenshots and evidence:
@@ -264,13 +268,13 @@ from the event stream and derived `WorldState`.
 ## Moving Toward Smallville
 
 `docs/SMALLVILLE_PARITY.md` tracks the actual gap to Stanford Smallville-style
-generative agents. The current `Cognitive`, `Social day`, `Intervention`, and
-`Memory` sources are deterministic: they emit observation, memory retrieval,
-reflection, planning, action/conversation, social diffusion, natural-language
-intervention, durable memory recall, and closure as canonical `AgentEvent`
-records. They are testable event contracts for future LLM-backed behavior, not
-a claim that the app already has autonomous social emergence or complete
-persistent agent cognition.
+generative agents. The current `Cognitive`, `Social day`, `Intervention`,
+`Memory`, and `Memory plan` sources are deterministic: they emit observation,
+memory retrieval, reflection, planning, action/conversation, social diffusion,
+natural-language intervention, durable memory recall, agent-addressable memory
+planning, and closure as canonical `AgentEvent` records. They are testable
+event contracts for future LLM-backed behavior, not a claim that the app
+already has autonomous social emergence or complete persistent agent cognition.
 
 ## Adding An Adapter
 
@@ -316,8 +320,10 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
 - The WebSocket demo path has a built-in sample; a real runtime sender still
   needs to emit canonical or supported source-shaped messages.
 - Persistent memory currently uses versioned browser storage for canonical
-  `memory_read` / `memory_write` evidence extracted from imported runs. It is
-  not yet a server-backed world database or full autonomous memory engine.
+  `memory_read` / `memory_write` evidence extracted from imported runs. The
+  `Memory plan` source can retrieve those records per agent by query relevance,
+  importance, recency, and agent affinity, but it is not yet a server-backed
+  world database or full autonomous memory engine.
 - The graph and memory views are represented through current projection data,
   detail, summary, edges, persistent memory recall, and memory events; separate
   dedicated tabs are future work.

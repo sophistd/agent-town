@@ -7,6 +7,7 @@ export type ImportSourceKind =
   | "intervention"
   | "jsonl"
   | "memory"
+  | "memory-plan"
   | "mock"
   | "smallville"
   | "social"
@@ -28,6 +29,7 @@ type ImportPanelProps = {
   onImportIntervention: (prompt: string) => void;
   onImportJsonl: (input: string) => void;
   onLoadCognitiveRun: () => void;
+  onLoadAgentMemoryPlan: () => void;
   onLoadPersistentMemory: () => void;
   onLoadMock: () => void;
   onLoadSocialRun: () => void;
@@ -174,6 +176,7 @@ export function ImportPanel({
   onImportIntervention,
   onImportJsonl,
   onLoadCognitiveRun,
+  onLoadAgentMemoryPlan,
   onLoadPersistentMemory,
   onLoadMock,
   onLoadSocialRun,
@@ -254,6 +257,14 @@ export function ImportPanel({
           aria-pressed={activeSource === "memory"}
         >
           Memory
+        </button>
+        <button
+          type="button"
+          style={buttonStyleFor("memory-plan", activeSource)}
+          onClick={onLoadAgentMemoryPlan}
+          aria-pressed={activeSource === "memory-plan"}
+        >
+          Memory plan
         </button>
         <button
           type="button"

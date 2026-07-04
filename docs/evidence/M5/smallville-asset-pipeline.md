@@ -933,6 +933,117 @@ license boundary.
   without fabricating events.
 - No adapter-specific logic was added to `src/game/*`.
 
+## Agent-addressable Memory Plan Continuation
+
+Scope:
+
+- Added a deterministic `Memory plan` source that uses the browser-local
+  durable memory bank as an adapter boundary, not as renderer state.
+- Each durable-memory agent gets a query built from stored memory evidence,
+  enriched by current-run context when the same agent is present.
+- Durable memory records are scored by query relevance, importance, recency,
+  and agent affinity.
+- The adapter emits canonical `memory_read`, `thinking`, and `decision` events
+  with `metadata.agentAddressableMemory`; the town canvas still only receives
+  replayed `WorldState`.
+- This moves persistent memory from whole-bank recall toward agent-addressable
+  planning evidence. It is still not an LLM-backed autonomous memory engine or
+  a server-backed world database.
+
+Files changed:
+
+- `src/events/persistentMemory.ts`
+  - `PersistentMemoryRetrievalQuery`
+  - `RetrievedPersistentMemoryRecord`
+  - `scorePersistentMemoryRecord`
+  - `retrievePersistentMemoryRecords`
+- `src/adapters/persistentMemoryAdapter.ts`
+  - `AgentAddressableMemoryPlanInput`
+  - `buildAgentAddressableMemoryPlanResult`
+- `src/ui/App.tsx`
+  - wires `Memory plan` to current run context plus durable memory records
+  - skips re-persisting `memory` and `memory-plan` source output to prevent
+    self-referential memory-bank pollution
+- `src/ui/ImportPanel.tsx`
+  - adds the `Memory plan` import source button
+- `src/tests/persistent-memory.test.ts`
+  - proves agent/query/importance/recency retrieval
+  - proves 25-agent Memory plan emits 75 replayable events
+- `README.md`
+- `docs/EVENT_SCHEMA.md`
+- `docs/SMALLVILLE_PARITY.md`
+- `docs/NEXT_PHASE.md`
+- `docs/VISUAL_MAPPING.md`
+
+Verification:
+
+- `pnpm typecheck`: passed.
+- `pnpm test -- src/tests/persistent-memory.test.ts`: passed; the repo script
+  ran all 10 files / 58 tests.
+- `pnpm test`: passed, 10 files / 58 tests.
+- `pnpm build`: passed with the existing Phaser/Vite large chunk warning.
+
+Browser / Playwright evidence:
+
+- Browser plugin was attempted first.
+- Browser loaded `http://127.0.0.1:5173/`, clicked `Social day`, observed
+  `Memory bank · 50 records`, clicked `Memory plan`, and observed
+  `memory-plan · 75 events`.
+- Browser `domSnapshot()` failed with plugin-side
+  `TypeError: o.incrementalAriaSnapshot is not a function`.
+- Browser dev logs for the long-lived tab still contained stale prior-session
+  errors, so a fresh Playwright context was used as authoritative evidence.
+- Fresh Playwright flow:
+  `app -> clear local memory once -> Social day persists 50 memory records ->
+  reload keeps 50 records -> Memory plan emits 75 agent-addressable
+  retrieval/reflection/planning events for durable-memory agents`.
+- Desktop 1440x960 screenshot:
+  `docs/evidence/M5/smallville-memory-plan-desktop.png`.
+- Desktop interaction screenshot:
+  `docs/evidence/M5/smallville-memory-plan-interaction.png`.
+- Mobile 390x844 screenshot:
+  `docs/evidence/M5/smallville-memory-plan-mobile.png`.
+- Mobile map screenshot:
+  `docs/evidence/M5/smallville-memory-plan-mobile-map.png`.
+- QA JSON:
+  `docs/evidence/M5/smallville-memory-plan-qa.json`.
+- Pixel check JSON:
+  `docs/evidence/M5/smallville-memory-plan-pixel-check.json`.
+
+Playwright assertions:
+
+- Initial memory bank was 0 after explicit test-context cleanup.
+- Social day persisted 50 memory records.
+- Reload kept 50 memory records.
+- Memory plan loaded 75 events.
+- Memory plan used durable-memory agents from the persisted Social day memory
+  bank, including Isabella, rather than introducing renderer-owned facts.
+- Warnings stayed 0.
+- Quarantine stayed 0.
+- Critical filter changed the Timeline to the expected empty set because Memory
+  plan has no blocked/error/done/handoff events.
+- Next changed cursor from 1/75 to 2/75.
+- Play changed status to running.
+- Desktop and mobile page errors: none.
+- Relevant desktop and mobile console issues: none; Chromium WebGL `ReadPixels`
+  warnings are recorded as screenshot-capture GPU warnings.
+- Desktop and mobile horizontal overflow: 0.
+- Desktop, interaction, mobile, and mobile-map screenshots are nonblank.
+
+AgentEvent boundary self-check:
+
+- `src/events/persistentMemory.ts` remains pure event-layer extraction, scoring,
+  and retrieval logic. It does not import React, DOM, Storage, Phaser, canvas,
+  Zustand, or adapters.
+- `src/adapters/persistentMemoryAdapter.ts` converts retrieval results into
+  validated canonical `AgentEvent[]`.
+- Browser storage remains in `src/state/persistentMemoryStore.ts`.
+- `metadata.agentAddressableMemory` is inspection evidence carried by the
+  event stream; Phaser never creates query, score, selected-record, or planning
+  facts.
+- The renderer receives the same `WorldState` shape as every other source.
+- No adapter-specific logic was added to `src/game/*`.
+
 ## Notion / Linear Sync
 
 Earlier read/write-back from the first object-map pass:
@@ -1069,12 +1180,12 @@ Scope truth:
   anchors, a deterministic day-run fixture, a deterministic cognitive-loop
   fixture, a deterministic 25-agent social-diffusion fixture, and a
   deterministic natural-language intervention adapter plus browser-local
-  durable memory recall, but it is not yet a complete Stanford Generative
-  Agents town: there are no autonomous schedules, server-backed world memory,
-  agent-addressable long-term memory retrieval across days, LLM-backed
-  reflection/planning calls, many-building interior layouts, animated walking
-  cycles, LLM-grade intervention understanding, rigorous social diffusion
-  evaluation, or full-world Tiled editing workflow.
+  durable memory recall and agent-addressable memory planning, but it is not
+  yet a complete Stanford Generative Agents town: there are no autonomous
+  schedules, server-backed world memory, LLM-backed reflection/planning calls,
+  many-building interior layouts, animated walking cycles, LLM-grade
+  intervention understanding, rigorous social diffusion evaluation, or
+  full-world Tiled editing workflow.
 - The map is denser and materially closer to a Smallville-like top-down town,
   but it remains a compact prototype projection for runtime events.
 - Browser frame-rate profiling is still future work.
@@ -1089,8 +1200,8 @@ Deepen the original generator rather than importing unknown art:
 - animated agent walk/idle frames
 - denser props and readable districts
 - LLM-backed reflection/planning adapter behind the same `AgentEvent` contract
-- agent-addressable persistent memory retrieval by persona, query, importance,
-  and recency
+- use agent-addressable persistent memory retrieval inside an LLM-backed planner
+  or a server-backed world-memory store
 - durable intervention memory beyond browser-local storage
 - 25-agent cognitive fixture with routine conflicts, persistent memories, and
   evaluated social diffusion

@@ -36,6 +36,35 @@ export type PersistentMemoryRecord = {
   savedAt: string;
 };
 
+export type PersistentMemoryRetrievalQuery = {
+  agentId: string;
+  agentName?: string;
+  agentRole?: AgentRole;
+  query: string;
+  currentTimestamp: string;
+  limit?: number;
+};
+
+export type RetrievedPersistentMemoryRecord = {
+  recordId: string;
+  sourceEventId: string;
+  sourceRunId: string;
+  sourceType: MemoryEventType;
+  agentId: string;
+  agentName: string;
+  agentRole: AgentRole;
+  content: string;
+  summary?: string;
+  sourceTimestamp: string;
+  importance?: number;
+  tags: string[];
+  relevanceScore: number;
+  importanceScore: number;
+  recencyScore: number;
+  agentAffinityScore: number;
+  score: number;
+};
+
 function isMemoryEvent(event: AgentEvent): event is AgentEvent & { type: MemoryEventType } {
   return event.type === "memory_read" || event.type === "memory_write";
 }
@@ -140,6 +169,163 @@ export function comparePersistentMemoryRecords(
   }
 
   return left.id.localeCompare(right.id);
+}
+
+function roundScore(value: number): number {
+  return Math.round(value * 1000) / 1000;
+}
+
+function tokenize(text: string): Set<string> {
+  return new Set(
+    text
+      .toLowerCase()
+      .replace(/[^a-z0-9_\-\s]/g, " ")
+      .split(/\s+/)
+      .filter((token) => token.length > 2),
+  );
+}
+
+function scorePersistentMemoryRelevance(
+  record: PersistentMemoryRecord,
+  query: string,
+): number {
+  const queryTokens = tokenize(query);
+  const recordTokens = tokenize(
+    [
+      record.agentName,
+      record.agentRole,
+      record.content,
+      record.summary,
+      record.activity,
+      record.locationHint,
+      record.subLocationId,
+      record.sourceRunId,
+      record.sourceType,
+      record.memoryKind,
+      record.retrievalQuery,
+      record.tags.join(" "),
+    ]
+      .filter((value): value is string => typeof value === "string")
+      .join(" "),
+  );
+
+  if (queryTokens.size === 0) {
+    return 0;
+  }
+
+  let overlap = 0;
+  for (const token of queryTokens) {
+    if (recordTokens.has(token)) {
+      overlap += 1;
+    }
+  }
+
+  return overlap / queryTokens.size;
+}
+
+function scorePersistentMemoryImportance(record: PersistentMemoryRecord): number {
+  if (typeof record.importance !== "number") {
+    return record.sourceType === "memory_write" ? 0.62 : 0.5;
+  }
+
+  return Math.max(0, Math.min(1, record.importance / 10));
+}
+
+function scorePersistentMemoryRecency(
+  record: PersistentMemoryRecord,
+  currentTimestamp: string,
+): number {
+  const current = Date.parse(currentTimestamp);
+  const source = Date.parse(record.sourceTimestamp);
+
+  if (!Number.isFinite(current) || !Number.isFinite(source) || current <= source) {
+    return 1;
+  }
+
+  const hours = (current - source) / (1000 * 60 * 60);
+
+  return 1 / (1 + hours / 24);
+}
+
+function scoreAgentAffinity(
+  record: PersistentMemoryRecord,
+  query: PersistentMemoryRetrievalQuery,
+): number {
+  if (record.agentId === query.agentId) {
+    return 1;
+  }
+
+  if (query.agentRole !== undefined && record.agentRole === query.agentRole) {
+    return 0.45;
+  }
+
+  const agentName = query.agentName?.toLowerCase();
+  if (
+    agentName !== undefined &&
+    (record.content.toLowerCase().includes(agentName) ||
+      record.tags.some((tag) => tag.toLowerCase() === agentName))
+  ) {
+    return 0.35;
+  }
+
+  return 0;
+}
+
+export function scorePersistentMemoryRecord(
+  record: PersistentMemoryRecord,
+  query: PersistentMemoryRetrievalQuery,
+): RetrievedPersistentMemoryRecord {
+  const relevanceScore = scorePersistentMemoryRelevance(record, query.query);
+  const importanceScore = scorePersistentMemoryImportance(record);
+  const recencyScore = scorePersistentMemoryRecency(record, query.currentTimestamp);
+  const agentAffinityScore = scoreAgentAffinity(record, query);
+  const score =
+    0.35 * relevanceScore +
+    0.25 * importanceScore +
+    0.2 * recencyScore +
+    0.2 * agentAffinityScore;
+
+  return {
+    recordId: record.id,
+    sourceEventId: record.sourceEventId,
+    sourceRunId: record.sourceRunId,
+    sourceType: record.sourceType,
+    agentId: record.agentId,
+    agentName: record.agentName,
+    agentRole: record.agentRole,
+    content: record.content,
+    summary: record.summary,
+    sourceTimestamp: record.sourceTimestamp,
+    importance: record.importance,
+    tags: record.tags,
+    relevanceScore: roundScore(relevanceScore),
+    importanceScore: roundScore(importanceScore),
+    recencyScore: roundScore(recencyScore),
+    agentAffinityScore: roundScore(agentAffinityScore),
+    score: roundScore(score),
+  };
+}
+
+export function retrievePersistentMemoryRecords(
+  records: readonly PersistentMemoryRecord[],
+  query: PersistentMemoryRetrievalQuery,
+): RetrievedPersistentMemoryRecord[] {
+  const limit = Math.max(1, query.limit ?? 3);
+
+  return records
+    .map((record) => scorePersistentMemoryRecord(record, query))
+    .sort((left, right) => {
+      if (right.score !== left.score) {
+        return right.score - left.score;
+      }
+
+      if (right.agentAffinityScore !== left.agentAffinityScore) {
+        return right.agentAffinityScore - left.agentAffinityScore;
+      }
+
+      return left.recordId.localeCompare(right.recordId);
+    })
+    .slice(0, limit);
 }
 
 export function mergePersistentMemoryRecords(

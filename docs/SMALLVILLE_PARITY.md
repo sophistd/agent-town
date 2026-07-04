@@ -45,13 +45,13 @@ runtime facts.
 | Agent identity | Persona, routine, relationships, and memory history | Agent role/name from `AgentEvent`; cognitive/social seed personas and relationship IDs now present in deterministic fixture metadata | Partial |
 | Observation | Agents perceive events and environment changes | `generativeRuntime.ts` emits observation-stage `memory_write` events | Initial |
 | Memory stream | Chronological natural-language record of experiences | `MemoryRecord` stream exists inside deterministic generator; browser-persisted Memory source now recalls extracted `memory_read` / `memory_write` evidence across imported runs | Initial |
-| Retrieval | Dynamic memory retrieval by relevance, importance, recency | `retrieveMemories` scores and records retrieval evidence in event metadata | Initial |
+| Retrieval | Dynamic memory retrieval by relevance, importance, recency | `retrieveMemories` scores fixture memory; persistent `Memory plan` now retrieves durable records per agent by relevance, importance, recency, and agent affinity | Initial |
 | Reflection | Higher-level synthesis from memories | Generator emits reflection-stage `thinking` events with source memory IDs | Initial |
 | Planning | Higher-level plans decomposed into actions | Generator emits planning-stage `decision` events with `planStep` metadata | Initial |
 | Action/conversation | Agents act, talk, coordinate | Generator emits `handoff`, `message`, `tool_call`, and `done` events through the existing projection path; Social day emits 25 invitation messages | Partial |
 | Emergent social behavior | Information spreads and coordination emerges from agent interaction over time | `Social day` deterministically models a user-seeded Valentine's invitation spreading through a 25-agent relationship graph | Initial |
 | LLM behavior generation | LLM produces observations/reflections/plans/actions | Not implemented; deterministic generator is a scaffold for testable event shape | Missing |
-| Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence and recalls it as `memory_read` events; not yet a server-backed world database or autonomous memory engine | Initial |
+| Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, recalls it as `memory_read` events, and feeds agent-addressable planning events; not yet a server-backed world database or autonomous memory engine | Initial |
 | Many agents | Reference environment used 25 agents | `Social day` fixture uses 25 agents and 150 canonical events | Initial |
 | Human intervention | User can inject natural-language changes into the town | `Intervention` source turns an operator prompt into canonical observation/retrieval/reflection/planning/action/closure events with prior-run context | Initial |
 | Evaluation | Believability and ablation evidence | Local type/test/build/Playwright evidence exists; no believability evaluation | Missing |
@@ -75,12 +75,14 @@ The current slice adds deterministic cognitive evidence:
 - `src/events/persistentMemory.ts`
   - `extractPersistentMemoryRecords`
   - `mergePersistentMemoryRecords`
+  - `retrievePersistentMemoryRecords`
 - `src/adapters/persistentMemoryAdapter.ts`
   - `buildPersistentMemoryRecallResult`
+  - `buildAgentAddressableMemoryPlanResult`
   - `persistentMemoryAdapter`
 - `src/state/persistentMemoryStore.ts`
   - versioned browser storage for durable memory records
-- UI sources: `Cognitive`, `Social day`, `Intervention`, `Memory`
+- UI sources: `Cognitive`, `Social day`, `Intervention`, `Memory`, `Memory plan`
 - Metadata stages:
   - `observation`
   - `retrieval`
@@ -114,6 +116,15 @@ The current slice adds deterministic cognitive evidence:
   - `durableMemory.memoryId`
   - `durableMemory.retrievalQuery`
   - `durableMemory.savedAt`
+- Agent-addressable memory metadata:
+  - `agentAddressableMemory.schemaVersion`
+  - `agentAddressableMemory.agentId`
+  - `agentAddressableMemory.latestEventId`
+  - `agentAddressableMemory.retrievalQuery`
+  - `agentAddressableMemory.selectedRecordIds`
+  - `agentAddressableMemory.selectedSourceEventIds`
+  - `agentAddressableMemory.averageScore`
+  - `agentAddressableMemory.weights`
 
 This is intentionally not a free-running agent simulation. It is a deterministic
 contract test for the cognitive evidence shape that a future LLM-backed adapter
@@ -134,6 +145,9 @@ This slice can pass if:
   adapter, not through renderer or UI-owned facts
 - memory events from imported runs persist into a versioned browser memory bank
   and recall as canonical `memory_read` events
+- each durable-memory agent can retrieve persistent records by persona/query,
+  importance, recency, and agent affinity, then emit canonical retrieval,
+  reflection, and planning evidence
 - the existing town projection can render the run without source-specific
   renderer branches
 - docs and evidence state that full Stanford parity is still incomplete
@@ -141,7 +155,7 @@ This slice can pass if:
 This slice cannot claim:
 
 - autonomous social emergence
-- complete persistent agent memory across sessions
+- complete persistent agent memory across devices or server sessions
 - LLM-generated behavior
 - free-form natural-language understanding beyond deterministic intent routing
 - unscripted 25-agent-scale simulation
@@ -153,7 +167,7 @@ The next meaningful move is not more labels. It is one of:
 
 - add an LLM-backed reflection/planning adapter behind the same deterministic
   event contract
-- make the persistent memory stream agent-addressable for future planning
+- use agent-addressable memory retrieval inside LLM-backed planning
 - persist the intervention memory stream beyond browser-local storage
 - add relationship state as derived projection evidence, not renderer-owned
   state

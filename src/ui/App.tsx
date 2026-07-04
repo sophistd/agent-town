@@ -13,7 +13,10 @@ import {
   parseWebSocketMessages,
   type WebSocketIngestConnection,
 } from "../adapters/websocketAdapter";
-import { buildPersistentMemoryRecallResult } from "../adapters/persistentMemoryAdapter";
+import {
+  buildAgentAddressableMemoryPlanResult,
+  buildPersistentMemoryRecallResult,
+} from "../adapters/persistentMemoryAdapter";
 import { parseNaturalLanguageIntervention } from "../adapters/interventionAdapter";
 import {
   mockSmallvilleCognitiveRun,
@@ -251,7 +254,7 @@ export function App() {
       setQuarantinedEvents(nextQuarantinedEvents);
       setPlaybackCursor(0, nextEvents.length);
 
-      if (source !== "memory") {
+      if (source !== "memory" && source !== "memory-plan") {
         const savedAt = new Date().toISOString();
         const incomingMemoryRecords = extractPersistentMemoryRecords(nextEvents, savedAt);
 
@@ -403,6 +406,18 @@ export function App() {
     );
   }, [applyAdapterResult, disconnectWebSocket]);
 
+  const loadAgentMemoryPlan = useCallback(() => {
+    disconnectWebSocket();
+    applyAdapterResult(
+      "memory-plan",
+      buildAgentAddressableMemoryPlanResult({
+        previousEvents: eventsRef.current,
+        records: persistentMemoryRecordsRef.current,
+      }),
+      "Agent-addressable memory plan",
+    );
+  }, [applyAdapterResult, disconnectWebSocket]);
+
   const loadWebSocketSample = useCallback(() => {
     disconnectWebSocket();
     applyAdapterResult(
@@ -502,6 +517,7 @@ export function App() {
             onImportIntervention={importIntervention}
             onImportJsonl={importJsonl}
             onLoadCognitiveRun={loadCognitiveRun}
+            onLoadAgentMemoryPlan={loadAgentMemoryPlan}
             onLoadPersistentMemory={loadPersistentMemory}
             onLoadMock={loadMock}
             onLoadSocialRun={loadSocialRun}

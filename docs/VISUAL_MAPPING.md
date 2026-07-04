@@ -108,6 +108,14 @@ Memory records are extracted only from canonical `memory_read` /
 new canonical `memory_read` events. The renderer receives only replayed
 `WorldState`; localStorage never becomes a projection fact.
 
+The same adapter provides the deterministic "Memory plan" source. It takes
+durable records, enriches matching agents with current run context when
+available, builds an agent-scoped query for each durable-memory agent, scores
+records by relevance, importance, recency, and agent affinity, then emits
+`memory_read`, `thinking`, and `decision` events. The town canvas still sees
+only `WorldState`; query scores and selected record IDs live in event metadata
+for Detail inspection.
+
 | Role | Default visible identity |
 | --- | --- |
 | `planner` | Planner |

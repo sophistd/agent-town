@@ -141,6 +141,7 @@ Common fields:
 | `intervention` | User-seeded social premise or natural-language operator prompt that became an `AgentEvent`, not renderer state |
 | `socialDiffusion` | Object describing event id, invite wave, source agent, targets, knowledge, and attendance |
 | `durableMemory` | Versioned record showing which persisted memory record was recalled into the current event stream |
+| `agentAddressableMemory` | Agent-scoped persistent-memory query, selected records, scores, and retrieval weights used to create planning evidence |
 
 These fields are projection and inspection evidence. The renderer may display
 them or use `subLocationId` / `activity` as projection hints, but it must not
@@ -164,6 +165,14 @@ boundary. The store saves only evidence extracted from canonical
 `memory_read` / `memory_write` events. When recalled, those records become new
 canonical `memory_read` events with `metadata.durableMemory`; localStorage is
 not replayed directly and does not give the renderer runtime facts.
+
+The deterministic `Memory plan` source uses the same persistent records as an
+agent-addressable memory stream. Each durable-memory agent receives a query
+built from its stored memory evidence, enriched by current-run context when the
+same agent is present; the adapter scores durable records by relevance,
+importance, recency, and agent affinity, then emits canonical `memory_read`,
+`thinking`, and `decision` events with `metadata.agentAddressableMemory`.
+The browser store remains an adapter boundary, not a projection fact.
 
 ## WorldState
 

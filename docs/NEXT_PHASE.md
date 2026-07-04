@@ -38,13 +38,14 @@ intact.
    The deterministic `Cognitive`, `Social day`, `Intervention`, and `Memory`
    sources now prove the event shape for observation, memory retrieval,
    reflection, planning, social diffusion, natural-language intervention,
-   durable memory recall, and action at 25-agent scale. The next
-   Smallville-oriented runtime session should choose exactly one of:
+   durable memory recall, agent-addressable memory planning, and action at
+   25-agent scale. The next Smallville-oriented runtime session should choose
+   exactly one of:
 
    - add an LLM-backed reflection/planning adapter behind the same event
      contract
-   - make persistent memory agent-addressable so future plans can retrieve by
-     persona, query, importance, and recency across browser sessions
+   - use the agent-addressable memory retrieval stream inside an LLM-backed
+     planner while preserving deterministic validation fixtures
    - move durable memory from browser-local storage to a real world-state
      backing store
    - profile replay/rendering for 25-agent and larger social fixtures
