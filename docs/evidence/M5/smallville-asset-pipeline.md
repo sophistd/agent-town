@@ -537,6 +537,16 @@ Town day / interior-anchor continuation actual write-back after pushing commit
 - Linear MDL-144 comment created:
   `3e976fa0-88a8-41bd-b5d8-442e52a0078e`.
 
+Cognitive runtime continuation actual write-back after pushing commit
+`3c8024b feat: add deterministic cognitive town runtime`:
+
+- Notion M5 spec comment created:
+  `393acb4b-b6e6-819d-8890-001dd894dcfe`.
+- Linear MDL-129 comment created:
+  `0041694f-c4af-4c4e-a70b-4173e20708d7`.
+- Linear MDL-144 comment created:
+  `54b8cffe-8601-4bab-8200-186da4fc07cb`.
+
 Read-back after write:
 
 - Notion `get_comments` returned comment
@@ -555,6 +565,14 @@ Read-back after write:
   `11dfe30c-76ea-44da-b93f-6d07e2dcd18e`.
 - Linear `list_comments` for MDL-144 returned comment
   `3e976fa0-88a8-41bd-b5d8-442e52a0078e`.
+- Notion `get_comments` returned comment
+  `393acb4b-b6e6-819d-8890-001dd894dcfe` with PR, branch, commit,
+  Cognitive implementation, verification summary, evidence paths, scope truth,
+  asset/license boundary, and remaining limitations.
+- Linear `list_comments` for MDL-129 returned comment
+  `0041694f-c4af-4c4e-a70b-4173e20708d7`.
+- Linear `list_comments` for MDL-144 returned comment
+  `54b8cffe-8601-4bab-8200-186da4fc07cb`.
 
 Scope truth:
 
