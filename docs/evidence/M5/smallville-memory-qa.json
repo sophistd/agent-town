@@ -1,0 +1,514 @@
+{
+  "flow": "app -> clear local memory -> Social day persists 50 memory records -> reload keeps 50 records -> Memory source recalls 50 canonical memory events",
+  "url": "http://127.0.0.1:5173/",
+  "browserFallback": "Browser completed the flow but domSnapshot failed with plugin-side incrementalAriaSnapshot error; Playwright fresh context is authoritative for console and screenshots.",
+  "initialMemoryText": "Memory bank · 0 records",
+  "afterSocialMemoryText": "Memory bank · 50 records",
+  "afterReloadMemoryText": "Memory bank · 50 records",
+  "storageAfterSocial": {
+    "bodyHasOverlay": false,
+    "bodyTextSample": "\n    ATAgent TownAgentEvent-driven runtime projectionRun IDrun-smallville-social-001StatuspausedCursor1 / 150Events150Warnings0Quarantine0Import Sourcesocial · 150 eventsMockJSONLTown dayCognitiveSocial dayInterventionMemoryWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}}\n{\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}}\n{\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-",
+    "canvasCount": 1,
+    "canvasRect": {
+      "x": 311,
+      "y": 110,
+      "width": 773.0625,
+      "height": 669
+    },
+    "horizontalOverflow": 0,
+    "importPanelText": "Import Sourcesocial · 150 eventsMockJSONLTown dayCognitiveSocial dayInterventionMemoryWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}}\n{\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}}\n{\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-002\"}}ConnectDisconnectSocial diffusion run loaded.warnings=0; quarantined=0",
+    "memoryRecordCount": 50,
+    "memorySchemaVersion": 1,
+    "runSummaryText": "",
+    "townStatusText": "cursor 0visible 150/150balanced100%",
+    "url": "http://127.0.0.1:5173/",
+    "viewport": {
+      "width": 1440,
+      "height": 960
+    }
+  },
+  "desktopFacts": {
+    "bodyHasOverlay": false,
+    "bodyTextSample": "\n    ATAgent TownAgentEvent-driven runtime projectionRun IDrun-persistent-memory-cf547627StatuspausedCursor1 / 50Events50Warnings0Quarantine0Import Sourcememory · 50 eventsMockJSONLTown dayCognitiveSocial dayInterventionMemoryWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}}\n{\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}}\n{\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happ",
+    "canvasCount": 1,
+    "canvasRect": {
+      "x": 311,
+      "y": 110,
+      "width": 773.0625,
+      "height": 669
+    },
+    "horizontalOverflow": 0,
+    "importPanelText": "Import Sourcememory · 50 eventsMockJSONLTown dayCognitiveSocial dayInterventionMemoryWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}}\n{\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}}\n{\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-002\"}}ConnectDisconnectPersistent memory recall: 50 events accepted.warnings=0; quarantined=0",
+    "memoryRecordCount": 50,
+    "memorySchemaVersion": 1,
+    "runSummaryText": "",
+    "townStatusText": "cursor 0visible 50/50balanced100%",
+    "url": "http://127.0.0.1:5173/",
+    "viewport": {
+      "width": 1440,
+      "height": 960
+    }
+  },
+  "interaction": {
+    "zoomBefore": "cursor 0visible 50/50expanded100%",
+    "zoomAfter": "cursor 0visible 50/50expanded105%",
+    "bubblesBefore": "true",
+    "bubblesAfter": "false",
+    "edgesBefore": "true",
+    "edgesAfter": "false",
+    "afterCriticalStatus": "cursor 0visible 0/50expanded105%",
+    "afterNextStatus": "cursor 1visible 0/50expanded105%",
+    "afterPlayHeader": "ATAgent TownAgentEvent-driven runtime projectionRun IDrun-persistent-memory-cf547627StatusrunningCursor2 / 50Events50Warnings0Quarantine0",
+    "facts": {
+      "bodyHasOverlay": false,
+      "bodyTextSample": "\n    ATAgent TownAgentEvent-driven runtime projectionRun IDrun-persistent-memory-cf547627StatusrunningCursor2 / 50Events50Warnings0Quarantine0Import Sourcememory · 50 eventsMockJSONLTown dayCognitiveSocial dayInterventionMemoryWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}}\n{\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}}\n{\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"hap",
+      "canvasCount": 1,
+      "canvasRect": {
+        "x": 311,
+        "y": 110,
+        "width": 773.0625,
+        "height": 669
+      },
+      "horizontalOverflow": 0,
+      "importPanelText": "Import Sourcememory · 50 eventsMockJSONLTown dayCognitiveSocial dayInterventionMemoryWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}}\n{\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}}\n{\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-002\"}}ConnectDisconnectPersistent memory recall: 50 events accepted.warnings=0; quarantined=0",
+      "memoryRecordCount": 50,
+      "memorySchemaVersion": 1,
+      "runSummaryText": "",
+      "townStatusText": "cursor 1visible 0/50expanded105%",
+      "url": "http://127.0.0.1:5173/",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    }
+  },
+  "mobileFacts": {
+    "bodyHasOverlay": false,
+    "bodyTextSample": "\n    ATAgent TownAgentEvent-driven runtime projectionRun IDrun-persistent-memory-cf547627StatuspausedCursor1 / 50Events50Warnings0Quarantine0Import Sourcememory · 50 eventsMockJSONLTown dayCognitiveSocial dayInterventionMemoryWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}}\n{\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}}\n{\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happ",
+    "canvasCount": 1,
+    "canvasRect": {
+      "x": 9,
+      "y": 1844.578125,
+      "width": 371.984375,
+      "height": 321.921875
+    },
+    "horizontalOverflow": 0,
+    "importPanelText": "Import Sourcememory · 50 eventsMockJSONLTown dayCognitiveSocial dayInterventionMemoryWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}}\n{\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}}\n{\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-002\"}}ConnectDisconnectPersistent memory recall: 50 events accepted.warnings=0; quarantined=0",
+    "memoryRecordCount": 50,
+    "memorySchemaVersion": 1,
+    "runSummaryText": "",
+    "townStatusText": "cursor 0visible 50/50balanced100%",
+    "url": "http://127.0.0.1:5173/",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  "mobileMapFacts": {
+    "bodyHasOverlay": false,
+    "bodyTextSample": "\n    ATAgent TownAgentEvent-driven runtime projectionRun IDrun-persistent-memory-cf547627StatuspausedCursor1 / 50Events50Warnings0Quarantine0Import Sourcememory · 50 eventsMockJSONLTown dayCognitiveSocial dayInterventionMemoryWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}}\n{\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}}\n{\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happ",
+    "canvasCount": 1,
+    "canvasRect": {
+      "x": 9,
+      "y": 260.578125,
+      "width": 371.984375,
+      "height": 321.921875
+    },
+    "horizontalOverflow": 0,
+    "importPanelText": "Import Sourcememory · 50 eventsMockJSONLTown dayCognitiveSocial dayInterventionMemoryWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}}\n{\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}}\n{\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-002\"}}ConnectDisconnectPersistent memory recall: 50 events accepted.warnings=0; quarantined=0",
+    "memoryRecordCount": 50,
+    "memorySchemaVersion": 1,
+    "runSummaryText": "",
+    "townStatusText": "cursor 0visible 50/50balanced100%",
+    "url": "http://127.0.0.1:5173/",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  "assetResponses": [
+    {
+      "url": "http://127.0.0.1:5173/maps/town-v1-preview.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/tilesets/agent-town-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/agent-roles-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/buildings-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/maps/town-v1-preview.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/tilesets/agent-town-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/agent-roles-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/buildings-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/maps/town-v1-preview.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/tilesets/agent-town-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/agent-roles-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/buildings-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/maps/town-v1-preview.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/tilesets/agent-town-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/agent-roles-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/buildings-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/maps/town-v1.tiled.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/maps/town-v1-preview.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/tilesets/agent-town-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/agent-roles-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/buildings-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/maps/town-v1-preview.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/tilesets/agent-town-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/agent-roles-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/buildings-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/maps/town-v1.tiled.json",
+      "status": 200
+    }
+  ],
+  "pageErrors": [],
+  "mobilePageErrors": [],
+  "relevantConsoleIssues": [],
+  "relevantMobileConsoleIssues": [],
+  "allConsoleMessages": [
+    {
+      "type": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://127.0.0.1:5173/@vite/client",
+        "line": 732,
+        "column": 8,
+        "lineNumber": 732,
+        "columnNumber": 8
+      }
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://127.0.0.1:5173/@vite/client",
+        "line": 826,
+        "column": 11,
+        "lineNumber": 826,
+        "columnNumber": 11
+      }
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=f916eed7",
+        "line": 20102,
+        "column": 53,
+        "lineNumber": 20102,
+        "columnNumber": 53
+      }
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x10c00544800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "location": {
+        "url": "http://127.0.0.1:5173/",
+        "line": 0,
+        "column": 0,
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "type": "log",
+      "text": "%cPhaser v4.2.0 (WebGL | Web Audio)%c https://phaser.io/v402 color: #ffffff; background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAARBJREFUeNpi/P//P0OHsPB/BiCoePuWkYFEwALSXJElzMBgLwE2CNkQxgWr/yMr/p8QimlBu5DQ//+8vBBco/ofzAe6imH+qv/53/6jYJAYSA4ZoxoANYTPKhiuCQZwGcJU+e4dqpMmvsDq14krV2MPAxDha2CMKvoXoiE/PBQUDgQD8j82UFae9B9bOIC8B9UD9gIjjIMN7Ns6lWHn4XMoYu62RgxO3tkMjIyMII2MYAOAtmFVhA+ADHf2ycGMRhANjUq8YO+WKWCvgAORIV8CkpDCrzIwsLIymC1qAtuAD4Bsh3sBmqAY3qcGwL2AC4DCpKtzHlgzOLWihwEuzTCN0GhDJHeYC4gByBphACDAAH2dDIxdjr+VAAAAAElFTkSuQmCC\"), linear-gradient(to bottom, #000814, #001d3d, #003566); background-repeat: no-repeat; background-position: 4px center, 0 0; padding: 2px 6px 2px 24px; background: transparent",
+      "location": {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/phaser.js?v=f916eed7",
+        "line": 8455,
+        "column": 20,
+        "lineNumber": 8455,
+        "columnNumber": 20
+      }
+    },
+    {
+      "type": "log",
+      "text": "%cPhaser v4.2.0 (WebGL | Web Audio)%c https://phaser.io/v402 color: #ffffff; background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAARBJREFUeNpi/P//P0OHsPB/BiCoePuWkYFEwALSXJElzMBgLwE2CNkQxgWr/yMr/p8QimlBu5DQ//+8vBBco/ofzAe6imH+qv/53/6jYJAYSA4ZoxoANYTPKhiuCQZwGcJU+e4dqpMmvsDq14krV2MPAxDha2CMKvoXoiE/PBQUDgQD8j82UFae9B9bOIC8B9UD9gIjjIMN7Ns6lWHn4XMoYu62RgxO3tkMjIyMII2MYAOAtmFVhA+ADHf2ycGMRhANjUq8YO+WKWCvgAORIV8CkpDCrzIwsLIymC1qAtuAD4Bsh3sBmqAY3qcGwL2AC4DCpKtzHlgzOLWihwEuzTCN0GhDJHeYC4gByBphACDAAH2dDIxdjr+VAAAAAElFTkSuQmCC\"), linear-gradient(to bottom, #000814, #001d3d, #003566); background-repeat: no-repeat; background-position: 4px center, 0 0; padding: 2px 6px 2px 24px; background: transparent",
+      "location": {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/phaser.js?v=f916eed7",
+        "line": 8455,
+        "column": 20,
+        "lineNumber": 8455,
+        "columnNumber": 20
+      }
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x10c00548a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "location": {
+        "url": "http://127.0.0.1:5173/",
+        "line": 0,
+        "column": 0,
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x10c0054a200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "location": {
+        "url": "http://127.0.0.1:5173/",
+        "line": 0,
+        "column": 0,
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x10c00548a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+      "location": {
+        "url": "http://127.0.0.1:5173/",
+        "line": 0,
+        "column": 0,
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://127.0.0.1:5173/@vite/client",
+        "line": 732,
+        "column": 8,
+        "lineNumber": 732,
+        "columnNumber": 8
+      }
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://127.0.0.1:5173/@vite/client",
+        "line": 826,
+        "column": 11,
+        "lineNumber": 826,
+        "columnNumber": 11
+      }
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=f916eed7",
+        "line": 20102,
+        "column": 53,
+        "lineNumber": 20102,
+        "columnNumber": 53
+      }
+    },
+    {
+      "type": "log",
+      "text": "%cPhaser v4.2.0 (WebGL | Web Audio)%c https://phaser.io/v402 color: #ffffff; background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAARBJREFUeNpi/P//P0OHsPB/BiCoePuWkYFEwALSXJElzMBgLwE2CNkQxgWr/yMr/p8QimlBu5DQ//+8vBBco/ofzAe6imH+qv/53/6jYJAYSA4ZoxoANYTPKhiuCQZwGcJU+e4dqpMmvsDq14krV2MPAxDha2CMKvoXoiE/PBQUDgQD8j82UFae9B9bOIC8B9UD9gIjjIMN7Ns6lWHn4XMoYu62RgxO3tkMjIyMII2MYAOAtmFVhA+ADHf2ycGMRhANjUq8YO+WKWCvgAORIV8CkpDCrzIwsLIymC1qAtuAD4Bsh3sBmqAY3qcGwL2AC4DCpKtzHlgzOLWihwEuzTCN0GhDJHeYC4gByBphACDAAH2dDIxdjr+VAAAAAElFTkSuQmCC\"), linear-gradient(to bottom, #000814, #001d3d, #003566); background-repeat: no-repeat; background-position: 4px center, 0 0; padding: 2px 6px 2px 24px; background: transparent",
+      "location": {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/phaser.js?v=f916eed7",
+        "line": 8455,
+        "column": 20,
+        "lineNumber": 8455,
+        "columnNumber": 20
+      }
+    },
+    {
+      "type": "log",
+      "text": "%cPhaser v4.2.0 (WebGL | Web Audio)%c https://phaser.io/v402 color: #ffffff; background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAARBJREFUeNpi/P//P0OHsPB/BiCoePuWkYFEwALSXJElzMBgLwE2CNkQxgWr/yMr/p8QimlBu5DQ//+8vBBco/ofzAe6imH+qv/53/6jYJAYSA4ZoxoANYTPKhiuCQZwGcJU+e4dqpMmvsDq14krV2MPAxDha2CMKvoXoiE/PBQUDgQD8j82UFae9B9bOIC8B9UD9gIjjIMN7Ns6lWHn4XMoYu62RgxO3tkMjIyMII2MYAOAtmFVhA+ADHf2ycGMRhANjUq8YO+WKWCvgAORIV8CkpDCrzIwsLIymC1qAtuAD4Bsh3sBmqAY3qcGwL2AC4DCpKtzHlgzOLWihwEuzTCN0GhDJHeYC4gByBphACDAAH2dDIxdjr+VAAAAAElFTkSuQmCC\"), linear-gradient(to bottom, #000814, #001d3d, #003566); background-repeat: no-repeat; background-position: 4px center, 0 0; padding: 2px 6px 2px 24px; background: transparent",
+      "location": {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/phaser.js?v=f916eed7",
+        "line": 8455,
+        "column": 20,
+        "lineNumber": 8455,
+        "columnNumber": 20
+      }
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://127.0.0.1:5173/@vite/client",
+        "line": 732,
+        "column": 8,
+        "lineNumber": 732,
+        "columnNumber": 8
+      }
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://127.0.0.1:5173/@vite/client",
+        "line": 826,
+        "column": 11,
+        "lineNumber": 826,
+        "columnNumber": 11
+      }
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=f916eed7",
+        "line": 20102,
+        "column": 53,
+        "lineNumber": 20102,
+        "columnNumber": 53
+      }
+    },
+    {
+      "type": "log",
+      "text": "%cPhaser v4.2.0 (WebGL | Web Audio)%c https://phaser.io/v402 color: #ffffff; background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAARBJREFUeNpi/P//P0OHsPB/BiCoePuWkYFEwALSXJElzMBgLwE2CNkQxgWr/yMr/p8QimlBu5DQ//+8vBBco/ofzAe6imH+qv/53/6jYJAYSA4ZoxoANYTPKhiuCQZwGcJU+e4dqpMmvsDq14krV2MPAxDha2CMKvoXoiE/PBQUDgQD8j82UFae9B9bOIC8B9UD9gIjjIMN7Ns6lWHn4XMoYu62RgxO3tkMjIyMII2MYAOAtmFVhA+ADHf2ycGMRhANjUq8YO+WKWCvgAORIV8CkpDCrzIwsLIymC1qAtuAD4Bsh3sBmqAY3qcGwL2AC4DCpKtzHlgzOLWihwEuzTCN0GhDJHeYC4gByBphACDAAH2dDIxdjr+VAAAAAElFTkSuQmCC\"), linear-gradient(to bottom, #000814, #001d3d, #003566); background-repeat: no-repeat; background-position: 4px center, 0 0; padding: 2px 6px 2px 24px; background: transparent",
+      "location": {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/phaser.js?v=f916eed7",
+        "line": 8455,
+        "column": 20,
+        "lineNumber": 8455,
+        "columnNumber": 20
+      }
+    },
+    {
+      "type": "log",
+      "text": "%cPhaser v4.2.0 (WebGL | Web Audio)%c https://phaser.io/v402 color: #ffffff; background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAARBJREFUeNpi/P//P0OHsPB/BiCoePuWkYFEwALSXJElzMBgLwE2CNkQxgWr/yMr/p8QimlBu5DQ//+8vBBco/ofzAe6imH+qv/53/6jYJAYSA4ZoxoANYTPKhiuCQZwGcJU+e4dqpMmvsDq14krV2MPAxDha2CMKvoXoiE/PBQUDgQD8j82UFae9B9bOIC8B9UD9gIjjIMN7Ns6lWHn4XMoYu62RgxO3tkMjIyMII2MYAOAtmFVhA+ADHf2ycGMRhANjUq8YO+WKWCvgAORIV8CkpDCrzIwsLIymC1qAtuAD4Bsh3sBmqAY3qcGwL2AC4DCpKtzHlgzOLWihwEuzTCN0GhDJHeYC4gByBphACDAAH2dDIxdjr+VAAAAAElFTkSuQmCC\"), linear-gradient(to bottom, #000814, #001d3d, #003566); background-repeat: no-repeat; background-position: 4px center, 0 0; padding: 2px 6px 2px 24px; background: transparent",
+      "location": {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/phaser.js?v=f916eed7",
+        "line": 8455,
+        "column": 20,
+        "lineNumber": 8455,
+        "columnNumber": 20
+      }
+    }
+  ],
+  "allMobileConsoleMessages": [
+    {
+      "type": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://127.0.0.1:5173/@vite/client",
+        "line": 732,
+        "column": 8,
+        "lineNumber": 732,
+        "columnNumber": 8
+      }
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://127.0.0.1:5173/@vite/client",
+        "line": 826,
+        "column": 11,
+        "lineNumber": 826,
+        "columnNumber": 11
+      }
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=f916eed7",
+        "line": 20102,
+        "column": 53,
+        "lineNumber": 20102,
+        "columnNumber": 53
+      }
+    },
+    {
+      "type": "log",
+      "text": "%cPhaser v4.2.0 (WebGL | Web Audio)%c https://phaser.io/v402 color: #ffffff; background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAARBJREFUeNpi/P//P0OHsPB/BiCoePuWkYFEwALSXJElzMBgLwE2CNkQxgWr/yMr/p8QimlBu5DQ//+8vBBco/ofzAe6imH+qv/53/6jYJAYSA4ZoxoANYTPKhiuCQZwGcJU+e4dqpMmvsDq14krV2MPAxDha2CMKvoXoiE/PBQUDgQD8j82UFae9B9bOIC8B9UD9gIjjIMN7Ns6lWHn4XMoYu62RgxO3tkMjIyMII2MYAOAtmFVhA+ADHf2ycGMRhANjUq8YO+WKWCvgAORIV8CkpDCrzIwsLIymC1qAtuAD4Bsh3sBmqAY3qcGwL2AC4DCpKtzHlgzOLWihwEuzTCN0GhDJHeYC4gByBphACDAAH2dDIxdjr+VAAAAAElFTkSuQmCC\"), linear-gradient(to bottom, #000814, #001d3d, #003566); background-repeat: no-repeat; background-position: 4px center, 0 0; padding: 2px 6px 2px 24px; background: transparent",
+      "location": {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/phaser.js?v=f916eed7",
+        "line": 8455,
+        "column": 20,
+        "lineNumber": 8455,
+        "columnNumber": 20
+      }
+    },
+    {
+      "type": "log",
+      "text": "%cPhaser v4.2.0 (WebGL | Web Audio)%c https://phaser.io/v402 color: #ffffff; background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAARBJREFUeNpi/P//P0OHsPB/BiCoePuWkYFEwALSXJElzMBgLwE2CNkQxgWr/yMr/p8QimlBu5DQ//+8vBBco/ofzAe6imH+qv/53/6jYJAYSA4ZoxoANYTPKhiuCQZwGcJU+e4dqpMmvsDq14krV2MPAxDha2CMKvoXoiE/PBQUDgQD8j82UFae9B9bOIC8B9UD9gIjjIMN7Ns6lWHn4XMoYu62RgxO3tkMjIyMII2MYAOAtmFVhA+ADHf2ycGMRhANjUq8YO+WKWCvgAORIV8CkpDCrzIwsLIymC1qAtuAD4Bsh3sBmqAY3qcGwL2AC4DCpKtzHlgzOLWihwEuzTCN0GhDJHeYC4gByBphACDAAH2dDIxdjr+VAAAAAElFTkSuQmCC\"), linear-gradient(to bottom, #000814, #001d3d, #003566); background-repeat: no-repeat; background-position: 4px center, 0 0; padding: 2px 6px 2px 24px; background: transparent",
+      "location": {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/phaser.js?v=f916eed7",
+        "line": 8455,
+        "column": 20,
+        "lineNumber": 8455,
+        "columnNumber": 20
+      }
+    }
+  ],
+  "screenshots": {
+    "desktop": "docs/evidence/M5/smallville-memory-desktop.png",
+    "interaction": "docs/evidence/M5/smallville-memory-interaction.png",
+    "mobile": "docs/evidence/M5/smallville-memory-mobile.png",
+    "mobileMap": "docs/evidence/M5/smallville-memory-mobile-map.png"
+  },
+  "consoleClassification": "Raw Chromium WebGL ReadPixels GPU warnings are retained in allConsoleMessages but excluded from relevant app console issues."
+}

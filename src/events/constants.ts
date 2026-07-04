@@ -82,6 +82,7 @@ export const PROJECTION_EDGE_KINDS = [
 
 export const AGENT_EVENT_SOURCES = [
   "intervention",
+  "memory",
   "mock",
   "jsonl",
   "websocket",

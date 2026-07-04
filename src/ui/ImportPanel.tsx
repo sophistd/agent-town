@@ -6,6 +6,7 @@ export type ImportSourceKind =
   | "cognitive"
   | "intervention"
   | "jsonl"
+  | "memory"
   | "mock"
   | "smallville"
   | "social"
@@ -27,10 +28,12 @@ type ImportPanelProps = {
   onImportIntervention: (prompt: string) => void;
   onImportJsonl: (input: string) => void;
   onLoadCognitiveRun: () => void;
+  onLoadPersistentMemory: () => void;
   onLoadMock: () => void;
   onLoadSocialRun: () => void;
   onLoadSmallvilleDay: () => void;
   onLoadWebSocketSample: () => void;
+  persistentMemoryCount: number;
   quarantinedEvents: readonly AdapterQuarantinedEvent[];
   status: ImportPanelStatus;
   warnings: readonly AdapterWarning[];
@@ -171,10 +174,12 @@ export function ImportPanel({
   onImportIntervention,
   onImportJsonl,
   onLoadCognitiveRun,
+  onLoadPersistentMemory,
   onLoadMock,
   onLoadSocialRun,
   onLoadSmallvilleDay,
   onLoadWebSocketSample,
+  persistentMemoryCount,
   quarantinedEvents,
   status,
   warnings,
@@ -244,6 +249,14 @@ export function ImportPanel({
         </button>
         <button
           type="button"
+          style={buttonStyleFor("memory", activeSource)}
+          onClick={onLoadPersistentMemory}
+          aria-pressed={activeSource === "memory"}
+        >
+          Memory
+        </button>
+        <button
+          type="button"
           style={buttonStyleFor("websocket", activeSource)}
           onClick={onLoadWebSocketSample}
           aria-pressed={activeSource === "websocket"}
@@ -251,6 +264,8 @@ export function ImportPanel({
           WS sample
         </button>
       </div>
+
+      <p style={mutedTextStyle}>Memory bank · {persistentMemoryCount} records</p>
 
       <textarea
         style={textareaStyle}

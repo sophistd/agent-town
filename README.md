@@ -94,7 +94,8 @@ The current surface includes:
 - a Timeline with playback, cursor jumping, and current-event selection
 - a Detail panel for the selected event and run summary
 - an Import Source panel for mock, Town day, Cognitive, Social day,
-  natural-language Intervention, native JSONL, and WebSocket-shaped input
+  natural-language Intervention, persistent Memory, native JSONL, and
+  WebSocket-shaped input
 - adapter warnings and quarantine counts
 
 ## Architecture
@@ -145,10 +146,13 @@ Quick path:
    prompt into canonical `AgentEvent` evidence. The adapter uses the current run
    as prior context, then emits observation, retrieval, reflection, planning,
    message, action, and closure events.
-10. Use Detail to inspect the selected event fields.
-11. Use Import Source -> JSONL to import the native JSONL sample in the text
+10. Use Import Source -> Memory to recall the memory stream persisted from
+   previous imported runs. The browser store is a source boundary; recall still
+   becomes canonical `memory_read` events before projection.
+11. Use Detail to inspect the selected event fields.
+12. Use Import Source -> JSONL to import the native JSONL sample in the text
    area.
-12. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
+13. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
    the same projection pipeline.
 
 Relevant screenshots and evidence:
@@ -260,12 +264,13 @@ from the event stream and derived `WorldState`.
 ## Moving Toward Smallville
 
 `docs/SMALLVILLE_PARITY.md` tracks the actual gap to Stanford Smallville-style
-generative agents. The current `Cognitive`, `Social day`, and `Intervention`
-sources are deterministic: they emit observation, memory retrieval, reflection,
-planning, action/conversation, social diffusion, natural-language intervention,
-and closure as canonical `AgentEvent` records. They are testable event contracts
-for future LLM-backed behavior, not a claim that the app already has autonomous
-social emergence or persistent agent cognition.
+generative agents. The current `Cognitive`, `Social day`, `Intervention`, and
+`Memory` sources are deterministic: they emit observation, memory retrieval,
+reflection, planning, action/conversation, social diffusion, natural-language
+intervention, durable memory recall, and closure as canonical `AgentEvent`
+records. They are testable event contracts for future LLM-backed behavior, not
+a claim that the app already has autonomous social emergence or complete
+persistent agent cognition.
 
 ## Adding An Adapter
 
@@ -310,9 +315,12 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
   review.
 - The WebSocket demo path has a built-in sample; a real runtime sender still
   needs to emit canonical or supported source-shaped messages.
+- Persistent memory currently uses versioned browser storage for canonical
+  `memory_read` / `memory_write` evidence extracted from imported runs. It is
+  not yet a server-backed world database or full autonomous memory engine.
 - The graph and memory views are represented through current projection data,
-  detail, summary, edges, and memory events; separate dedicated tabs are future
-  work.
+  detail, summary, edges, persistent memory recall, and memory events; separate
+  dedicated tabs are future work.
 - Performance evidence covers deterministic 200-event replay and local demo
   usability. It is not a browser frame-rate benchmark.
 - This public repository currently has no formal open-source `LICENSE` file.

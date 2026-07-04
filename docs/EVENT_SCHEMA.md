@@ -102,6 +102,8 @@ Canonical roles are:
 
 `metadata.source` supports:
 
+- `intervention`
+- `memory`
 - `mock`
 - `jsonl`
 - `websocket`
@@ -138,6 +140,7 @@ Common fields:
 | `relationships` | Agent IDs used by deterministic social fixtures to expose relationship graph evidence |
 | `intervention` | User-seeded social premise or natural-language operator prompt that became an `AgentEvent`, not renderer state |
 | `socialDiffusion` | Object describing event id, invite wave, source agent, targets, knowledge, and attendance |
+| `durableMemory` | Versioned record showing which persisted memory record was recalled into the current event stream |
 
 These fields are projection and inspection evidence. The renderer may display
 them or use `subLocationId` / `activity` as projection hints, but it must not
@@ -155,6 +158,12 @@ prior event/memory counts, target location, and generator name under
 `metadata.intervention`. That record is inspection evidence carried by the
 event stream; the UI text area and Phaser renderer do not own the intervention
 state.
+
+The deterministic `Memory` source uses versioned browser storage as an adapter
+boundary. The store saves only evidence extracted from canonical
+`memory_read` / `memory_write` events. When recalled, those records become new
+canonical `memory_read` events with `metadata.durableMemory`; localStorage is
+not replayed directly and does not give the renderer runtime facts.
 
 ## WorldState
 

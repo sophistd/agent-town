@@ -101,6 +101,13 @@ prompt text, inferred intent, prior run evidence, and target projection anchor
 live in event metadata; the text area and renderer do not own intervention
 facts.
 
+`src/adapters/persistentMemoryAdapter.ts` and
+`src/state/persistentMemoryStore.ts` provide the deterministic "Memory" source.
+Memory records are extracted only from canonical `memory_read` /
+`memory_write` events, persisted in versioned browser storage, and recalled as
+new canonical `memory_read` events. The renderer receives only replayed
+`WorldState`; localStorage never becomes a projection fact.
+
 | Role | Default visible identity |
 | --- | --- |
 | `planner` | Planner |

@@ -13,6 +13,7 @@ import {
   parseWebSocketMessages,
   type WebSocketIngestConnection,
 } from "../adapters/websocketAdapter";
+import { buildPersistentMemoryRecallResult } from "../adapters/persistentMemoryAdapter";
 import { parseNaturalLanguageIntervention } from "../adapters/interventionAdapter";
 import {
   mockSmallvilleCognitiveRun,
@@ -20,12 +21,22 @@ import {
 } from "../events/generativeRuntime";
 import { mockFailureRun } from "../events/mockFailureRun";
 import { mockEvents } from "../events/mockEvents";
+import {
+  extractPersistentMemoryRecords,
+  mergePersistentMemoryRecords,
+  type PersistentMemoryRecord,
+} from "../events/persistentMemory";
 import { mockSmallvilleDayRun } from "../events/mockSmallvilleDayRun";
 import { replay } from "../events/reducer";
 import { selectCurrentEvent } from "../events/selectors";
 import type { AgentEvent } from "../events/types";
 import { DEFAULT_TOWN_PROJECTION_SETTINGS } from "../game/projectionSettings";
 import { advancePlayback, setPlaybackCursor, usePlayback } from "../state/playbackStore";
+import {
+  loadPersistentMemoryRecords,
+  savePersistentMemoryRecords,
+  type StorageLike,
+} from "../state/persistentMemoryStore";
 import { selectAgent, selectEvent, useSelection } from "../state/selectionStore";
 import { DetailPanel } from "./DetailPanel";
 import { ImportPanel, type ImportPanelStatus, type ImportSourceKind } from "./ImportPanel";
@@ -110,6 +121,18 @@ const socialRunStatus = {
   message: "Social diffusion run loaded.",
 } satisfies ImportPanelStatus;
 
+function getBrowserMemoryStorage(): StorageLike | undefined {
+  if (typeof window === "undefined") {
+    return undefined;
+  }
+
+  try {
+    return window.localStorage;
+  } catch {
+    return undefined;
+  }
+}
+
 function HeaderMetric({
   label,
   tone,
@@ -176,12 +199,18 @@ export function App() {
   const [projectionSettings, setProjectionSettings] = useState(
     DEFAULT_TOWN_PROJECTION_SETTINGS,
   );
+  const [persistentMemoryRecords, setPersistentMemoryRecords] = useState<
+    readonly PersistentMemoryRecord[]
+  >(() => loadPersistentMemoryRecords(getBrowserMemoryStorage()).records);
   const [warnings, setWarnings] = useState<readonly AdapterWarning[]>([]);
   const [quarantinedEvents, setQuarantinedEvents] = useState<
     readonly AdapterQuarantinedEvent[]
   >([]);
   const eventsRef = useRef<readonly AgentEvent[]>(mockFailureRun);
   const activeSourceRef = useRef<ImportSourceKind>("mock");
+  const persistentMemoryRecordsRef = useRef<readonly PersistentMemoryRecord[]>(
+    persistentMemoryRecords,
+  );
   const websocketConnectionRef = useRef<WebSocketIngestConnection | null>(null);
   const currentState = useMemo(() => {
     const replayState = replay(events, playback.cursor);
@@ -221,6 +250,30 @@ export function App() {
       setWarnings(nextWarnings);
       setQuarantinedEvents(nextQuarantinedEvents);
       setPlaybackCursor(0, nextEvents.length);
+
+      if (source !== "memory") {
+        const savedAt = new Date().toISOString();
+        const incomingMemoryRecords = extractPersistentMemoryRecords(nextEvents, savedAt);
+
+        if (incomingMemoryRecords.length > 0) {
+          const nextMemoryRecords = mergePersistentMemoryRecords(
+            persistentMemoryRecordsRef.current,
+            incomingMemoryRecords,
+          );
+          const saveWarnings = savePersistentMemoryRecords(
+            getBrowserMemoryStorage(),
+            nextMemoryRecords,
+            savedAt,
+          );
+
+          persistentMemoryRecordsRef.current = nextMemoryRecords;
+          setPersistentMemoryRecords(nextMemoryRecords);
+
+          if (saveWarnings.length > 0) {
+            setWarnings([...nextWarnings, ...saveWarnings]);
+          }
+        }
+      }
 
       const firstEvent = nextEvents[0];
       if (firstEvent !== undefined) {
@@ -341,6 +394,15 @@ export function App() {
     [applyAdapterResult, disconnectWebSocket],
   );
 
+  const loadPersistentMemory = useCallback(() => {
+    disconnectWebSocket();
+    applyAdapterResult(
+      "memory",
+      buildPersistentMemoryRecallResult(persistentMemoryRecordsRef.current),
+      "Persistent memory recall",
+    );
+  }, [applyAdapterResult, disconnectWebSocket]);
+
   const loadWebSocketSample = useCallback(() => {
     disconnectWebSocket();
     applyAdapterResult(
@@ -440,10 +502,12 @@ export function App() {
             onImportIntervention={importIntervention}
             onImportJsonl={importJsonl}
             onLoadCognitiveRun={loadCognitiveRun}
+            onLoadPersistentMemory={loadPersistentMemory}
             onLoadMock={loadMock}
             onLoadSocialRun={loadSocialRun}
             onLoadSmallvilleDay={loadSmallvilleDay}
             onLoadWebSocketSample={loadWebSocketSample}
+            persistentMemoryCount={persistentMemoryRecords.length}
             quarantinedEvents={quarantinedEvents}
             status={importStatus}
             warnings={warnings}

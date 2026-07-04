@@ -69,6 +69,12 @@ intervention adapter. It lets an operator prompt become canonical
 `AgentEvent` evidence with prior-run context, but it still does not claim
 LLM-grade free-form language understanding or persistent cross-session memory.
 
+The latest Memory continuation adds a browser-persisted durable memory stream.
+It extracts canonical `memory_read` / `memory_write` events from imported runs,
+stores versioned memory records, and recalls them as new canonical
+`memory_read` events. This is the first persistent memory slice, not a complete
+agent memory database or autonomous long-term world model.
+
 ## Implementation Decision
 
 Adopt an original generated asset pipeline:
@@ -134,16 +140,20 @@ The map object layer preserves:
 - `src/game/renderBubbles.ts`
 - `src/game/renderEdges.ts`
 - `src/adapters/interventionAdapter.ts`
+- `src/adapters/persistentMemoryAdapter.ts`
 - `src/events/constants.ts`
+- `src/events/persistentMemory.ts`
 - `src/events/types.ts`
 - `src/events/reducer.ts`
 - `src/events/mockSmallvilleDayRun.ts`
+- `src/state/persistentMemoryStore.ts`
 - `src/ui/App.css`
 - `src/ui/App.tsx`
 - `src/ui/ImportPanel.tsx`
 - `src/tests/reducer.test.ts`
 - `src/tests/replay.test.ts`
 - `src/tests/town-map.test.ts`
+- `src/tests/persistent-memory.test.ts`
 - `README.md`
 - `docs/VISUAL_MAPPING.md`
 - `docs/ASSET_LICENSES.md`
@@ -184,6 +194,12 @@ The map object layer preserves:
 - `docs/evidence/M5/smallville-intervention-interaction.png`
 - `docs/evidence/M5/smallville-intervention-mobile.png`
 - `docs/evidence/M5/smallville-intervention-mobile-map.png`
+- `docs/evidence/M5/smallville-memory-qa.json`
+- `docs/evidence/M5/smallville-memory-pixel-check.json`
+- `docs/evidence/M5/smallville-memory-desktop.png`
+- `docs/evidence/M5/smallville-memory-interaction.png`
+- `docs/evidence/M5/smallville-memory-mobile.png`
+- `docs/evidence/M5/smallville-memory-mobile-map.png`
 
 ## Verification Commands
 
@@ -273,6 +289,35 @@ Results:
 
 - `pnpm typecheck`: passed.
 - `pnpm test`: passed, 9 files / 50 tests.
+- `pnpm build`: passed.
+- `git diff --check`: passed.
+
+Latest Memory continuation targeted checks before final verification:
+
+```text
+pnpm typecheck
+pnpm test -- src/tests/persistent-memory.test.ts
+```
+
+Results:
+
+- `pnpm typecheck`: passed.
+- `pnpm test -- src/tests/persistent-memory.test.ts`: passed, 10 files / 55
+  tests.
+
+Latest Memory continuation full checks after final docs/evidence edits:
+
+```text
+pnpm typecheck
+pnpm test
+pnpm build
+git diff --check
+```
+
+Results:
+
+- `pnpm typecheck`: passed.
+- `pnpm test`: passed, 10 files / 55 tests.
 - `pnpm build`: passed.
 - `git diff --check`: passed.
 
@@ -726,6 +771,104 @@ docs/evidence/M5/smallville-intervention-mobile.png: size=780x1688 unique_colors
 docs/evidence/M5/smallville-intervention-mobile-map.png: size=780x1688 unique_colors_64x64=147 nonblank=true
 ```
 
+## Memory Browser Evidence
+
+The latest QA targeted the deterministic persistent Memory source. The flow
+under test was:
+
+```text
+app -> clear local memory -> Social day persists 50 memory records -> reload keeps 50 records -> Memory source recalls 50 canonical memory events
+```
+
+Browser path:
+
+- Browser plugin connected to `http://127.0.0.1:5173/`, returned page title
+  `Agent Town`, loaded `Social day`, observed `Memory bank · 50 records`,
+  reloaded the tab, observed `Memory bank · 50 records` again, clicked the
+  scoped `Memory` source button, and read `memory · 50 events` from the page.
+- Browser `domSnapshot()` still failed with plugin-side error:
+  `TypeError: o.incrementalAriaSnapshot is not a function`.
+- Browser dev logs for the long-lived tab contained stale pre-existing errors
+  from earlier tab lifetime, so a fresh Playwright context was used as the
+  authoritative console-health check.
+- Regular Playwright fallback used bundled Codex runtime Playwright for clean
+  screenshot, console, asset, interaction, mobile, and pixel proof.
+- QA result JSON:
+  `docs/evidence/M5/smallville-memory-qa.json`.
+- Pixel check JSON:
+  `docs/evidence/M5/smallville-memory-pixel-check.json`.
+
+Screenshots:
+
+```text
+docs/evidence/M5/smallville-memory-desktop.png
+docs/evidence/M5/smallville-memory-interaction.png
+docs/evidence/M5/smallville-memory-mobile.png
+docs/evidence/M5/smallville-memory-mobile-map.png
+```
+
+Desktop 1440x960:
+
+- Initial clean memory state: `Memory bank · 0 records`.
+- After `Social day`: `Memory bank · 50 records`.
+- After reload in the same browser context: `Memory bank · 50 records`.
+- Active source after recall: `memory · 50 events`.
+- Status copy: `Persistent memory recall: 50 events accepted.`
+- Local storage snapshot schema version: `1`.
+- Local storage memory record count: `50`.
+- Run ID starts with `run-persistent-memory-`.
+- Town toolbar: `cursor 0`, `visible 50/50`, `balanced`, `100%`.
+- Run summary: 50 events, 25 agents, 0 handoffs, 0 tool calls, 50 memory
+  actions, 0 blocked, 0 errors.
+- Canvas count: `1`.
+- Canvas rect: about `773 x 669`.
+- Horizontal overflow: `0`.
+- Framework overlay: absent.
+- Asset HTTP responses all returned `200`:
+  - `/maps/town-v1.tiled.json`
+  - `/maps/town-v1-preview.png`
+  - `/tilesets/agent-town-v1.png`
+  - `/sprites/agent-roles-v1.png`
+  - `/sprites/buildings-v1.png`
+
+Interaction checks:
+
+- Memory source loaded: `true`.
+- Expanded density applied.
+- Zoom in changed toolbar from `100%` to `105%`.
+- Bubbles toggle changed `aria-pressed` from `true` to `false`.
+- Handoff edges toggle changed `aria-pressed` from `true` to `false`.
+- Critical filter changed visible event count to `0/50`; this is expected
+  because the recall run contains only `memory_read` events and Critical
+  includes blocked, error, done, and handoff.
+- Next changed toolbar cursor from `0` to `1`.
+- Play changed the header status to `running`.
+
+Console health:
+
+- Page errors: none in the fresh Playwright context.
+- Relevant app console errors/warnings: none in the fresh Playwright context.
+- Chromium emitted WebGL `ReadPixels` / GPU-stall performance warnings during
+  screenshot capture; these are recorded in the QA JSON and classified as
+  screenshot GPU warnings, not application errors.
+
+Mobile 390x844:
+
+- First mobile screenshot verifies the responsive control stack with Memory
+  loaded from persisted records.
+- Scrolled mobile map screenshot verifies the town canvas in viewport.
+- Horizontal overflow: `0`.
+- Mobile map canvas rect after scrolling: about `372 x 322`.
+
+Memory PNG nonblank sampling:
+
+```text
+docs/evidence/M5/smallville-memory-desktop.png: size=1440x960 unique_colors_64x64=318 nonblank=true
+docs/evidence/M5/smallville-memory-interaction.png: size=1440x960 unique_colors_64x64=252 nonblank=true
+docs/evidence/M5/smallville-memory-mobile.png: size=780x1688 unique_colors_64x64=168 nonblank=true
+docs/evidence/M5/smallville-memory-mobile-map.png: size=780x1688 unique_colors_64x64=172 nonblank=true
+```
+
 ## Asset License Status
 
 - External visual assets imported: none.
@@ -748,7 +891,7 @@ license boundary.
 - Agent roles, statuses, event types, selected event, selected agent, and replay
   cursor still come from `AgentEvent -> WorldState`.
 - The map object layer supplies projection terrain, route, decor, building
-- footprint, location-anchor, and interior-anchor metadata only.
+  footprint, location-anchor, and interior-anchor metadata only.
 - Tile IDs and sprite frames are presentation metadata only.
 - `AgentEvent.metadata.subLocationId` and `metadata.activity` are preserved by
   the reducer and consumed by renderers as projection hints; the renderer still
@@ -778,6 +921,16 @@ license boundary.
 - `src/tests/adapters.test.ts` proves empty intervention prompts quarantine,
   accepted prompts generate 8 canonical events, prior Social day context is
   recorded in `metadata.intervention`, and replay stays warning-free.
+- `src/events/persistentMemory.ts` extracts durable records only from canonical
+  `memory_read` / `memory_write` events; it does not read browser storage or
+  generate adapter results.
+- `src/state/persistentMemoryStore.ts` owns versioned browser storage and
+  stores extracted memory evidence, not renderer state.
+- `src/adapters/persistentMemoryAdapter.ts` recalls stored records as validated
+  canonical `memory_read` events with `metadata.durableMemory`.
+- `src/tests/persistent-memory.test.ts` proves extraction, stable de-duplication,
+  versioned storage round-trip, warning-free replay, and empty-bank handling
+  without fabricating events.
 - No adapter-specific logic was added to `src/game/*`.
 
 ## Notion / Linear Sync
@@ -897,12 +1050,13 @@ Scope truth:
 - This is now an original pixel asset pipeline with generated room/interior
   anchors, a deterministic day-run fixture, a deterministic cognitive-loop
   fixture, a deterministic 25-agent social-diffusion fixture, and a
-  deterministic natural-language intervention adapter, but it is not yet a
-  complete Stanford Generative Agents town: there are no autonomous schedules,
-  persistent cross-session agent memories, LLM-backed reflection/planning calls,
-  many-building interior layouts, animated walking cycles, LLM-grade
-  intervention understanding, rigorous social diffusion evaluation, or
-  full-world Tiled editing workflow.
+  deterministic natural-language intervention adapter plus browser-local
+  durable memory recall, but it is not yet a complete Stanford Generative
+  Agents town: there are no autonomous schedules, server-backed world memory,
+  agent-addressable long-term memory retrieval across days, LLM-backed
+  reflection/planning calls, many-building interior layouts, animated walking
+  cycles, LLM-grade intervention understanding, rigorous social diffusion
+  evaluation, or full-world Tiled editing workflow.
 - The map is denser and materially closer to a Smallville-like top-down town,
   but it remains a compact prototype projection for runtime events.
 - Browser frame-rate profiling is still future work.
@@ -916,9 +1070,10 @@ Deepen the original generator rather than importing unknown art:
 - more interior rooms and doorway relationships
 - animated agent walk/idle frames
 - denser props and readable districts
-- persistent memory streams across imported runs
 - LLM-backed reflection/planning adapter behind the same `AgentEvent` contract
-- durable intervention memory across browser sessions
+- agent-addressable persistent memory retrieval by persona, query, importance,
+  and recency
+- durable intervention memory beyond browser-local storage
 - 25-agent cognitive fixture with routine conflicts, persistent memories, and
   evaluated social diffusion
 - optional true Phaser tilemap render path
