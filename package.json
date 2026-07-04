@@ -10,6 +10,7 @@
     "build": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json && vite build"
   },
   "dependencies": {
+    "phaser": "^4.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
