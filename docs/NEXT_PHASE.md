@@ -1,0 +1,77 @@
+# Next Phase
+
+Agent Town v0.5 proves the core projection claim:
+
+```text
+External source -> Adapter -> AgentEvent -> WorldState -> projection views
+```
+
+The next phase should not start by adding visual polish everywhere. It should
+choose the highest-risk product question and keep the AgentEvent boundary
+intact.
+
+## Recommended Sequence
+
+1. First-run onboarding UI
+
+   Add a small in-app onboarding surface that states:
+
+   ```text
+   This town is not a game simulation. It is a projection of agent runtime
+   events.
+   ```
+
+   Keep the copy close to the current shell, not as a marketing landing page.
+
+2. Stress-run source switcher
+
+   Let the operator load the 200-event fixture from the UI, then add a direct
+   evidence screenshot for dense Timeline and Detail inspection.
+
+3. Timeline filtering
+
+   Add filters for blocked, error, tool, memory, handoff, and done events.
+   Filtering should affect inspection only; it must not rewrite replay state.
+
+4. Dedicated Graph and Memory views
+
+   Promote the existing projection data into separate views only after the
+   demo proves which questions reviewers ask most often.
+
+5. Runtime adapter hardening
+
+   Expand source-specific adapters for OpenTelemetry, Codex-style logs, Claude
+   Code-style events, Langfuse, or other sources. Keep quarantine behavior
+   source-local and keep renderer branches source-agnostic.
+
+6. Tiled visual polish
+
+   Introduce Tiled only after the object layer preserves the stable location
+   IDs from `docs/VISUAL_MAPPING.md`. Do not import ambiguous-license assets.
+
+7. Performance profiling
+
+   Add browser frame-rate, memory, and canvas draw-call evidence once the UI
+   can load the stress fixture directly.
+
+## Do Not Do Next
+
+- Do not turn the town into an autonomous simulation.
+- Do not let Phaser own runtime facts.
+- Do not bypass AgentEvent for UI convenience.
+- Do not introduce external art before license and fallback behavior are clear.
+- Do not combine onboarding, filtering, graph tabs, adapter hardening, and Tiled
+  in one uncontrolled change.
+
+## Acceptance Shape For The Next Milestone
+
+Each next task should still map to one Notion session and one Linear issue.
+
+Required evidence should include:
+
+- the specific product question being answered
+- the files allowed for the session
+- targeted command output
+- screenshot or recording if the change is visual
+- boundary self-check for `AgentEvent -> WorldState -> projection views`
+- known limitations and the next unblocked task

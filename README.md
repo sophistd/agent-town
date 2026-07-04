@@ -1,43 +1,53 @@
 # Agent Town
 
-Agent Town is a multi-agent runtime projection layer: it turns AgentEvent streams,
-tool calls, handoffs, memory actions, blocked states, and errors into a visible,
-inspectable town view.
+Agent Town is a v0.5 prototype for inspecting multi-agent runtime work as an
+event-driven town.
 
-It is not an open-world game, a Stanford town clone, or a runtime simulator. The
-runtime facts come from AgentEvent. Town, Timeline, Detail, Graph, and Memory
-views are projections.
+First-run framing:
 
 ```text
-Source adapter -> AgentEvent -> WorldState reducer -> projection views
+This town is not a game simulation. It is a projection of agent runtime events.
+The runtime facts come from AgentEvent. Town, Timeline, Detail, Graph, and
+Memory views are projections.
 ```
 
-## Source Documents
+Chinese demo copy:
 
-- Root PRD and spec: https://app.notion.com/p/393acb4bb6e68173afe9f05fbcf69313
-- Session runbook index: https://app.notion.com/p/393acb4bb6e681cc9b54c0c41957775a
-- S00 runbook: https://app.notion.com/p/393acb4bb6e681ac9102ceff70470707
-- S01 runbook: https://app.notion.com/p/393acb4bb6e68127a4ede7659e98959d
-- Build materials manifest: https://app.notion.com/p/393acb4bb6e6813690bdc7628633b570
-- Codex implementation method: https://app.notion.com/p/393acb4bb6e681358333d24895d85412
-- Linear implementation issue: https://linear.app/infoark/issue/MDL-130/build-readiness-materials-manifest-and-asset-policy
+```text
+这个小镇不是自主生命模拟游戏。它是 Agent 运行事件的投影。
+事实来自 AgentEvent；小镇、时间线、详情、关系和记忆视图只是投影。
+```
 
-## Codex Protocol
+```text
+External source -> Adapter -> AgentEvent -> WorldState reducer -> projection views
+```
 
-Repository-level agent instructions live in `AGENTS.md`.
+## Source And Gates
 
-Reusable session prompts live in `docs/CODEX_PROMPTS.md`.
+Construction source:
 
-Human review expectations live in `docs/HUMAN_REVIEW_CHECKLIST.md`.
+- Notion root PRD and spec:
+  https://app.notion.com/p/393acb4bb6e68173afe9f05fbcf69313
+- Notion session runbook index:
+  https://app.notion.com/p/393acb4bb6e681cc9b54c0c41957775a
+- S15 final packaging runbook:
+  https://app.notion.com/p/393acb4bb6e681bea31fedaf1f8c8ce2
 
-Metrics and acceptance measurement live in `docs/METRICS.md`.
+Acceptance source:
 
-AgentEvent schema documentation lives in `docs/EVENT_SCHEMA.md`.
+- M0 gate: https://linear.app/infoark/issue/MDL-124
+- M1 gate: https://linear.app/infoark/issue/MDL-125
+- M2 gate: https://linear.app/infoark/issue/MDL-126
+- M3 gate: https://linear.app/infoark/issue/MDL-127
+- M4 gate: https://linear.app/infoark/issue/MDL-128
+- M5 gate: https://linear.app/infoark/issue/MDL-129
+- M5 implementation: https://linear.app/infoark/issue/MDL-145
+- M5 red-check: https://linear.app/infoark/issue/MDL-152
 
-The core operating rule is one Notion session plus one Linear issue per Codex
-task. Later agents should read `AGENTS.md` first, then the relevant Notion
-session, Linear implementation issue, milestone acceptance gate, and red-check
-issue.
+Repository-level agent instructions live in `AGENTS.md`. Reusable session
+prompts live in `docs/CODEX_PROMPTS.md`. Human review expectations live in
+`docs/HUMAN_REVIEW_CHECKLIST.md`. Metrics and acceptance measurement live in
+`docs/METRICS.md`.
 
 ## Local Setup
 
@@ -53,7 +63,13 @@ Run the local app:
 pnpm dev
 ```
 
-Required checks:
+Open the Vite URL printed by the command, usually:
+
+```text
+http://127.0.0.1:5173/
+```
+
+Required checks before finishing code or evidence work:
 
 ```bash
 pnpm typecheck
@@ -61,190 +77,191 @@ pnpm test
 pnpm build
 ```
 
-## Build Materials
+## What The Prototype Shows
 
-S00 makes the repository materials-ready before product code is introduced. It
-documents what later sessions need, while deliberately avoiding implementation
-code, fixtures, Phaser setup, reducers, adapters, and external visual assets.
+The app starts with a deterministic mock failure run. It is meant to answer one
+product question: can an operator understand what a multi-agent runtime did,
+where the work moved, why it blocked, and what evidence closed it?
 
-### Target Repository Structure
+The current surface includes:
 
-The complete project is expected to grow into this shape as later sessions run:
+- a Phaser town canvas that renders `WorldState`
+- stable town zones for planning, research, production, memory, review, queue,
+  and final state
+- agent marks, role colors, status markers, bubbles, and handoff/message edges
+- a Timeline with playback, cursor jumping, and current-event selection
+- a Detail panel for the selected event and run summary
+- an Import Source panel for mock, native JSONL, and WebSocket-shaped input
+- adapter warnings and quarantine counts
+
+## Architecture
+
+`AgentEvent` is the only source of truth.
 
 ```text
-agent-town/
-  AGENTS.md
-  README.md
-  package.json
-  vite.config.ts
-  tsconfig.json
-  vitest.config.ts
-  public/
-    maps/
-    tilesets/
-    sprites/
-    icons/
-  src/
-    events/
-      types.ts
-      constants.ts
-      mockEvents.ts
-      mockFailureRun.ts
-      mockStressRun.ts
-      invalidEvents.ts
-      reducer.ts
-      selectors.ts
-      validators.ts
-      routing.ts
-    adapters/
-      types.ts
-      jsonlAdapter.ts
-      websocketAdapter.ts
-      sampleOtelAdapter.ts
-      sampleCodexAdapter.ts
-    game/
-      AgentTownScene.ts
-      createPhaserGame.ts
-      renderAgents.ts
-      renderBubbles.ts
-      renderEdges.ts
-      renderLocations.ts
-      visualMapping.ts
-    state/
-      playbackStore.ts
-      selectionStore.ts
-    ui/
-      App.tsx
-      Layout.tsx
-      TownCanvas.tsx
-      Timeline.tsx
-      DetailPanel.tsx
-      RunSummary.tsx
-      SessionSidebar.tsx
-      ImportPanel.tsx
-    tests/
-      reducer.test.ts
-      replay.test.ts
-      routing.test.ts
-      validators.test.ts
-      adapters.test.ts
-  docs/
-    ASSET_LICENSES.md
-    EVENT_SCHEMA.md
-    ADAPTER_GUIDE.md
-    VISUAL_MAPPING.md
-    DEMO_SCRIPT.md
-    evidence/
-      README.md
-      M1/
-      M2/
-      M3/
-      M4/
-      M5/
+src/adapters/*  -> converts external input into canonical AgentEvent
+src/events/*    -> schema, fixtures, validation, routing, reducer, selectors
+src/state/*     -> playback and selection state
+src/game/*      -> Phaser projection of WorldState only
+src/ui/*        -> React shell, controls, timeline, detail, import panel
+docs/evidence/* -> proof for Notion sessions and Linear gates
 ```
 
-Empty evidence folders do not need placeholder files. The first evidence artifact
-for each milestone can create the matching folder.
+Important boundaries:
 
-### Required Code Materials
+- No React, DOM, Phaser, or canvas imports belong in `src/events/reducer.ts`.
+- No adapter-specific logic belongs in `src/game/*`.
+- No renderer-owned business facts. Renderers consume `WorldState`.
+- Unknown events and invalid adapter input must not crash playback.
+- External visual assets require a license entry in `docs/ASSET_LICENSES.md`.
 
-M1 establishes the event engine without rendering:
+## Demo Run
 
-- `src/events/types.ts`: AgentEvent, WorldState, RunSummary, projection edge, and
-  related ontology types.
-- `src/events/constants.ts`: event type, role, status, and location constants.
-- `src/events/mockEvents.ts`, `mockFailureRun.ts`, `mockStressRun.ts`,
-  `invalidEvents.ts`: deterministic fixture sets.
-- `src/events/reducer.ts`: pure event-to-world reducer.
-- `src/events/selectors.ts`: UI-safe selectors over WorldState.
-- `src/events/routing.ts`: event-to-location routing.
-- `src/events/validators.ts`: validation and quarantine handling.
-- `src/tests/*.test.ts`: determinism, routing, validation, and replay tests.
+Use `docs/DEMO_SCRIPT.md` as the operator script.
 
-M2 adds the visual projection boundary:
+Quick path:
 
-- `src/ui/TownCanvas.tsx`, `src/game/createPhaserGame.ts`,
-  `src/game/AgentTownScene.ts`: React to Phaser lifecycle boundary.
-- `src/game/renderLocations.ts`, `renderAgents.ts`, `renderBubbles.ts`,
-  `renderEdges.ts`, `visualMapping.ts`: WorldState to visual output.
-- `src/ui/DetailPanel.tsx`: selected event inspection.
+1. Start the app with `pnpm dev`.
+2. Open the local Vite URL.
+3. Read the first-run framing aloud: the town is a runtime-event projection,
+   not an autonomous game simulation.
+4. Start from the default mock failure run.
+5. Use Timeline to jump through planning, research, coding, error, blocked,
+   repair, review, memory write, and done events.
+6. Use Detail to inspect the selected event fields.
+7. Use Import Source -> JSONL to import the native JSONL sample in the text
+   area.
+8. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
+   the same projection pipeline.
 
-M3 adds replay debugging:
+Relevant screenshots and evidence:
 
-- `src/state/playbackStore.ts`, `src/state/selectionStore.ts`.
-- `src/ui/Timeline.tsx`, `src/ui/RunSummary.tsx`.
-- `src/tests/replay.test.ts`.
+- `docs/evidence/M5/visual-layout.png`
+- `docs/evidence/M5/visual-layout.md`
+- `docs/evidence/M5/performance-200-events.md`
+- `docs/evidence/M5/final-demo-notes.md`
+- `docs/evidence/M4/source-switcher.png`
 
-M4 adds adapters while keeping the event model stable:
+## JSONL Import
 
-- `src/adapters/types.ts`, `jsonlAdapter.ts`, `websocketAdapter.ts`,
-  `sampleOtelAdapter.ts`, `sampleCodexAdapter.ts`.
-- `src/ui/ImportPanel.tsx`.
-- `src/tests/adapters.test.ts`.
+The JSONL path accepts one canonical `AgentEvent` JSON object per non-empty line.
+Use the built-in Import Source text area or the sample file:
 
-M5 adds demo evidence and any deferred visual polish:
+```text
+docs/samples/sample-native.jsonl
+```
 
-- `docs/DEMO_SCRIPT.md`, `docs/VISUAL_MAPPING.md`,
-  `docs/evidence/M5/performance-200-events.md`,
-  `docs/evidence/M5/final-demo-notes.md`.
+Rules:
 
-### Required Data Fixtures
+- Each line must already be a canonical `AgentEvent`.
+- Missing required fields are quarantined.
+- Duplicate event IDs are quarantined.
+- Duplicate `(runId, sequence)` pairs are quarantined.
+- Existing `metadata.source` is preserved.
+- Missing `metadata.source` becomes `jsonl`.
+- Invalid timestamps create a warning but do not block replay, because replay
+  uses `sequence`.
 
-Later sessions must provide these deterministic data materials:
+More detail lives in `docs/ADAPTER_GUIDE.md`.
 
-| File | Minimum content | Purpose |
-| --- | ---: | --- |
-| `mockEvents.ts` | 25+ events | happy-path demo |
-| `mockFailureRun.ts` | 30+ events | blocked, error, repair, done path |
-| `mockStressRun.ts` | 200+ events | performance and density test |
-| `invalidEvents.ts` | 10+ invalid examples | validator and quarantine test |
-| `sample-native.jsonl` | 25+ events | JSONL import proof |
-| `sample-otel-shaped.json` | 10+ spans | adapter mapping proof |
-| `sample-codex-shaped.json` | 10+ logs/actions | Codex-style mapping proof |
+## WebSocket Import
 
-Fixture coverage must include at least five agents, seven locations, all ten
-event types, handoffs/messages, tool calls, memory actions, a blocked or error
-path, a repair or retry path, and a done event.
+The WebSocket adapter accepts JSON messages from:
 
-### Placeholder-First Visual Strategy
+```text
+ws://localhost:8765/events
+```
 
-M1 through M3 are not blocked by external pixel art. Visual proof starts with
-generated placeholders:
+Messages may be canonical `AgentEvent` objects or supported source-shaped
+objects. The adapter normalizes them, validates them, quarantines invalid
+messages, and appends accepted events to the WebSocket run.
 
-- buildings: labeled geometric blocks
-- agents: simple stable marks with names
-- bubbles: CSS or generated text blocks
-- edges: generated lines
-- blocked/error/done states: generated markers
+The UI includes a `WS sample` button so the demo can prove the adapter path
+without requiring a live WebSocket server.
 
-External maps, tilesets, sprites, icons, and pixel polish are M5 materials unless
-a later session explicitly introduces them earlier with a documented license.
+## Adding An Event Type
 
-### Asset License Rule
+Keep the change event-first:
 
-Every imported external visual asset must have:
+1. Add the type to `src/events/constants.ts`.
+2. Extend the `AgentEventType` type in `src/events/types.ts` if needed.
+3. Update validation behavior in `src/events/validators.ts`.
+4. Update routing in `src/events/routing.ts`.
+5. Update reducer behavior in `src/events/reducer.ts`.
+6. Update visual labels or colors in `src/game/visualMapping.ts`.
+7. Add deterministic fixture coverage.
+8. Add or update tests under `src/tests/`.
+9. Document the type in `docs/EVENT_SCHEMA.md`.
 
-- source URL
-- license name and license URL
-- commercial-use status
-- attribution requirement
-- local repo path
-- reason it is needed instead of a generated placeholder
+Do not make the renderer invent facts for the new event. The renderer should
+only project the resulting `WorldState`.
 
-If the license is ambiguous, the asset must not be imported. Use generated
-placeholders instead.
+## Adding A Building Or Zone
 
-See `docs/ASSET_LICENSES.md` for the live asset policy and manifest.
+Buildings are projection targets for event locations.
 
-### Evidence Convention
+1. Add or confirm the location ID in `src/events/constants.ts` and
+   `src/events/types.ts`.
+2. Add coordinates in `src/events/routing.ts`.
+3. Add or update routing rules that map event types or `locationHint` values to
+   the new location.
+4. Update labels, colors, or placeholder shapes in `src/game/visualMapping.ts`
+   and renderer helpers.
+5. Document the new zone in `docs/VISUAL_MAPPING.md`.
+6. Add screenshot evidence if the change is visual.
 
-Evidence is stored under `docs/evidence/<milestone>/` and should include command
-output, screenshots or recordings when relevant, performance notes, audit notes,
-and any known limitations. See `docs/evidence/README.md`.
+If a later session introduces a Tiled map, the Tiled object layer must preserve
+the stable location IDs documented in `docs/VISUAL_MAPPING.md`.
 
-## Current Scaffold Scope
+## Adding An Adapter
 
-S03 introduces only the runnable React/TypeScript shell, scripts, baseline
-folders, and documentation alignment. Runtime code, schema implementation,
-fixtures, renderer code, adapters, and external assets are intentionally
-deferred to later sessions.
+Adapters are source boundaries.
+
+1. Create `src/adapters/<source>Adapter.ts`.
+2. Parse source input into candidate event objects.
+3. Map source fields into canonical `AgentEvent` fields.
+4. Preserve source metadata under `metadata`.
+5. Validate every mapped event with `validateAgentEvent`.
+6. Quarantine invalid candidates instead of throwing.
+7. Document duplicate ID and duplicate sequence policy.
+8. Add adapter tests.
+9. Record evidence under `docs/evidence/M4/` or the current session folder.
+
+Do not add source-specific branches to Phaser renderers or projection
+components.
+
+## Visual Density Rules
+
+The prototype is allowed to be dense, but not ambiguous.
+
+- Bubbles are truncated on the canvas so long text does not cover the town.
+- Detail expansion belongs in `DetailPanel`, where the full event can be read.
+- Timeline and summary views are the event filters for blocked, error, tool,
+  memory, and done checkpoints.
+- Status summarization must remain visible through marker color, marker label,
+  run summary counts, and selected-event detail.
+- Canvas visuals must prioritize stable identity, status, and route over
+  decorative fidelity.
+
+Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
+
+## Known Limitations
+
+- The current visual system uses generated Phaser placeholders. Tiled and
+  external art are explicitly deferred by S14.
+- The app does not yet include a modal onboarding surface. The first-run copy is
+  documented here, in `docs/DEMO_SCRIPT.md`, and in final demo notes for the M5
+  review.
+- The WebSocket demo path has a built-in sample; a real runtime sender still
+  needs to emit canonical or supported source-shaped messages.
+- The graph and memory views are represented through current projection data,
+  detail, summary, edges, and memory events; separate dedicated tabs are future
+  work.
+- Performance evidence covers deterministic 200-event replay and local demo
+  usability. It is not a browser frame-rate benchmark.
+- This repository currently has no remote configured; commits are local-only
+  unless a remote is added later.
+
+## Next Phase
+
+See `docs/NEXT_PHASE.md`.

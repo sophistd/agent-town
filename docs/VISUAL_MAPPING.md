@@ -78,3 +78,24 @@ S08 includes a status legend for idle, thinking, waiting, blocked, error, and do
 - Placeholder rendering remains the fallback for M5. It uses generated Phaser
   shapes, labels, status markers, bubbles, and edges; no external asset owns
   runtime facts.
+
+## Visual Density Rules
+
+M5 keeps density rules explicit so a busy run remains inspectable:
+
+- Bubble truncation: canvas bubbles show compact event text and must not cover
+  the town. Long content belongs in the selected-event detail view.
+- Detail expansion: `DetailPanel` is the expansion surface for full content,
+  tool input, output summary, metadata, and selected-event context.
+- Event filtering: Timeline and run summary are the current filtering surfaces
+  for blocked, error, tool, memory, handoff, and done checkpoints.
+- Status summarization: status must be visible through marker color, marker
+  label, run summary counts, and selected-event fields.
+- Stable identity first: agent name, role, status, route, and current event
+  matter more than decorative visual fidelity.
+- Projection boundary: visual density rules must never introduce runtime facts
+  that are absent from `AgentEvent` or derived `WorldState`.
+
+Current limitation: there is no dedicated search/filter input yet. S15 records
+the rule and preserves Timeline/detail-based inspection; a later session can add
+filter UI if product review makes that the highest-risk gap.
