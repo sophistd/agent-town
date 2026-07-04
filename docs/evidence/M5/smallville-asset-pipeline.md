@@ -671,6 +671,16 @@ Cognitive runtime continuation actual write-back after pushing commit
 - Linear MDL-144 comment created:
   `54b8cffe-8601-4bab-8200-186da4fc07cb`.
 
+Social day continuation actual write-back after pushing commit
+`0c3a0da feat: add 25-agent social diffusion run`:
+
+- Notion M5 spec comment created:
+  `393acb4b-b6e6-81d0-80f6-001dce3d850d`.
+- Linear MDL-129 comment created:
+  `bfa6645f-ad68-4f48-ac80-fee4a76b6f4e`.
+- Linear MDL-144 comment created:
+  `3d96e4da-0dcf-44e9-9ede-4b0b6b10610c`.
+
 Read-back after write:
 
 - Notion `get_comments` returned comment
@@ -697,6 +707,14 @@ Read-back after write:
   `0041694f-c4af-4c4e-a70b-4173e20708d7`.
 - Linear `list_comments` for MDL-144 returned comment
   `54b8cffe-8601-4bab-8200-186da4fc07cb`.
+- Notion `get_comments` returned comment
+  `393acb4b-b6e6-81d0-80f6-001dce3d850d` with PR, branch, commit, Social day
+  implementation, verification summary, evidence paths, scope truth, and
+  asset/license boundary.
+- Linear `list_comments` for MDL-129 returned comment
+  `bfa6645f-ad68-4f48-ac80-fee4a76b6f4e`.
+- Linear `list_comments` for MDL-144 returned comment
+  `3d96e4da-0dcf-44e9-9ede-4b0b6b10610c`.
 
 Scope truth:
 
