@@ -262,7 +262,7 @@ license boundary.
 
 ## Notion / Linear Sync
 
-Earlier read/write-back from the first asset-pipeline pass:
+Earlier read/write-back from the first object-map pass:
 
 - Notion M5 spec comment created:
   `393acb4b-b6e6-81b0-bfa6-001d71a7ca2a`.
@@ -271,15 +271,33 @@ Earlier read/write-back from the first asset-pipeline pass:
 - Linear MDL-144 comment created:
   `d4f612b7-98c3-4dab-8d92-e00ef8f56580`.
 
-Current revision must update PR / Notion / Linear again after final verification
-and push. Until then, this section is an evidence reminder, not a claim that the
-new pixel-asset revision has already been externally written back.
+Pixel-asset revision actual write-back after pushing commit
+`4206b94 feat: upgrade town projection pixel assets`:
+
+- Notion M5 spec comment created:
+  `393acb4b-b6e6-8170-9067-001d08773780`.
+- Linear MDL-129 comment created:
+  `5448a0f8-f179-45b2-a7bb-6d12b07e5a2a`.
+- Linear MDL-144 comment created:
+  `7e73ab22-6e81-4bfd-832c-6e88cea5ebed`.
+
+Read-back after write:
+
+- Notion `get_comments` returned comment
+  `393acb4b-b6e6-8170-9067-001d08773780` with PR, branch, commit, generated
+  asset paths, verification summary, evidence paths, license boundary, and
+  remaining limitation.
+- Linear `list_comments` for MDL-129 returned comment
+  `5448a0f8-f179-45b2-a7bb-6d12b07e5a2a`.
+- Linear `list_comments` for MDL-144 returned comment
+  `7e73ab22-6e81-4bfd-832c-6e88cea5ebed`.
 
 Scope truth:
 
 - No new Linear issue was created.
 - No Linear issue or gate was closed or reopened.
-- No Notion page content was replaced.
+- No Notion page content was replaced; the Notion write was a page-level
+  comment.
 - No repo-level `LICENSE` file was added.
 
 ## Remaining Limitations
