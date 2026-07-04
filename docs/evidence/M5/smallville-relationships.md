@@ -88,7 +88,18 @@ file was added.
 
 ## Notion / Linear Write-Back
 
-Pending actual write-back and read-back.
+Actual write-back and read-back completed:
+
+- Notion M5 spec page comment: `393acb4b-b6e6-8126-8a2c-001dca05f8c6`
+- Linear MDL-129 comment: `b8de15b2-642e-4508-9ecf-b870c8745bd2`
+- Linear MDL-144 comment: `0a13e32c-0775-4ee8-a458-f9220e4ed809`
+- Linear MDL-152 comment: `26c0c5ae-c67d-4d66-b028-61caab5db6da`
+
+Scope truth:
+
+- No Notion page content was replaced; this was a page-level comment.
+- No Linear issue state was changed.
+- No merge was performed.
 
 ## Remaining Limitations
 
