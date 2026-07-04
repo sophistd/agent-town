@@ -93,6 +93,8 @@ The current surface includes:
 - agent marks, role colors, status markers, bubbles, and handoff/message edges
 - replay-derived relationship state for social runs, surfaced in Run Summary
   and Detail without renderer-owned facts
+- a dedicated Graph View that filters replay-derived relationships by kind,
+  selected agent, text query, and evidence event jumps
 - a Run Summary `Smallville Eval` projection that scores structural
   capability evidence, top gaps, and ablation coverage from `AgentEvent` plus
   replayed `WorldState`
@@ -146,8 +148,9 @@ Quick path:
 8. Use Import Source -> Social day to inspect the 25-agent invitation diffusion
    fixture: a user-seeded Valentine's gathering spreads through relationships
    as canonical observation, retrieval, reflection, planning, message, and
-   attendance events. Run Summary and Detail expose replay-derived relationship
-   strength and evidence IDs from `WorldState.relationships`.
+   attendance events. Run Summary, Graph View, and Detail expose replay-derived
+   relationship strength, kind counts, filters, and evidence jumps from
+   `WorldState.relationships`.
 9. Use Import Source -> Routine day to inspect the 25-agent routine scheduler
    fixture: every agent observes an intention, retrieves memory, reflects on
    schedule fit, resolves deterministic crowding conflicts, plans, acts, and
@@ -183,6 +186,7 @@ Relevant screenshots and evidence:
 - `docs/evidence/M5/visual-layout.md`
 - `docs/evidence/M5/performance-200-events.md`
 - `docs/evidence/M5/final-demo-notes.md`
+- `docs/evidence/M5/smallville-graph-view.md`
 - `docs/evidence/M4/source-switcher.png`
 - `docs/SMALLVILLE_PARITY.md`
 

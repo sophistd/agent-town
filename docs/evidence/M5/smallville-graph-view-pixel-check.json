@@ -1,0 +1,37 @@
+{
+  "desktop": {
+    "path": "docs/evidence/M5/smallville-graph-view-desktop.png",
+    "width": 1440,
+    "height": 960,
+    "sampleColorCount": 9488,
+    "nonblank": true
+  },
+  "desktopInteraction": {
+    "path": "docs/evidence/M5/smallville-graph-view-interaction.png",
+    "width": 1440,
+    "height": 960,
+    "sampleColorCount": 11537,
+    "nonblank": true
+  },
+  "desktopMap": {
+    "path": "docs/evidence/M5/smallville-graph-view-desktop-map.png",
+    "width": 780,
+    "height": 714,
+    "sampleColorCount": 6848,
+    "nonblank": true
+  },
+  "mobile": {
+    "path": "docs/evidence/M5/smallville-graph-view-mobile.png",
+    "width": 780,
+    "height": 1688,
+    "sampleColorCount": 3151,
+    "nonblank": true
+  },
+  "mobileMap": {
+    "path": "docs/evidence/M5/smallville-graph-view-mobile-map.png",
+    "width": 748,
+    "height": 736,
+    "sampleColorCount": 6648,
+    "nonblank": true
+  }
+}

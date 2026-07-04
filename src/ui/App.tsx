@@ -52,6 +52,7 @@ import {
   EventFilterPanel,
   ProjectionControls,
 } from "./ProjectionControls";
+import { RelationshipGraphPanel } from "./RelationshipGraphPanel";
 import { RunSummary } from "./RunSummary";
 import { Timeline } from "./Timeline";
 import { TownCanvas } from "./TownCanvas";
@@ -597,6 +598,12 @@ export function App() {
           <RunSummary
             events={events}
             onJumpToEvent={jumpToEvent}
+            worldState={summaryState}
+          />
+          <RelationshipGraphPanel
+            events={events}
+            onJumpToEvent={jumpToEvent}
+            selectedAgentId={selection.selectedAgentId}
             worldState={summaryState}
           />
           <DetailPanel

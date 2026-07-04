@@ -99,6 +99,11 @@ Replay now derives `WorldState.relationships` from social metadata plus
 strength, interaction counts, and evidence event IDs, but those facts still come
 from canonical events reduced into `WorldState`. Phaser proximity, sprite
 choice, map objects, and selected UI state must not create relationships.
+The dedicated Graph View uses the same `WorldState.relationships` projection for
+relationship search, kind filtering, selected-agent filtering, compact graph
+rendering, and evidence-event jumps. Those controls inspect and navigate
+canonical event evidence; they do not mutate the event stream or create social
+facts.
 
 The same module also provides the deterministic "Routine day" run. It keeps the
 same 25-agent population and emits routine phases, memory retrieval,
@@ -248,6 +253,7 @@ Current limitations:
   adapter-produced event evidence, not as autonomous live simulation.
 - The `LLM plan` source proves model-output parsing and projection through
   canonical events, but it is not a live provider-backed behavior generator.
-- There is no dedicated search/filter input yet. S15 records the rule and
-  preserves Timeline/detail-based inspection; a later session can add filter UI
-  if product review makes that the highest-risk gap.
+- Relationship inspection now has a dedicated Graph View with text search,
+  relationship-kind toggles, selected-agent filtering, and evidence jumps. Other
+  future projection views should follow the same rule: inspect replayed
+  `WorldState`, never invent runtime facts.

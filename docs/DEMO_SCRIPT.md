@@ -111,6 +111,15 @@ the runtime path instead of only watching a happy-path animation.
    invalid events are quarantined. Do not let invalid input become a renderer
    branch.
 
+13. Graph View.
+
+   Click `Social day`, then inspect Graph View in the right panel. Toggle
+   message, handoff, declared, and diffusion filters; type an agent name or
+   evidence event id; use a `Latest` or sequence button to jump Timeline and
+   Detail back to the canonical event that created the relationship. Explain
+   that the graph reads `WorldState.relationships`; it does not create social
+   facts.
+
 ## Reviewer Checks
 
 - Can the reviewer state why this is a runtime projection and not a game sim?
@@ -118,6 +127,8 @@ the runtime path instead of only watching a happy-path animation.
   memory -> done?
 - Can the reviewer locate where a blocked or error event happened?
 - Can the reviewer inspect a selected event without reading source code?
+- Can the reviewer filter relationship evidence and jump to the event that
+  produced it?
 - Can the reviewer see that JSONL and WebSocket paths use the same projection
   pipeline?
 - Can the reviewer name the current known limitation: generated placeholder

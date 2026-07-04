@@ -273,6 +273,11 @@ given replay input. The UI may display this state as social proof, but Phaser,
 sprites, Tiled objects, and local UI selection must not create relationship
 facts.
 
+The dedicated Graph View is also a projection of this state. Its search box,
+kind toggles, selected-agent filter, SVG graph, and evidence jump buttons only
+read `WorldState.relationships` plus the canonical `AgentEvent[]`; they do not
+create relationships or change replay.
+
 This makes Social day relationship evidence inspectable without introducing an
 autonomous social simulation claim.
 

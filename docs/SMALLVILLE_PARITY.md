@@ -50,7 +50,7 @@ runtime facts.
 | Reflection | Higher-level synthesis from memories | Generator emits reflection-stage `thinking` events with source memory IDs | Initial |
 | Planning | Higher-level plans decomposed into actions | Generator emits planning-stage `decision` events with `planStep` and routine segment metadata | Initial |
 | Action/conversation | Agents act, talk, coordinate | Generator emits `handoff`, `message`, `tool_call`, and `done` events through the existing projection path; Social day emits 25 invitation messages | Partial |
-| Emergent social behavior | Information spreads and coordination emerges from agent interaction over time | `Social day` deterministically models a user-seeded Valentine's invitation spreading through a 25-agent relationship graph, and replay now derives inspectable relationship state from messages, handoffs, declarations, and diffusion metadata | Initial |
+| Emergent social behavior | Information spreads and coordination emerges from agent interaction over time | `Social day` deterministically models a user-seeded Valentine's invitation spreading through a 25-agent relationship graph; replay derives inspectable relationship state and Graph View exposes filtering plus evidence jumps | Initial |
 | LLM behavior generation | LLM produces observations/reflections/plans/actions | `LLM plan` builds a model-ready request, parses model-shaped responses into canonical events, quarantines invalid output, and now has an OpenAI Responses provider boundary with mock-fetch coverage; current UI source still uses a deterministic fixture and no live provider call was run without an API key | Initial |
 | Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, recalls it as `memory_read` events, and feeds agent-addressable planning events; not yet a server-backed world database or autonomous memory engine | Initial |
 | Many agents | Reference environment used 25 agents | `Social day` and `Routine day` fixtures use 25 agents and 150 canonical events each | Initial |
@@ -110,6 +110,13 @@ The current slice adds deterministic cognitive evidence:
   - `selectTopRelationships`
   - `selectAgentRelationships`
   - `selectRelationshipCount`
+- Dedicated Graph View:
+  - `src/ui/relationshipGraphModel.ts`
+  - `src/ui/RelationshipGraphPanel.tsx`
+  - relationship kind filters
+  - selected-agent filter
+  - text search over agents, tags, events, and evidence IDs
+  - evidence-event jump buttons
 - Metadata stages:
   - `observation`
   - `retrieval`
@@ -243,6 +250,8 @@ This slice can pass if:
   `output_text` through the same parser/quarantine path
 - social relationship state is derived from canonical event evidence and remains
   deterministic across replay
+- the dedicated Graph View filters and jumps through relationship evidence
+  without mutating replay or creating relationship facts
 - the Run Summary can display a structural Smallville evaluation report derived
   from canonical `AgentEvent[]` plus replayed `WorldState`
 - the evaluation report surfaces top gaps and ablation coverage without letting
@@ -272,7 +281,6 @@ The next meaningful move is not more labels. It is one of:
   key while keeping keys out of browser code
 - use agent-addressable memory retrieval inside live provider-backed planning
 - persist the intervention memory stream beyond browser-local storage
-- promote replay-derived relationship state into a dedicated Graph view
 - turn the structural evaluator into a human-review rubric or provider-backed
   benchmark while keeping evaluation evidence event-derived
 - profile replay/rendering for 25-agent and larger fixtures

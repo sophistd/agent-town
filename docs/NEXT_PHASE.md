@@ -43,7 +43,8 @@ intact.
    natural-language intervention, durable memory recall, agent-addressable
    memory planning, model-planner contract parsing/quarantine, OpenAI Responses
    provider-boundary request/parse coverage, replay-derived relationship state,
-   structural Smallville capability/ablation evaluation, and action at 25-agent scale. The next
+   dedicated Graph View inspection, structural Smallville capability/ablation
+   evaluation, and action at 25-agent scale. The next
    Smallville-oriented runtime session should choose
    exactly one of:
 
@@ -56,8 +57,6 @@ intact.
      preserving parser quarantine and replay validation
    - move durable memory from browser-local storage to a real world-state
      backing store
-   - promote `WorldState.relationships` into a dedicated Graph view for
-     relationship inspection, filtering, and evidence jumps
    - turn the structural Smallville evaluator into a human-review rubric,
      provider-backed benchmark, or dedicated evaluation dashboard
    - profile replay/rendering for 25-agent and larger cognitive/routine
@@ -65,10 +64,13 @@ intact.
 
    Do not let the LLM, adapter, or renderer bypass `AgentEvent`.
 
-5. Dedicated Graph and Memory views
+5. Dedicated Memory view
 
-   Promote the existing projection data into separate views only after the
-   demo proves which questions reviewers ask most often.
+   Graph View now exists for replay-derived relationship inspection, filtering,
+   and evidence jumps. The next projection-view candidate is Memory: promote
+   durable memory records, recall evidence, and agent-addressable retrieval
+   scores into a dedicated Memory view only after the server/provider boundary is
+   clear enough to avoid treating browser storage as world truth.
 
 6. Runtime adapter hardening
 

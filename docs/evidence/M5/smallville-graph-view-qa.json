@@ -1,0 +1,144 @@
+{
+  "date": "2026-07-04",
+  "browserFallbackReason": "Browser plugin domSnapshot failed with TypeError: o.incrementalAriaSnapshot is not a function; Playwright CLI wrapper was unavailable because @playwright/mcp did not expose playwright-cli, so Python Playwright was used for durable evidence.",
+  "desktop": {
+    "viewport": "desktop 1440x960",
+    "url": "http://127.0.0.1:5173/",
+    "assetResponses": [
+      {
+        "url": "http://127.0.0.1:5173/maps/town-v1-preview.png",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:5173/tilesets/agent-town-v1.png",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:5173/sprites/agent-roles-v1.png",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:5173/sprites/buildings-v1.png",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:5173/maps/town-v1-preview.png",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:5173/tilesets/agent-town-v1.png",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:5173/sprites/buildings-v1.png",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:5173/sprites/agent-roles-v1.png",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:5173/maps/town-v1.tiled.json",
+        "status": 200
+      }
+    ],
+    "graph": {
+      "textIncludesRelationshipProjection": true,
+      "filterValue": "valentine",
+      "diffusionBefore": "true",
+      "diffusionAfter": "false",
+      "selectedButtonCount": 1,
+      "selectedLabel": "selected 5",
+      "selectedBefore": "false",
+      "selectedAfter": "true",
+      "evidenceButtonCount": 15,
+      "firstEvidenceLabel": "Latest: social-125",
+      "cursorAfterEvidence": "Cursor126 / 150",
+      "selectedEventLine": "social-125"
+    },
+    "controls": {
+      "zoomAfter": "105%",
+      "bubblesBefore": "true",
+      "bubblesAfter": "false",
+      "edgesBefore": "true",
+      "edgesAfter": "false",
+      "visibleEventsAfterCritical": "cursor 125",
+      "cursorBeforeNext": "Cursor126 / 150",
+      "cursorAfterNext": "Cursor127 / 150",
+      "statusAfterPlay": "Statusrunning"
+    },
+    "horizontalOverflow": false,
+    "consoleMessages": [
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x13400614800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x13400611e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x13400620e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x13400611e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+      }
+    ],
+    "pageErrors": []
+  },
+  "mobile": {
+    "viewport": "mobile 390x844",
+    "url": "http://127.0.0.1:5173/",
+    "graphAttached": 1,
+    "canvasVisible": true,
+    "horizontalOverflow": false,
+    "consoleMessages": [],
+    "pageErrors": []
+  },
+  "screenshots": {
+    "desktop": "docs/evidence/M5/smallville-graph-view-desktop.png",
+    "interaction": "docs/evidence/M5/smallville-graph-view-interaction.png",
+    "desktopMap": "docs/evidence/M5/smallville-graph-view-desktop-map.png",
+    "mobile": "docs/evidence/M5/smallville-graph-view-mobile.png",
+    "mobileMap": "docs/evidence/M5/smallville-graph-view-mobile-map.png"
+  },
+  "pixelChecks": {
+    "desktop": {
+      "path": "docs/evidence/M5/smallville-graph-view-desktop.png",
+      "width": 1440,
+      "height": 960,
+      "sampleColorCount": 9488,
+      "nonblank": true
+    },
+    "desktopInteraction": {
+      "path": "docs/evidence/M5/smallville-graph-view-interaction.png",
+      "width": 1440,
+      "height": 960,
+      "sampleColorCount": 11537,
+      "nonblank": true
+    },
+    "desktopMap": {
+      "path": "docs/evidence/M5/smallville-graph-view-desktop-map.png",
+      "width": 780,
+      "height": 714,
+      "sampleColorCount": 6848,
+      "nonblank": true
+    },
+    "mobile": {
+      "path": "docs/evidence/M5/smallville-graph-view-mobile.png",
+      "width": 780,
+      "height": 1688,
+      "sampleColorCount": 3151,
+      "nonblank": true
+    },
+    "mobileMap": {
+      "path": "docs/evidence/M5/smallville-graph-view-mobile-map.png",
+      "width": 748,
+      "height": 736,
+      "sampleColorCount": 6648,
+      "nonblank": true
+    }
+  }
+}
