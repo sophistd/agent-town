@@ -1265,6 +1265,16 @@ commit `07758c8 feat: add agent-addressable memory planning`:
 - Linear MDL-144 comment created:
   `bedeed56-bc65-4515-8499-008dc13b2d51`.
 
+Routine day continuation actual write-back after pushing commit
+`44e44ed feat: add deterministic routine day scheduler`:
+
+- Notion M5 spec comment created:
+  `393acb4b-b6e6-818b-8012-001d3ec4d8e1`.
+- Linear MDL-129 comment created:
+  `91e3883c-df7b-4200-a16b-d6d54d72ee5c`.
+- Linear MDL-144 comment created:
+  `c44e08a0-e6bf-4048-81b9-00587bdb01c0`.
+
 Read-back after write:
 
 - Notion `get_comments` returned comment
@@ -1323,6 +1333,14 @@ Read-back after write:
   `c83cb052-cbd2-4b26-8992-86504cb7f756`.
 - Linear `list_comments` for MDL-144 returned comment
   `bedeed56-bc65-4515-8499-008dc13b2d51`.
+- Notion `get_comments` returned comment
+  `393acb4b-b6e6-818b-8012-001d3ec4d8e1` with PR, branch, commit, Routine
+  day implementation, verification summary, evidence paths, scope truth, and
+  asset/license boundary.
+- Linear `list_comments` for MDL-129 returned comment
+  `91e3883c-df7b-4200-a16b-d6d54d72ee5c`.
+- Linear `list_comments` for MDL-144 returned comment
+  `c44e08a0-e6bf-4048-81b9-00587bdb01c0`.
 
 Scope truth:
 
