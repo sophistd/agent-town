@@ -831,6 +831,16 @@ Social day continuation actual write-back after pushing commit
 - Linear MDL-144 comment created:
   `3d96e4da-0dcf-44e9-9ede-4b0b6b10610c`.
 
+Intervention continuation actual write-back after pushing commit
+`08290f5 feat: add natural-language intervention adapter`:
+
+- Notion M5 spec comment created:
+  `393acb4b-b6e6-8163-aa64-001db626633a`.
+- Linear MDL-129 comment created:
+  `9a1ff14c-17b4-4691-8770-873d14109f36`.
+- Linear MDL-144 comment created:
+  `225abfeb-df5b-4ce0-89e3-90cae1f04cbc`.
+
 Read-back after write:
 
 - Notion `get_comments` returned comment
@@ -865,6 +875,14 @@ Read-back after write:
   `bfa6645f-ad68-4f48-ac80-fee4a76b6f4e`.
 - Linear `list_comments` for MDL-144 returned comment
   `3d96e4da-0dcf-44e9-9ede-4b0b6b10610c`.
+- Notion `get_comments` returned comment
+  `393acb4b-b6e6-8163-aa64-001db626633a` with PR, branch, commit,
+  Intervention implementation, verification summary, evidence paths, scope
+  truth, and asset/license boundary.
+- Linear `list_comments` for MDL-129 returned comment
+  `9a1ff14c-17b4-4691-8770-873d14109f36`.
+- Linear `list_comments` for MDL-144 returned comment
+  `225abfeb-df5b-4ce0-89e3-90cae1f04cbc`.
 
 Scope truth:
 
