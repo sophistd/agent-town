@@ -93,6 +93,9 @@ The current surface includes:
 - agent marks, role colors, status markers, bubbles, and handoff/message edges
 - replay-derived relationship state for social runs, surfaced in Run Summary
   and Detail without renderer-owned facts
+- a Run Summary `Smallville Eval` projection that scores structural
+  capability evidence, top gaps, and ablation coverage from `AgentEvent` plus
+  replayed `WorldState`
 - a Timeline with playback, cursor jumping, and current-event selection
 - a Detail panel for the selected event and run summary
 - an Import Source panel for mock, Town day, Cognitive, Social day,
@@ -164,10 +167,14 @@ Quick path:
    a model-shaped JSON response is parsed, validated, quarantined if invalid,
    and replayed only as canonical `AgentEvent` evidence. This is still a
    deterministic contract fixture, not a live model provider call.
-14. Use Detail to inspect the selected event fields.
-15. Use Import Source -> JSONL to import the native JSONL sample in the text
+14. Use Run Summary -> Smallville Eval on Cognitive, Social day, Routine day,
+    Memory plan, or LLM plan sources to inspect the structural score, top gaps,
+    and ablation coverage. This is a projection report, not a human
+    believability study.
+15. Use Detail to inspect the selected event fields.
+16. Use Import Source -> JSONL to import the native JSONL sample in the text
    area.
-16. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
+17. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
    the same projection pipeline.
 
 Relevant screenshots and evidence:

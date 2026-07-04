@@ -195,6 +195,28 @@ targets, and missing tool names are quarantined before replay. The current UI
 button uses a deterministic fixture response; it does not call a live LLM
 provider and does not give the renderer model-owned runtime facts.
 
+## Smallville Evaluation
+
+`src/events/smallvilleEvaluation.ts` computes a structural Smallville-oriented
+report from canonical `AgentEvent[]` plus replayed `WorldState`.
+
+The report includes:
+
+- `isSmallvilleLike`
+- overall structural score
+- capability scores for identity, observation, retrieval, reflection, planning,
+  action/conversation, social coordination, relationship graph, routine
+  schedule, persistent memory, and LLM contract evidence
+- top missing or partial gaps
+- ablation checks for observation, retrieval, reflection, planning,
+  relationship graph, routine schedule, and LLM planner contract
+- event, agent, relationship, social, and routine evidence counts
+
+This evaluator is a projection/inspection helper. It does not create
+`AgentEvent` records, mutate `WorldState`, change replay semantics, or give
+React/Phaser ownership of behavior. It is not a human believability study and
+does not claim autonomous Stanford Smallville parity.
+
 ## WorldState
 
 WorldState is the derived projection state:

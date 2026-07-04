@@ -41,7 +41,8 @@ intact.
    diffusion, routine scheduling, deterministic routine-conflict resolution,
    natural-language intervention, durable memory recall, agent-addressable
    memory planning, model-planner contract parsing/quarantine, replay-derived
-   relationship state, and action at 25-agent scale. The next
+   relationship state, structural Smallville capability/ablation evaluation,
+   and action at 25-agent scale. The next
    Smallville-oriented runtime session should choose
    exactly one of:
 
@@ -56,6 +57,8 @@ intact.
      backing store
    - promote `WorldState.relationships` into a dedicated Graph view for
      relationship inspection, filtering, and evidence jumps
+   - turn the structural Smallville evaluator into a human-review rubric,
+     provider-backed benchmark, or dedicated evaluation dashboard
    - profile replay/rendering for 25-agent and larger cognitive/routine
      fixtures
 

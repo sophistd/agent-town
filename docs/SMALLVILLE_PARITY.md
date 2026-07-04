@@ -55,7 +55,7 @@ runtime facts.
 | Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, recalls it as `memory_read` events, and feeds agent-addressable planning events; not yet a server-backed world database or autonomous memory engine | Initial |
 | Many agents | Reference environment used 25 agents | `Social day` and `Routine day` fixtures use 25 agents and 150 canonical events each | Initial |
 | Human intervention | User can inject natural-language changes into the town | `Intervention` source turns an operator prompt into canonical observation/retrieval/reflection/planning/action/closure events with prior-run context | Initial |
-| Evaluation | Believability and ablation evidence | Local type/test/build/Playwright evidence exists; no believability evaluation | Missing |
+| Evaluation | Believability and ablation evidence | `evaluateSmallvilleRun` now computes a structural capability score, top gaps, and ablation coverage from canonical events plus replayed `WorldState`; no human believability study yet | Initial |
 
 ## Current Implementation Slice
 
@@ -89,6 +89,11 @@ The current slice adds deterministic cognitive evidence:
   - `parseLlmPlannerResponse`
   - `buildDeterministicLlmPlannerResult`
   - `llmPlannerAdapter`
+- `src/events/smallvilleEvaluation.ts`
+  - `evaluateSmallvilleRun`
+  - structural capability scores
+  - top missing/partial gaps
+  - ablation coverage checks
 - `src/state/persistentMemoryStore.ts`
   - versioned browser storage for durable memory records
 - UI sources: `Cognitive`, `Social day`, `Routine day`, `Intervention`,
@@ -171,6 +176,12 @@ The current slice adds deterministic cognitive evidence:
   - `llmPlanner.previousRunId`
   - `llmPlanner.previousEventCount`
   - `llmPlanner.selectedMemoryRecordIds`
+- Smallville evaluation projection:
+  - `Smallville Eval` in Run Summary
+  - overall structural score
+  - top gaps
+  - ablation coverage count
+  - event, agent, relationship, social, and routine evidence counts
 
 This is intentionally not a free-running agent simulation. It is a deterministic
 contract test for the cognitive evidence shape that a future LLM-backed adapter
@@ -202,6 +213,10 @@ This slice can pass if:
   and quarantine invalid model output before replay
 - social relationship state is derived from canonical event evidence and remains
   deterministic across replay
+- the Run Summary can display a structural Smallville evaluation report derived
+  from canonical `AgentEvent[]` plus replayed `WorldState`
+- the evaluation report surfaces top gaps and ablation coverage without letting
+  the renderer invent behavioral facts
 - the existing town projection can render the run without source-specific
   renderer branches
 - docs and evidence state that full Stanford parity is still incomplete
@@ -212,6 +227,7 @@ This slice cannot claim:
 - autonomous/adaptive daily scheduling
 - complete persistent agent memory across devices or server sessions
 - provider-backed autonomous LLM-generated behavior
+- human believability ratings or empirical ablation-study results
 - free-form natural-language understanding beyond deterministic intent routing
 - unscripted 25-agent-scale simulation
 - final Stanford Smallville parity
@@ -227,4 +243,6 @@ The next meaningful move is not more labels. It is one of:
   themselves from observation and memory evidence
 - persist the intervention memory stream beyond browser-local storage
 - promote replay-derived relationship state into a dedicated Graph view
+- turn the structural evaluator into a human-review rubric or provider-backed
+  benchmark while keeping evaluation evidence event-derived
 - profile replay/rendering for 25-agent and larger fixtures

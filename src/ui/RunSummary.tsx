@@ -9,6 +9,10 @@ import {
   selectRunSummary,
   selectTopRelationships,
 } from "../events/selectors";
+import {
+  evaluateSmallvilleRun,
+  type SmallvilleCapabilityScore,
+} from "../events/smallvilleEvaluation";
 import type { AgentEvent, RelationshipState, WorldState } from "../events/types";
 
 type RunSummaryProps = {
@@ -115,6 +119,95 @@ const relationshipStrengthStyle = {
   fontWeight: 750,
 } satisfies CSSProperties;
 
+const evaluationStyle = {
+  display: "grid",
+  gap: "8px",
+  marginTop: "14px",
+  borderTop: "1px solid rgba(143, 170, 157, 0.16)",
+  paddingTop: "12px",
+} satisfies CSSProperties;
+
+const evaluationHeaderStyle = {
+  display: "grid",
+  gridTemplateColumns: "minmax(0, 1fr) auto",
+  gap: "10px",
+  alignItems: "end",
+} satisfies CSSProperties;
+
+const evaluationTitleStyle = {
+  margin: 0,
+  color: "#dce8df",
+  fontSize: "12px",
+  fontWeight: 800,
+  textTransform: "uppercase",
+} satisfies CSSProperties;
+
+const evaluationScoreStyle = {
+  color: "#edf6ef",
+  fontSize: "22px",
+  fontWeight: 800,
+  lineHeight: 1,
+} satisfies CSSProperties;
+
+const evaluationMetaStyle = {
+  color: "#95aaa0",
+  fontSize: "11px",
+  lineHeight: 1.35,
+} satisfies CSSProperties;
+
+const evaluationRowStyle = {
+  display: "grid",
+  gridTemplateColumns: "minmax(0, 1fr) auto",
+  gap: "8px",
+  alignItems: "center",
+  color: "#d8e2dc",
+  fontSize: "12px",
+  lineHeight: 1.35,
+} satisfies CSSProperties;
+
+const evaluationStatusStyle = {
+  border: "1px solid rgba(143, 170, 157, 0.24)",
+  borderRadius: "6px",
+  padding: "2px 7px",
+  color: "#edf6ef",
+  fontSize: "10px",
+  fontWeight: 800,
+  textTransform: "uppercase",
+} satisfies CSSProperties;
+
+function statusLabel(capability: SmallvilleCapabilityScore): string {
+  return `${capability.status} ${capability.score}`;
+}
+
+const evidencePriority: Record<string, number> = {
+  llm_contract: 0,
+  routine_schedule: 1,
+  relationship_graph: 2,
+  social_coordination: 3,
+  persistent_memory: 4,
+  planning: 5,
+  reflection: 6,
+  memory_retrieval: 7,
+  observation: 8,
+  action_conversation: 9,
+  agent_identity: 10,
+};
+
+function topPassedCapabilities(
+  capabilities: readonly SmallvilleCapabilityScore[],
+): SmallvilleCapabilityScore[] {
+  return [...capabilities]
+    .filter((capability) => capability.status === "passed")
+    .sort(
+      (left, right) =>
+        evidencePriority[left.key] - evidencePriority[right.key] ||
+        right.score - left.score ||
+        right.evidenceCount - left.evidenceCount ||
+        left.label.localeCompare(right.label),
+    )
+    .slice(0, 2);
+}
+
 function ShortcutButton({
   event,
   label,
@@ -175,6 +268,11 @@ export function RunSummary({ events, onJumpToEvent, worldState }: RunSummaryProp
   const firstErrorEvent = selectFirstErrorEvent(events);
   const previousErrorContext = selectPreviousEvent(events, firstErrorEvent?.id);
   const topRelationships = selectTopRelationships(worldState, 4);
+  const smallvilleEvaluation = evaluateSmallvilleRun(events, worldState);
+  const coveredAblations = smallvilleEvaluation.ablationChecks.filter(
+    (check) => check.status !== "missing",
+  ).length;
+  const topEvidence = topPassedCapabilities(smallvilleEvaluation.capabilityScores);
 
   const metrics = [
     ["Events", summary.totalEvents],
@@ -198,6 +296,47 @@ export function RunSummary({ events, onJumpToEvent, worldState }: RunSummaryProp
           </div>
         ))}
       </div>
+
+      {smallvilleEvaluation.isSmallvilleLike ? (
+        <div style={evaluationStyle} aria-label="Smallville evaluation">
+          <div style={evaluationHeaderStyle}>
+            <div>
+              <h3 style={evaluationTitleStyle}>Smallville Eval</h3>
+              <div style={evaluationMetaStyle}>
+                Agents {smallvilleEvaluation.evidenceSummary.agentCount}; events{" "}
+                {smallvilleEvaluation.evidenceSummary.eventCount}; relationships{" "}
+                {smallvilleEvaluation.evidenceSummary.relationshipCount}
+              </div>
+            </div>
+            <strong style={evaluationScoreStyle}>{smallvilleEvaluation.overallScore}</strong>
+          </div>
+
+          <div style={evaluationMetaStyle}>
+            Ablations covered {coveredAblations}/{smallvilleEvaluation.ablationChecks.length};
+            routine phases {smallvilleEvaluation.evidenceSummary.routinePhaseCount}/6
+          </div>
+
+          {topEvidence.length > 0 ? (
+            <>
+              <div style={evaluationMetaStyle}>Evidence</div>
+              {topEvidence.map((capability) => (
+                <div key={capability.key} style={evaluationRowStyle}>
+                  <span>{capability.label}</span>
+                  <span style={evaluationStatusStyle}>{statusLabel(capability)}</span>
+                </div>
+              ))}
+            </>
+          ) : null}
+
+          <div style={evaluationMetaStyle}>Gaps</div>
+          {smallvilleEvaluation.topGaps.slice(0, 3).map((capability) => (
+            <div key={capability.key} style={evaluationRowStyle}>
+              <span>{capability.label}</span>
+              <span style={evaluationStatusStyle}>{statusLabel(capability)}</span>
+            </div>
+          ))}
+        </div>
+      ) : null}
 
       <div style={shortcutRowStyle} aria-label="Failure shortcuts">
         <ShortcutButton
