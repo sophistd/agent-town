@@ -93,7 +93,7 @@ The current surface includes:
 - agent marks, role colors, status markers, bubbles, and handoff/message edges
 - a Timeline with playback, cursor jumping, and current-event selection
 - a Detail panel for the selected event and run summary
-- an Import Source panel for mock, Town day, native JSONL, and
+- an Import Source panel for mock, Town day, Cognitive, native JSONL, and
   WebSocket-shaped input
 - adapter warnings and quarantine counts
 
@@ -134,10 +134,13 @@ Quick path:
 6. Use Import Source -> Town day to inspect the Smallville-like day fixture:
    five agents moving through stable zones, interior anchors, bubbles, handoff
    edges, and activity labels.
-7. Use Detail to inspect the selected event fields.
-8. Use Import Source -> JSONL to import the native JSONL sample in the text
+7. Use Import Source -> Cognitive to inspect the deterministic cognitive-loop
+   fixture: observation, memory retrieval, reflection, planning, action, and
+   closure evidence all represented as canonical `AgentEvent` metadata.
+8. Use Detail to inspect the selected event fields.
+9. Use Import Source -> JSONL to import the native JSONL sample in the text
    area.
-9. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
+10. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
    the same projection pipeline.
 
 Relevant screenshots and evidence:
@@ -147,6 +150,7 @@ Relevant screenshots and evidence:
 - `docs/evidence/M5/performance-200-events.md`
 - `docs/evidence/M5/final-demo-notes.md`
 - `docs/evidence/M4/source-switcher.png`
+- `docs/SMALLVILLE_PARITY.md`
 
 ## JSONL Import
 
@@ -244,6 +248,15 @@ Agent roles are stable runtime identities, not visual-only labels.
 
 Do not infer a role from sprite choice or building position. Role must come
 from the event stream and derived `WorldState`.
+
+## Moving Toward Smallville
+
+`docs/SMALLVILLE_PARITY.md` tracks the actual gap to Stanford Smallville-style
+generative agents. The current `Cognitive` source is deterministic: it emits
+observation, memory retrieval, reflection, planning, action, and closure as
+canonical `AgentEvent` records. It is a testable event contract for future
+LLM-backed behavior, not a claim that the app already has autonomous social
+emergence or persistent agent cognition.
 
 ## Adding An Adapter
 

@@ -13,6 +13,7 @@ import {
   parseWebSocketMessages,
   type WebSocketIngestConnection,
 } from "../adapters/websocketAdapter";
+import { mockSmallvilleCognitiveRun } from "../events/generativeRuntime";
 import { mockFailureRun } from "../events/mockFailureRun";
 import { mockEvents } from "../events/mockEvents";
 import { mockSmallvilleDayRun } from "../events/mockSmallvilleDayRun";
@@ -90,6 +91,11 @@ const mockStatus = {
 const smallvilleDayStatus = {
   level: "ok",
   message: "Town day run loaded.",
+} satisfies ImportPanelStatus;
+
+const cognitiveRunStatus = {
+  level: "ok",
+  message: "Cognitive loop run loaded.",
 } satisfies ImportPanelStatus;
 
 function HeaderMetric({
@@ -290,6 +296,11 @@ export function App() {
     commitEventSource("smallville", mockSmallvilleDayRun, smallvilleDayStatus);
   }, [commitEventSource, disconnectWebSocket]);
 
+  const loadCognitiveRun = useCallback(() => {
+    disconnectWebSocket();
+    commitEventSource("cognitive", mockSmallvilleCognitiveRun, cognitiveRunStatus);
+  }, [commitEventSource, disconnectWebSocket]);
+
   const importJsonl = useCallback(
     (input: string) => {
       disconnectWebSocket();
@@ -394,6 +405,7 @@ export function App() {
             onConnectWebSocket={connectWebSocket}
             onDisconnectWebSocket={disconnectWebSocket}
             onImportJsonl={importJsonl}
+            onLoadCognitiveRun={loadCognitiveRun}
             onLoadMock={loadMock}
             onLoadSmallvilleDay={loadSmallvilleDay}
             onLoadWebSocketSample={loadWebSocketSample}

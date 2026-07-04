@@ -33,18 +33,33 @@ intact.
    Add filters for blocked, error, tool, memory, handoff, and done events.
    Filtering should affect inspection only; it must not rewrite replay state.
 
-4. Dedicated Graph and Memory views
+4. Cognitive runtime hardening
+
+   The deterministic `Cognitive` source now proves the event shape for
+   observation, memory retrieval, reflection, planning, and action. The next
+   Smallville-oriented runtime session should choose exactly one of:
+
+   - persist memory streams across imported runs
+   - add a natural-language intervention adapter that emits canonical
+     `AgentEvent`
+   - add an LLM-backed reflection/planning adapter behind the same event
+     contract
+   - scale the cognitive fixture from 5 agents to 25 agents and profile replay
+
+   Do not let the LLM, adapter, or renderer bypass `AgentEvent`.
+
+5. Dedicated Graph and Memory views
 
    Promote the existing projection data into separate views only after the
    demo proves which questions reviewers ask most often.
 
-5. Runtime adapter hardening
+6. Runtime adapter hardening
 
    Expand source-specific adapters for OpenTelemetry, Codex-style logs, Claude
    Code-style events, Langfuse, or other sources. Keep quarantine behavior
    source-local and keep renderer branches source-agnostic.
 
-6. Pixel-town fidelity polish
+7. Pixel-town fidelity polish
 
    The project now has a project-authored Tiled-compatible map, terrain tileset,
    agent sprite sheet, building sprite sheet, and baked pixel-town background.
@@ -53,7 +68,7 @@ intact.
    third-party pack only after license, attribution, commercial-use, and fallback
    behavior are recorded.
 
-7. Performance profiling
+8. Performance profiling
 
    Add browser frame-rate, memory, and canvas draw-call evidence once the UI
    can load the stress fixture directly.

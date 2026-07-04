@@ -115,6 +115,32 @@ Canonical roles are:
 Adapters may preserve source-specific details in `metadata` as `unknown`, but
 renderer code must not branch on adapter-specific schemas.
 
+## Cognitive Metadata
+
+The deterministic Smallville-oriented runtime in `src/events/generativeRuntime.ts`
+uses `metadata` to preserve cognition evidence without extending the canonical
+event type vocabulary.
+
+Common fields:
+
+| Metadata field | Meaning |
+| --- | --- |
+| `cognitiveStage` | One of `observation`, `retrieval`, `reflection`, `planning`, `action`, `conversation`, `closure` |
+| `subLocationId` | Projection anchor inside the stable `locationHint` zone |
+| `activity` | Short activity label for expanded town rendering |
+| `persona` | Seed persona used to generate the deterministic fixture event |
+| `memoryId` | Memory record written by an observation, reflection, or plan event |
+| `memoryKind` | `observation`, `reflection`, or `plan` |
+| `retrievalQuery` | Query used by memory retrieval |
+| `retrievedMemories` | Array of retrieved memory score records |
+| `derivedFromMemoryIds` | Memory IDs synthesized into a reflection |
+| `planStep` | Planned goal, next action, and expected projection target |
+
+These fields are projection and inspection evidence. The renderer may display
+them or use `subLocationId` / `activity` as projection hints, but it must not
+invent them. If they are missing, replay still falls back to canonical
+`AgentEvent` fields.
+
 ## WorldState
 
 WorldState is the derived projection state:

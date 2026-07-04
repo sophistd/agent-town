@@ -82,6 +82,12 @@ that exercises the interior anchors with five named agents and day-phase event
 metadata. It is still a canonical `AgentEvent` fixture; selecting it in the UI
 does not activate a separate simulation engine.
 
+`src/events/generativeRuntime.ts` provides the deterministic "Cognitive" run.
+It exercises observation, memory retrieval, reflection, planning, action, and
+closure metadata while still emitting canonical `AgentEvent[]`. Selecting it in
+the UI proves that Smallville-oriented cognition evidence can flow through the
+same projection path without renderer-specific branches.
+
 | Role | Default visible identity |
 | --- | --- |
 | `planner` | Planner |

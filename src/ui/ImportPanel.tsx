@@ -2,7 +2,7 @@ import { useState, type CSSProperties } from "react";
 
 import type { AdapterQuarantinedEvent, AdapterWarning } from "../adapters/types";
 
-export type ImportSourceKind = "jsonl" | "mock" | "smallville" | "websocket";
+export type ImportSourceKind = "cognitive" | "jsonl" | "mock" | "smallville" | "websocket";
 export type ImportStatusLevel = "error" | "idle" | "ok" | "warning";
 
 export type ImportPanelStatus = {
@@ -17,6 +17,7 @@ type ImportPanelProps = {
   onConnectWebSocket: (url: string) => void;
   onDisconnectWebSocket: () => void;
   onImportJsonl: (input: string) => void;
+  onLoadCognitiveRun: () => void;
   onLoadMock: () => void;
   onLoadSmallvilleDay: () => void;
   onLoadWebSocketSample: () => void;
@@ -107,21 +108,29 @@ const actionRowStyle = {
 
 const statusStyleByLevel: Record<ImportStatusLevel, CSSProperties> = {
   error: {
+    borderStyle: "solid",
+    borderWidth: "1px",
     borderColor: "rgba(255, 141, 120, 0.52)",
     background: "#321c1a",
     color: "#ffb5a6",
   },
   idle: {
+    borderStyle: "solid",
+    borderWidth: "1px",
     borderColor: "rgba(143, 170, 157, 0.24)",
     background: "#101a1d",
     color: "#95aaa0",
   },
   ok: {
+    borderStyle: "solid",
+    borderWidth: "1px",
     borderColor: "rgba(117, 201, 164, 0.54)",
     background: "#163027",
     color: "#9ae6b5",
   },
   warning: {
+    borderStyle: "solid",
+    borderWidth: "1px",
     borderColor: "rgba(240, 195, 90, 0.54)",
     background: "#332915",
     color: "#f0d585",
@@ -130,8 +139,6 @@ const statusStyleByLevel: Record<ImportStatusLevel, CSSProperties> = {
 
 function statusBoxStyle(level: ImportStatusLevel): CSSProperties {
   return {
-    borderStyle: "solid",
-    borderWidth: "1px",
     borderRadius: "6px",
     padding: "8px",
     fontSize: "12px",
@@ -151,6 +158,7 @@ export function ImportPanel({
   onConnectWebSocket,
   onDisconnectWebSocket,
   onImportJsonl,
+  onLoadCognitiveRun,
   onLoadMock,
   onLoadSmallvilleDay,
   onLoadWebSocketSample,
@@ -195,6 +203,14 @@ export function ImportPanel({
           aria-pressed={activeSource === "smallville"}
         >
           Town day
+        </button>
+        <button
+          type="button"
+          style={buttonStyleFor("cognitive", activeSource)}
+          onClick={onLoadCognitiveRun}
+          aria-pressed={activeSource === "cognitive"}
+        >
+          Cognitive
         </button>
         <button
           type="button"

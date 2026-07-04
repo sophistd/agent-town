@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { mockSmallvilleCognitiveRun } from "../events/generativeRuntime";
 import { invalidEvents } from "../events/invalidEvents";
 import { mockEvents } from "../events/mockEvents";
 import { replayValidated } from "../events/reducer";
@@ -10,6 +11,13 @@ describe("event validators", () => {
     const result = validateEventStream(mockEvents);
 
     expect(result.events).toHaveLength(mockEvents.length);
+    expect(result.quarantinedEvents).toHaveLength(0);
+  });
+
+  it("accepts cognitive runtime events with rich metadata", () => {
+    const result = validateEventStream(mockSmallvilleCognitiveRun);
+
+    expect(result.events).toHaveLength(mockSmallvilleCognitiveRun.length);
     expect(result.quarantinedEvents).toHaveLength(0);
   });
 

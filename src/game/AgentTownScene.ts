@@ -39,6 +39,7 @@ export class AgentTownScene extends Phaser.Scene {
   private townLayer?: Phaser.GameObjects.Container;
   private townMap: TownMapDefinition = DEFAULT_TOWN_MAP;
   private isShutdown = false;
+  private mapLoadRequestId = 0;
 
   constructor() {
     super(AGENT_TOWN_SCENE_KEY);
@@ -81,21 +82,11 @@ export class AgentTownScene extends Phaser.Scene {
       this.handleRegistryProjectionSettings,
       this,
     );
-    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-      this.game.registry.events.off(
-        `changedata-${WORLD_STATE_REGISTRY_KEY}`,
-        this.handleRegistryWorldState,
-        this,
-      );
-      this.game.registry.events.off(
-        `changedata-${PROJECTION_SETTINGS_REGISTRY_KEY}`,
-        this.handleRegistryProjectionSettings,
-        this,
-      );
-      this.isShutdown = true;
-    });
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.handleSceneExit, this);
+    this.events.once(Phaser.Scenes.Events.DESTROY, this.handleSceneExit, this);
     this.renderWorldState();
-    void this.loadProjectionMap();
+    const mapLoadRequestId = ++this.mapLoadRequestId;
+    void this.loadProjectionMap(mapLoadRequestId);
   }
 
   setWorldState(worldState: WorldState): void {
@@ -122,10 +113,26 @@ export class AgentTownScene extends Phaser.Scene {
     this.setProjectionSettings(value);
   }
 
-  private async loadProjectionMap(): Promise<void> {
+  private handleSceneExit(): void {
+    this.game.registry.events.off(
+      `changedata-${WORLD_STATE_REGISTRY_KEY}`,
+      this.handleRegistryWorldState,
+      this,
+    );
+    this.game.registry.events.off(
+      `changedata-${PROJECTION_SETTINGS_REGISTRY_KEY}`,
+      this.handleRegistryProjectionSettings,
+      this,
+    );
+    this.isShutdown = true;
+    this.mapLoadRequestId += 1;
+    this.townLayer = undefined;
+  }
+
+  private async loadProjectionMap(requestId: number): Promise<void> {
     const townMap = await loadTownMap();
 
-    if (!this.canRender()) {
+    if (requestId !== this.mapLoadRequestId || !this.canRender()) {
       return;
     }
 
@@ -134,15 +141,27 @@ export class AgentTownScene extends Phaser.Scene {
   }
 
   private canRender(): boolean {
-    const gameObjectFactory = this.add as Phaser.GameObjects.GameObjectFactory & {
-      displayList?: unknown;
+    const sceneSystems = this.sys as Phaser.Scenes.Systems & {
+      displayList?: { add?: unknown } | null;
+      updateList?: unknown;
     };
+    const gameObjectFactory = this.add as Phaser.GameObjects.GameObjectFactory & {
+      displayList?: { add?: unknown } | null;
+      updateList?: unknown;
+    };
+    const game = this.game as Phaser.Game & { isDestroyed?: boolean };
+    const displayList = gameObjectFactory.displayList ?? sceneSystems.displayList;
+    const updateList = gameObjectFactory.updateList ?? sceneSystems.updateList;
 
     return (
       !this.isShutdown &&
+      game.isDestroyed !== true &&
       this.sys.isActive() &&
-      gameObjectFactory.displayList !== undefined &&
-      gameObjectFactory.displayList !== null
+      displayList !== undefined &&
+      displayList !== null &&
+      typeof displayList.add === "function" &&
+      updateList !== undefined &&
+      updateList !== null
     );
   }
 
@@ -161,6 +180,10 @@ export class AgentTownScene extends Phaser.Scene {
     }
 
     this.townLayer?.destroy(true);
+    this.townLayer = undefined;
+    if (!this.canRender()) {
+      return;
+    }
     this.townLayer = this.add.container(0, 0);
 
     renderTownMap(this, this.townLayer, this.townMap);

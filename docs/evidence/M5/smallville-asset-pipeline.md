@@ -46,10 +46,17 @@ This revision is a direct response to the product bar being raised from "asset
 pipeline minimal loop" to "materially closer to Stanford Smallville-level
 pixel-town experience."
 
-The latest continuation adds an event-driven "Town day" slice: generated
+The Town day continuation added an event-driven slice: generated
 interior anchors, a deterministic Smallville-like day fixture, activity labels,
 and movement trails. This still does not claim autonomous generative-agent
 simulation; the routine is an `AgentEvent` stream projected through `WorldState`.
+
+The latest continuation adds a deterministic "Cognitive" runtime slice:
+observation, memory retrieval, reflection, planning, action/conversation, and
+closure are represented as canonical `AgentEvent` records with inspectable
+metadata. This raises the implementation from town visual projection toward the
+Generative Agents architecture shape, but it is still not autonomous LLM-backed
+social emergence.
 
 ## Implementation Decision
 
@@ -141,6 +148,16 @@ The map object layer preserves:
 - `docs/evidence/M5/smallville-day-interaction.png`
 - `docs/evidence/M5/smallville-day-mobile.png`
 - `docs/evidence/M5/smallville-day-mobile-map.png`
+- `src/events/generativeRuntime.ts`
+- `src/tests/generative-runtime.test.ts`
+- `docs/SMALLVILLE_PARITY.md`
+- `docs/EVENT_SCHEMA.md`
+- `docs/evidence/M5/smallville-cognitive-qa.json`
+- `docs/evidence/M5/smallville-cognitive-pixel-check.json`
+- `docs/evidence/M5/smallville-cognitive-desktop.png`
+- `docs/evidence/M5/smallville-cognitive-interaction.png`
+- `docs/evidence/M5/smallville-cognitive-mobile.png`
+- `docs/evidence/M5/smallville-cognitive-mobile-map.png`
 
 ## Verification Commands
 
@@ -170,6 +187,22 @@ Results:
 
 - `pnpm typecheck`: passed.
 - `pnpm test`: passed, 8 files / 38 tests.
+- `pnpm build`: passed.
+- `git diff --check`: passed.
+
+Latest Cognitive continuation checks:
+
+```text
+pnpm typecheck
+pnpm test
+pnpm build
+git diff --check
+```
+
+Results:
+
+- `pnpm typecheck`: passed.
+- `pnpm test`: passed, 9 files / 44 tests.
 - `pnpm build`: passed.
 - `git diff --check`: passed.
 
@@ -344,6 +377,94 @@ public/sprites/agent-roles-v1.png: size=192x128 sampled_unique_colors=44 non_whi
 public/sprites/buildings-v1.png: size=1120x112 sampled_unique_colors=55 non_white_ratio=0.5588 transparent_ratio=0.4412
 ```
 
+## Cognitive Runtime Browser Evidence
+
+The latest QA targeted the deterministic Cognitive run and the
+Smallville-oriented memory/retrieval/reflection/planning loop.
+
+Browser path:
+
+- Browser plugin was attempted first.
+- Browser connected to `http://127.0.0.1:5173/`, returned page title
+  `Agent Town`, and exposed console logs.
+- Browser required DOM snapshot failed with plugin-side error:
+  `TypeError: o.incrementalAriaSnapshot is not a function`.
+- The same Browser pass revealed a real Phaser lifecycle error from a stale
+  async map load; this continuation fixed it in `AgentTownScene`.
+- Regular Playwright fallback used bundled Codex runtime Playwright for clean
+  screenshot, console, asset, and interaction proof.
+- QA result JSON:
+  `docs/evidence/M5/smallville-cognitive-qa.json`.
+- Pixel check JSON:
+  `docs/evidence/M5/smallville-cognitive-pixel-check.json`.
+
+Screenshots:
+
+```text
+docs/evidence/M5/smallville-cognitive-desktop.png
+docs/evidence/M5/smallville-cognitive-interaction.png
+docs/evidence/M5/smallville-cognitive-mobile.png
+docs/evidence/M5/smallville-cognitive-mobile-map.png
+```
+
+Desktop 1440x960:
+
+- Page title: `Agent Town`.
+- Active source: `cognitive · 30 events`.
+- Status copy: `Cognitive loop run loaded.`
+- Town toolbar: `cursor 0`, `visible 30/30`, `balanced`, `100%`.
+- Run summary: 30 events, 5 agents, 1 handoff, 3 tool calls, 10 memory
+  actions, 0 blocked, 0 errors.
+- Detail panel exposes cognition metadata including `cognitiveStage`,
+  `subLocationId`, `activity`, `memoryKind`, `memoryId`, and retrieval records.
+- Canvas count: `1`.
+- Canvas rect after interaction: about `773 x 669`.
+- Horizontal overflow: `0`.
+- Framework overlay: absent.
+- Asset HTTP responses all returned `200`:
+  - `/maps/town-v1.tiled.json`
+  - `/maps/town-v1-preview.png`
+  - `/tilesets/agent-town-v1.png`
+  - `/sprites/agent-roles-v1.png`
+  - `/sprites/buildings-v1.png`
+
+Interaction checks:
+
+- Cognitive source loaded: `true`.
+- Expanded density applied: `aria-pressed=true`.
+- Zoom in changed toolbar from `100%` to `105%`.
+- Bubbles toggle changed `aria-pressed` from `true` to `false`.
+- Handoff edges toggle changed `aria-pressed` from `true` to `false`.
+- Critical filter changed visible event count to `6/30`.
+- Next changed header cursor to `2 / 30`.
+- Play changed the timeline control state to `Pause` and header status to
+  `running`.
+
+Console health:
+
+- Page errors: none.
+- Relevant app console errors/warnings: none after the lifecycle fix.
+- Chromium emitted WebGL `ReadPixels` performance warnings during screenshot
+  capture; these are recorded in the QA JSON and classified as screenshot GPU
+  warnings, not application errors.
+
+Mobile 390x844:
+
+- First mobile screenshot verifies the responsive control stack with Cognitive
+  loaded.
+- Scrolled mobile map screenshot verifies the town canvas in viewport.
+- Horizontal overflow: `0`.
+- Mobile map canvas rect after scrolling: about `372 x 322`.
+
+Cognitive PNG nonblank sampling:
+
+```text
+docs/evidence/M5/smallville-cognitive-desktop.png: size=1440x960 unique_colors_64x64=1710 nonblank=true
+docs/evidence/M5/smallville-cognitive-interaction.png: size=1440x960 unique_colors_64x64=1663 nonblank=true
+docs/evidence/M5/smallville-cognitive-mobile.png: size=780x1688 unique_colors_64x64=759 nonblank=true
+docs/evidence/M5/smallville-cognitive-mobile-map.png: size=780x1688 unique_colors_64x64=1399 nonblank=true
+```
+
 ## Asset License Status
 
 - External visual assets imported: none.
@@ -378,6 +499,11 @@ license boundary.
 - `src/tests/reducer.test.ts` proves sub-location/activity metadata projects
   into `WorldState`, and the Smallville day run is deterministic and
   warning-free.
+- `src/events/generativeRuntime.ts` emits observation, retrieval, reflection,
+  planning, action/conversation, and closure as canonical `AgentEvent` records.
+- `src/tests/generative-runtime.test.ts` proves deterministic retrieval scoring,
+  replay compatibility, cognitive-stage coverage, inspectable retrieval
+  evidence, and warning-free `WorldState` reconstruction for the Cognitive run.
 - No adapter-specific logic was added to `src/game/*`.
 
 ## Notion / Linear Sync
@@ -441,10 +567,12 @@ Scope truth:
 ## Remaining Limitations
 
 - This is now an original pixel asset pipeline with generated room/interior
-  anchors and a deterministic day-run fixture, but it is not yet a complete
-  Stanford Generative Agents town: there are no autonomous schedules, persistent
-  agent memories, many-building interior layouts, animated walking cycles, or
-  full-world Tiled editing workflow.
+  anchors, a deterministic day-run fixture, and a deterministic cognitive-loop
+  fixture, but it is not yet a complete Stanford Generative Agents town: there
+  are no autonomous schedules, persistent cross-session agent memories,
+  LLM-backed reflection/planning calls, many-building interior layouts,
+  animated walking cycles, human intervention loop, social diffusion evaluation,
+  or full-world Tiled editing workflow.
 - The map is denser and materially closer to a Smallville-like top-down town,
   but it remains a compact prototype projection for runtime events.
 - Browser frame-rate profiling is still future work.
@@ -458,7 +586,10 @@ Deepen the original generator rather than importing unknown art:
 - more interior rooms and doorway relationships
 - animated agent walk/idle frames
 - denser props and readable districts
-- longer event traces with routine conflicts and memory recall
+- persistent memory streams across imported runs
+- LLM-backed reflection/planning adapter behind the same `AgentEvent` contract
+- 25-agent cognitive fixture with routine conflicts and social diffusion
+  evidence
 - optional true Phaser tilemap render path
 - same stable object layer IDs
 - same explicit license/rights entry before any external asset enters the repo
