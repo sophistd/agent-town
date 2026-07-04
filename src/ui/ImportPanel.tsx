@@ -2,7 +2,13 @@ import { useState, type CSSProperties } from "react";
 
 import type { AdapterQuarantinedEvent, AdapterWarning } from "../adapters/types";
 
-export type ImportSourceKind = "cognitive" | "jsonl" | "mock" | "smallville" | "websocket";
+export type ImportSourceKind =
+  | "cognitive"
+  | "jsonl"
+  | "mock"
+  | "smallville"
+  | "social"
+  | "websocket";
 export type ImportStatusLevel = "error" | "idle" | "ok" | "warning";
 
 export type ImportPanelStatus = {
@@ -19,6 +25,7 @@ type ImportPanelProps = {
   onImportJsonl: (input: string) => void;
   onLoadCognitiveRun: () => void;
   onLoadMock: () => void;
+  onLoadSocialRun: () => void;
   onLoadSmallvilleDay: () => void;
   onLoadWebSocketSample: () => void;
   quarantinedEvents: readonly AdapterQuarantinedEvent[];
@@ -160,6 +167,7 @@ export function ImportPanel({
   onImportJsonl,
   onLoadCognitiveRun,
   onLoadMock,
+  onLoadSocialRun,
   onLoadSmallvilleDay,
   onLoadWebSocketSample,
   quarantinedEvents,
@@ -211,6 +219,14 @@ export function ImportPanel({
           aria-pressed={activeSource === "cognitive"}
         >
           Cognitive
+        </button>
+        <button
+          type="button"
+          style={buttonStyleFor("social", activeSource)}
+          onClick={onLoadSocialRun}
+          aria-pressed={activeSource === "social"}
+        >
+          Social day
         </button>
         <button
           type="button"

@@ -73,9 +73,22 @@ type CognitivePlan = {
   eventType: Extract<AgentEventType, "handoff" | "message" | "tool_call">;
 };
 
+type SocialAgentSeed = Omit<CognitiveAgentSeed, "memories"> & {
+  dailyIntention: string;
+  inviteWave: number;
+  relationshipIds: string[];
+};
+
+export type SocialDiffusionSummary = {
+  agentCount: number;
+  informedAgentIds: string[];
+  invitationMessageCount: number;
+  maxWave: number;
+};
+
 const runId = "run-smallville-cognitive-001";
 const taskId = "task-smallville-cognitive-loop";
-const baseTimestamp = "2026-07-04T15:";
+const baseTimestamp = "2026-07-04T15:00:00.000Z";
 
 const cognitiveAgents: CognitiveAgentSeed[] = [
   {
@@ -295,8 +308,15 @@ const cognitivePlans: CognitivePlan[] = [
   },
 ];
 
+function timestampAt(startTimestamp: string, sequence: number): string {
+  const start = new Date(startTimestamp);
+  start.setUTCMinutes(start.getUTCMinutes() + sequence);
+
+  return start.toISOString();
+}
+
 function timestamp(sequence: number): string {
-  return `${baseTimestamp}${String(sequence).padStart(2, "0")}:00.000Z`;
+  return timestampAt(baseTimestamp, sequence);
 }
 
 function roundScore(value: number): number {
@@ -682,4 +702,716 @@ export function generateSmallvilleCognitiveRun(): AgentEvent[] {
   return events;
 }
 
+const socialRunId = "run-smallville-social-001";
+const socialTaskId = "task-valentine-social-diffusion";
+const socialBaseTimestamp = "2026-07-04T16:00:00.000Z";
+
+const socialAgentSeeds: readonly SocialAgentSeed[] = [
+  {
+    agentId: "agent-isabella",
+    agentName: "Isabella",
+    agentRole: "planner",
+    persona: "Hosts civic rituals and turns one suggestion into a coordinated plan.",
+    homeLocation: "town_hall",
+    homeSubLocationId: "town_hall_table",
+    workLocation: "dispatch_board",
+    workSubLocationId: "dispatch_notice_wall",
+    workActivity: "posts party plan",
+    dailyIntention: "host a small Valentine's gathering by the fountain",
+    inviteWave: 0,
+    relationshipIds: ["agent-klaus", "agent-mei", "agent-sam"],
+  },
+  {
+    agentId: "agent-klaus",
+    agentName: "Klaus",
+    agentRole: "researcher",
+    persona: "Turns rumors into trustworthy town knowledge.",
+    homeLocation: "library",
+    homeSubLocationId: "library_stacks",
+    workLocation: "library",
+    workSubLocationId: "library_reading_nook",
+    workActivity: "checks precedent",
+    dailyIntention: "verify the invitation and tell the researchers",
+    inviteWave: 1,
+    relationshipIds: ["agent-mei", "agent-nora", "agent-teo", "agent-priya"],
+  },
+  {
+    agentId: "agent-mei",
+    agentName: "Mei",
+    agentRole: "memory",
+    persona: "Maintains the town memory stream and knows who should hear what.",
+    homeLocation: "archive",
+    homeSubLocationId: "archive_shelves",
+    workLocation: "archive",
+    workSubLocationId: "archive_writing_desk",
+    workActivity: "records invitation",
+    dailyIntention: "record the party as a durable social memory",
+    inviteWave: 1,
+    relationshipIds: ["agent-sam", "agent-pavel", "agent-zara", "agent-iris"],
+  },
+  {
+    agentId: "agent-sam",
+    agentName: "Sam",
+    agentRole: "reviewer",
+    persona: "Checks whether social claims are supported by observable evidence.",
+    homeLocation: "review_room",
+    homeSubLocationId: "review_table",
+    workLocation: "review_room",
+    workSubLocationId: "review_evidence_wall",
+    workActivity: "checks acceptance",
+    dailyIntention: "make sure the gathering has verifiable attendance",
+    inviteWave: 1,
+    relationshipIds: ["agent-maria", "agent-omar", "agent-june", "agent-victor"],
+  },
+  {
+    agentId: "agent-maria",
+    agentName: "Maria",
+    agentRole: "coder",
+    persona: "Builds projection mechanics while staying alert to social signals.",
+    homeLocation: "workshop",
+    homeSubLocationId: "workshop_bench",
+    workLocation: "workshop",
+    workSubLocationId: "workshop_debug_desk",
+    workActivity: "checks route",
+    dailyIntention: "prepare the fountain projection for the gathering",
+    inviteWave: 2,
+    relationshipIds: ["agent-nora", "agent-lina", "agent-marco", "agent-rafa"],
+  },
+  {
+    agentId: "agent-nora",
+    agentName: "Nora",
+    agentRole: "planner",
+    persona: "Coordinates small routines and keeps the town square calendar.",
+    homeLocation: "town_hall",
+    homeSubLocationId: "town_hall_office",
+    workLocation: "town_hall",
+    workSubLocationId: "town_hall_table",
+    workActivity: "updates calendar",
+    dailyIntention: "reserve the square for evening coordination",
+    inviteWave: 2,
+    relationshipIds: ["agent-teo", "agent-anika", "agent-celine"],
+  },
+  {
+    agentId: "agent-teo",
+    agentName: "Teo",
+    agentRole: "researcher",
+    persona: "Carries new information from the library into casual conversation.",
+    homeLocation: "library",
+    homeSubLocationId: "library_reading_nook",
+    workLocation: "library",
+    workSubLocationId: "library_stacks",
+    workActivity: "sorts notes",
+    dailyIntention: "tell nearby readers why the gathering matters",
+    inviteWave: 2,
+    relationshipIds: ["agent-priya", "agent-haruto", "agent-yuna"],
+  },
+  {
+    agentId: "agent-priya",
+    agentName: "Priya",
+    agentRole: "critic",
+    persona: "Asks whether a plan is socially useful before endorsing it.",
+    homeLocation: "review_room",
+    homeSubLocationId: "review_table",
+    workLocation: "library",
+    workSubLocationId: "library_reading_nook",
+    workActivity: "questions premise",
+    dailyIntention: "make the party inclusive instead of symbolic",
+    inviteWave: 2,
+    relationshipIds: ["agent-pavel", "agent-sol", "agent-elena"],
+  },
+  {
+    agentId: "agent-pavel",
+    agentName: "Pavel",
+    agentRole: "memory",
+    persona: "Connects current plans to what the town promised yesterday.",
+    homeLocation: "archive",
+    homeSubLocationId: "archive_shelves",
+    workLocation: "archive",
+    workSubLocationId: "archive_writing_desk",
+    workActivity: "links memory",
+    dailyIntention: "bring past invitations into the current plan",
+    inviteWave: 2,
+    relationshipIds: ["agent-zara", "agent-noah", "agent-diego"],
+  },
+  {
+    agentId: "agent-zara",
+    agentName: "Zara",
+    agentRole: "orchestrator",
+    persona: "Moves between rooms and connects people who would not otherwise meet.",
+    homeLocation: "dispatch_board",
+    homeSubLocationId: "dispatch_queue",
+    workLocation: "square",
+    workSubLocationId: "square_cafe",
+    workActivity: "routes guests",
+    dailyIntention: "turn memory into turnout",
+    inviteWave: 2,
+    relationshipIds: ["agent-iris", "agent-diego"],
+  },
+  {
+    agentId: "agent-iris",
+    agentName: "Iris",
+    agentRole: "custom",
+    persona: "Makes the square feel welcoming through small gestures.",
+    homeLocation: "square",
+    homeSubLocationId: "square_cafe",
+    workLocation: "square",
+    workSubLocationId: "square_fountain_edge",
+    workActivity: "sets tables",
+    dailyIntention: "prepare the gathering place",
+    inviteWave: 2,
+    relationshipIds: ["agent-omar", "agent-celine", "agent-victor"],
+  },
+  {
+    agentId: "agent-omar",
+    agentName: "Omar",
+    agentRole: "reviewer",
+    persona: "Watches whether plans become observable commitments.",
+    homeLocation: "review_room",
+    homeSubLocationId: "review_evidence_wall",
+    workLocation: "review_room",
+    workSubLocationId: "review_table",
+    workActivity: "tracks RSVP",
+    dailyIntention: "count who actually heard the invitation",
+    inviteWave: 2,
+    relationshipIds: ["agent-june", "agent-lina", "agent-noah"],
+  },
+  {
+    agentId: "agent-june",
+    agentName: "June",
+    agentRole: "critic",
+    persona: "Identifies awkward social edges before the gathering happens.",
+    homeLocation: "review_room",
+    homeSubLocationId: "review_table",
+    workLocation: "dispatch_board",
+    workSubLocationId: "dispatch_notice_wall",
+    workActivity: "edits notice",
+    dailyIntention: "make the invitation less formal",
+    inviteWave: 2,
+    relationshipIds: ["agent-victor", "agent-yuna", "agent-marco"],
+  },
+  {
+    agentId: "agent-victor",
+    agentName: "Victor",
+    agentRole: "custom",
+    persona: "Often decides late but influences nearby friends.",
+    homeLocation: "square",
+    homeSubLocationId: "square_fountain_edge",
+    workLocation: "workshop",
+    workSubLocationId: "workshop_bench",
+    workActivity: "helps setup",
+    dailyIntention: "decide whether to attend after hearing from reviewers",
+    inviteWave: 2,
+    relationshipIds: ["agent-lina", "agent-rafa", "agent-anika"],
+  },
+  {
+    agentId: "agent-lina",
+    agentName: "Lina",
+    agentRole: "coder",
+    persona: "Turns social plans into concrete setup tasks.",
+    homeLocation: "workshop",
+    homeSubLocationId: "workshop_bench",
+    workLocation: "workshop",
+    workSubLocationId: "workshop_debug_desk",
+    workActivity: "makes checklist",
+    dailyIntention: "prepare lights for the fountain",
+    inviteWave: 3,
+    relationshipIds: ["agent-marco", "agent-maria", "agent-noah"],
+  },
+  {
+    agentId: "agent-marco",
+    agentName: "Marco",
+    agentRole: "custom",
+    persona: "Treats invitations as chances to repair weak ties.",
+    homeLocation: "square",
+    homeSubLocationId: "square_cafe",
+    workLocation: "square",
+    workSubLocationId: "square_cafe",
+    workActivity: "sets menu",
+    dailyIntention: "bring a cafe plan to the party",
+    inviteWave: 3,
+    relationshipIds: ["agent-rafa", "agent-elena", "agent-zara"],
+  },
+  {
+    agentId: "agent-rafa",
+    agentName: "Rafa",
+    agentRole: "orchestrator",
+    persona: "Collects late RSVPs and prevents the plan from fragmenting.",
+    homeLocation: "dispatch_board",
+    homeSubLocationId: "dispatch_queue",
+    workLocation: "dispatch_board",
+    workSubLocationId: "dispatch_notice_wall",
+    workActivity: "collects RSVP",
+    dailyIntention: "close the attendance loop",
+    inviteWave: 3,
+    relationshipIds: ["agent-anika", "agent-isabella", "agent-zara"],
+  },
+  {
+    agentId: "agent-anika",
+    agentName: "Anika",
+    agentRole: "researcher",
+    persona: "Learns by listening to multiple sides of a town plan.",
+    homeLocation: "library",
+    homeSubLocationId: "library_stacks",
+    workLocation: "library",
+    workSubLocationId: "library_reading_nook",
+    workActivity: "compares stories",
+    dailyIntention: "verify the party time",
+    inviteWave: 3,
+    relationshipIds: ["agent-celine", "agent-nora", "agent-victor"],
+  },
+  {
+    agentId: "agent-celine",
+    agentName: "Celine",
+    agentRole: "planner",
+    persona: "Turns informal talk into a schedule people can follow.",
+    homeLocation: "town_hall",
+    homeSubLocationId: "town_hall_table",
+    workLocation: "town_hall",
+    workSubLocationId: "town_hall_office",
+    workActivity: "sets time",
+    dailyIntention: "write down the evening sequence",
+    inviteWave: 3,
+    relationshipIds: ["agent-haruto", "agent-iris", "agent-june"],
+  },
+  {
+    agentId: "agent-haruto",
+    agentName: "Haruto",
+    agentRole: "memory",
+    persona: "Remembers who tends to be left out of group plans.",
+    homeLocation: "archive",
+    homeSubLocationId: "archive_shelves",
+    workLocation: "archive",
+    workSubLocationId: "archive_writing_desk",
+    workActivity: "checks omissions",
+    dailyIntention: "make sure quiet agents are invited",
+    inviteWave: 3,
+    relationshipIds: ["agent-teo", "agent-yuna"],
+  },
+  {
+    agentId: "agent-yuna",
+    agentName: "Yuna",
+    agentRole: "custom",
+    persona: "Speaks softly but spreads trusted plans quickly.",
+    homeLocation: "square",
+    homeSubLocationId: "square_cafe",
+    workLocation: "library",
+    workSubLocationId: "library_reading_nook",
+    workActivity: "passes whisper",
+    dailyIntention: "invite friends without making the room too formal",
+    inviteWave: 3,
+    relationshipIds: ["agent-sol", "agent-haruto", "agent-priya"],
+  },
+  {
+    agentId: "agent-sol",
+    agentName: "Sol",
+    agentRole: "critic",
+    persona: "Notices when a social plan creates pressure instead of warmth.",
+    homeLocation: "review_room",
+    homeSubLocationId: "review_table",
+    workLocation: "review_room",
+    workSubLocationId: "review_evidence_wall",
+    workActivity: "softens plan",
+    dailyIntention: "make attendance optional and comfortable",
+    inviteWave: 3,
+    relationshipIds: ["agent-elena", "agent-priya", "agent-noah"],
+  },
+  {
+    agentId: "agent-elena",
+    agentName: "Elena",
+    agentRole: "custom",
+    persona: "Brings practical hospitality into abstract plans.",
+    homeLocation: "square",
+    homeSubLocationId: "square_cafe",
+    workLocation: "square",
+    workSubLocationId: "square_cafe",
+    workActivity: "plans snacks",
+    dailyIntention: "bring food to the gathering",
+    inviteWave: 3,
+    relationshipIds: ["agent-noah", "agent-marco", "agent-zara"],
+  },
+  {
+    agentId: "agent-noah",
+    agentName: "Noah",
+    agentRole: "coder",
+    persona: "Uses visible artifacts to coordinate with people he barely knows.",
+    homeLocation: "workshop",
+    homeSubLocationId: "workshop_bench",
+    workLocation: "workshop",
+    workSubLocationId: "workshop_debug_desk",
+    workActivity: "builds sign",
+    dailyIntention: "make a readable RSVP sign",
+    inviteWave: 3,
+    relationshipIds: ["agent-diego", "agent-pavel", "agent-sol"],
+  },
+  {
+    agentId: "agent-diego",
+    agentName: "Diego",
+    agentRole: "reviewer",
+    persona: "Looks for the final proof that a town plan became shared reality.",
+    homeLocation: "review_room",
+    homeSubLocationId: "review_evidence_wall",
+    workLocation: "square",
+    workSubLocationId: "square_fountain_edge",
+    workActivity: "records turnout",
+    dailyIntention: "write down who came and how they heard",
+    inviteWave: 4,
+    relationshipIds: ["agent-isabella", "agent-zara", "agent-omar"],
+  },
+];
+
+function socialTimestamp(sequence: number): string {
+  return timestampAt(socialBaseTimestamp, sequence);
+}
+
+function getSocialAgent(agentId: string): SocialAgentSeed {
+  const agent = socialAgentSeeds.find((candidate) => candidate.agentId === agentId);
+
+  if (agent === undefined) {
+    throw new Error(`Unknown social agent: ${agentId}`);
+  }
+
+  return agent;
+}
+
+function seedSocialMemoryStream(agents: readonly SocialAgentSeed[]): Map<string, MemoryRecord[]> {
+  const streams = new Map<string, MemoryRecord[]>();
+
+  for (const agent of agents) {
+    const relationshipNames = agent.relationshipIds
+      .map((relationshipId) => getSocialAgent(relationshipId).agentName)
+      .join(", ");
+    streams.set(agent.agentId, [
+      {
+        id: `${agent.agentId}-seed-party`,
+        agentId: agent.agentId,
+        content: `${agent.agentName} knows that town gatherings work only when invitations travel through trusted relationships.`,
+        createdAtSequence: 0,
+        importance: 8,
+        kind: "observation",
+        lastAccessedSequence: 0,
+        tags: ["party", "relationship", "smallville-social"],
+      },
+      {
+        id: `${agent.agentId}-seed-relationships`,
+        agentId: agent.agentId,
+        content: `${agent.agentName} tends to coordinate with ${relationshipNames}.`,
+        createdAtSequence: 0,
+        importance: 7,
+        kind: "observation",
+        lastAccessedSequence: 0,
+        tags: ["relationship", "social-graph", agent.workLocation],
+      },
+      {
+        id: `${agent.agentId}-seed-intention`,
+        agentId: agent.agentId,
+        content: `${agent.agentName}'s plan today is to ${agent.dailyIntention}.`,
+        createdAtSequence: 0,
+        importance: 6,
+        kind: "plan",
+        lastAccessedSequence: 0,
+        tags: ["daily-plan", "routine", agent.workSubLocationId],
+      },
+    ]);
+  }
+
+  return streams;
+}
+
+function makeSocialEvent(input: {
+  agent: SocialAgentSeed;
+  sequence: number;
+  type: AgentEventType;
+  summary: string;
+  content: string;
+  locationHint: AgentLocation;
+  subLocationId: string;
+  activity: string;
+  cognitiveStage: CognitiveStage;
+  targetAgentId?: string;
+  status?: AgentEventStatus;
+  metadata?: Record<string, unknown>;
+}): AgentEvent {
+  return {
+    id: `social-${String(input.sequence).padStart(3, "0")}`,
+    runId: socialRunId,
+    taskId: socialTaskId,
+    timestamp: socialTimestamp(input.sequence),
+    sequence: input.sequence,
+    agentId: input.agent.agentId,
+    agentName: input.agent.agentName,
+    agentRole: input.agent.agentRole,
+    type: input.type,
+    content: input.content,
+    summary: input.summary,
+    targetAgentId: input.targetAgentId,
+    targetTaskId: socialTaskId,
+    locationHint: input.locationHint,
+    status: input.status ?? "running",
+    metadata: {
+      source: "mock",
+      tags: [
+        "smallville-social",
+        input.cognitiveStage,
+        input.subLocationId,
+        `wave-${input.agent.inviteWave}`,
+      ],
+      cognitiveStage: input.cognitiveStage,
+      subLocationId: input.subLocationId,
+      activity: input.activity,
+      persona: input.agent.persona,
+      relationships: input.agent.relationshipIds,
+      ...input.metadata,
+    },
+  };
+}
+
+export function summarizeSocialDiffusion(
+  events: readonly AgentEvent[],
+): SocialDiffusionSummary {
+  const informedAgentIds = new Set<string>();
+  let invitationMessageCount = 0;
+  let maxWave = 0;
+
+  for (const event of events) {
+    const diffusion = event.metadata?.socialDiffusion;
+    if (typeof diffusion !== "object" || diffusion === null || Array.isArray(diffusion)) {
+      continue;
+    }
+
+    const record = diffusion as Record<string, unknown>;
+    if (record.knowsParty === true) {
+      informedAgentIds.add(event.agentId);
+    }
+
+    if (event.type === "message" && record.eventId === "valentine-party") {
+      invitationMessageCount += 1;
+    }
+
+    if (typeof record.wave === "number") {
+      maxWave = Math.max(maxWave, record.wave);
+    }
+  }
+
+  return {
+    agentCount: informedAgentIds.size,
+    informedAgentIds: [...informedAgentIds].sort(),
+    invitationMessageCount,
+    maxWave,
+  };
+}
+
+export function generateSmallvilleSocialRun(): AgentEvent[] {
+  const streams = seedSocialMemoryStream(socialAgentSeeds);
+  const events: AgentEvent[] = [];
+  let sequence = 0;
+
+  socialAgentSeeds.forEach((agent, index) => {
+    const heardFromAgent =
+      index === 0 ? undefined : socialAgentSeeds[Math.max(0, index - 1)];
+    const targetAgent = getSocialAgent(agent.relationshipIds[0]);
+    const observationContent =
+      heardFromAgent === undefined
+        ? "A user suggests that Isabella should host a Valentine's gathering by the fountain."
+        : `${agent.agentName} hears from ${heardFromAgent.agentName} that Isabella is planning a Valentine's gathering.`;
+    const socialDiffusion = {
+      eventId: "valentine-party",
+      wave: agent.inviteWave,
+      heardFromAgentId: heardFromAgent?.agentId,
+      spreadsToAgentIds: [targetAgent.agentId],
+      knowsParty: true,
+    };
+
+    const observation = makeSocialEvent({
+      agent,
+      sequence,
+      type: "memory_write",
+      summary: index === 0 ? "Seed party intervention" : "Hear party invitation",
+      content: observationContent,
+      locationHint: agent.homeLocation,
+      subLocationId: agent.homeSubLocationId,
+      activity: index === 0 ? "receives intervention" : "hears invitation",
+      cognitiveStage: "observation",
+      metadata: {
+        memoryKind: "observation",
+        intervention:
+          index === 0
+            ? {
+                source: "user",
+                prompt: "Isabella wants to host a Valentine's gathering.",
+              }
+            : undefined,
+        socialDiffusion,
+      },
+    });
+    const observationRecord = remember(
+      streams,
+      observation,
+      "observation",
+      observationContent,
+      9,
+      ["observation", "valentine-party", "smallville-social"],
+    );
+    observation.metadata = {
+      ...observation.metadata,
+      memoryId: observationRecord.id,
+      importance: observationRecord.importance,
+    };
+    events.push(observation);
+    sequence += 1;
+
+    const query = `valentine party ${targetAgent.agentName} relationship schedule`;
+    const stream = streams.get(agent.agentId) ?? [];
+    const retrievedMemories = retrieveMemories(stream, query, sequence, 3);
+    const retrievedIds = new Set(retrievedMemories.map((memory) => memory.memoryId));
+    streams.set(
+      agent.agentId,
+      stream.map((memory) =>
+        retrievedIds.has(memory.id)
+          ? { ...memory, lastAccessedSequence: sequence }
+          : memory,
+      ),
+    );
+
+    events.push(
+      makeSocialEvent({
+        agent,
+        sequence,
+        type: "memory_read",
+        summary: "Retrieve social memory",
+        content: `${agent.agentName} retrieves memories before deciding whether to tell ${targetAgent.agentName}.`,
+        locationHint: "archive",
+        subLocationId: "archive_shelves",
+        activity: "retrieves social memory",
+        cognitiveStage: "retrieval",
+        metadata: {
+          retrievalQuery: query,
+          retrievedMemories,
+          socialDiffusion,
+        },
+      }),
+    );
+    sequence += 1;
+
+    const reflectionContent = `${agent.agentName} reflects that the invitation should travel through ${targetAgent.agentName} because ${targetAgent.agentName} connects another part of town.`;
+    const reflection = makeSocialEvent({
+      agent,
+      sequence,
+      type: "thinking",
+      summary: "Reflect on social path",
+      content: reflectionContent,
+      locationHint: agent.workLocation,
+      subLocationId: agent.workSubLocationId,
+      activity: "reflects on tie",
+      cognitiveStage: "reflection",
+      metadata: {
+        derivedFromMemoryIds: retrievedMemories.map((memory) => memory.memoryId),
+        averageRetrievedScore: roundScore(
+          retrievedMemories.reduce((sum, memory) => sum + memory.score, 0) /
+            Math.max(1, retrievedMemories.length),
+        ),
+        socialDiffusion,
+      },
+    });
+    const reflectionRecord = remember(
+      streams,
+      reflection,
+      "reflection",
+      reflectionContent,
+      8,
+      ["reflection", "valentine-party", "smallville-social"],
+    );
+    reflection.metadata = {
+      ...reflection.metadata,
+      memoryId: reflectionRecord.id,
+    };
+    events.push(reflection);
+    sequence += 1;
+
+    const decisionContent = `${agent.agentName} decides to attend if the plan remains voluntary and to tell ${targetAgent.agentName}.`;
+    const decision = makeSocialEvent({
+      agent,
+      sequence,
+      type: "decision",
+      summary: "Plan invitation relay",
+      content: decisionContent,
+      locationHint: "town_hall",
+      subLocationId: "town_hall_table",
+      activity: "plans relay",
+      cognitiveStage: "planning",
+      metadata: {
+        planStep: {
+          goal: agent.dailyIntention,
+          nextAction: `Tell ${targetAgent.agentName} about the Valentine's gathering.`,
+          targetAgentId: targetAgent.agentId,
+          expectedLocation: targetAgent.homeSubLocationId,
+        },
+        socialDiffusion,
+      },
+    });
+    const planRecord = remember(
+      streams,
+      decision,
+      "plan",
+      decisionContent,
+      8,
+      ["plan", "valentine-party", "smallville-social"],
+    );
+    decision.metadata = {
+      ...decision.metadata,
+      memoryId: planRecord.id,
+    };
+    events.push(decision);
+    sequence += 1;
+
+    events.push(
+      makeSocialEvent({
+        agent,
+        sequence,
+        type: "message",
+        summary: "Spread party invitation",
+        content: `${agent.agentName} tells ${targetAgent.agentName}: Isabella is hosting a Valentine's gathering by the fountain, and you should come if it fits your evening.`,
+        locationHint: agent.workLocation,
+        subLocationId: agent.workSubLocationId,
+        activity: "spreads invitation",
+        cognitiveStage: "conversation",
+        targetAgentId: targetAgent.agentId,
+        metadata: {
+          executedPlanMemoryId: planRecord.id,
+          socialDiffusion,
+        },
+      }),
+    );
+    sequence += 1;
+  });
+
+  for (const agent of socialAgentSeeds) {
+    events.push(
+      makeSocialEvent({
+        agent,
+        sequence,
+        type: "done",
+        summary: "Arrive at party",
+        content: `${agent.agentName} arrives at the fountain knowing who carried the invitation through town.`,
+        locationHint: "square",
+        subLocationId: "square_fountain_edge",
+        activity: "attends party",
+        cognitiveStage: "closure",
+        status: "done",
+        metadata: {
+          socialDiffusion: {
+            eventId: "valentine-party",
+            wave: agent.inviteWave,
+            knowsParty: true,
+            attended: true,
+          },
+        },
+      }),
+    );
+    sequence += 1;
+  }
+
+  return events;
+}
+
 export const mockSmallvilleCognitiveRun: AgentEvent[] = generateSmallvilleCognitiveRun();
+export const mockSmallvilleSocialRun: AgentEvent[] = generateSmallvilleSocialRun();

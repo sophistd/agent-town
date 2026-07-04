@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { mockSmallvilleCognitiveRun } from "../events/generativeRuntime";
+import {
+  mockSmallvilleCognitiveRun,
+  mockSmallvilleSocialRun,
+} from "../events/generativeRuntime";
 import { mockEvents } from "../events/mockEvents";
 import { mockFailureRun } from "../events/mockFailureRun";
 import { mockSmallvilleDayRun } from "../events/mockSmallvilleDayRun";
@@ -27,6 +30,7 @@ describe("deterministic replay controls", () => {
       mockFailureRun,
       mockSmallvilleDayRun,
       mockSmallvilleCognitiveRun,
+      mockSmallvilleSocialRun,
       mockStressRun,
     ];
 

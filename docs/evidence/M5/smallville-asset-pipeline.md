@@ -58,6 +58,12 @@ metadata. This raises the implementation from town visual projection toward the
 Generative Agents architecture shape, but it is still not autonomous LLM-backed
 social emergence.
 
+The latest Social day continuation adds a deterministic 25-agent Valentine
+invitation diffusion fixture. It represents intervention, social memory,
+retrieval, reflection, planning, invitation messages, and party attendance as
+150 canonical `AgentEvent` records. This closes a larger-scale social-spread
+slice, but it still does not claim unscripted or LLM-autonomous emergence.
+
 ## Implementation Decision
 
 Adopt an original generated asset pipeline:
@@ -150,6 +156,7 @@ The map object layer preserves:
 - `docs/evidence/M5/smallville-day-mobile-map.png`
 - `src/events/generativeRuntime.ts`
 - `src/tests/generative-runtime.test.ts`
+- `src/tests/validators.test.ts`
 - `docs/SMALLVILLE_PARITY.md`
 - `docs/EVENT_SCHEMA.md`
 - `docs/evidence/M5/smallville-cognitive-qa.json`
@@ -158,6 +165,12 @@ The map object layer preserves:
 - `docs/evidence/M5/smallville-cognitive-interaction.png`
 - `docs/evidence/M5/smallville-cognitive-mobile.png`
 - `docs/evidence/M5/smallville-cognitive-mobile-map.png`
+- `docs/evidence/M5/smallville-social-qa.json`
+- `docs/evidence/M5/smallville-social-pixel-check.json`
+- `docs/evidence/M5/smallville-social-desktop.png`
+- `docs/evidence/M5/smallville-social-interaction.png`
+- `docs/evidence/M5/smallville-social-mobile.png`
+- `docs/evidence/M5/smallville-social-mobile-map.png`
 
 ## Verification Commands
 
@@ -203,6 +216,22 @@ Results:
 
 - `pnpm typecheck`: passed.
 - `pnpm test`: passed, 9 files / 44 tests.
+- `pnpm build`: passed.
+- `git diff --check`: passed.
+
+Latest Social day continuation checks:
+
+```text
+pnpm typecheck
+pnpm test
+pnpm build
+git diff --check
+```
+
+Results:
+
+- `pnpm typecheck`: passed.
+- `pnpm test`: passed, 9 files / 48 tests.
 - `pnpm build`: passed.
 - `git diff --check`: passed.
 
@@ -465,6 +494,94 @@ docs/evidence/M5/smallville-cognitive-mobile.png: size=780x1688 unique_colors_64
 docs/evidence/M5/smallville-cognitive-mobile-map.png: size=780x1688 unique_colors_64x64=1399 nonblank=true
 ```
 
+## Social Day Browser Evidence
+
+The latest QA targeted the deterministic 25-agent Social day run and the
+Smallville-style invitation diffusion loop.
+
+Browser path:
+
+- Browser plugin connected to `http://127.0.0.1:5173/`, returned page title
+  `Agent Town`, clicked `Social day`, and read `run-smallville-social-001`, 150
+  events, 25 agents, 50 memory actions, 0 warnings, and 0 quarantined events
+  from the page text.
+- Browser `domSnapshot()` still failed with plugin-side error:
+  `TypeError: o.incrementalAriaSnapshot is not a function`.
+- Regular Playwright fallback used bundled Codex runtime Playwright for clean
+  screenshot, console, asset, interaction, mobile, and pixel proof.
+- QA result JSON:
+  `docs/evidence/M5/smallville-social-qa.json`.
+- Pixel check JSON:
+  `docs/evidence/M5/smallville-social-pixel-check.json`.
+
+Screenshots:
+
+```text
+docs/evidence/M5/smallville-social-desktop.png
+docs/evidence/M5/smallville-social-interaction.png
+docs/evidence/M5/smallville-social-mobile.png
+docs/evidence/M5/smallville-social-mobile-map.png
+```
+
+Desktop 1440x960:
+
+- Page title: `Agent Town`.
+- Active source: `social · 150 events`.
+- Status copy: `Social diffusion run loaded.`
+- Run ID: `run-smallville-social-001`.
+- Town toolbar: `cursor 0`, `visible 150/150`, `balanced`, `100%`.
+- Run summary: 150 events, 25 agents, 0 handoffs, 0 tool calls, 50 memory
+  actions, 0 blocked, 0 errors.
+- Detail panel exposes Social day metadata including `intervention` and
+  `socialDiffusion`.
+- Canvas count: `1`.
+- Canvas rect: about `773 x 669`.
+- Horizontal overflow: `0`.
+- Framework overlay: absent.
+- Asset HTTP responses all returned `200`:
+  - `/maps/town-v1.tiled.json`
+  - `/maps/town-v1-preview.png`
+  - `/tilesets/agent-town-v1.png`
+  - `/sprites/agent-roles-v1.png`
+  - `/sprites/buildings-v1.png`
+
+Interaction checks:
+
+- Social day source loaded: `true`.
+- Expanded density applied: `aria-pressed=true`.
+- Zoom in changed toolbar from `100%` to `105%`.
+- Bubbles toggle changed `aria-pressed` from `true` to `false`.
+- Handoff edges toggle changed `aria-pressed` from `true` to `false`.
+- Critical filter changed visible event count to `25/150`.
+- Next changed header cursor to `2 / 150`.
+- Play changed the timeline control state to `Pause` and header status to
+  `running`.
+
+Console health:
+
+- Page errors: none.
+- Relevant app console errors/warnings: none.
+- Chromium emitted four WebGL `ReadPixels` performance warnings during
+  screenshot capture; these are recorded in the QA JSON and classified as
+  screenshot GPU warnings, not application errors.
+
+Mobile 390x844:
+
+- First mobile screenshot verifies the responsive control stack with Social day
+  loaded.
+- Scrolled mobile map screenshot verifies the town canvas in viewport.
+- Horizontal overflow: `0`.
+- Mobile map canvas rect after scrolling: about `372 x 322`.
+
+Social day PNG nonblank sampling:
+
+```text
+docs/evidence/M5/smallville-social-desktop.png: size=1440x960 unique_colors_64x64=265 nonblank=true
+docs/evidence/M5/smallville-social-interaction.png: size=1440x960 unique_colors_64x64=261 nonblank=true
+docs/evidence/M5/smallville-social-mobile.png: size=780x1688 unique_colors_64x64=147 nonblank=true
+docs/evidence/M5/smallville-social-mobile-map.png: size=780x1688 unique_colors_64x64=151 nonblank=true
+```
+
 ## Asset License Status
 
 - External visual assets imported: none.
@@ -503,7 +620,14 @@ license boundary.
   planning, action/conversation, and closure as canonical `AgentEvent` records.
 - `src/tests/generative-runtime.test.ts` proves deterministic retrieval scoring,
   replay compatibility, cognitive-stage coverage, inspectable retrieval
-  evidence, and warning-free `WorldState` reconstruction for the Cognitive run.
+  evidence, 25-agent social diffusion coverage, and warning-free `WorldState`
+  reconstruction for the Cognitive and Social day runs.
+- `summarizeSocialDiffusion` proves the Social day fixture reaches all 25
+  agents, emits 25 invitation messages, and reaches wave 4 without renderer
+  state becoming a runtime fact.
+- Social day tests also prove every invitation message target is present in the
+  sender's `relationships` metadata, so the deterministic diffusion path is
+  inspectable as relationship evidence.
 - No adapter-specific logic was added to `src/game/*`.
 
 ## Notion / Linear Sync
@@ -585,12 +709,13 @@ Scope truth:
 ## Remaining Limitations
 
 - This is now an original pixel asset pipeline with generated room/interior
-  anchors, a deterministic day-run fixture, and a deterministic cognitive-loop
-  fixture, but it is not yet a complete Stanford Generative Agents town: there
-  are no autonomous schedules, persistent cross-session agent memories,
-  LLM-backed reflection/planning calls, many-building interior layouts,
-  animated walking cycles, human intervention loop, social diffusion evaluation,
-  or full-world Tiled editing workflow.
+  anchors, a deterministic day-run fixture, a deterministic cognitive-loop
+  fixture, and a deterministic 25-agent social-diffusion fixture, but it is not
+  yet a complete Stanford Generative Agents town: there are no autonomous
+  schedules, persistent cross-session agent memories, LLM-backed
+  reflection/planning calls, many-building interior layouts, animated walking
+  cycles, live human intervention loop, rigorous social diffusion evaluation, or
+  full-world Tiled editing workflow.
 - The map is denser and materially closer to a Smallville-like top-down town,
   but it remains a compact prototype projection for runtime events.
 - Browser frame-rate profiling is still future work.
@@ -606,8 +731,8 @@ Deepen the original generator rather than importing unknown art:
 - denser props and readable districts
 - persistent memory streams across imported runs
 - LLM-backed reflection/planning adapter behind the same `AgentEvent` contract
-- 25-agent cognitive fixture with routine conflicts and social diffusion
-  evidence
+- 25-agent cognitive fixture with routine conflicts, persistent memories, and
+  evaluated social diffusion
 - optional true Phaser tilemap render path
 - same stable object layer IDs
 - same explicit license/rights entry before any external asset enters the repo

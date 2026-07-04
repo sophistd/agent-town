@@ -88,6 +88,12 @@ closure metadata while still emitting canonical `AgentEvent[]`. Selecting it in
 the UI proves that Smallville-oriented cognition evidence can flow through the
 same projection path without renderer-specific branches.
 
+The same module also provides the deterministic "Social day" run. It scales the
+fixture to 25 agents and emits a user-seeded Valentine's invitation diffusion
+chain as canonical `AgentEvent[]`. Relationship IDs, invite waves, source
+agents, and attendance evidence live in event metadata for inspection; the town
+canvas still only projects the replayed `WorldState`.
+
 | Role | Default visible identity |
 | --- | --- |
 | `planner` | Planner |

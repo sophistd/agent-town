@@ -135,11 +135,19 @@ Common fields:
 | `retrievedMemories` | Array of retrieved memory score records |
 | `derivedFromMemoryIds` | Memory IDs synthesized into a reflection |
 | `planStep` | Planned goal, next action, and expected projection target |
+| `relationships` | Agent IDs used by deterministic social fixtures to expose relationship graph evidence |
+| `intervention` | User-seeded social premise that became an `AgentEvent`, not renderer state |
+| `socialDiffusion` | Object describing event id, invite wave, source agent, targets, knowledge, and attendance |
 
 These fields are projection and inspection evidence. The renderer may display
 them or use `subLocationId` / `activity` as projection hints, but it must not
 invent them. If they are missing, replay still falls back to canonical
 `AgentEvent` fields.
+
+The deterministic `Social day` source uses these social metadata fields to
+model a 25-agent Valentine's invitation diffusion chain. The metadata is not a
+separate simulation state: it is evidence carried by canonical `AgentEvent`
+records and replayed into `WorldState` like any other source.
 
 ## WorldState
 

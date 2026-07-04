@@ -13,7 +13,10 @@ import {
   parseWebSocketMessages,
   type WebSocketIngestConnection,
 } from "../adapters/websocketAdapter";
-import { mockSmallvilleCognitiveRun } from "../events/generativeRuntime";
+import {
+  mockSmallvilleCognitiveRun,
+  mockSmallvilleSocialRun,
+} from "../events/generativeRuntime";
 import { mockFailureRun } from "../events/mockFailureRun";
 import { mockEvents } from "../events/mockEvents";
 import { mockSmallvilleDayRun } from "../events/mockSmallvilleDayRun";
@@ -96,6 +99,11 @@ const smallvilleDayStatus = {
 const cognitiveRunStatus = {
   level: "ok",
   message: "Cognitive loop run loaded.",
+} satisfies ImportPanelStatus;
+
+const socialRunStatus = {
+  level: "ok",
+  message: "Social diffusion run loaded.",
 } satisfies ImportPanelStatus;
 
 function HeaderMetric({
@@ -301,6 +309,11 @@ export function App() {
     commitEventSource("cognitive", mockSmallvilleCognitiveRun, cognitiveRunStatus);
   }, [commitEventSource, disconnectWebSocket]);
 
+  const loadSocialRun = useCallback(() => {
+    disconnectWebSocket();
+    commitEventSource("social", mockSmallvilleSocialRun, socialRunStatus);
+  }, [commitEventSource, disconnectWebSocket]);
+
   const importJsonl = useCallback(
     (input: string) => {
       disconnectWebSocket();
@@ -407,6 +420,7 @@ export function App() {
             onImportJsonl={importJsonl}
             onLoadCognitiveRun={loadCognitiveRun}
             onLoadMock={loadMock}
+            onLoadSocialRun={loadSocialRun}
             onLoadSmallvilleDay={loadSmallvilleDay}
             onLoadWebSocketSample={loadWebSocketSample}
             quarantinedEvents={quarantinedEvents}

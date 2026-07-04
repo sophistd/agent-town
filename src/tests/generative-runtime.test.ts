@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import {
   mockSmallvilleCognitiveRun,
+  mockSmallvilleSocialRun,
   retrieveMemories,
   scoreMemoryRecord,
+  summarizeSocialDiffusion,
   type MemoryRecord,
 } from "../events/generativeRuntime";
 import { replay } from "../events/reducer";
@@ -121,5 +123,61 @@ describe("deterministic generative runtime", () => {
         }),
       ]),
     );
+  });
+
+  it("generates a 25-agent Smallville-style social diffusion run", () => {
+    const validation = validateEventStream(mockSmallvilleSocialRun);
+    const agentIds = new Set(validation.events.map((event) => event.agentId));
+    const summary = summarizeSocialDiffusion(validation.events);
+
+    expect(validation.quarantinedEvents).toHaveLength(0);
+    expect(validation.events).toHaveLength(150);
+    expect(agentIds.size).toBe(25);
+    expect(summary.agentCount).toBe(25);
+    expect(summary.invitationMessageCount).toBe(25);
+    expect(summary.maxWave).toBe(4);
+  });
+
+  it("keeps social diffusion replay deterministic and warning-free", () => {
+    const state = replay(mockSmallvilleSocialRun, mockSmallvilleSocialRun.length - 1);
+
+    expect(state.warnings).toHaveLength(0);
+    expect(state.runSummary).toMatchObject({
+      totalEvents: 150,
+      memoryActionCount: 50,
+      blockedCount: 0,
+      errorCount: 0,
+    });
+    expect(Object.keys(state.agents)).toHaveLength(25);
+    expect(Object.values(state.agents).every((agent) => agent.status === "done")).toBe(true);
+    expect(state.agents["agent-diego"]?.subLocationId).toBe("square_fountain_edge");
+  });
+
+  it("keeps the user intervention and invitation path inspectable", () => {
+    const firstEvent = mockSmallvilleSocialRun[0];
+    const messageEvents = mockSmallvilleSocialRun.filter((event) => event.type === "message");
+
+    expect(firstEvent?.metadata?.intervention).toMatchObject({
+      source: "user",
+      prompt: "Isabella wants to host a Valentine's gathering.",
+    });
+    expect(firstEvent?.metadata?.socialDiffusion).toMatchObject({
+      eventId: "valentine-party",
+      wave: 0,
+      knowsParty: true,
+    });
+    expect(messageEvents).toHaveLength(25);
+    expect(
+      messageEvents.every((event) => typeof event.targetAgentId === "string"),
+    ).toBe(true);
+    expect(
+      messageEvents.every((event) =>
+        Array.isArray(event.metadata?.relationships) &&
+        event.metadata.relationships.includes(event.targetAgentId),
+      ),
+    ).toBe(true);
+    expect(
+      messageEvents.some((event) => event.targetAgentId === "agent-isabella"),
+    ).toBe(true);
   });
 });

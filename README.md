@@ -93,8 +93,8 @@ The current surface includes:
 - agent marks, role colors, status markers, bubbles, and handoff/message edges
 - a Timeline with playback, cursor jumping, and current-event selection
 - a Detail panel for the selected event and run summary
-- an Import Source panel for mock, Town day, Cognitive, native JSONL, and
-  WebSocket-shaped input
+- an Import Source panel for mock, Town day, Cognitive, Social day, native
+  JSONL, and WebSocket-shaped input
 - adapter warnings and quarantine counts
 
 ## Architecture
@@ -137,10 +137,14 @@ Quick path:
 7. Use Import Source -> Cognitive to inspect the deterministic cognitive-loop
    fixture: observation, memory retrieval, reflection, planning, action, and
    closure evidence all represented as canonical `AgentEvent` metadata.
-8. Use Detail to inspect the selected event fields.
-9. Use Import Source -> JSONL to import the native JSONL sample in the text
+8. Use Import Source -> Social day to inspect the 25-agent invitation diffusion
+   fixture: a user-seeded Valentine's gathering spreads through relationships
+   as canonical observation, retrieval, reflection, planning, message, and
+   attendance events.
+9. Use Detail to inspect the selected event fields.
+10. Use Import Source -> JSONL to import the native JSONL sample in the text
    area.
-10. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
+11. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
    the same projection pipeline.
 
 Relevant screenshots and evidence:
@@ -252,11 +256,12 @@ from the event stream and derived `WorldState`.
 ## Moving Toward Smallville
 
 `docs/SMALLVILLE_PARITY.md` tracks the actual gap to Stanford Smallville-style
-generative agents. The current `Cognitive` source is deterministic: it emits
-observation, memory retrieval, reflection, planning, action, and closure as
-canonical `AgentEvent` records. It is a testable event contract for future
-LLM-backed behavior, not a claim that the app already has autonomous social
-emergence or persistent agent cognition.
+generative agents. The current `Cognitive` and `Social day` sources are
+deterministic: they emit observation, memory retrieval, reflection, planning,
+action/conversation, social diffusion, and closure as canonical `AgentEvent`
+records. They are testable event contracts for future LLM-backed behavior, not
+a claim that the app already has autonomous social emergence or persistent agent
+cognition.
 
 ## Adding An Adapter
 
