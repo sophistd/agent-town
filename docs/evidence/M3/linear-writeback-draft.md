@@ -1,10 +1,10 @@
-# M3 Linear Writeback Draft
+# M3 Linear Writeback Record
 
 ## Status
 
-Not posted to Linear.
+Posted to Linear after connector auth recovered.
 
-Current Codex app connectors for Notion and Linear return:
+Original blocker recorded before posting:
 
 ```text
 HTTP 401 token_invalidated
@@ -13,6 +13,14 @@ Your authentication token has been invalidated. Please try signing in again.
 
 Local MCP OAuth login for `linear` and `notion` succeeded, but the current
 `codex_apps` tool session still uses the invalidated app connector token.
+The next session restored working app connector reads and wrote the records
+below to Linear.
+
+## Posted Linear Records
+
+- MDL-141 comment: `2db98e4b-eafb-44e9-8b40-4d4c37bd9833`; issue read back as `Done`.
+- MDL-127 comment: `0a8c3918-a055-48cf-99ee-f1ccbe9b2bc7`; issue read back as `Done`.
+- MDL-149 comment: `36374926-d6da-4d40-87e4-7190cce1fba0`; issue read back as `Done`.
 
 ## MDL-141 Draft Comment
 
@@ -130,10 +138,9 @@ Result:
 
 ## Resume Instruction
 
-After Notion and Linear app connector auth is restored:
+After this writeback record:
 
 1. Fetch the Session Runbook Index again.
 2. Confirm MDL-141, MDL-127, and MDL-149 current external states.
-3. Post the relevant comments above only if they are still accurate.
-4. Move the corresponding Linear issues to Done only after read-back confirms the external state and no newer acceptance text contradicts this local evidence.
-5. Continue by selecting the first still-uncompleted session from S00-S15.
+3. Confirm all three read back as `Done`.
+4. Continue by selecting the first still-uncompleted session from S00-S15.
