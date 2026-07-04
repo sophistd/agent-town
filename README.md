@@ -207,11 +207,15 @@ Buildings are projection targets for event locations.
    the new location.
 4. Update labels, colors, or placeholder shapes in `src/game/visualMapping.ts`
    and renderer helpers.
-5. Document the new zone in `docs/VISUAL_MAPPING.md`.
-6. Add screenshot evidence if the change is visual.
+5. Update `public/maps/town-v1.tiled.json` if the rendered object map needs a
+   new building footprint or anchor.
+6. Document the new zone in `docs/VISUAL_MAPPING.md`.
+7. Add screenshot evidence if the change is visual.
 
-If a later session introduces a Tiled map, the Tiled object layer must preserve
-the stable location IDs documented in `docs/VISUAL_MAPPING.md`.
+The current Tiled-compatible object map must preserve the stable location IDs
+documented in `docs/VISUAL_MAPPING.md`. Map object names, sprite names, and
+building labels are projection metadata only; they must not create runtime
+facts.
 
 ## Adding An Agent Role
 
@@ -263,8 +267,10 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
 
 ## Known Limitations
 
-- The current visual system uses generated Phaser placeholders. Tiled and
-  external art are explicitly deferred by S14.
+- The current visual system uses a project-authored Tiled-compatible JSON object
+  map plus generated Phaser drawing. External PNG tilesets, spritesheets, and
+  third-party art remain deferred until license and fallback behavior are
+  recorded.
 - The app does not yet include a modal onboarding surface. The first-run copy is
   documented here, in `docs/DEMO_SCRIPT.md`, and in final demo notes for the M5
   review.
@@ -275,8 +281,9 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
   work.
 - Performance evidence covers deterministic 200-event replay and local demo
   usability. It is not a browser frame-rate benchmark.
-- This repository currently has no remote configured; commits are local-only
-  unless a remote is added later.
+- This public repository currently has no formal open-source `LICENSE` file.
+  Do not import external art or publish asset-license claims until that choice
+  is explicit.
 
 ## Next Phase
 

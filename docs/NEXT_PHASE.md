@@ -44,10 +44,12 @@ intact.
    Code-style events, Langfuse, or other sources. Keep quarantine behavior
    source-local and keep renderer branches source-agnostic.
 
-6. Tiled visual polish
+6. Tileset and sprite polish
 
-   Introduce Tiled only after the object layer preserves the stable location
-   IDs from `docs/VISUAL_MAPPING.md`. Do not import ambiguous-license assets.
+   The project now has a project-authored Tiled-compatible object map. The next
+   visual session should add a project-authored tileset and agent sprite sheet,
+   or choose a third-party pack only after license, attribution, commercial-use,
+   and fallback behavior are recorded.
 
 7. Performance profiling
 
@@ -60,8 +62,8 @@ intact.
 - Do not let Phaser own runtime facts.
 - Do not bypass AgentEvent for UI convenience.
 - Do not introduce external art before license and fallback behavior are clear.
-- Do not combine onboarding, filtering, graph tabs, adapter hardening, and Tiled
-  in one uncontrolled change.
+- Do not combine onboarding, filtering, graph tabs, adapter hardening, and
+  tileset/sprite polish in one uncontrolled change.
 
 ## Acceptance Shape For The Next Milestone
 

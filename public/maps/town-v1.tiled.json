@@ -1,0 +1,321 @@
+{
+  "type": "map",
+  "version": "1.10",
+  "tiledversion": "1.11.0",
+  "orientation": "orthogonal",
+  "renderorder": "right-down",
+  "width": 65,
+  "height": 56,
+  "tilewidth": 16,
+  "tileheight": 16,
+  "infinite": false,
+  "nextlayerid": 5,
+  "nextobjectid": 42,
+  "properties": [
+    { "name": "mapId", "type": "string", "value": "town-v1-original-object-map" },
+    { "name": "assetPolicy", "type": "string", "value": "project-authored-json-no-external-art" },
+    { "name": "runtimeBoundary", "type": "string", "value": "locations are projection targets; AgentEvent remains source of truth" }
+  ],
+  "tilesets": [],
+  "layers": [
+    {
+      "id": 1,
+      "name": "terrain",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "objects": [
+        {
+          "id": 1,
+          "name": "base meadow",
+          "type": "terrain",
+          "x": 0,
+          "y": 0,
+          "width": 1040,
+          "height": 896,
+          "properties": [{ "name": "kind", "type": "string", "value": "grass" }]
+        },
+        {
+          "id": 2,
+          "name": "central square paving",
+          "type": "terrain",
+          "x": 392,
+          "y": 356,
+          "width": 226,
+          "height": 176,
+          "properties": [{ "name": "kind", "type": "string", "value": "plaza" }]
+        },
+        {
+          "id": 3,
+          "name": "reflecting pond",
+          "type": "terrain",
+          "x": 456,
+          "y": 344,
+          "width": 98,
+          "height": 64,
+          "properties": [{ "name": "kind", "type": "string", "value": "water" }]
+        },
+        {
+          "id": 4,
+          "name": "planning lawn",
+          "type": "terrain",
+          "x": 118,
+          "y": 196,
+          "width": 264,
+          "height": 178,
+          "properties": [{ "name": "kind", "type": "string", "value": "district" }]
+        },
+        {
+          "id": 5,
+          "name": "research terrace",
+          "type": "terrain",
+          "x": 432,
+          "y": 166,
+          "width": 262,
+          "height": 182,
+          "properties": [{ "name": "kind", "type": "string", "value": "district" }]
+        },
+        {
+          "id": 6,
+          "name": "review ridge",
+          "type": "terrain",
+          "x": 710,
+          "y": 404,
+          "width": 246,
+          "height": 184,
+          "properties": [{ "name": "kind", "type": "string", "value": "district" }]
+        },
+        {
+          "id": 7,
+          "name": "memory grove",
+          "type": "terrain",
+          "x": 126,
+          "y": 566,
+          "width": 270,
+          "height": 190,
+          "properties": [{ "name": "kind", "type": "string", "value": "district" }]
+        },
+        {
+          "id": 8,
+          "name": "workshop yard",
+          "type": "terrain",
+          "x": 454,
+          "y": 590,
+          "width": 282,
+          "height": 210,
+          "properties": [{ "name": "kind", "type": "string", "value": "district" }]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "routes",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "objects": [
+        {
+          "id": 9,
+          "name": "queue to square",
+          "type": "route",
+          "x": 505,
+          "y": 120,
+          "polyline": [{ "x": 0, "y": 0 }, { "x": 0, "y": 325 }],
+          "properties": [
+            { "name": "fromLocationId", "type": "string", "value": "dispatch_board" },
+            { "name": "toLocationId", "type": "string", "value": "square" }
+          ]
+        },
+        {
+          "id": 10,
+          "name": "square to workshop",
+          "type": "route",
+          "x": 505,
+          "y": 445,
+          "polyline": [{ "x": 0, "y": 0 }, { "x": 80, "y": 235 }],
+          "properties": [
+            { "name": "fromLocationId", "type": "string", "value": "square" },
+            { "name": "toLocationId", "type": "string", "value": "workshop" }
+          ]
+        },
+        {
+          "id": 11,
+          "name": "square to planning",
+          "type": "route",
+          "x": 505,
+          "y": 445,
+          "polyline": [{ "x": 0, "y": 0 }, { "x": -255, "y": -165 }],
+          "properties": [
+            { "name": "fromLocationId", "type": "string", "value": "square" },
+            { "name": "toLocationId", "type": "string", "value": "town_hall" }
+          ]
+        },
+        {
+          "id": 12,
+          "name": "square to research",
+          "type": "route",
+          "x": 505,
+          "y": 445,
+          "polyline": [{ "x": 0, "y": 0 }, { "x": 55, "y": -195 }],
+          "properties": [
+            { "name": "fromLocationId", "type": "string", "value": "square" },
+            { "name": "toLocationId", "type": "string", "value": "library" }
+          ]
+        },
+        {
+          "id": 13,
+          "name": "square to memory",
+          "type": "route",
+          "x": 505,
+          "y": 445,
+          "polyline": [{ "x": 0, "y": 0 }, { "x": -245, "y": 205 }],
+          "properties": [
+            { "name": "fromLocationId", "type": "string", "value": "square" },
+            { "name": "toLocationId", "type": "string", "value": "archive" }
+          ]
+        },
+        {
+          "id": 14,
+          "name": "square to review",
+          "type": "route",
+          "x": 505,
+          "y": 445,
+          "polyline": [{ "x": 0, "y": 0 }, { "x": 335, "y": 55 }],
+          "properties": [
+            { "name": "fromLocationId", "type": "string", "value": "square" },
+            { "name": "toLocationId", "type": "string", "value": "review_room" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "locations",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "objects": [
+        {
+          "id": 15,
+          "name": "Dispatch Board",
+          "type": "location",
+          "x": 426,
+          "y": 87,
+          "width": 158,
+          "height": 66,
+          "properties": [
+            { "name": "locationId", "type": "string", "value": "dispatch_board" },
+            { "name": "projectionRole", "type": "string", "value": "queue" }
+          ]
+        },
+        {
+          "id": 16,
+          "name": "Town Hall",
+          "type": "location",
+          "x": 163,
+          "y": 231,
+          "width": 174,
+          "height": 98,
+          "properties": [
+            { "name": "locationId", "type": "string", "value": "town_hall" },
+            { "name": "projectionRole", "type": "string", "value": "planning" }
+          ]
+        },
+        {
+          "id": 17,
+          "name": "Library",
+          "type": "location",
+          "x": 473,
+          "y": 201,
+          "width": 174,
+          "height": 98,
+          "properties": [
+            { "name": "locationId", "type": "string", "value": "library" },
+            { "name": "projectionRole", "type": "string", "value": "research" }
+          ]
+        },
+        {
+          "id": 18,
+          "name": "Archive",
+          "type": "location",
+          "x": 173,
+          "y": 601,
+          "width": 174,
+          "height": 98,
+          "properties": [
+            { "name": "locationId", "type": "string", "value": "archive" },
+            { "name": "projectionRole", "type": "string", "value": "memory" }
+          ]
+        },
+        {
+          "id": 19,
+          "name": "Square",
+          "type": "location",
+          "x": 418,
+          "y": 396,
+          "width": 174,
+          "height": 98,
+          "properties": [
+            { "name": "locationId", "type": "string", "value": "square" },
+            { "name": "projectionRole", "type": "string", "value": "final square" }
+          ]
+        },
+        {
+          "id": 20,
+          "name": "Workshop",
+          "type": "location",
+          "x": 498,
+          "y": 631,
+          "width": 174,
+          "height": 98,
+          "properties": [
+            { "name": "locationId", "type": "string", "value": "workshop" },
+            { "name": "projectionRole", "type": "string", "value": "production" }
+          ]
+        },
+        {
+          "id": 21,
+          "name": "Review Room",
+          "type": "location",
+          "x": 753,
+          "y": 451,
+          "width": 174,
+          "height": 98,
+          "properties": [
+            { "name": "locationId", "type": "string", "value": "review_room" },
+            { "name": "projectionRole", "type": "string", "value": "review" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "decor",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "objects": [
+        { "id": 22, "name": "tree", "type": "tree", "x": 92, "y": 190 },
+        { "id": 23, "name": "tree", "type": "tree", "x": 122, "y": 740 },
+        { "id": 24, "name": "tree", "type": "tree", "x": 172, "y": 112 },
+        { "id": 25, "name": "tree", "type": "tree", "x": 198, "y": 808 },
+        { "id": 26, "name": "tree", "type": "tree", "x": 328, "y": 120 },
+        { "id": 27, "name": "tree", "type": "tree", "x": 358, "y": 750 },
+        { "id": 28, "name": "tree", "type": "tree", "x": 438, "y": 780 },
+        { "id": 29, "name": "tree", "type": "tree", "x": 726, "y": 146 },
+        { "id": 30, "name": "tree", "type": "tree", "x": 770, "y": 754 },
+        { "id": 31, "name": "tree", "type": "tree", "x": 902, "y": 210 },
+        { "id": 32, "name": "tree", "type": "tree", "x": 922, "y": 694 },
+        { "id": 33, "name": "tree", "type": "tree", "x": 968, "y": 374 },
+        { "id": 34, "name": "tree", "type": "tree", "x": 84, "y": 476 },
+        { "id": 35, "name": "lamp", "type": "lamp", "x": 382, "y": 348 },
+        { "id": 36, "name": "lamp", "type": "lamp", "x": 620, "y": 392 },
+        { "id": 37, "name": "lamp", "type": "lamp", "x": 438, "y": 590 },
+        { "id": 38, "name": "lamp", "type": "lamp", "x": 704, "y": 574 },
+        { "id": 39, "name": "bench", "type": "bench", "x": 478, "y": 522 },
+        { "id": 40, "name": "bench", "type": "bench", "x": 550, "y": 522 },
+        { "id": 41, "name": "sign", "type": "sign", "x": 622, "y": 124 }
+      ]
+    }
+  ]
+}

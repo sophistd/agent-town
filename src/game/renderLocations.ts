@@ -1,33 +1,24 @@
 import Phaser from "phaser";
 
-import { LOCATION_COORDINATES } from "../events/routing";
-import type { AgentLocation } from "../events/types";
 import type { TownProjectionSettings } from "./projectionSettings";
+import type { TownMapDefinition } from "./townMap";
 import { LOCATION_VISUALS } from "./visualMapping";
-
-const RENDERED_LOCATIONS: Array<Exclude<AgentLocation, "unknown">> = [
-  "dispatch_board",
-  "town_hall",
-  "library",
-  "archive",
-  "square",
-  "workshop",
-  "review_room",
-];
 
 export function renderLocations(
   scene: Phaser.Scene,
   layer: Phaser.GameObjects.Container,
   settings: TownProjectionSettings,
+  townMap: TownMapDefinition,
 ): void {
-  for (const location of RENDERED_LOCATIONS) {
-    const coordinates = LOCATION_COORDINATES[location];
-    const visual = LOCATION_VISUALS[location];
+  for (const location of townMap.locations) {
+    const visual = LOCATION_VISUALS[location.locationId];
     const isCompact = settings.density === "compact";
-    const width = location === "dispatch_board" ? 158 : 174;
-    const height = location === "dispatch_board" ? 66 : 98;
-    const x = coordinates.x - width / 2;
-    const y = coordinates.y - height / 2;
+    const width = location.width;
+    const height = location.height;
+    const x = location.x;
+    const y = location.y;
+    const centerX = location.anchorX;
+    const centerY = location.anchorY;
 
     const shadow = scene.add.graphics();
     shadow.fillStyle(0x17211b, 0.22);
@@ -55,7 +46,7 @@ export function renderLocations(
     }
 
     const label = scene.add
-      .text(coordinates.x, y - 14, isCompact ? visual.shortLabel : visual.label, {
+      .text(centerX, y - 14, isCompact ? visual.shortLabel : location.label, {
         backgroundColor: "#142024",
         color: "#f3f4ef",
         fontFamily: "Inter, Arial, sans-serif",
@@ -69,7 +60,7 @@ export function renderLocations(
 
     if (!isCompact) {
       const shortLabel = scene.add
-        .text(coordinates.x, y + height + 16, visual.shortLabel, {
+        .text(centerX, y + height + 16, visual.shortLabel, {
           color: "#35443a",
           fontFamily: "Inter, Arial, sans-serif",
           fontSize: "12px",
@@ -77,6 +68,18 @@ export function renderLocations(
         })
         .setOrigin(0.5, 0.5);
       layer.add(shortLabel);
+    }
+
+    if (!isCompact && townMap.source === "asset") {
+      const idLabel = scene.add
+        .text(centerX, centerY + height / 2 - 14, location.projectionRole, {
+          color: "#536057",
+          fontFamily: "Inter, Arial, sans-serif",
+          fontSize: "10px",
+          fontStyle: "700",
+        })
+        .setOrigin(0.5, 0.5);
+      layer.add(idLabel);
     }
   }
 }

@@ -85,13 +85,13 @@ const eventButtonStyle = {
 
 const currentEventButtonStyle = {
   ...eventButtonStyle,
-  borderColor: "#75c9a4",
+  border: "1px solid #75c9a4",
   background: "#18352c",
 } satisfies CSSProperties;
 
 const selectedEventButtonStyle = {
   ...eventButtonStyle,
-  borderColor: "#7dc6c7",
+  border: "1px solid #7dc6c7",
   boxShadow: "inset 0 0 0 2px rgba(125, 198, 199, 0.2)",
 } satisfies CSSProperties;
 

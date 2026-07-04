@@ -4,7 +4,11 @@ Agent Town renders `WorldState`; it does not create business facts inside the re
 
 ## Location Mapping
 
-Coordinates are canonical in `src/events/routing.ts`. The renderer imports those coordinates and only adds labels, colors, and placeholder building shapes.
+Stable location IDs and routing coordinates are canonical in
+`src/events/routing.ts`. The renderer loads `public/maps/town-v1.tiled.json` as
+a Tiled-compatible projection asset and verifies that its location object layer
+preserves the same stable IDs and anchors. If the map cannot load or parse, the
+renderer falls back to the generated in-code map with the same IDs.
 
 | Stable zone | Location ID | Label | Projection role |
 | --- | --- | --- | --- |
@@ -16,8 +20,23 @@ Coordinates are canonical in `src/events/routing.ts`. The renderer imports those
 | queue | `dispatch_board` | Dispatch Board | Handoffs and queued work |
 | final square | `square` | Square | Current shared surface and done state |
 
-S14 defers Tiled import. Any later Tiled map must preserve these location IDs
-in its object layer before replacing the generated placeholder layout.
+The current map session introduces a project-authored object map, not a
+third-party tileset or sprite sheet. The `locations` object layer is projection
+metadata only: it may define building footprints and visual anchors, but it does
+not create runtime facts. Agent role, status, event type, and selected state
+still come from `AgentEvent -> WorldState`.
+
+The object layer must preserve these `locationId` values:
+
+- `town_hall`
+- `library`
+- `workshop`
+- `archive`
+- `review_room`
+- `dispatch_board`
+- `square`
+- `unknown` remains a routing fallback and is not rendered as a normal town
+  building.
 
 ## Agent Mapping
 
@@ -71,13 +90,18 @@ S08 includes a status legend for idle, thinking, waiting, blocked, error, and do
 
 ## Boundary Notes
 
-- `src/game/renderLocations.ts` renders locations from `LOCATION_COORDINATES`.
+- `public/maps/town-v1.tiled.json` is the current project-authored map asset.
+- `src/game/townMap.ts` parses the Tiled-compatible object map and provides the
+  generated fallback.
+- `src/game/renderTownMap.ts` renders terrain, routes, and decor from the parsed
+  map definition.
+- `src/game/renderLocations.ts` renders location buildings from the parsed map
+  footprints, while tests keep map anchors aligned with `LOCATION_COORDINATES`.
 - `src/game/renderAgents.ts` renders agent identity, role color, status marker, and label from `WorldState`.
 - `src/game/visualMapping.ts` contains visual labels/colors only. It does not route events.
 - `src/events/routing.ts` remains the source of event-to-location routing.
-- Placeholder rendering remains the fallback for M5. It uses generated Phaser
-  shapes, labels, status markers, bubbles, and edges; no external asset owns
-  runtime facts.
+- Generated rendering remains the fallback. It uses local Phaser shapes, labels,
+  status markers, bubbles, and edges; no visual asset owns runtime facts.
 
 ## Visual Density Rules
 
@@ -96,6 +120,11 @@ M5 keeps density rules explicit so a busy run remains inspectable:
 - Projection boundary: visual density rules must never introduce runtime facts
   that are absent from `AgentEvent` or derived `WorldState`.
 
-Current limitation: there is no dedicated search/filter input yet. S15 records
-the rule and preserves Timeline/detail-based inspection; a later session can add
-filter UI if product review makes that the highest-risk gap.
+Current limitations:
+
+- There is no imported PNG tileset or sprite sheet yet. This session adds the
+  maintainable map-data layer first so the next asset session can add
+  project-authored pixel tiles without changing event semantics.
+- There is no dedicated search/filter input yet. S15 records the rule and
+  preserves Timeline/detail-based inspection; a later session can add filter UI
+  if product review makes that the highest-risk gap.

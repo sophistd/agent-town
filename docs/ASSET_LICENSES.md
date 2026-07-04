@@ -5,14 +5,20 @@ Agent Town.
 
 ## Current Status
 
-No external visual assets are imported through S14.
+No external visual assets are imported.
 
 M1 through M5 use generated placeholders so event-engine, projection,
 replay-debugger, runtime ingest, and demo-evidence work cannot be blocked by
 pixel-art availability or unclear licenses.
 
-S14 explicitly defers Tiled and external pixel-art import. The current town is
-rendered from generated Phaser shapes, local CSS, and text labels only.
+The current asset/map session adds `public/maps/town-v1.tiled.json`, a
+project-authored Tiled-compatible JSON object map. It contains terrain, routes,
+decor markers, and location object metadata, but no third-party tileset PNG,
+sprite sheet, downloaded art, or copied Stanford Smallville asset.
+
+The repository is public but currently has no `LICENSE` file. Project-authored
+map data and code should therefore be treated as repository-owned content until
+the project owner chooses an explicit open-source license.
 
 ## Placeholder-First Policy
 
@@ -26,6 +32,12 @@ Use generated placeholders unless a session explicitly requires imported art:
 
 Imported assets are a M5 concern unless an earlier session documents why they
 are necessary and records full license evidence here.
+
+## Project-Authored Asset Inventory
+
+| Asset name | Local path | Source | License / rights status | Attribution | Runtime boundary |
+| --- | --- | --- | --- | --- | --- |
+| Town v1 object map | `public/maps/town-v1.tiled.json` | Authored in this repository for this session | Project-owned repository content; no third-party license; no repo-level open-source license selected yet | none | Projection metadata only; `AgentEvent` remains source of truth |
 
 ## Required Fields For Every External Asset
 
@@ -48,18 +60,20 @@ If any license field is unclear, do not import the asset.
 
 | Asset | Format | Status | Rule |
 | --- | --- | --- | --- |
-| Town tilemap | Tiled JSON | deferred in S14 | introduce in a later visual-polish session only after object-layer IDs are specified |
+| Town tilemap | Tiled-compatible JSON | introduced as original object map | object-layer IDs must remain aligned with `src/events/routing.ts` |
 | Tileset | PNG | deferred | must include license and attribution status |
 | Agent spritesheet | PNG | deferred | optional until product polish |
 | Event icons | SVG or PNG | deferred | generated icons are acceptable first |
 | Bubble frame | PNG, SVG, or CSS | deferred | CSS first is acceptable |
 | Status markers | SVG, PNG, or CSS | deferred | generated markers are acceptable first |
 
-## S14 Defer Decision
+## Asset Pipeline Decision
 
-Tiled and external art are deferred because the product risk at M5 is demo
-comprehension, not asset fidelity. The existing generated layout already covers
-the required stable zones:
+The session introduces the map data layer but still defers external pixel art.
+That keeps the product moving toward a Smallville-like maintained town projection
+without importing ambiguous-license art into the public repository.
+
+The current map covers the required stable zones:
 
 - `town_hall`: planning and decisions
 - `library`: research
@@ -70,8 +84,12 @@ the required stable zones:
 - `square`: current shared/final surface
 
 No third-party asset has been copied into `public/`, `src/`, or `docs/`.
-Therefore commercial-use, attribution, and modification obligations are
-currently `not applicable`.
+Therefore third-party commercial-use, attribution, and modification obligations
+are currently `not applicable`.
+
+Next asset step: create a project-authored tileset and agent sprite sheet, or
+choose a third-party asset pack only after recording source URL, author, license,
+commercial-use status, attribution, modifications, and fallback behavior here.
 
 ## Import Checklist
 
