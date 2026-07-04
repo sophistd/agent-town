@@ -117,6 +117,31 @@ Screenshot / check artifacts:
 - Current generated project assets remain under the existing repository-owned
   content boundary documented in `docs/ASSET_LICENSES.md`.
 
+## Notion / Linear Write-Back
+
+Actual writes:
+
+- Notion S15 / M5 runbook page comment:
+  `393acb4b-b6e6-8123-b755-001d8d14c4cd`
+- Linear MDL-129 comment: `57e3d585-6785-4335-b9c0-d51a6e8426ae`
+- Linear MDL-152 comment: `60f380fd-246e-469e-a52a-896882b4fa00`
+
+Verified read-back:
+
+- Notion `get_comments` returned comment
+  `393acb4b-b6e6-8123-b755-001d8d14c4cd` with commit, evidence paths,
+  verification, and scope truth.
+- Linear `list_comments` for MDL-129 returned comment
+  `57e3d585-6785-4335-b9c0-d51a6e8426ae`.
+- Linear `list_comments` for MDL-152 returned comment
+  `60f380fd-246e-469e-a52a-896882b4fa00`.
+
+Scope truth:
+
+- No Notion page content was replaced; this was a page-level comment.
+- No Linear issue state was changed.
+- No merge was performed.
+
 ## Remaining Limitations
 
 - This is deterministic adapter-produced revision, not autonomous free-running
