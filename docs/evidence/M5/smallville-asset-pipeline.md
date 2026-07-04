@@ -1115,6 +1115,16 @@ Memory continuation actual write-back after pushing commit
 - Linear MDL-144 comment created:
   `b79369f9-4e5a-44a5-87a9-19a568327fc4`.
 
+Agent-addressable Memory plan continuation actual write-back after pushing
+commit `07758c8 feat: add agent-addressable memory planning`:
+
+- Notion M5 spec comment created:
+  `393acb4b-b6e6-812a-a2b7-001d78d133f6`.
+- Linear MDL-129 comment created:
+  `c83cb052-cbd2-4b26-8992-86504cb7f756`.
+- Linear MDL-144 comment created:
+  `bedeed56-bc65-4515-8499-008dc13b2d51`.
+
 Read-back after write:
 
 - Notion `get_comments` returned comment
@@ -1165,6 +1175,14 @@ Read-back after write:
   `ad883943-5095-4fb1-b8ec-743a08c447f4`.
 - Linear `list_comments` for MDL-144 returned comment
   `b79369f9-4e5a-44a5-87a9-19a568327fc4`.
+- Notion `get_comments` returned comment
+  `393acb4b-b6e6-812a-a2b7-001d78d133f6` with PR, branch, commit, Memory
+  plan implementation, verification summary, evidence paths, scope truth, and
+  asset/license boundary.
+- Linear `list_comments` for MDL-129 returned comment
+  `c83cb052-cbd2-4b26-8992-86504cb7f756`.
+- Linear `list_comments` for MDL-144 returned comment
+  `bedeed56-bc65-4515-8499-008dc13b2d51`.
 
 Scope truth:
 
