@@ -2,10 +2,9 @@ import { useMemo, useState, type CSSProperties } from "react";
 
 import { mockEvents } from "../events/mockEvents";
 import { replay } from "../events/reducer";
-import {
-  selectCurrentEvent,
-  selectRunSummary,
-} from "../events/selectors";
+import { selectCurrentEvent } from "../events/selectors";
+import { selectAgent, selectEvent } from "../state/selectionStore";
+import { DetailPanel } from "./DetailPanel";
 import { Layout } from "./Layout";
 import { TownCanvas } from "./TownCanvas";
 
@@ -46,7 +45,6 @@ export function App() {
   );
   const currentState = timeline[cursor]?.state ?? replay(mockEvents, -1);
   const currentEvent = selectCurrentEvent(currentState, mockEvents);
-  const runSummary = selectRunSummary(currentState);
   const agents = Object.values(currentState.agents).sort((left, right) =>
     left.agentId.localeCompare(right.agentId),
   );
@@ -73,29 +71,11 @@ export function App() {
       }
       town={<TownCanvas worldState={currentState} />}
       detail={
-        <>
-          <h2 style={{ margin: "0 0 12px", fontSize: "16px" }}>Event / Agent Detail</h2>
-          <h2 style={{ margin: "0 0 12px", fontSize: "16px" }}>Run Summary</h2>
-          <dl style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "8px", margin: 0 }}>
-            <dt>Total</dt>
-            <dd style={{ margin: 0 }}>{runSummary.totalEvents}</dd>
-            <dt>Handoffs</dt>
-            <dd style={{ margin: 0 }}>{runSummary.handoffCount}</dd>
-            <dt>Tools</dt>
-            <dd style={{ margin: 0 }}>{runSummary.toolCallCount}</dd>
-            <dt>Memory</dt>
-            <dd style={{ margin: 0 }}>{runSummary.memoryActionCount}</dd>
-            <dt>Blocked</dt>
-            <dd style={{ margin: 0 }}>{runSummary.blockedCount}</dd>
-            <dt>Errors</dt>
-            <dd style={{ margin: 0 }}>{runSummary.errorCount}</dd>
-          </dl>
-
-          <h2 style={{ margin: "20px 0 12px", fontSize: "16px" }}>Current Event</h2>
-          <p style={compactTextStyle}>
-            {currentEvent?.id} · {currentEvent?.agentName} · {currentEvent?.summary}
-          </p>
-        </>
+        <DetailPanel
+          currentEvent={currentEvent}
+          events={mockEvents}
+          worldState={currentState}
+        />
       }
       timeline={
         <>
@@ -115,7 +95,11 @@ export function App() {
                 <button
                   type="button"
                   style={index === cursor ? selectedEventButtonStyle : eventButtonStyle}
-                  onClick={() => setCursor(index)}
+                  onClick={() => {
+                    setCursor(index);
+                    selectEvent(event.id, event.agentId);
+                    selectAgent(event.agentId);
+                  }}
                   aria-pressed={index === cursor}
                 >
                   <strong>

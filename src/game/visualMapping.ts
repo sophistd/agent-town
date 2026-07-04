@@ -1,4 +1,9 @@
-import type { AgentLocation, AgentRole, AgentStateStatus } from "../events/types";
+import type {
+  AgentLocation,
+  AgentRole,
+  AgentStateStatus,
+  BubbleKind,
+} from "../events/types";
 
 export type LocationVisual = {
   label: string;
@@ -19,6 +24,13 @@ export type StatusVisual = {
   fill: number;
   stroke: number;
   marker: string;
+};
+
+export type BubbleVisual = {
+  marker: string;
+  fill: number;
+  stroke: number;
+  text: string;
 };
 
 export const LOCATION_VISUALS: Record<Exclude<AgentLocation, "unknown">, LocationVisual> = {
@@ -151,3 +163,36 @@ export const STATUS_LEGEND_ORDER: AgentStateStatus[] = [
   "error",
   "done",
 ];
+
+export const BUBBLE_VISUALS: Record<BubbleKind, BubbleVisual> = {
+  thought: {
+    marker: "THOUGHT",
+    fill: 0xfff6d8,
+    stroke: 0xb88a3d,
+    text: "#2f2a1d",
+  },
+  message: {
+    marker: "MESSAGE",
+    fill: 0xe9f4f2,
+    stroke: 0x4d8873,
+    text: "#1f3832",
+  },
+  tool: {
+    marker: "TOOL / MEMORY",
+    fill: 0xeee7f6,
+    stroke: 0x7a639d,
+    text: "#302942",
+  },
+  error: {
+    marker: "BLOCKED / ERROR",
+    fill: 0xf9e0d8,
+    stroke: 0xa65f57,
+    text: "#4b2420",
+  },
+  done: {
+    marker: "DONE",
+    fill: 0xe7f3e7,
+    stroke: 0x47784f,
+    text: "#233b27",
+  },
+};

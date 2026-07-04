@@ -1,13 +1,19 @@
 import Phaser from "phaser";
 
 import type { AgentState, WorldState } from "../events/types";
+import { selectAgent } from "../state/selectionStore";
 import {
   ROLE_VISUALS,
   STATUS_LEGEND_ORDER,
   STATUS_VISUALS,
 } from "./visualMapping";
 
-function getAgentOffsets(agents: AgentState[]): Map<string, { x: number; y: number }> {
+export type RenderPosition = {
+  x: number;
+  y: number;
+};
+
+function getAgentOffsets(agents: AgentState[]): Map<string, RenderPosition> {
   const byLocation = new Map<string, AgentState[]>();
 
   for (const agent of agents) {
@@ -32,6 +38,24 @@ function getAgentOffsets(agents: AgentState[]): Map<string, { x: number; y: numb
   }
 
   return offsets;
+}
+
+export function getAgentRenderPositions(worldState: WorldState): Map<string, RenderPosition> {
+  const agents = Object.values(worldState.agents).sort((left, right) =>
+    left.agentId.localeCompare(right.agentId),
+  );
+  const offsets = getAgentOffsets(agents);
+  const positions = new Map<string, RenderPosition>();
+
+  for (const agent of agents) {
+    const offset = offsets.get(agent.agentId) ?? { x: 0, y: 0 };
+    positions.set(agent.agentId, {
+      x: agent.x + offset.x,
+      y: agent.y + offset.y,
+    });
+  }
+
+  return positions;
 }
 
 function renderStatusBadge(
@@ -108,7 +132,13 @@ function renderAgent(
     })
     .setOrigin(0.5, 0.5);
 
-  layer.add([shadow, body, labelBackground, nameLabel, statusLabel]);
+  const hitZone = scene.add
+    .zone(x, y + 12, 76, 108)
+    .setOrigin(0.5, 0.5)
+    .setInteractive();
+  hitZone.on("pointerdown", () => selectAgent(agent.agentId));
+
+  layer.add([shadow, body, labelBackground, nameLabel, statusLabel, hitZone]);
 }
 
 function renderStatusLegend(
@@ -154,15 +184,16 @@ export function renderAgents(
   const agents = Object.values(worldState.agents).sort((left, right) =>
     left.agentId.localeCompare(right.agentId),
   );
-  const offsets = getAgentOffsets(agents);
+  const positions = getAgentRenderPositions(worldState);
 
   for (const agent of agents) {
+    const position = positions.get(agent.agentId) ?? { x: agent.x, y: agent.y };
     renderAgent(
       scene,
       layer,
       agent,
       agent.agentId === worldState.selectedAgentId,
-      offsets.get(agent.agentId) ?? { x: 0, y: 0 },
+      { x: position.x - agent.x, y: position.y - agent.y },
     );
   }
 

@@ -2,6 +2,8 @@ import Phaser from "phaser";
 
 import type { WorldState } from "../events/types";
 import { renderAgents } from "./renderAgents";
+import { renderBubbles } from "./renderBubbles";
+import { renderEdges } from "./renderEdges";
 import { renderLocations } from "./renderLocations";
 
 export const AGENT_TOWN_SCENE_KEY = "AgentTownScene";
@@ -71,7 +73,9 @@ export class AgentTownScene extends Phaser.Scene {
     }
 
     renderLocations(this, this.townLayer);
+    renderEdges(this, this.townLayer, state);
     renderAgents(this, this.townLayer, state);
+    renderBubbles(this, this.townLayer, state);
 
     const footer = this.add.text(
       36,
