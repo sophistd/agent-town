@@ -173,11 +173,25 @@ Pixel checks from `smallville-llm-plan-pixel-check.json`:
 
 ## Notion / Linear Sync
 
-Pending until the implementation commit is pushed:
+Actual write-back after pushing commit
+`f905938 feat: add llm planner contract adapter`:
 
-- Notion M5 spec comment: pending actual write + read-back.
-- Linear MDL-129 comment: pending actual write + read-back.
-- Linear MDL-144 comment: pending actual write + read-back.
+- Notion M5 spec comment created:
+  `393acb4b-b6e6-8164-b233-001d462e83c1`.
+- Linear MDL-129 comment created:
+  `72694329-84f6-4e5b-ba17-4db2a2bd8a85`.
+- Linear MDL-144 comment created:
+  `110bb9c4-88d1-4c80-aa14-27d8a98b5307`.
+
+Read-back after write:
+
+- Notion `get_comments` returned comment
+  `393acb4b-b6e6-8164-b233-001d462e83c1` with commit, scope truth,
+  verification, evidence paths, and remaining gap.
+- Linear `list_comments` for MDL-129 returned comment
+  `72694329-84f6-4e5b-ba17-4db2a2bd8a85`.
+- Linear `list_comments` for MDL-144 returned comment
+  `110bb9c4-88d1-4c80-aa14-27d8a98b5307`.
 
 ## Scope Truth
 
