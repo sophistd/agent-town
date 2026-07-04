@@ -1,10 +1,11 @@
 import type { CSSProperties, ReactNode } from "react";
 
 const shellStyle = {
-  minHeight: "100vh",
+  height: "100vh",
   margin: 0,
   display: "grid",
   gridTemplateRows: "auto minmax(0, 1fr) 186px",
+  overflow: "hidden",
   background: "#f7f7f4",
   color: "#202124",
   fontFamily:

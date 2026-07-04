@@ -17,10 +17,15 @@ const mutedTextStyle = {
 
 const dataRowStyle = {
   display: "grid",
-  gridTemplateColumns: "104px minmax(0, 1fr)",
+  gridTemplateColumns: "112px minmax(0, 1fr)",
   gap: "8px",
   margin: "8px 0",
   fontSize: "13px",
+} satisfies CSSProperties;
+
+const valueStyle = {
+  minWidth: 0,
+  overflowWrap: "anywhere",
 } satisfies CSSProperties;
 
 const preStyle = {
@@ -45,6 +50,22 @@ type DetailPanelProps = {
 
 function findEvent(events: readonly AgentEvent[], eventId: string | undefined) {
   return events.find((event) => event.id === eventId);
+}
+
+function formatValue(value: unknown): string {
+  if (value === undefined || value === null) {
+    return "none";
+  }
+
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  return JSON.stringify(value);
 }
 
 export function DetailPanel({ currentEvent, events, worldState }: DetailPanelProps) {
@@ -76,19 +97,19 @@ export function DetailPanel({ currentEvent, events, worldState }: DetailPanelPro
           <>
             <div style={dataRowStyle}>
               <strong>Name</strong>
-              <span>{selectedAgent.agentName}</span>
+              <span style={valueStyle}>{selectedAgent.agentName}</span>
             </div>
             <div style={dataRowStyle}>
               <strong>Role</strong>
-              <span>{selectedAgent.role}</span>
+              <span style={valueStyle}>{selectedAgent.role}</span>
             </div>
             <div style={dataRowStyle}>
               <strong>Status</strong>
-              <span>{selectedAgent.status}</span>
+              <span style={valueStyle}>{selectedAgent.status}</span>
             </div>
             <div style={dataRowStyle}>
               <strong>Location</strong>
-              <span>{selectedAgent.location}</span>
+              <span style={valueStyle}>{selectedAgent.location}</span>
             </div>
           </>
         )}
@@ -101,24 +122,85 @@ export function DetailPanel({ currentEvent, events, worldState }: DetailPanelPro
         ) : (
           <>
             <div style={dataRowStyle}>
-              <strong>Type</strong>
-              <span>{selectedEvent.type}</span>
+              <strong>ID</strong>
+              <span style={valueStyle}>{selectedEvent.id}</span>
+            </div>
+            <div style={dataRowStyle}>
+              <strong>Sequence</strong>
+              <span style={valueStyle}>{selectedEvent.sequence}</span>
+            </div>
+            <div style={dataRowStyle}>
+              <strong>Timestamp</strong>
+              <span style={valueStyle}>{selectedEvent.timestamp}</span>
+            </div>
+            <div style={dataRowStyle}>
+              <strong>Run ID</strong>
+              <span style={valueStyle}>{selectedEvent.runId}</span>
+            </div>
+            <div style={dataRowStyle}>
+              <strong>Task ID</strong>
+              <span style={valueStyle}>{selectedEvent.taskId}</span>
             </div>
             <div style={dataRowStyle}>
               <strong>Agent</strong>
-              <span>{selectedEvent.agentName}</span>
+              <span style={valueStyle}>
+                {selectedEvent.agentName} ({selectedEvent.agentId})
+              </span>
+            </div>
+            <div style={dataRowStyle}>
+              <strong>Role</strong>
+              <span style={valueStyle}>{selectedEvent.agentRole}</span>
+            </div>
+            <div style={dataRowStyle}>
+              <strong>Type</strong>
+              <span style={valueStyle}>{selectedEvent.type}</span>
+            </div>
+            <div style={dataRowStyle}>
+              <strong>Status</strong>
+              <span style={valueStyle}>{formatValue(selectedEvent.status)}</span>
             </div>
             <div style={dataRowStyle}>
               <strong>Summary</strong>
-              <span>{selectedEvent.summary ?? "none"}</span>
+              <span style={valueStyle}>{formatValue(selectedEvent.summary)}</span>
+            </div>
+            <div style={dataRowStyle}>
+              <strong>Content</strong>
+              <span style={valueStyle}>{selectedEvent.content}</span>
             </div>
             <div style={dataRowStyle}>
               <strong>Target</strong>
-              <span>{selectedEvent.targetAgentId ?? "none"}</span>
+              <span style={valueStyle}>
+                agent={formatValue(selectedEvent.targetAgentId)}; task=
+                {formatValue(selectedEvent.targetTaskId)}
+              </span>
             </div>
             <div style={dataRowStyle}>
               <strong>Tool</strong>
-              <span>{selectedEvent.toolName ?? "none"}</span>
+              <span style={valueStyle}>{formatValue(selectedEvent.toolName)}</span>
+            </div>
+            <div style={dataRowStyle}>
+              <strong>Tool input</strong>
+              <span style={valueStyle}>{formatValue(selectedEvent.toolInput)}</span>
+            </div>
+            <div style={dataRowStyle}>
+              <strong>Tool output</strong>
+              <span style={valueStyle}>{formatValue(selectedEvent.toolOutputSummary)}</span>
+            </div>
+            <div style={dataRowStyle}>
+              <strong>Artifacts</strong>
+              <span style={valueStyle}>{formatValue(selectedEvent.artifactIds)}</span>
+            </div>
+            <div style={dataRowStyle}>
+              <strong>File path</strong>
+              <span style={valueStyle}>{formatValue(selectedEvent.filePath)}</span>
+            </div>
+            <div style={dataRowStyle}>
+              <strong>Metrics</strong>
+              <span style={valueStyle}>{formatValue(selectedEvent.metrics)}</span>
+            </div>
+            <div style={dataRowStyle}>
+              <strong>Metadata</strong>
+              <span style={valueStyle}>{formatValue(selectedEvent.metadata)}</span>
             </div>
             <pre style={preStyle}>{JSON.stringify(selectedEvent, null, 2)}</pre>
           </>

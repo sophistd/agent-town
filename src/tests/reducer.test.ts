@@ -6,10 +6,14 @@ import { mockStressRun } from "../events/mockStressRun";
 import { createInitialWorldState, reduceEvent, replay } from "../events/reducer";
 import {
   selectAgentState,
+  selectActiveAgentCount,
   selectBlockedEvents,
   selectCurrentEvent,
   selectEdges,
   selectErrorEvents,
+  selectFirstBlockedEvent,
+  selectFirstErrorEvent,
+  selectPreviousEvent,
   selectRunSummary,
   selectSelectedEvent,
   selectVisibleBubbles,
@@ -182,5 +186,9 @@ describe("event reducer", () => {
     expect(selectEdges(state)).toHaveLength(10);
     expect(selectBlockedEvents(mockFailureRun)).toHaveLength(2);
     expect(selectErrorEvents(mockFailureRun)).toHaveLength(1);
+    expect(selectActiveAgentCount(state)).toBe(5);
+    expect(selectFirstErrorEvent(mockFailureRun)?.id).toBe("failure-008");
+    expect(selectFirstBlockedEvent(mockFailureRun)?.id).toBe("failure-009");
+    expect(selectPreviousEvent(mockFailureRun, "failure-008")?.id).toBe("failure-007");
   });
 });

@@ -1,11 +1,14 @@
-import { useEffect, useMemo, type CSSProperties } from "react";
+import { useCallback, useEffect, useMemo, type CSSProperties } from "react";
 
-import { mockEvents } from "../events/mockEvents";
+import { mockFailureRun } from "../events/mockFailureRun";
 import { replay } from "../events/reducer";
 import { selectCurrentEvent } from "../events/selectors";
-import { advancePlayback, usePlayback } from "../state/playbackStore";
+import type { AgentEvent } from "../events/types";
+import { advancePlayback, setPlaybackCursor, usePlayback } from "../state/playbackStore";
+import { selectAgent, selectEvent } from "../state/selectionStore";
 import { DetailPanel } from "./DetailPanel";
 import { Layout } from "./Layout";
+import { RunSummary } from "./RunSummary";
 import { Timeline } from "./Timeline";
 import { TownCanvas } from "./TownCanvas";
 
@@ -16,16 +19,33 @@ const compactTextStyle = {
   color: "#42423d",
 } satisfies CSSProperties;
 
+const demoEvents = mockFailureRun;
+
 export function App() {
   const playback = usePlayback();
   const currentState = useMemo(
-    () => replay(mockEvents, playback.cursor),
+    () => replay(demoEvents, playback.cursor),
     [playback.cursor],
   );
-  const currentEvent = selectCurrentEvent(currentState, mockEvents);
+  const summaryState = useMemo(
+    () => replay(demoEvents, demoEvents.length - 1),
+    [],
+  );
+  const currentEvent = selectCurrentEvent(currentState, demoEvents);
   const agents = Object.values(currentState.agents).sort((left, right) =>
     left.agentId.localeCompare(right.agentId),
   );
+  const jumpToEvent = useCallback((event: AgentEvent) => {
+    const index = demoEvents.findIndex((candidate) => candidate.id === event.id);
+
+    if (index < 0) {
+      return;
+    }
+
+    setPlaybackCursor(index, demoEvents.length);
+    selectEvent(event.id, event.agentId);
+    selectAgent(event.agentId);
+  }, []);
 
   useEffect(() => {
     if (!playback.isPlaying) {
@@ -33,7 +53,7 @@ export function App() {
     }
 
     const timer = window.setInterval(
-      () => advancePlayback(mockEvents.length),
+      () => advancePlayback(demoEvents.length),
       playback.intervalMs,
     );
 
@@ -62,14 +82,21 @@ export function App() {
       }
       town={<TownCanvas worldState={currentState} />}
       detail={
-        <DetailPanel
-          currentEvent={currentEvent}
-          events={mockEvents}
-          worldState={currentState}
-        />
+        <>
+          <RunSummary
+            events={demoEvents}
+            onJumpToEvent={jumpToEvent}
+            worldState={summaryState}
+          />
+          <DetailPanel
+            currentEvent={currentEvent}
+            events={demoEvents}
+            worldState={currentState}
+          />
+        </>
       }
       timeline={
-        <Timeline events={mockEvents} playback={playback} />
+        <Timeline events={demoEvents} playback={playback} />
       }
     />
   );

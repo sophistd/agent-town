@@ -1,8 +1,5 @@
 # M3 Debuggability Checklist
 
-Use this checklist when M3 introduces timeline, replay, detail, and failure
-shortcuts.
-
 ## Source
 
 - Metrics doc: `docs/METRICS.md`
@@ -11,37 +8,41 @@ shortcuts.
 
 ## Test Setup
 
-- Run or recording source:
-- Event fixture:
-- Viewer:
-- Date:
-- Reviewer:
+- Run or recording source: `src/events/mockFailureRun.ts`
+- Event fixture: `mockFailureRun`
+- Viewer: local Vite app at `http://127.0.0.1:5173/`
+- Browser verification: Chrome DevTools Protocol on a temporary Chrome profile
+- Date: 2026-07-04
+- Reviewer: Codex
 
 ## Replay And Detail
 
-- [ ] Timeline lists every event in chronological order.
-- [ ] Play, pause, previous, next, and jump controls work.
-- [ ] Timeline cursor and Town View remain synchronized.
-- [ ] Selected event and playback current event are distinguishable.
-- [ ] Detail Panel shows raw event fields for selected event.
-- [ ] Bubble or visual marker maps back to the selected raw event.
-- [ ] Replay is deterministic for the same fixture and cursor.
+- [x] Timeline lists every event in sequence order.
+- [x] Play, pause, previous, next, and jump controls work.
+- [x] Timeline cursor and Town View remain synchronized.
+- [x] Selected event and playback current event are distinguishable.
+- [x] Detail Panel shows raw event fields for selected event.
+- [x] Bubble or visual marker maps back to the selected raw event.
+- [x] Replay is deterministic for the same fixture and cursor.
 
 ## Failure Context
 
-- [ ] Run Summary exposes first blocked event.
-- [ ] Run Summary exposes first error event.
-- [ ] Jump to first error takes 1 click or less from summary.
-- [ ] Previous context before error is reachable in 2 clicks or less.
-- [ ] Blocked and error markers remain visible long enough to inspect.
-- [ ] Run summary counts match selectors.
+- [x] Run Summary exposes first blocked event: `failure-009`.
+- [x] Run Summary exposes first error event: `failure-008`.
+- [x] Jump to first error takes 1 click from summary.
+- [x] Previous context before error is reachable in 2 clicks: `First error` -> `Before error`.
+- [x] Blocked and error markers remain visible long enough to inspect.
+- [x] Run summary counts match selectors.
 
 ## Result
 
 ```text
-Pass / Fail:
-Missing items:
-Replay mismatch:
+Pass / Fail: Pass
+Missing items: none
+Replay mismatch: none observed
 Evidence files:
-Required fixes:
+- docs/evidence/M3/failure-jump.md
+- docs/evidence/M3/failure-jump.png
+- docs/evidence/M3/detail-panel.png
+Required fixes: none
 ```

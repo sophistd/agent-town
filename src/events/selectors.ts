@@ -33,6 +33,10 @@ export function selectRunSummary(state: WorldState): RunSummary {
   return state.runSummary;
 }
 
+export function selectActiveAgentCount(state: WorldState): number {
+  return Object.keys(state.agents).length;
+}
+
 export function selectVisibleBubbles(state: WorldState): WorldState["visibleBubbles"] {
   return state.visibleBubbles;
 }
@@ -47,4 +51,40 @@ export function selectBlockedEvents(events: readonly AgentEvent[]): AgentEvent[]
 
 export function selectErrorEvents(events: readonly AgentEvent[]): AgentEvent[] {
   return events.filter((event) => event.type === "error" || event.status === "failed");
+}
+
+function sortEventsBySequence(events: readonly AgentEvent[]): AgentEvent[] {
+  return [...events].sort((left, right) => {
+    if (left.sequence !== right.sequence) {
+      return left.sequence - right.sequence;
+    }
+
+    return left.id.localeCompare(right.id);
+  });
+}
+
+export function selectFirstBlockedEvent(events: readonly AgentEvent[]): AgentEvent | undefined {
+  return sortEventsBySequence(selectBlockedEvents(events))[0];
+}
+
+export function selectFirstErrorEvent(events: readonly AgentEvent[]): AgentEvent | undefined {
+  return sortEventsBySequence(selectErrorEvents(events))[0];
+}
+
+export function selectPreviousEvent(
+  events: readonly AgentEvent[],
+  eventId: string | undefined,
+): AgentEvent | undefined {
+  if (eventId === undefined) {
+    return undefined;
+  }
+
+  const sortedEvents = sortEventsBySequence(events);
+  const eventIndex = sortedEvents.findIndex((event) => event.id === eventId);
+
+  if (eventIndex <= 0) {
+    return undefined;
+  }
+
+  return sortedEvents[eventIndex - 1];
 }
