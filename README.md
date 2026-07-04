@@ -213,6 +213,22 @@ Buildings are projection targets for event locations.
 If a later session introduces a Tiled map, the Tiled object layer must preserve
 the stable location IDs documented in `docs/VISUAL_MAPPING.md`.
 
+## Adding An Agent Role
+
+Agent roles are stable runtime identities, not visual-only labels.
+
+1. Add or confirm the role value in `src/events/constants.ts` and
+   `src/events/types.ts`.
+2. Update validation in `src/events/validators.ts` if the role vocabulary
+   changes.
+3. Add role color, label, or marker behavior in `src/game/visualMapping.ts`.
+4. Add fixture coverage that proves the role can appear in an `AgentEvent`.
+5. Add or update reducer/renderer tests if role behavior changes.
+6. Document the role in `docs/EVENT_SCHEMA.md` and `docs/VISUAL_MAPPING.md`.
+
+Do not infer a role from sprite choice or building position. Role must come
+from the event stream and derived `WorldState`.
+
 ## Adding An Adapter
 
 Adapters are source boundaries.

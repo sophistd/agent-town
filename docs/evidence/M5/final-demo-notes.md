@@ -105,11 +105,11 @@ Relevant output: tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.
 
 pnpm test
 Result: passed
-Relevant output: Test Files 6 passed (6); Tests 29 passed (29); Duration 570ms
+Relevant output: Test Files 6 passed (6); Tests 29 passed (29); Duration 564ms
 
 pnpm build
 Result: passed
-Relevant output: vite built in 1.87s
+Relevant output: vite built in 1.90s
 ```
 
 Known build warning:
@@ -134,6 +134,8 @@ packaging regression.
 - [x] Visual density rules are documented.
 - [x] Final docs link to Notion root spec and Linear gates.
 - [x] Known limitations and next-phase recommendations are written.
+- [x] Docs explain how to add a new event type, new building, new agent role,
+  and new adapter.
 
 ## Known Limitations
 
