@@ -994,6 +994,16 @@ Intervention continuation actual write-back after pushing commit
 - Linear MDL-144 comment created:
   `225abfeb-df5b-4ce0-89e3-90cae1f04cbc`.
 
+Memory continuation actual write-back after pushing commit
+`16e816c feat: add persistent memory recall source`:
+
+- Notion M5 spec comment created:
+  `393acb4b-b6e6-819e-8668-001d2510ee7e`.
+- Linear MDL-129 comment created:
+  `ad883943-5095-4fb1-b8ec-743a08c447f4`.
+- Linear MDL-144 comment created:
+  `b79369f9-4e5a-44a5-87a9-19a568327fc4`.
+
 Read-back after write:
 
 - Notion `get_comments` returned comment
@@ -1036,6 +1046,14 @@ Read-back after write:
   `9a1ff14c-17b4-4691-8770-873d14109f36`.
 - Linear `list_comments` for MDL-144 returned comment
   `225abfeb-df5b-4ce0-89e3-90cae1f04cbc`.
+- Notion `get_comments` returned comment
+  `393acb4b-b6e6-819e-8668-001d2510ee7e` with PR, branch, commit, Memory
+  implementation, verification summary, evidence paths, scope truth, and
+  asset/license boundary.
+- Linear `list_comments` for MDL-129 returned comment
+  `ad883943-5095-4fb1-b8ec-743a08c447f4`.
+- Linear `list_comments` for MDL-144 returned comment
+  `b79369f9-4e5a-44a5-87a9-19a568327fc4`.
 
 Scope truth:
 
