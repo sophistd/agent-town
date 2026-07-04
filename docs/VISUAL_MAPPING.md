@@ -6,15 +6,18 @@ Agent Town renders `WorldState`; it does not create business facts inside the re
 
 Coordinates are canonical in `src/events/routing.ts`. The renderer imports those coordinates and only adds labels, colors, and placeholder building shapes.
 
-| Location | Label | Projection role |
-| --- | --- | --- |
-| `town_hall` | Town Hall | Planning and decisions |
-| `library` | Library | Research, search, and reading |
-| `workshop` | Workshop | Editing, building, tests, and tool work |
-| `archive` | Archive | Memory reads and writes |
-| `review_room` | Review Room | Review, blocked, and error inspection |
-| `dispatch_board` | Dispatch Board | Handoffs and queued work |
-| `square` | Square | Current shared surface and done state |
+| Stable zone | Location ID | Label | Projection role |
+| --- | --- | --- | --- |
+| planning | `town_hall` | Town Hall | Planning and decisions |
+| research | `library` | Library | Research, search, and reading |
+| production | `workshop` | Workshop | Editing, building, tests, and tool work |
+| memory | `archive` | Archive | Memory reads and writes |
+| review | `review_room` | Review Room | Review, blocked, and error inspection |
+| queue | `dispatch_board` | Dispatch Board | Handoffs and queued work |
+| final square | `square` | Square | Current shared surface and done state |
+
+S14 defers Tiled import. Any later Tiled map must preserve these location IDs
+in its object layer before replacing the generated placeholder layout.
 
 ## Agent Mapping
 
@@ -72,3 +75,6 @@ S08 includes a status legend for idle, thinking, waiting, blocked, error, and do
 - `src/game/renderAgents.ts` renders agent identity, role color, status marker, and label from `WorldState`.
 - `src/game/visualMapping.ts` contains visual labels/colors only. It does not route events.
 - `src/events/routing.ts` remains the source of event-to-location routing.
+- Placeholder rendering remains the fallback for M5. It uses generated Phaser
+  shapes, labels, status markers, bubbles, and edges; no external asset owns
+  runtime facts.
