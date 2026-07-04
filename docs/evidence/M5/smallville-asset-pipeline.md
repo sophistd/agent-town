@@ -401,6 +401,16 @@ Pixel-asset revision actual write-back after pushing commit
 - Linear MDL-144 comment created:
   `7e73ab22-6e81-4bfd-832c-6e88cea5ebed`.
 
+Town day / interior-anchor continuation actual write-back after pushing commit
+`b54134f feat: add event-driven town day projection`:
+
+- Notion M5 spec comment created:
+  `393acb4b-b6e6-817b-80ce-001d605e39f8`.
+- Linear MDL-129 comment created:
+  `11dfe30c-76ea-44da-b93f-6d07e2dcd18e`.
+- Linear MDL-144 comment created:
+  `3e976fa0-88a8-41bd-b5d8-442e52a0078e`.
+
 Read-back after write:
 
 - Notion `get_comments` returned comment
@@ -411,6 +421,14 @@ Read-back after write:
   `5448a0f8-f179-45b2-a7bb-6d12b07e5a2a`.
 - Linear `list_comments` for MDL-144 returned comment
   `7e73ab22-6e81-4bfd-832c-6e88cea5ebed`.
+- Notion `get_comments` returned comment
+  `393acb4b-b6e6-817b-80ce-001d605e39f8` with PR, branch, commit, Town day
+  implementation, verification summary, evidence paths, license boundary, and
+  remaining limitation.
+- Linear `list_comments` for MDL-129 returned comment
+  `11dfe30c-76ea-44da-b93f-6d07e2dcd18e`.
+- Linear `list_comments` for MDL-144 returned comment
+  `3e976fa0-88a8-41bd-b5d8-442e52a0078e`.
 
 Scope truth:
 
