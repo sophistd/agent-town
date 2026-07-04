@@ -3,6 +3,8 @@
 Session: post-M5 asset/map follow-up
 Date: 2026-07-04
 Branch: `codex/smallville-asset-pipeline`
+PR: `https://github.com/sophistd/agent-town/pull/1`
+Implementation commit: `183acc9 feat: add original town map asset pipeline`
 
 ## Scope
 
@@ -211,20 +213,38 @@ license boundary.
 
 ## Notion / Linear Sync
 
-Status before PR creation:
+Read status:
 
-- Notion read-back: actual read happened through connector fetch/search.
-- Linear read-back: actual read happened through connector fetch/search.
-- Notion write-back: pending PR URL.
-- Linear write-back: pending PR URL.
+- Notion read-back: actual read happened through connector fetch/search for the
+  runbook index, S14, S15, M5 spec, and root spec.
+- Linear read-back: actual read happened through connector fetch/search for
+  MDL-144, MDL-145, MDL-129, and MDL-152.
 
-Planned write-back after PR exists:
+Actual write-back:
 
-- Add a Notion comment to the M5 spec with branch, PR, evidence paths, and
-  asset-license status.
-- Add a Linear comment to MDL-129 or MDL-144 with branch, PR, evidence paths,
-  verification summary, and remaining risks.
-- Read both back and record actual write/read-back in the final response.
+- Notion M5 spec comment created:
+  `393acb4b-b6e6-81b0-bfa6-001d71a7ca2a`.
+- Linear MDL-129 comment created:
+  `191a6b4e-87f4-4c7b-9460-0ba26f1f04d8`.
+- Linear MDL-144 comment created:
+  `d4f612b7-98c3-4dab-8d92-e00ef8f56580`.
+
+Read-back after write:
+
+- Notion `get_comments` returned the M5 spec comment with PR
+  `https://github.com/sophistd/agent-town/pull/1`, branch, evidence paths,
+  verification summary, and asset-license status.
+- Linear `list_comments` for MDL-129 returned comment
+  `191a6b4e-87f4-4c7b-9460-0ba26f1f04d8`.
+- Linear `list_comments` for MDL-144 returned comment
+  `d4f612b7-98c3-4dab-8d92-e00ef8f56580`.
+
+Scope truth:
+
+- No new Linear issue was created.
+- No Linear issue or gate was closed or reopened.
+- No Notion page content was replaced; the Notion write was a page-level
+  comment.
 
 ## Remaining Limitations
 
