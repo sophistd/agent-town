@@ -17,6 +17,7 @@ import {
   buildAgentAddressableMemoryPlanResult,
   buildPersistentMemoryRecallResult,
 } from "../adapters/persistentMemoryAdapter";
+import { buildDeterministicLlmPlannerResult } from "../adapters/llmPlannerAdapter";
 import { parseNaturalLanguageIntervention } from "../adapters/interventionAdapter";
 import {
   mockSmallvilleCognitiveRun,
@@ -260,7 +261,7 @@ export function App() {
       setQuarantinedEvents(nextQuarantinedEvents);
       setPlaybackCursor(0, nextEvents.length);
 
-      if (source !== "memory" && source !== "memory-plan") {
+      if (source !== "memory" && source !== "memory-plan" && source !== "llm-plan") {
         const savedAt = new Date().toISOString();
         const incomingMemoryRecords = extractPersistentMemoryRecords(nextEvents, savedAt);
 
@@ -429,6 +430,18 @@ export function App() {
     );
   }, [applyAdapterResult, disconnectWebSocket]);
 
+  const loadLlmPlannerRun = useCallback(() => {
+    disconnectWebSocket();
+    applyAdapterResult(
+      "llm-plan",
+      buildDeterministicLlmPlannerResult({
+        previousEvents: eventsRef.current,
+        records: persistentMemoryRecordsRef.current,
+      }),
+      "LLM planner contract",
+    );
+  }, [applyAdapterResult, disconnectWebSocket]);
+
   const loadWebSocketSample = useCallback(() => {
     disconnectWebSocket();
     applyAdapterResult(
@@ -529,6 +542,7 @@ export function App() {
             onImportJsonl={importJsonl}
             onLoadCognitiveRun={loadCognitiveRun}
             onLoadAgentMemoryPlan={loadAgentMemoryPlan}
+            onLoadLlmPlannerRun={loadLlmPlannerRun}
             onLoadPersistentMemory={loadPersistentMemory}
             onLoadMock={loadMock}
             onLoadRoutineRun={loadRoutineRun}

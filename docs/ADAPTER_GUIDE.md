@@ -151,6 +151,27 @@ covered by the WebSocket mapping table above. The app's Import Source panel can
 connect to that URL, and every accepted message is appended to the current
 WebSocket run before replay.
 
+## LLM Planner Contract Adapter
+
+`src/adapters/llmPlannerAdapter.ts` implements the current LLM planner contract
+path.
+
+Rules:
+
+- The request builder summarizes prior canonical events and durable memory
+  records into a model-ready JSON contract.
+- The parser accepts either an object or JSON string response.
+- Each response step must map to one canonical `AgentEvent`.
+- Missing required event fields are quarantined.
+- `message` and `handoff` steps without `targetAgentId` are quarantined.
+- `tool_call` steps without `toolName` are quarantined.
+- Duplicate event IDs and duplicate `(runId, sequence)` pairs are quarantined.
+- Accepted events receive `metadata.source = "llm"` and
+  `metadata.llmPlanner` with request id, prompt hash, model role, model name,
+  response step id, prior-run context, and selected memory record IDs.
+- The current UI source uses a deterministic model-shaped fixture response. It
+  proves the adapter contract, not a live provider integration.
+
 ## Adding Another Source
 
 1. Create `src/adapters/<source>Adapter.ts`.

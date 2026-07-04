@@ -84,6 +84,7 @@ The demo can switch among:
 - natural-language Intervention source
 - persistent Memory recall source
 - agent-addressable Memory plan source
+- deterministic LLM planner contract source
 - native JSONL sample
 - WebSocket sample
 

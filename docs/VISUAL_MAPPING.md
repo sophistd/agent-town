@@ -124,6 +124,14 @@ records by relevance, importance, recency, and agent affinity, then emits
 only `WorldState`; query scores and selected record IDs live in event metadata
 for Detail inspection.
 
+`src/adapters/llmPlannerAdapter.ts` provides the deterministic "LLM plan"
+contract source. It builds a JSON request for future model-backed planning and
+parses a model-shaped JSON response into canonical `AgentEvent[]` with
+`metadata.llmPlanner`. Accepted steps replay through the same `WorldState`
+path; rejected JSON or invalid steps are quarantined. The current source uses a
+deterministic fixture response and does not let a model, prompt, or renderer
+own runtime facts.
+
 | Role | Default visible identity |
 | --- | --- |
 | `planner` | Planner |
@@ -222,6 +230,8 @@ Current limitations:
   compact prototype map rather than a complete generative-agents world with
   autonomous/adaptive schedules, server-backed persistent memories, animation
   cycles, or editable large-world Tiled authoring.
+- The `LLM plan` source proves model-output parsing and projection through
+  canonical events, but it is not a live provider-backed behavior generator.
 - There is no dedicated search/filter input yet. S15 records the rule and
   preserves Timeline/detail-based inspection; a later session can add filter UI
   if product review makes that the highest-risk gap.

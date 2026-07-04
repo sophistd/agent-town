@@ -60,6 +60,7 @@ export type ProjectionEdgeKind =
 export type AgentEventSource =
   | "intervention"
   | "memory"
+  | "llm"
   | "mock"
   | "jsonl"
   | "websocket"

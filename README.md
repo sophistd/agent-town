@@ -95,7 +95,7 @@ The current surface includes:
 - a Detail panel for the selected event and run summary
 - an Import Source panel for mock, Town day, Cognitive, Social day,
   Routine day, natural-language Intervention, persistent Memory, Memory plan,
-  native JSONL, and WebSocket-shaped input
+  LLM plan, native JSONL, and WebSocket-shaped input
 - adapter warnings and quarantine counts
 
 ## Architecture
@@ -157,10 +157,14 @@ Quick path:
    relevant records by agent identity, query relevance, importance, and
    recency, then emit retrieval, reflection, and planning evidence as canonical
    events.
-13. Use Detail to inspect the selected event fields.
-14. Use Import Source -> JSONL to import the native JSONL sample in the text
+13. Use Import Source -> LLM plan to inspect the model-planner contract path:
+   a model-shaped JSON response is parsed, validated, quarantined if invalid,
+   and replayed only as canonical `AgentEvent` evidence. This is still a
+   deterministic contract fixture, not a live model provider call.
+14. Use Detail to inspect the selected event fields.
+15. Use Import Source -> JSONL to import the native JSONL sample in the text
    area.
-15. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
+16. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
    the same projection pipeline.
 
 Relevant screenshots and evidence:
@@ -273,14 +277,14 @@ from the event stream and derived `WorldState`.
 
 `docs/SMALLVILLE_PARITY.md` tracks the actual gap to Stanford Smallville-style
 generative agents. The current `Cognitive`, `Social day`, `Routine day`,
-`Intervention`, `Memory`, and `Memory plan` sources are deterministic: they emit
+`Intervention`, `Memory`, `Memory plan`, and `LLM plan` sources are deterministic: they emit
 observation, memory retrieval, reflection, planning, action/conversation, social
 diffusion, routine scheduling, deterministic routine-conflict resolution,
 natural-language intervention, durable memory recall, agent-addressable memory
-planning, and closure as canonical `AgentEvent` records. They are testable
-event contracts for future LLM-backed behavior, not a claim that the app
-already has autonomous social emergence, adaptive schedules, or complete
-persistent agent cognition.
+planning, model-planner contract parsing/quarantine, and closure as canonical
+`AgentEvent` records. They are testable event contracts for future
+provider-backed LLM behavior, not a claim that the app already has autonomous
+social emergence, adaptive schedules, or complete persistent agent cognition.
 
 ## Adding An Adapter
 
@@ -333,6 +337,9 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
 - Routine scheduling is currently deterministic fixture evidence. The app can
   show routine phases and crowding-resolution events for 25 agents, but it is
   not yet an adaptive autonomous scheduler.
+- The `LLM plan` source proves the request/response parser contract for future
+  model-backed planning, but it does not call a live provider and does not put
+  API keys or model execution in browser code.
 - The graph and memory views are represented through current projection data,
   detail, summary, edges, persistent memory recall, and memory events; separate
   dedicated tabs are future work.

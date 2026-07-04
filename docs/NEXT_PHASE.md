@@ -36,17 +36,19 @@ intact.
 4. Cognitive runtime hardening
 
    The deterministic `Cognitive`, `Social day`, `Routine day`,
-   `Intervention`, `Memory`, and `Memory plan` sources now prove the event
+   `Intervention`, `Memory`, `Memory plan`, and `LLM plan` sources now prove the event
    shape for observation, memory retrieval, reflection, planning, social
    diffusion, routine scheduling, deterministic routine-conflict resolution,
    natural-language intervention, durable memory recall, agent-addressable
-   memory planning, and action at 25-agent scale. The next Smallville-oriented
-   runtime session should choose exactly one of:
+   memory planning, model-planner contract parsing/quarantine, and action at
+   25-agent scale. The next Smallville-oriented runtime session should choose
+   exactly one of:
 
-   - add an LLM-backed reflection/planning adapter behind the same event
-     contract
-   - use the agent-addressable memory retrieval stream inside an LLM-backed
-     planner while preserving deterministic validation fixtures
+   - connect a real provider-backed LLM call behind the existing LLM planner
+     contract, with keys kept out of browser code and deterministic fixtures
+     preserved for tests
+   - use the agent-addressable memory retrieval stream inside provider-backed
+     planning while preserving parser quarantine and replay validation
    - turn deterministic routine schedules into adapter-produced daily plans
      that can be validated and replayed as canonical events
    - move durable memory from browser-local storage to a real world-state

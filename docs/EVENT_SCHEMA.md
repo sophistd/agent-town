@@ -104,6 +104,7 @@ Canonical roles are:
 
 - `intervention`
 - `memory`
+- `llm`
 - `mock`
 - `jsonl`
 - `websocket`
@@ -144,6 +145,7 @@ Common fields:
 | `routineConflict` | Deterministic routine crowding record with conflict id, capacity, involved agents, shifted location, shifted sub-location, and resolution |
 | `durableMemory` | Versioned record showing which persisted memory record was recalled into the current event stream |
 | `agentAddressableMemory` | Agent-scoped persistent-memory query, selected records, scores, and retrieval weights used to create planning evidence |
+| `llmPlanner` | Model-planner contract evidence showing request id, prompt hash, model role, response step id, selected memory record IDs, and prior-run context |
 
 These fields are projection and inspection evidence. The renderer may display
 them or use `subLocationId` / `activity` as projection hints, but it must not
@@ -183,6 +185,15 @@ same agent is present; the adapter scores durable records by relevance,
 importance, recency, and agent affinity, then emits canonical `memory_read`,
 `thinking`, and `decision` events with `metadata.agentAddressableMemory`.
 The browser store remains an adapter boundary, not a projection fact.
+
+The deterministic `LLM plan` source defines the contract for future
+provider-backed model behavior. It builds a model-ready JSON request from prior
+events and durable memory records, then parses a model-shaped JSON response into
+canonical events with `metadata.llmPlanner`. Invalid JSON, invalid step objects,
+duplicate event IDs, duplicate `(runId, sequence)` pairs, missing message
+targets, and missing tool names are quarantined before replay. The current UI
+button uses a deterministic fixture response; it does not call a live LLM
+provider and does not give the renderer model-owned runtime facts.
 
 ## WorldState
 

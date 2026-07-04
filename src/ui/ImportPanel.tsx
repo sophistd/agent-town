@@ -6,6 +6,7 @@ export type ImportSourceKind =
   | "cognitive"
   | "intervention"
   | "jsonl"
+  | "llm-plan"
   | "memory"
   | "memory-plan"
   | "mock"
@@ -31,6 +32,7 @@ type ImportPanelProps = {
   onImportJsonl: (input: string) => void;
   onLoadCognitiveRun: () => void;
   onLoadAgentMemoryPlan: () => void;
+  onLoadLlmPlannerRun: () => void;
   onLoadPersistentMemory: () => void;
   onLoadMock: () => void;
   onLoadRoutineRun: () => void;
@@ -179,6 +181,7 @@ export function ImportPanel({
   onImportJsonl,
   onLoadCognitiveRun,
   onLoadAgentMemoryPlan,
+  onLoadLlmPlannerRun,
   onLoadPersistentMemory,
   onLoadMock,
   onLoadRoutineRun,
@@ -276,6 +279,14 @@ export function ImportPanel({
           aria-pressed={activeSource === "memory-plan"}
         >
           Memory plan
+        </button>
+        <button
+          type="button"
+          style={buttonStyleFor("llm-plan", activeSource)}
+          onClick={onLoadLlmPlannerRun}
+          aria-pressed={activeSource === "llm-plan"}
+        >
+          LLM plan
         </button>
         <button
           type="button"

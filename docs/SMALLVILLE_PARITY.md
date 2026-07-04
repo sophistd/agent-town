@@ -51,7 +51,7 @@ runtime facts.
 | Planning | Higher-level plans decomposed into actions | Generator emits planning-stage `decision` events with `planStep` and routine segment metadata | Initial |
 | Action/conversation | Agents act, talk, coordinate | Generator emits `handoff`, `message`, `tool_call`, and `done` events through the existing projection path; Social day emits 25 invitation messages | Partial |
 | Emergent social behavior | Information spreads and coordination emerges from agent interaction over time | `Social day` deterministically models a user-seeded Valentine's invitation spreading through a 25-agent relationship graph | Initial |
-| LLM behavior generation | LLM produces observations/reflections/plans/actions | Not implemented; deterministic generator is a scaffold for testable event shape | Missing |
+| LLM behavior generation | LLM produces observations/reflections/plans/actions | `LLM plan` builds a model-ready request, parses a model-shaped response into canonical events, and quarantines invalid output; current UI source uses a deterministic fixture and no live provider call | Initial |
 | Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, recalls it as `memory_read` events, and feeds agent-addressable planning events; not yet a server-backed world database or autonomous memory engine | Initial |
 | Many agents | Reference environment used 25 agents | `Social day` and `Routine day` fixtures use 25 agents and 150 canonical events each | Initial |
 | Human intervention | User can inject natural-language changes into the town | `Intervention` source turns an operator prompt into canonical observation/retrieval/reflection/planning/action/closure events with prior-run context | Initial |
@@ -84,10 +84,15 @@ The current slice adds deterministic cognitive evidence:
   - `buildPersistentMemoryRecallResult`
   - `buildAgentAddressableMemoryPlanResult`
   - `persistentMemoryAdapter`
+- `src/adapters/llmPlannerAdapter.ts`
+  - `buildSmallvilleLlmPlannerRequest`
+  - `parseLlmPlannerResponse`
+  - `buildDeterministicLlmPlannerResult`
+  - `llmPlannerAdapter`
 - `src/state/persistentMemoryStore.ts`
   - versioned browser storage for durable memory records
 - UI sources: `Cognitive`, `Social day`, `Routine day`, `Intervention`,
-  `Memory`, `Memory plan`
+  `Memory`, `Memory plan`, `LLM plan`
 - Metadata stages:
   - `observation`
   - `retrieval`
@@ -148,6 +153,18 @@ The current slice adds deterministic cognitive evidence:
   - `agentAddressableMemory.selectedSourceEventIds`
   - `agentAddressableMemory.averageScore`
   - `agentAddressableMemory.weights`
+- LLM planner metadata:
+  - `llmPlanner.schemaVersion`
+  - `llmPlanner.contractVersion`
+  - `llmPlanner.requestId`
+  - `llmPlanner.responseRequestId`
+  - `llmPlanner.promptHash`
+  - `llmPlanner.model`
+  - `llmPlanner.modelRole`
+  - `llmPlanner.responseStepId`
+  - `llmPlanner.previousRunId`
+  - `llmPlanner.previousEventCount`
+  - `llmPlanner.selectedMemoryRecordIds`
 
 This is intentionally not a free-running agent simulation. It is a deterministic
 contract test for the cognitive evidence shape that a future LLM-backed adapter
@@ -174,6 +191,9 @@ This slice can pass if:
 - each durable-memory agent can retrieve persistent records by persona/query,
   importance, recency, and agent affinity, then emit canonical retrieval,
   reflection, and planning evidence
+- a model-planner contract can build a JSON request from prior events and
+  durable memory records, parse a model-shaped response into canonical events,
+  and quarantine invalid model output before replay
 - the existing town projection can render the run without source-specific
   renderer branches
 - docs and evidence state that full Stanford parity is still incomplete
@@ -183,7 +203,7 @@ This slice cannot claim:
 - autonomous social emergence
 - autonomous/adaptive daily scheduling
 - complete persistent agent memory across devices or server sessions
-- LLM-generated behavior
+- provider-backed autonomous LLM-generated behavior
 - free-form natural-language understanding beyond deterministic intent routing
 - unscripted 25-agent-scale simulation
 - final Stanford Smallville parity
@@ -192,9 +212,9 @@ This slice cannot claim:
 
 The next meaningful move is not more labels. It is one of:
 
-- add an LLM-backed reflection/planning adapter behind the same deterministic
-  event contract
-- use agent-addressable memory retrieval inside LLM-backed planning
+- connect a real provider-backed LLM call behind the existing planner contract,
+  keeping API keys out of browser code and preserving deterministic fixtures
+- use agent-addressable memory retrieval inside provider-backed planning
 - turn routine schedules into adapter-produced daily plans that can revise
   themselves from observation and memory evidence
 - persist the intervention memory stream beyond browser-local storage

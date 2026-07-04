@@ -150,8 +150,8 @@ export class AgentTownScene extends Phaser.Scene {
       updateList?: unknown;
     };
     const game = this.game as Phaser.Game & { isDestroyed?: boolean };
-    const displayList = gameObjectFactory.displayList ?? sceneSystems.displayList;
-    const updateList = gameObjectFactory.updateList ?? sceneSystems.updateList;
+    const displayList = gameObjectFactory.displayList;
+    const updateList = gameObjectFactory.updateList;
 
     return (
       !this.isShutdown &&
