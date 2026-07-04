@@ -1,11 +1,12 @@
-import { useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, type CSSProperties } from "react";
 
 import { mockEvents } from "../events/mockEvents";
 import { replay } from "../events/reducer";
 import { selectCurrentEvent } from "../events/selectors";
-import { selectAgent, selectEvent } from "../state/selectionStore";
+import { advancePlayback, usePlayback } from "../state/playbackStore";
 import { DetailPanel } from "./DetailPanel";
 import { Layout } from "./Layout";
+import { Timeline } from "./Timeline";
 import { TownCanvas } from "./TownCanvas";
 
 const compactTextStyle = {
@@ -15,39 +16,29 @@ const compactTextStyle = {
   color: "#42423d",
 } satisfies CSSProperties;
 
-const eventButtonStyle = {
-  width: "160px",
-  border: "1px solid #d8d8d2",
-  borderRadius: "6px",
-  padding: "10px",
-  background: "#fffdfa",
-  color: "#202124",
-  textAlign: "left",
-  cursor: "pointer",
-} satisfies CSSProperties;
-
-const selectedEventButtonStyle = {
-  ...eventButtonStyle,
-  borderColor: "#1b6f6a",
-  background: "#eaf4f2",
-} satisfies CSSProperties;
-
 export function App() {
-  const [cursor, setCursor] = useState(mockEvents.length - 1);
-  const timeline = useMemo(
-    () =>
-      mockEvents.map((event, index) => ({
-        event,
-        index,
-        state: replay(mockEvents, index),
-      })),
-    [],
+  const playback = usePlayback();
+  const currentState = useMemo(
+    () => replay(mockEvents, playback.cursor),
+    [playback.cursor],
   );
-  const currentState = timeline[cursor]?.state ?? replay(mockEvents, -1);
   const currentEvent = selectCurrentEvent(currentState, mockEvents);
   const agents = Object.values(currentState.agents).sort((left, right) =>
     left.agentId.localeCompare(right.agentId),
   );
+
+  useEffect(() => {
+    if (!playback.isPlaying) {
+      return undefined;
+    }
+
+    const timer = window.setInterval(
+      () => advancePlayback(mockEvents.length),
+      playback.intervalMs,
+    );
+
+    return () => window.clearInterval(timer);
+  }, [playback.intervalMs, playback.isPlaying]);
 
   return (
     <Layout
@@ -78,41 +69,7 @@ export function App() {
         />
       }
       timeline={
-        <>
-          <h2 style={{ margin: "0 0 10px", fontSize: "16px" }}>Timeline placeholder</h2>
-          <ol
-            style={{
-              display: "flex",
-              gap: "8px",
-              margin: 0,
-              padding: 0,
-              listStyle: "none",
-              overflowX: "auto",
-            }}
-          >
-            {timeline.map(({ event, index }) => (
-              <li key={event.id}>
-                <button
-                  type="button"
-                  style={index === cursor ? selectedEventButtonStyle : eventButtonStyle}
-                  onClick={() => {
-                    setCursor(index);
-                    selectEvent(event.id, event.agentId);
-                    selectAgent(event.agentId);
-                  }}
-                  aria-pressed={index === cursor}
-                >
-                  <strong>
-                    {String(event.sequence).padStart(2, "0")} · {event.type}
-                  </strong>
-                  <span style={{ display: "block", marginTop: "4px", fontSize: "12px" }}>
-                    {event.agentName}
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ol>
-        </>
+        <Timeline events={mockEvents} playback={playback} />
       }
     />
   );

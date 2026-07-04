@@ -4,7 +4,7 @@ const shellStyle = {
   minHeight: "100vh",
   margin: 0,
   display: "grid",
-  gridTemplateRows: "auto minmax(0, 1fr) 112px",
+  gridTemplateRows: "auto minmax(0, 1fr) 186px",
   background: "#f7f7f4",
   color: "#202124",
   fontFamily:
@@ -62,7 +62,7 @@ export function Layout({ sidebar, town, detail, timeline }: LayoutProps) {
             AgentEvent-driven runtime projection
           </p>
         </div>
-        <span style={{ fontSize: "12px", color: "#62625b" }}>M2 lifecycle boundary</span>
+        <span style={{ fontSize: "12px", color: "#62625b" }}>M3 replay debugger</span>
       </header>
 
       <div style={mainGridStyle}>
@@ -77,7 +77,7 @@ export function Layout({ sidebar, town, detail, timeline }: LayoutProps) {
         </section>
       </div>
 
-      <section style={timelineStyle} aria-label="Timeline placeholder">
+      <section style={timelineStyle} aria-label="Timeline">
         {timeline}
       </section>
     </main>
