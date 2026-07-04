@@ -20,11 +20,13 @@ renderer falls back to the generated in-code map with the same IDs.
 | queue | `dispatch_board` | Dispatch Board | Handoffs and queued work |
 | final square | `square` | Square | Current shared surface and done state |
 
-The current map session introduces a project-authored object map, not a
-third-party tileset or sprite sheet. The `locations` object layer is projection
-metadata only: it may define building footprints and visual anchors, but it does
-not create runtime facts. Agent role, status, event type, and selected state
-still come from `AgentEvent -> WorldState`.
+The current asset session introduces a project-authored Tiled-compatible map, a
+generated terrain tileset, generated agent/building sprite sheets, and a baked
+pixel-town background. These assets are projection metadata and presentation
+surfaces only: they may define tile layers, building footprints, visual anchors,
+and sprite frames, but they do not create runtime facts. Agent role, status,
+event type, selected event, selected agent, and cursor state still come from
+`AgentEvent -> WorldState`.
 
 The object layer must preserve these `locationId` values:
 
@@ -41,6 +43,12 @@ The object layer must preserve these `locationId` values:
 ## Agent Mapping
 
 Agent identity comes from `WorldState.agents`.
+
+`public/sprites/agent-roles-v1.png` provides the current project-authored agent
+sprite sheet. Sprite columns follow the role order below. Sprite rows represent
+visual status families: idle/waiting, active, blocked/error, and done. The
+renderer chooses a frame from `AgentState.role` and `AgentState.status`; it does
+not infer those values from the sprite.
 
 | Role | Default visible identity |
 | --- | --- |
@@ -91,13 +99,21 @@ S08 includes a status legend for idle, thinking, waiting, blocked, error, and do
 ## Boundary Notes
 
 - `public/maps/town-v1.tiled.json` is the current project-authored map asset.
-- `src/game/townMap.ts` parses the Tiled-compatible object map and provides the
-  generated fallback.
-- `src/game/renderTownMap.ts` renders terrain, routes, and decor from the parsed
-  map definition.
-- `src/game/renderLocations.ts` renders location buildings from the parsed map
-  footprints, while tests keep map anchors aligned with `LOCATION_COORDINATES`.
-- `src/game/renderAgents.ts` renders agent identity, role color, status marker, and label from `WorldState`.
+- `public/maps/town-v1-preview.png` is the baked pixel-town background used when
+  the asset map loads.
+- `public/tilesets/agent-town-v1.png` is the project-authored terrain tileset
+  referenced by the Tiled JSON.
+- `public/sprites/buildings-v1.png` and `public/sprites/agent-roles-v1.png` are
+  generated sprite sheets used by the projection renderer.
+- `src/game/townMap.ts` parses map properties, tilesets, tile layers, object
+  layers, and provides the generated fallback.
+- `src/game/renderTownMap.ts` renders the baked background first, then falls
+  back to tile layers or generated Phaser graphics if assets are unavailable.
+- `src/game/renderLocations.ts` renders projection labels/anchors over the
+  baked map, or building sprites / generated footprints in fallback paths,
+  while tests keep map anchors aligned with `LOCATION_COORDINATES`.
+- `src/game/renderAgents.ts` renders agent sprites, status marker, selected
+  state, and label from `WorldState`.
 - `src/game/visualMapping.ts` contains visual labels/colors only. It does not route events.
 - `src/events/routing.ts` remains the source of event-to-location routing.
 - Generated rendering remains the fallback. It uses local Phaser shapes, labels,
@@ -122,9 +138,11 @@ M5 keeps density rules explicit so a busy run remains inspectable:
 
 Current limitations:
 
-- There is no imported PNG tileset or sprite sheet yet. This session adds the
-  maintainable map-data layer first so the next asset session can add
-  project-authored pixel tiles without changing event semantics.
+- The assets are original and generated for this repository; they are not copied
+  Stanford Smallville art and not a third-party asset pack.
+- The map is visually closer to a Smallville-like projection, but it is still a
+  compact prototype map rather than a complete generative-agents world with
+  many interiors, occupations, and day-long character routines.
 - There is no dedicated search/filter input yet. S15 records the rule and
   preserves Timeline/detail-based inspection; a later session can add filter UI
   if product review makes that the highest-risk gap.

@@ -63,13 +63,14 @@ existing screenshot set and command output.
 ## Visual And Asset State
 
 - S15 deferred Tiled import in `docs/evidence/M5/visual-layout.md`.
-- A later asset/map session introduces a project-authored Tiled-compatible JSON
-  object map at `public/maps/town-v1.tiled.json`; external PNG tilesets and
-  spritesheets remain deferred.
+- A later asset/map session introduces a project-authored Tiled-compatible map,
+  terrain tileset, baked pixel-town background, agent sprite sheet, and building
+  sprite sheet under `public/maps/`, `public/tilesets/`, and `public/sprites/`.
 - Stable zones are documented in `docs/VISUAL_MAPPING.md`.
 - Visual density rules are documented in `docs/VISUAL_MAPPING.md` and README.
 - Asset license state is documented in `docs/ASSET_LICENSES.md`.
-- No external visual assets are imported.
+- No external visual assets are imported and no Stanford Smallville assets are
+  copied.
 
 ## Adapter State
 
@@ -144,8 +145,8 @@ packaging regression.
 
 - First-run copy is documented for the demo, but the app does not yet include a
   dedicated onboarding modal or first-run UI surface.
-- External visual assets remain deferred. The current map layer is
-  project-authored JSON metadata, not an imported tileset or sprite sheet.
+- External visual assets remain deferred. The current pixel map, tileset, and
+  sprite sheets are project-authored generated assets, not imported art.
 - Browser frame-rate profiling is not part of S15; current performance evidence
   is deterministic replay plus demo usability.
 - Dedicated Graph and Memory tabs remain next-phase product work.

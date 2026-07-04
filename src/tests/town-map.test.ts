@@ -12,6 +12,8 @@ import {
   type RenderedLocationId,
 } from "../game/townMap";
 
+const pngSignature = [137, 80, 78, 71, 13, 10, 26, 10];
+
 const expectedLocationIds: RenderedLocationId[] = [
   "dispatch_board",
   "town_hall",
@@ -31,16 +33,42 @@ function readTownMapFixture(): unknown {
   ) as unknown;
 }
 
+function expectPngAsset(path: string): void {
+  const bytes = readFileSync(join(process.cwd(), path));
+
+  expect([...bytes.subarray(0, 8)]).toEqual(pngSignature);
+}
+
 describe("town map asset", () => {
   it("parses the public Tiled-compatible map with every stable projection zone", () => {
     const map = parseTiledTownMap(readTownMapFixture());
 
     expect(map).toBeDefined();
     expect(map?.source).toBe("asset");
+    expect(map?.id).toBe("town-v1-original-pixel-town");
+    expect(map?.width).toBe(1040);
+    expect(map?.height).toBe(896);
+    expect(map?.backgroundImageUrl).toBe("/maps/town-v1-preview.png");
+    expect(map?.agentSpritesheetUrl).toBe("/sprites/agent-roles-v1.png");
+    expect(map?.buildingSpritesheetUrl).toBe("/sprites/buildings-v1.png");
+    expect(map?.tilesets).toHaveLength(1);
+    expect(map?.tilesets[0]?.imageUrl).toBe("/tilesets/agent-town-v1.png");
+    expect(map?.tileLayers.map((layer) => layer.name)).toEqual([
+      "base",
+      "paths-and-plaza",
+      "detail",
+    ]);
     expect(map === undefined ? [] : getTownMapLocationIds(map)).toEqual(expectedLocationIds);
     expect(map === undefined ? false : hasCompleteTownMapLocations(map)).toBe(true);
     expect(map?.routes).toHaveLength(6);
     expect(map?.decor.length).toBeGreaterThan(DEFAULT_TOWN_MAP.decor.length);
+  });
+
+  it("keeps the generated project-authored PNG assets readable", () => {
+    expectPngAsset("public/maps/town-v1-preview.png");
+    expectPngAsset("public/tilesets/agent-town-v1.png");
+    expectPngAsset("public/sprites/agent-roles-v1.png");
+    expectPngAsset("public/sprites/buildings-v1.png");
   });
 
   it("keeps map anchors aligned with event routing coordinates", () => {

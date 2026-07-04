@@ -267,10 +267,10 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
 
 ## Known Limitations
 
-- The current visual system uses a project-authored Tiled-compatible JSON object
-  map plus generated Phaser drawing. External PNG tilesets, spritesheets, and
-  third-party art remain deferred until license and fallback behavior are
-  recorded.
+- The current visual system uses a project-authored Tiled-compatible JSON map,
+  generated pixel tileset, generated agent/building sprite sheets, and a baked
+  pixel-town background. External or third-party visual assets remain deferred
+  until license and fallback behavior are recorded.
 - The app does not yet include a modal onboarding surface. The first-run copy is
   documented here, in `docs/DEMO_SCRIPT.md`, and in final demo notes for the M5
   review.

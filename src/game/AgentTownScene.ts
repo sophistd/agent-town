@@ -11,7 +11,23 @@ import { renderBubbles } from "./renderBubbles";
 import { renderEdges } from "./renderEdges";
 import { renderLocations } from "./renderLocations";
 import { renderTownMap } from "./renderTownMap";
-import { DEFAULT_TOWN_MAP, loadTownMap, type TownMapDefinition } from "./townMap";
+import {
+  AGENT_SPRITESHEET_KEY,
+  AGENT_SPRITESHEET_URL,
+  AGENT_SPRITE_HEIGHT,
+  AGENT_SPRITE_WIDTH,
+  BUILDING_SPRITESHEET_KEY,
+  BUILDING_SPRITESHEET_URL,
+  BUILDING_SPRITE_HEIGHT,
+  BUILDING_SPRITE_WIDTH,
+  DEFAULT_TOWN_MAP,
+  loadTownMap,
+  TOWN_MAP_BACKGROUND_KEY,
+  TOWN_MAP_BACKGROUND_URL,
+  TOWN_MAP_TILESET_KEY,
+  TOWN_MAP_TILESET_URL,
+  type TownMapDefinition,
+} from "./townMap";
 
 export const AGENT_TOWN_SCENE_KEY = "AgentTownScene";
 export const PROJECTION_SETTINGS_REGISTRY_KEY = "agent-town:projection-settings";
@@ -26,6 +42,22 @@ export class AgentTownScene extends Phaser.Scene {
 
   constructor() {
     super(AGENT_TOWN_SCENE_KEY);
+  }
+
+  preload(): void {
+    this.load.image(TOWN_MAP_BACKGROUND_KEY, TOWN_MAP_BACKGROUND_URL);
+    this.load.spritesheet(TOWN_MAP_TILESET_KEY, TOWN_MAP_TILESET_URL, {
+      frameWidth: DEFAULT_TOWN_MAP.tileWidth,
+      frameHeight: DEFAULT_TOWN_MAP.tileHeight,
+    });
+    this.load.spritesheet(AGENT_SPRITESHEET_KEY, AGENT_SPRITESHEET_URL, {
+      frameWidth: AGENT_SPRITE_WIDTH,
+      frameHeight: AGENT_SPRITE_HEIGHT,
+    });
+    this.load.spritesheet(BUILDING_SPRITESHEET_KEY, BUILDING_SPRITESHEET_URL, {
+      frameWidth: BUILDING_SPRITE_WIDTH,
+      frameHeight: BUILDING_SPRITE_HEIGHT,
+    });
   }
 
   create(): void {

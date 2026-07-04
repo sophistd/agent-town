@@ -1,0 +1,466 @@
+{
+  "url": "http://127.0.0.1:5173/",
+  "browserPath": "python-playwright",
+  "browserFallbackReason": "Codex Browser domSnapshot failed: incrementalAriaSnapshot is not a function",
+  "desktopInitial": {
+    "title": "Agent Town",
+    "hasRoot": true,
+    "header": "Agent Town",
+    "canvasCount": 1,
+    "canvasRect": {
+      "width": 773,
+      "height": 669,
+      "top": 110
+    },
+    "hostRect": {
+      "width": 778,
+      "height": 669,
+      "top": 110
+    },
+    "chips": [
+      "cursor 0",
+      "visible 30/30",
+      "balanced",
+      "100%"
+    ],
+    "timelineButtons": [
+      {
+        "text": "Prev",
+        "current": null,
+        "pressed": null,
+        "disabled": true
+      },
+      {
+        "text": "Play",
+        "current": null,
+        "pressed": null,
+        "disabled": false
+      },
+      {
+        "text": "Next",
+        "current": null,
+        "pressed": null,
+        "disabled": false
+      },
+      {
+        "text": "#00 \u00b7 13:00Planner \u00b7 thinkingPlan debug run",
+        "current": "step",
+        "pressed": "false",
+        "disabled": false
+      },
+      {
+        "text": "#01 \u00b7 13:01Planner \u00b7 decisionReproduce first",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      },
+      {
+        "text": "#02 \u00b7 13:02Planner \u00b7 handoffAssign research",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      },
+      {
+        "text": "#03 \u00b7 13:03Researcher \u00b7 memory_readRead schema note",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      },
+      {
+        "text": "#04 \u00b7 13:04Researcher \u00b7 tool_callRead M1 spec",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      }
+    ],
+    "overflowX": 0,
+    "viewport": {
+      "width": 1440,
+      "height": 960
+    },
+    "rootExcerpt": "ATAgent TownAgentEvent-driven runtime projectionRun IDrun-failure-agent-town-001StatuspausedCursor1 / 30Events30Warnings0Quarantine0Import Sourcemock \u00b7 30 eventsMockJSONLWS sample{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}} {\"id\":\"jsonl-ui-1\",\"runId\":\"run",
+    "frameworkOverlay": false
+  },
+  "desktopResponses": [
+    {
+      "url": "http://127.0.0.1:5173/maps/town-v1-preview.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/agent-roles-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/tilesets/agent-town-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/buildings-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/maps/town-v1-preview.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/tilesets/agent-town-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/agent-roles-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/buildings-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/maps/town-v1.tiled.json",
+      "status": 200
+    }
+  ],
+  "desktopConsole": [
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x10c00544800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "classification": "browser-screenshot-gpu-warning"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x10c00547200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "classification": "browser-screenshot-gpu-warning"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x10c00548a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "classification": "browser-screenshot-gpu-warning"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x10c00547200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+      "classification": "browser-screenshot-gpu-warning"
+    }
+  ],
+  "desktopInteraction": {
+    "title": "Agent Town",
+    "hasRoot": true,
+    "header": "Agent Town",
+    "canvasCount": 1,
+    "canvasRect": {
+      "width": 773,
+      "height": 669,
+      "top": 110
+    },
+    "hostRect": {
+      "width": 778,
+      "height": 669,
+      "top": 110
+    },
+    "chips": [
+      "cursor 1",
+      "visible 7/30",
+      "balanced",
+      "105%"
+    ],
+    "timelineButtons": [
+      {
+        "text": "Prev",
+        "current": null,
+        "pressed": null,
+        "disabled": false
+      },
+      {
+        "text": "Pause",
+        "current": null,
+        "pressed": null,
+        "disabled": false
+      },
+      {
+        "text": "Next",
+        "current": null,
+        "pressed": null,
+        "disabled": false
+      },
+      {
+        "text": "#02 \u00b7 13:02Planner \u00b7 handoffAssign research",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      },
+      {
+        "text": "#08 \u00b7 13:08Coder \u00b7 errorDuplicate sequence",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      },
+      {
+        "text": "#09 \u00b7 13:09Coder \u00b7 blockedNeeds source decision",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      },
+      {
+        "text": "#12 \u00b7 13:12Planner \u00b7 handoffSend repair task",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      },
+      {
+        "text": "#17 \u00b7 13:17Reviewer \u00b7 blockedMissing memory note",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      }
+    ],
+    "overflowX": 0,
+    "viewport": {
+      "width": 1440,
+      "height": 960
+    },
+    "rootExcerpt": "ATAgent TownAgentEvent-driven runtime projectionRun IDrun-failure-agent-town-001StatusrunningCursor2 / 30Events30Warnings0Quarantine0Import Sourcemock \u00b7 30 eventsMockJSONLWS sample{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}} {\"id\":\"jsonl-ui-1\",\"runId\":\"ru",
+    "frameworkOverlay": false
+  },
+  "interactionAssertions": {
+    "zoom": {
+      "before": "100%",
+      "after": "105%"
+    },
+    "bubbles": {
+      "before": "true",
+      "after": "false"
+    },
+    "edges": {
+      "before": "true",
+      "after": "false"
+    },
+    "visibleEvents": {
+      "before": "visible 30/30",
+      "after": "visible 7/30"
+    },
+    "cursor": {
+      "before": "cursor 0",
+      "after": "cursor 1"
+    },
+    "playButtonState": {
+      "text": "Pause",
+      "current": null,
+      "pressed": null,
+      "disabled": false
+    }
+  },
+  "mobileInitial": {
+    "title": "Agent Town",
+    "hasRoot": true,
+    "header": "Agent Town",
+    "canvasCount": 1,
+    "canvasRect": {
+      "width": 372,
+      "height": 322,
+      "top": 1602
+    },
+    "hostRect": {
+      "width": 372,
+      "height": 322,
+      "top": 1602
+    },
+    "chips": [
+      "cursor 0",
+      "visible 30/30",
+      "balanced",
+      "100%"
+    ],
+    "timelineButtons": [
+      {
+        "text": "Prev",
+        "current": null,
+        "pressed": null,
+        "disabled": true
+      },
+      {
+        "text": "Play",
+        "current": null,
+        "pressed": null,
+        "disabled": false
+      },
+      {
+        "text": "Next",
+        "current": null,
+        "pressed": null,
+        "disabled": false
+      },
+      {
+        "text": "#00 \u00b7 13:00Planner \u00b7 thinkingPlan debug run",
+        "current": "step",
+        "pressed": "false",
+        "disabled": false
+      },
+      {
+        "text": "#01 \u00b7 13:01Planner \u00b7 decisionReproduce first",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      },
+      {
+        "text": "#02 \u00b7 13:02Planner \u00b7 handoffAssign research",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      },
+      {
+        "text": "#03 \u00b7 13:03Researcher \u00b7 memory_readRead schema note",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      },
+      {
+        "text": "#04 \u00b7 13:04Researcher \u00b7 tool_callRead M1 spec",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      }
+    ],
+    "overflowX": 0,
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "rootExcerpt": "ATAgent TownAgentEvent-driven runtime projectionRun IDrun-failure-agent-town-001StatuspausedCursor1 / 30Events30Warnings0Quarantine0Import Sourcemock \u00b7 30 eventsMockJSONLWS sample{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}} {\"id\":\"jsonl-ui-1\",\"runId\":\"run",
+    "frameworkOverlay": false
+  },
+  "mobileResponses": [
+    {
+      "url": "http://127.0.0.1:5173/maps/town-v1-preview.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/tilesets/agent-town-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/agent-roles-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/buildings-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/maps/town-v1-preview.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/tilesets/agent-town-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/agent-roles-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/sprites/buildings-v1.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5173/maps/town-v1.tiled.json",
+      "status": 200
+    }
+  ],
+  "mobileConsole": [],
+  "mobileMap": {
+    "title": "Agent Town",
+    "hasRoot": true,
+    "header": "Agent Town",
+    "canvasCount": 1,
+    "canvasRect": {
+      "width": 372,
+      "height": 322,
+      "top": 261
+    },
+    "hostRect": {
+      "width": 372,
+      "height": 322,
+      "top": 261
+    },
+    "chips": [
+      "cursor 0",
+      "visible 30/30",
+      "balanced",
+      "100%"
+    ],
+    "timelineButtons": [
+      {
+        "text": "Prev",
+        "current": null,
+        "pressed": null,
+        "disabled": true
+      },
+      {
+        "text": "Play",
+        "current": null,
+        "pressed": null,
+        "disabled": false
+      },
+      {
+        "text": "Next",
+        "current": null,
+        "pressed": null,
+        "disabled": false
+      },
+      {
+        "text": "#00 \u00b7 13:00Planner \u00b7 thinkingPlan debug run",
+        "current": "step",
+        "pressed": "false",
+        "disabled": false
+      },
+      {
+        "text": "#01 \u00b7 13:01Planner \u00b7 decisionReproduce first",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      },
+      {
+        "text": "#02 \u00b7 13:02Planner \u00b7 handoffAssign research",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      },
+      {
+        "text": "#03 \u00b7 13:03Researcher \u00b7 memory_readRead schema note",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      },
+      {
+        "text": "#04 \u00b7 13:04Researcher \u00b7 tool_callRead M1 spec",
+        "current": null,
+        "pressed": "false",
+        "disabled": false
+      }
+    ],
+    "overflowX": 0,
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "rootExcerpt": "ATAgent TownAgentEvent-driven runtime projectionRun IDrun-failure-agent-town-001StatuspausedCursor1 / 30Events30Warnings0Quarantine0Import Sourcemock \u00b7 30 eventsMockJSONLWS sample{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}} {\"id\":\"jsonl-ui-1\",\"runId\":\"run",
+    "frameworkOverlay": false
+  },
+  "pass": {
+    "desktopPageIdentity": true,
+    "desktopNotBlank": true,
+    "desktopNoFrameworkOverlay": true,
+    "noRelevantAppConsoleErrors": true,
+    "desktopNoHorizontalOverflow": true,
+    "assetResponsesOk": true,
+    "zoomChanged": true,
+    "bubblesChanged": true,
+    "edgesChanged": true,
+    "criticalChangedVisibleEvents": true,
+    "nextOrPlayMovedCursor": true,
+    "mobileNotBlank": true,
+    "mobileMapVisible": true,
+    "mobileNoFrameworkOverlay": true,
+    "mobileNoHorizontalOverflow": true,
+    "mobileHostFitsCanvas": true
+  }
+}

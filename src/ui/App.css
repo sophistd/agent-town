@@ -466,7 +466,17 @@ select:focus-visible {
   }
 
   .app-panel--town {
-    min-height: 520px;
+    min-height: 0;
+  }
+
+  .town-shell {
+    height: auto;
+  }
+
+  .town-canvas-host {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 1040 / 900;
   }
 
   .app-timeline {

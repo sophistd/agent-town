@@ -44,12 +44,14 @@ intact.
    Code-style events, Langfuse, or other sources. Keep quarantine behavior
    source-local and keep renderer branches source-agnostic.
 
-6. Tileset and sprite polish
+6. Pixel-town fidelity polish
 
-   The project now has a project-authored Tiled-compatible object map. The next
-   visual session should add a project-authored tileset and agent sprite sheet,
-   or choose a third-party pack only after license, attribution, commercial-use,
-   and fallback behavior are recorded.
+   The project now has a project-authored Tiled-compatible map, terrain tileset,
+   agent sprite sheet, building sprite sheet, and baked pixel-town background.
+   The next visual session should deepen fidelity with more tile variation,
+   interiors, animated agent poses, and denser prop placement. Choose a
+   third-party pack only after license, attribution, commercial-use, and fallback
+   behavior are recorded.
 
 7. Performance profiling
 

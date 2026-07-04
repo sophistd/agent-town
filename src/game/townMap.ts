@@ -2,6 +2,18 @@ import { LOCATION_COORDINATES } from "../events/routing";
 import type { AgentLocation } from "../events/types";
 
 export const TOWN_MAP_ASSET_URL = "/maps/town-v1.tiled.json";
+export const TOWN_MAP_BACKGROUND_KEY = "agent-town:town-v1-preview";
+export const TOWN_MAP_BACKGROUND_URL = "/maps/town-v1-preview.png";
+export const TOWN_MAP_TILESET_KEY = "agent-town:tileset-v1";
+export const TOWN_MAP_TILESET_URL = "/tilesets/agent-town-v1.png";
+export const AGENT_SPRITESHEET_KEY = "agent-town:agent-roles-v1";
+export const AGENT_SPRITESHEET_URL = "/sprites/agent-roles-v1.png";
+export const AGENT_SPRITE_WIDTH = 24;
+export const AGENT_SPRITE_HEIGHT = 32;
+export const BUILDING_SPRITESHEET_KEY = "agent-town:buildings-v1";
+export const BUILDING_SPRITESHEET_URL = "/sprites/buildings-v1.png";
+export const BUILDING_SPRITE_WIDTH = 160;
+export const BUILDING_SPRITE_HEIGHT = 112;
 
 export type RenderedLocationId = Exclude<AgentLocation, "unknown">;
 
@@ -40,6 +52,26 @@ export type TownDecorObject = {
   y: number;
 };
 
+export type TownTilesetDefinition = {
+  firstGid: number;
+  name: string;
+  image: string;
+  imageUrl: string;
+  tileWidth: number;
+  tileHeight: number;
+  columns: number;
+  tileCount: number;
+};
+
+export type TownTileLayerDefinition = {
+  name: string;
+  width: number;
+  height: number;
+  opacity: number;
+  visible: boolean;
+  data: number[];
+};
+
 export type TownMapDefinition = {
   id: string;
   source: "asset" | "generated-fallback";
@@ -47,6 +79,11 @@ export type TownMapDefinition = {
   height: number;
   tileWidth: number;
   tileHeight: number;
+  backgroundImageUrl?: string;
+  agentSpritesheetUrl?: string;
+  buildingSpritesheetUrl?: string;
+  tilesets: TownTilesetDefinition[];
+  tileLayers: TownTileLayerDefinition[];
   terrain: TownTerrainObject[];
   routes: TownRouteObject[];
   locations: TownLocationObject[];
@@ -136,6 +173,8 @@ export const DEFAULT_TOWN_MAP: TownMapDefinition = {
   height: 900,
   tileWidth: 16,
   tileHeight: 16,
+  tilesets: [],
+  tileLayers: [],
   terrain: [
     { kind: "grass", x: 0, y: 0, width: 1040, height: 900 },
     { kind: "plaza", x: 392, y: 356, width: 226, height: 176 },
@@ -264,6 +303,87 @@ function readObjectLayer(map: JsonRecord, name: string): JsonRecord[] {
   }
 
   return layer.objects.filter(isRecord);
+}
+
+function readTileLayers(map: JsonRecord): TownTileLayerDefinition[] {
+  const layers = map.layers;
+
+  if (!Array.isArray(layers)) {
+    return [];
+  }
+
+  return layers.flatMap((layer) => {
+    if (!isRecord(layer) || layer.type !== "tilelayer" || !Array.isArray(layer.data)) {
+      return [];
+    }
+
+    const width = readNumber(layer, "width");
+    const height = readNumber(layer, "height");
+    const data = layer.data.filter(
+      (item): item is number => typeof item === "number" && Number.isInteger(item) && item >= 0,
+    );
+
+    if (width <= 0 || height <= 0 || data.length !== width * height) {
+      return [];
+    }
+
+    return [
+      {
+        name: readString(layer, "name", "tilelayer"),
+        width,
+        height,
+        opacity: readNumber(layer, "opacity", 1),
+        visible: layer.visible !== false,
+        data,
+      },
+    ];
+  });
+}
+
+function normalizePublicAssetPath(image: string): string {
+  if (image.startsWith("/")) {
+    return image;
+  }
+
+  return `/${image.replace(/^\.\.\//, "")}`;
+}
+
+function readTilesets(map: JsonRecord): TownTilesetDefinition[] {
+  const tilesets = map.tilesets;
+
+  if (!Array.isArray(tilesets)) {
+    return [];
+  }
+
+  return tilesets.flatMap((tileset) => {
+    if (!isRecord(tileset)) {
+      return [];
+    }
+
+    const image = readString(tileset, "image");
+    const firstGid = readNumber(tileset, "firstgid");
+    const tileWidth = readNumber(tileset, "tilewidth");
+    const tileHeight = readNumber(tileset, "tileheight");
+    const columns = readNumber(tileset, "columns");
+    const tileCount = readNumber(tileset, "tilecount");
+
+    if (image === "" || firstGid <= 0 || tileWidth <= 0 || tileHeight <= 0) {
+      return [];
+    }
+
+    return [
+      {
+        firstGid,
+        name: readString(tileset, "name", "tileset"),
+        image,
+        imageUrl: normalizePublicAssetPath(image),
+        tileWidth,
+        tileHeight,
+        columns,
+        tileCount,
+      },
+    ];
+  });
 }
 
 function parseTerrainObjects(objects: JsonRecord[]): TownTerrainObject[] {
@@ -412,6 +532,11 @@ export function parseTiledTownMap(input: unknown): TownMapDefinition | undefined
   const height = readNumber(input, "height", DEFAULT_TOWN_MAP.height / tileHeight) * tileHeight;
   const properties = readProperties(input.properties);
   const id = readStringProperty(properties, "mapId") ?? "town-v1-tiled-map";
+  const backgroundImageUrl = readStringProperty(properties, "backgroundImage");
+  const agentSpritesheetUrl = readStringProperty(properties, "agentSpritesheet");
+  const buildingSpritesheetUrl = readStringProperty(properties, "buildingSpritesheet");
+  const tilesets = readTilesets(input);
+  const tileLayers = readTileLayers(input);
   const terrain = parseTerrainObjects(readObjectLayer(input, "terrain"));
   const routes = parseRouteObjects(readObjectLayer(input, "routes"));
   const locations = parseLocationObjects(readObjectLayer(input, "locations"));
@@ -432,6 +557,11 @@ export function parseTiledTownMap(input: unknown): TownMapDefinition | undefined
     height,
     tileWidth,
     tileHeight,
+    backgroundImageUrl,
+    agentSpritesheetUrl,
+    buildingSpritesheetUrl,
+    tilesets,
+    tileLayers,
     terrain: terrain.length > 0 ? terrain : DEFAULT_TOWN_MAP.terrain,
     routes: routes.length > 0 ? routes : DEFAULT_TOWN_MAP.routes,
     locations,

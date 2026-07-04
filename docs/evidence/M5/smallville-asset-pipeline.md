@@ -4,20 +4,21 @@ Session: post-M5 asset/map follow-up
 Date: 2026-07-04
 Branch: `codex/smallville-asset-pipeline`
 PR: `https://github.com/sophistd/agent-town/pull/1`
-Implementation commit: `183acc9 feat: add original town map asset pipeline`
 
 ## Scope
 
-Move the town projection from a purely code-native placeholder map toward a
-maintainable Smallville-like asset pipeline while preserving the invariant:
+Move the town projection from a code-native placeholder toward a maintainable,
+Smallville-like pixel asset pipeline while preserving the invariant:
 
 ```text
 External source -> Adapter -> AgentEvent -> WorldState -> Projection views
 ```
 
-This session introduces a project-authored Tiled-compatible JSON object map. It
-does not import third-party pixel art, Stanford Smallville assets, PNG tilesets,
-or sprite sheets.
+This session now introduces a project-authored Tiled-compatible map, generated
+terrain tileset, generated building sprite sheet, generated agent role/status
+sprite sheet, and baked pixel-town background. It does not copy Stanford
+Smallville assets, third-party pixel art, downloaded sprites, or source-unknown
+visual assets.
 
 ## External Sources Checked
 
@@ -33,7 +34,7 @@ or sprite sheets.
   `https://app.notion.com/p/393acb4bb6e68173afe9f05fbcf69313`
 - Linear MDL-144, MDL-145, MDL-129, and MDL-152.
 
-Read result:
+Read result from the earlier asset session:
 
 - S14 / MDL-144: Done; original decision deferred Tiled/external art.
 - S15 / MDL-145: Done.
@@ -41,22 +42,35 @@ Read result:
 - M5 red-check MDL-152: Done.
 - Linear search did not find a separate current visual-asset issue.
 
+This revision is a direct response to the product bar being raised from "asset
+pipeline minimal loop" to "materially closer to Stanford Smallville-level
+pixel-town experience."
+
 ## Implementation Decision
 
-Adopt a middle path:
+Adopt an original generated asset pipeline:
 
-- Add `public/maps/town-v1.tiled.json` as an original Tiled-compatible object
-  map.
-- Parse the map with `src/game/townMap.ts`.
-- Render terrain, routes, and decor from parsed map data in
-  `src/game/renderTownMap.ts`.
-- Render building footprints from the parsed `locations` object layer in
-  `src/game/renderLocations.ts`.
-- Keep generated fallback map behavior for load or parse failure.
+- Add `scripts/generate_pixel_town_assets.py` as the reproducible local
+  generator.
+- Generate `public/maps/town-v1.tiled.json` with tile layers, tileset metadata,
+  object layers, stable location IDs, and projection-only asset properties.
+- Generate `public/maps/town-v1-preview.png` as the baked top-down pixel-town
+  background.
+- Generate `public/tilesets/agent-town-v1.png` as the terrain/detail tileset.
+- Generate `public/sprites/agent-roles-v1.png` as the role/status agent sprite
+  sheet.
+- Generate `public/sprites/buildings-v1.png` as the building sprite sheet.
+- Parse map properties, tilesets, tile layers, and object layers in
+  `src/game/townMap.ts`.
+- Preload the map background, tileset, agent sprite sheet, and building sprite
+  sheet in `AgentTownScene`.
+- Render the baked pixel map first, with tile/vector fallback paths preserved.
+- Render agents from sprite frames selected by `AgentState.role` and
+  `AgentState.status`, with generated geometry fallback preserved.
 - Keep event routing and stable location IDs in `src/events/routing.ts`.
 
-This gives the repo a real map-data pipeline without introducing license risk
-or allowing map objects, Phaser objects, or asset names to own runtime facts.
+This gives the repo a real asset/map pipeline without allowing Tiled objects,
+Phaser objects, image names, or sprite frames to own runtime facts.
 
 ## Stable Location IDs
 
@@ -74,18 +88,25 @@ The map object layer preserves:
 
 ## Files Changed
 
+- `scripts/generate_pixel_town_assets.py`
 - `public/maps/town-v1.tiled.json`
+- `public/maps/town-v1-preview.png`
+- `public/tilesets/agent-town-v1.png`
+- `public/sprites/agent-roles-v1.png`
+- `public/sprites/buildings-v1.png`
 - `src/game/townMap.ts`
-- `src/game/renderTownMap.ts`
 - `src/game/AgentTownScene.ts`
+- `src/game/renderTownMap.ts`
 - `src/game/renderLocations.ts`
-- `src/ui/Timeline.tsx`
+- `src/game/renderAgents.ts`
+- `src/ui/App.css`
 - `src/tests/town-map.test.ts`
 - `README.md`
 - `docs/VISUAL_MAPPING.md`
 - `docs/ASSET_LICENSES.md`
 - `docs/NEXT_PHASE.md`
 - `docs/evidence/M5/final-demo-notes.md`
+- `docs/evidence/M5/smallville-assets-qa.json`
 - `docs/evidence/M5/smallville-asset-pipeline.md`
 - `docs/evidence/M5/smallville-asset-pipeline-desktop.png`
 - `docs/evidence/M5/smallville-asset-pipeline-interaction.png`
@@ -94,12 +115,21 @@ The map object layer preserves:
 
 ## Verification Commands
 
+Focused checks during implementation:
+
 ```text
-git status -sb
-git remote -v
-git log -1 --oneline --decorate
-git fetch origin --prune
-git status -sb
+pnpm typecheck
+pnpm test -- src/tests/town-map.test.ts
+```
+
+Results:
+
+- `pnpm typecheck`: passed.
+- `pnpm test -- src/tests/town-map.test.ts`: passed, 8 files / 35 tests.
+
+Full required checks after final docs/evidence edits:
+
+```text
 pnpm typecheck
 pnpm test
 pnpm build
@@ -108,11 +138,9 @@ git diff --check
 
 Results:
 
-- Initial and post-fetch git status: `main...origin/main`, clean before work.
-- Current branch: `codex/smallville-asset-pipeline`.
 - `pnpm typecheck`: passed.
-- `pnpm test`: passed, 8 files / 34 tests.
-- `pnpm build`: passed with existing Phaser chunk-size warning.
+- `pnpm test`: passed, 8 files / 35 tests.
+- `pnpm build`: passed.
 - `git diff --check`: passed.
 
 Build warning:
@@ -121,24 +149,27 @@ Build warning:
 Some chunks are larger than 500 kB after minification.
 ```
 
-This is the existing Phaser bundle-size warning and is not caused by imported
-assets.
+This is the existing Phaser/Vite bundle-size warning and does not indicate a
+failed build.
 
 ## Browser Evidence
 
 Local dev server:
 
 ```text
-pnpm dev -- --host 127.0.0.1
-http://localhost:5173/
+pnpm dev --host 127.0.0.1
+http://127.0.0.1:5173/
 ```
 
 Browser path:
 
-- Browser plugin was available and used first.
-- Browser `domSnapshot()` failed with a plugin-side snapshot error, so QA used
-  Browser screenshots, Browser evaluate state reads, and Browser locators.
-- No standalone Playwright fallback was needed for interaction checks.
+- Codex Browser plugin was available and attempted first.
+- Browser `domSnapshot()` failed with plugin-side error:
+  `incrementalAriaSnapshot is not a function`.
+- Fallback used Python Playwright because the session explicitly requires
+  Playwright browser verification.
+- QA result JSON:
+  `docs/evidence/M5/smallville-assets-qa.json`.
 
 Screenshots:
 
@@ -152,12 +183,14 @@ docs/evidence/M5/smallville-asset-pipeline-mobile-map.png
 Desktop 1440x960:
 
 - Page title: `Agent Town`.
-- Meaningful app text present.
+- Header: `Agent Town`.
 - Framework overlay absent.
-- Horizontal overflow: false.
-- Canvas count: 1.
-- Canvas rect: about 773 x 669.
+- Horizontal overflow: `0`.
+- Canvas count: `1`.
+- Canvas rect: about `773 x 669`.
 - Initial town toolbar: `cursor 0`, `visible 30/30`, `balanced`, `100%`.
+- Asset HTTP responses: map JSON, baked map PNG, tileset PNG, agent sprite
+  sheet, and building sprite sheet all returned `200`.
 
 Interaction checks:
 
@@ -166,24 +199,35 @@ Interaction checks:
 - Handoff edges toggle changed `aria-pressed` from `true` to `false`.
 - Critical filter changed visible event count from `30/30` to `7/30`.
 - Next changed cursor from `0` to `1`.
-- Play advanced playback after waiting; toolbar reached later cursor state.
-- Pause returned header status to paused.
-- Post-fix browser console check after `2026-07-04T17:11:58.280Z` returned no
-  warn/error logs.
+- Play changed the timeline control state to `Pause` and header status to
+  running.
+
+Console health:
+
+- No relevant app console errors or warnings.
+- Chromium emitted WebGL `ReadPixels` performance warnings during screenshot
+  capture; the QA JSON classifies these as browser screenshot GPU warnings, not
+  application errors.
 
 Mobile 390x844:
 
 - First mobile screenshot verifies the responsive control stack.
 - Scrolled mobile map screenshot verifies the town canvas in viewport.
-- Horizontal overflow: false.
-- Mobile map canvas rect: about 372 x 322.
+- Horizontal overflow: `0`.
+- Mobile map canvas rect: about `372 x 322`.
+- Mobile town canvas host fits the canvas height after the CSS fix.
 
 PNG nonblank sampling:
 
 ```text
-smallville-asset-pipeline-desktop.png: size=1440x960 non_white_ratio=1.0000 sampled_unique_colors=1130
-smallville-asset-pipeline-interaction.png: size=1440x960 non_white_ratio=1.0000 sampled_unique_colors=1086
-smallville-asset-pipeline-mobile-map.png: size=390x844 non_white_ratio=1.0000 sampled_unique_colors=923
+docs/evidence/M5/smallville-asset-pipeline-desktop.png: size=1440x960 sampled_unique_colors=342 non_white_ratio=1.0000 transparent_ratio=0.0000
+docs/evidence/M5/smallville-asset-pipeline-interaction.png: size=1440x960 sampled_unique_colors=282 non_white_ratio=1.0000 transparent_ratio=0.0000
+docs/evidence/M5/smallville-asset-pipeline-mobile.png: size=780x1688 sampled_unique_colors=179 non_white_ratio=1.0000 transparent_ratio=0.0000
+docs/evidence/M5/smallville-asset-pipeline-mobile-map.png: size=780x1688 sampled_unique_colors=200 non_white_ratio=1.0000 transparent_ratio=0.0000
+public/maps/town-v1-preview.png: size=1040x896 sampled_unique_colors=89 non_white_ratio=1.0000 transparent_ratio=0.0000
+public/tilesets/agent-town-v1.png: size=128x128 sampled_unique_colors=49 non_white_ratio=0.2501 transparent_ratio=0.7499
+public/sprites/agent-roles-v1.png: size=192x128 sampled_unique_colors=44 non_white_ratio=0.4583 transparent_ratio=0.5417
+public/sprites/buildings-v1.png: size=1120x112 sampled_unique_colors=53 non_white_ratio=0.5516 transparent_ratio=0.4484
 ```
 
 ## Asset License Status
@@ -191,12 +235,16 @@ smallville-asset-pipeline-mobile-map.png: size=390x844 non_white_ratio=1.0000 sa
 - External visual assets imported: none.
 - Stanford Smallville assets copied: none.
 - Third-party tilesets/spritesheets copied: none.
-- Project-authored asset added:
-  `public/maps/town-v1.tiled.json`.
+- Project-authored generated assets added:
+  - `public/maps/town-v1.tiled.json`
+  - `public/maps/town-v1-preview.png`
+  - `public/tilesets/agent-town-v1.png`
+  - `public/sprites/agent-roles-v1.png`
+  - `public/sprites/buildings-v1.png`
 - Repo-level open-source license: not present.
 - Commercial-use / attribution obligations for third-party art: not applicable.
 
-`docs/ASSET_LICENSES.md` records the project-authored map and the remaining
+`docs/ASSET_LICENSES.md` records these project-authored assets and the remaining
 license boundary.
 
 ## AgentEvent Boundary Self-Check
@@ -205,22 +253,16 @@ license boundary.
   cursor still come from `AgentEvent -> WorldState`.
 - The map object layer supplies projection terrain, route, decor, building
   footprint, and location-anchor metadata only.
+- Tile IDs and sprite frames are presentation metadata only.
 - `src/tests/town-map.test.ts` proves the public map preserves all rendered
-  stable location IDs and keeps map anchors aligned with
-  `src/events/routing.ts`.
+  stable location IDs, exposes tile layers/tileset metadata, points to generated
+  PNG assets, and keeps map anchors aligned with `src/events/routing.ts`.
 - `src/events/reducer.ts` was not changed.
 - No adapter-specific logic was added to `src/game/*`.
 
 ## Notion / Linear Sync
 
-Read status:
-
-- Notion read-back: actual read happened through connector fetch/search for the
-  runbook index, S14, S15, M5 spec, and root spec.
-- Linear read-back: actual read happened through connector fetch/search for
-  MDL-144, MDL-145, MDL-129, and MDL-152.
-
-Actual write-back:
+Earlier read/write-back from the first asset-pipeline pass:
 
 - Notion M5 spec comment created:
   `393acb4b-b6e6-81b0-bfa6-001d71a7ca2a`.
@@ -229,36 +271,36 @@ Actual write-back:
 - Linear MDL-144 comment created:
   `d4f612b7-98c3-4dab-8d92-e00ef8f56580`.
 
-Read-back after write:
-
-- Notion `get_comments` returned the M5 spec comment with PR
-  `https://github.com/sophistd/agent-town/pull/1`, branch, evidence paths,
-  verification summary, and asset-license status.
-- Linear `list_comments` for MDL-129 returned comment
-  `191a6b4e-87f4-4c7b-9460-0ba26f1f04d8`.
-- Linear `list_comments` for MDL-144 returned comment
-  `d4f612b7-98c3-4dab-8d92-e00ef8f56580`.
+Current revision must update PR / Notion / Linear again after final verification
+and push. Until then, this section is an evidence reminder, not a claim that the
+new pixel-asset revision has already been externally written back.
 
 Scope truth:
 
 - No new Linear issue was created.
 - No Linear issue or gate was closed or reopened.
-- No Notion page content was replaced; the Notion write was a page-level
-  comment.
+- No Notion page content was replaced.
+- No repo-level `LICENSE` file was added.
 
 ## Remaining Limitations
 
-- No PNG tileset or agent sprite sheet exists yet.
-- The map is Tiled-compatible JSON object data, not a full Tiled tileset render.
+- This is now an original pixel asset pipeline, but it is not yet a complete
+  Stanford Generative Agents town: there are no many-building interiors,
+  animated day schedules, complex character routines, or full-world Tiled
+  editing workflow.
+- The map is denser and materially closer to a Smallville-like top-down town,
+  but it remains a compact prototype projection for runtime events.
 - Browser frame-rate profiling is still future work.
 - The repository is public but has no formal open-source `LICENSE` file.
 
 ## Next Session Candidate
 
-Create a dedicated tileset/sprite session:
+Deepen the original generator rather than importing unknown art:
 
-- project-authored terrain tileset
-- project-authored agent sprite sheet
-- optional Phaser tilemap render path
+- richer terrain tile variation
+- interior rooms and doorway anchors
+- animated agent walk/idle frames
+- denser props and readable districts
+- optional true Phaser tilemap render path
 - same stable object layer IDs
-- explicit license/rights entry before assets enter the public repo
+- same explicit license/rights entry before any external asset enters the repo

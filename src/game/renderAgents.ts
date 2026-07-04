@@ -1,8 +1,9 @@
 import Phaser from "phaser";
 
-import type { AgentState, WorldState } from "../events/types";
+import type { AgentRole, AgentState, AgentStateStatus, WorldState } from "../events/types";
 import { selectAgent } from "../state/selectionStore";
 import type { TownProjectionSettings } from "./projectionSettings";
+import { AGENT_SPRITESHEET_KEY } from "./townMap";
 import {
   ROLE_VISUALS,
   STATUS_LEGEND_ORDER,
@@ -13,6 +14,33 @@ export type RenderPosition = {
   x: number;
   y: number;
 };
+
+const AGENT_ROLE_FRAME_COLUMN: Record<AgentRole, number> = {
+  planner: 0,
+  researcher: 1,
+  coder: 2,
+  reviewer: 3,
+  memory: 4,
+  critic: 5,
+  orchestrator: 6,
+  custom: 7,
+};
+
+const AGENT_STATUS_FRAME_ROW: Record<AgentStateStatus, number> = {
+  idle: 0,
+  thinking: 1,
+  walking: 1,
+  talking: 1,
+  working: 1,
+  waiting: 0,
+  blocked: 2,
+  error: 2,
+  done: 3,
+};
+
+function getAgentSpriteFrame(agent: AgentState): number {
+  return AGENT_STATUS_FRAME_ROW[agent.status] * 8 + AGENT_ROLE_FRAME_COLUMN[agent.role];
+}
 
 function getAgentOffsets(agents: AgentState[]): Map<string, RenderPosition> {
   const byLocation = new Map<string, AgentState[]>();
@@ -105,19 +133,36 @@ function renderAgent(
   shadow.fillStyle(0x000000, 0.16);
   shadow.fillEllipse(x + 2, y + 25, 44, 10);
 
-  const body = scene.add.graphics();
-  body.fillStyle(0x1b2224, 0.14);
-  body.fillRoundedRect(x - 13, y - 7, 28, 38, 5);
-  body.fillStyle(roleVisual.fill, 1);
-  body.fillRoundedRect(x - 11, y - 4, 22, 28, 5);
-  body.fillStyle(0xf3d5a7, 1);
-  body.fillRoundedRect(x - 9, y - 22, 18, 18, 5);
-  body.fillStyle(roleVisual.stroke, 1);
-  body.fillRect(x - 10, y - 24, 20, 7);
-  body.lineStyle(isSelected ? 4 : 2, isSelected ? 0xf4f7ef : roleVisual.stroke, 1);
-  body.strokeRoundedRect(x - 13, y - 24, 26, 50, 6);
+  if (scene.textures.exists(AGENT_SPRITESHEET_KEY)) {
+    const selectionRing = scene.add.graphics();
+    if (isSelected) {
+      selectionRing.lineStyle(4, 0xf4f7ef, 0.95);
+      selectionRing.strokeRoundedRect(x - 21, y - 34, 42, 62, 8);
+      selectionRing.lineStyle(2, roleVisual.stroke, 0.88);
+      selectionRing.strokeRoundedRect(x - 17, y - 30, 34, 54, 6);
+    }
 
-  layer.add([shadow, body]);
+    const sprite = scene.add
+      .sprite(x, y + 10, AGENT_SPRITESHEET_KEY, getAgentSpriteFrame(agent))
+      .setOrigin(0.5, 0.88)
+      .setScale(isExpanded ? 1.7 : 1.55);
+
+    layer.add(isSelected ? [shadow, selectionRing, sprite] : [shadow, sprite]);
+  } else {
+    const body = scene.add.graphics();
+    body.fillStyle(0x1b2224, 0.14);
+    body.fillRoundedRect(x - 13, y - 7, 28, 38, 5);
+    body.fillStyle(roleVisual.fill, 1);
+    body.fillRoundedRect(x - 11, y - 4, 22, 28, 5);
+    body.fillStyle(0xf3d5a7, 1);
+    body.fillRoundedRect(x - 9, y - 22, 18, 18, 5);
+    body.fillStyle(roleVisual.stroke, 1);
+    body.fillRect(x - 10, y - 24, 20, 7);
+    body.lineStyle(isSelected ? 4 : 2, isSelected ? 0xf4f7ef : roleVisual.stroke, 1);
+    body.strokeRoundedRect(x - 13, y - 24, 26, 50, 6);
+
+    layer.add([shadow, body]);
+  }
   renderStatusBadge(scene, layer, agent, x, y);
 
   if (!isCompact) {

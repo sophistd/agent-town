@@ -4,8 +4,11 @@ import type {
   TownDecorObject,
   TownMapDefinition,
   TownRouteObject,
+  TownTileLayerDefinition,
+  TownTilesetDefinition,
   TownTerrainKind,
 } from "./townMap";
+import { TOWN_MAP_BACKGROUND_KEY, TOWN_MAP_TILESET_KEY } from "./townMap";
 
 const terrainPalette: Record<
   TownTerrainKind,
@@ -44,6 +47,89 @@ function drawTerrain(scene: Phaser.Scene, layer: Phaser.GameObjects.Container, m
   }
 
   layer.add(terrain);
+}
+
+function hasTexture(scene: Phaser.Scene, key: string): boolean {
+  return scene.textures.exists(key);
+}
+
+function drawBakedBackground(
+  scene: Phaser.Scene,
+  layer: Phaser.GameObjects.Container,
+  map: TownMapDefinition,
+): boolean {
+  if (map.backgroundImageUrl === undefined || !hasTexture(scene, TOWN_MAP_BACKGROUND_KEY)) {
+    return false;
+  }
+
+  const background = scene.add
+    .image(0, 0, TOWN_MAP_BACKGROUND_KEY)
+    .setOrigin(0, 0)
+    .setDisplaySize(map.width, map.height);
+
+  layer.add(background);
+
+  return true;
+}
+
+function findTilesetForGid(
+  tilesets: TownTilesetDefinition[],
+  gid: number,
+): TownTilesetDefinition | undefined {
+  return [...tilesets]
+    .sort((left, right) => right.firstGid - left.firstGid)
+    .find((tileset) => gid >= tileset.firstGid);
+}
+
+function drawTileLayer(
+  scene: Phaser.Scene,
+  layer: Phaser.GameObjects.Container,
+  map: TownMapDefinition,
+  tileLayer: TownTileLayerDefinition,
+): void {
+  if (!tileLayer.visible || !hasTexture(scene, TOWN_MAP_TILESET_KEY)) {
+    return;
+  }
+
+  for (let index = 0; index < tileLayer.data.length; index += 1) {
+    const gid = tileLayer.data[index];
+
+    if (gid <= 0) {
+      continue;
+    }
+
+    const tileset = findTilesetForGid(map.tilesets, gid);
+
+    if (tileset === undefined) {
+      continue;
+    }
+
+    const x = (index % tileLayer.width) * map.tileWidth;
+    const y = Math.floor(index / tileLayer.width) * map.tileHeight;
+    const frame = gid - tileset.firstGid;
+    const tile = scene.add
+      .image(x, y, TOWN_MAP_TILESET_KEY, frame)
+      .setOrigin(0, 0)
+      .setAlpha(tileLayer.opacity);
+
+    layer.add(tile);
+  }
+}
+
+function drawTileLayers(
+  scene: Phaser.Scene,
+  layer: Phaser.GameObjects.Container,
+  map: TownMapDefinition,
+): boolean {
+  if (map.tileLayers.length === 0 || map.tilesets.length === 0) {
+    return false;
+  }
+
+  for (const tileLayer of map.tileLayers) {
+    drawTileLayer(scene, layer, map, tileLayer);
+  }
+
+  return hasTexture(scene, TOWN_MAP_TILESET_KEY);
 }
 
 function drawRoute(
@@ -141,13 +227,17 @@ export function renderTownMap(
   layer: Phaser.GameObjects.Container,
   map: TownMapDefinition,
 ): void {
-  drawTerrain(scene, layer, map);
-  drawRoutes(scene, layer, map);
+  const renderedBakedBackground = drawBakedBackground(scene, layer, map);
+  const renderedTileLayers = renderedBakedBackground ? false : drawTileLayers(scene, layer, map);
+
+  if (!renderedBakedBackground && !renderedTileLayers) {
+    drawTerrain(scene, layer, map);
+    drawRoutes(scene, layer, map);
+    drawDecor(scene, layer, map);
+  }
 
   const border = scene.add.graphics();
   border.lineStyle(2, 0x91a87d, 0.7);
-  border.strokeRoundedRect(18, 18, scene.scale.width - 36, scene.scale.height - 36, 14);
+  border.strokeRoundedRect(18, 18, map.width - 36, map.height - 36, 14);
   layer.add(border);
-
-  drawDecor(scene, layer, map);
 }
