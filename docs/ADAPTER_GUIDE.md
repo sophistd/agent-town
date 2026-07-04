@@ -45,6 +45,23 @@ Rules:
 - Invalid timestamps produce a warning, but the event remains playable because
   deterministic replay uses `sequence`.
 
+## WebSocket Adapter
+
+`src/adapters/websocketAdapter.ts` implements the S13 WebSocket path.
+
+Rules:
+
+- Each WebSocket message must be JSON or an already parsed object.
+- Native `AgentEvent` messages are validated directly.
+- Envelope messages may use `event`, `payload`, or `data` to carry the event.
+- Source-shaped messages may be normalized before validation.
+- Missing required fields are quarantined.
+- Existing canonical `metadata.source` values are preserved.
+- Missing `metadata.source` is set to `websocket`.
+- `metadata.transport` is set to `websocket`.
+- Invalid timestamps produce a warning, but the event remains playable because
+  deterministic replay uses `sequence`.
+
 ## Mapping Table
 
 For native JSONL, source fields map directly:
@@ -75,9 +92,64 @@ source.metrics             -> AgentEvent.metrics
 source.metadata            -> AgentEvent.metadata
 ```
 
+For WebSocket source-shaped events, the adapter supports this initial mapping:
+
+```text
+source.id                  -> AgentEvent.id
+source.eventId             -> AgentEvent.id
+source.runId               -> AgentEvent.runId
+source.run_id              -> AgentEvent.runId
+source.taskId              -> AgentEvent.taskId
+source.task_id             -> AgentEvent.taskId
+source.parentEventId       -> AgentEvent.parentEventId
+source.parent_event_id     -> AgentEvent.parentEventId
+source.timestamp           -> AgentEvent.timestamp
+source.time                -> AgentEvent.timestamp
+source.createdAt           -> AgentEvent.timestamp
+source.sequence            -> AgentEvent.sequence
+source.seq                 -> AgentEvent.sequence
+source.agent.id            -> AgentEvent.agentId
+source.agent.name          -> AgentEvent.agentName
+source.agent.role          -> AgentEvent.agentRole
+source.agentId             -> AgentEvent.agentId
+source.agentName           -> AgentEvent.agentName
+source.agentRole           -> AgentEvent.agentRole
+source.eventType           -> AgentEvent.type
+source.event_type          -> AgentEvent.type
+source.type                -> AgentEvent.type
+source.content             -> AgentEvent.content
+source.message             -> AgentEvent.content
+source.text                -> AgentEvent.content
+source.summary             -> AgentEvent.summary
+source.name                -> AgentEvent.summary
+source.targetAgentId       -> AgentEvent.targetAgentId
+source.target_agent_id     -> AgentEvent.targetAgentId
+source.targetTaskId        -> AgentEvent.targetTaskId
+source.target_task_id      -> AgentEvent.targetTaskId
+source.tool.name           -> AgentEvent.toolName
+source.tool.input          -> AgentEvent.toolInput
+source.tool.outputSummary  -> AgentEvent.toolOutputSummary
+source.tool.output         -> AgentEvent.toolOutputSummary
+source.metrics             -> AgentEvent.metrics
+source.metadata            -> AgentEvent.metadata
+```
+
 For non-native sources, add a new adapter file and document a source-specific
 mapping table before sending data to the reducer. Do not add source-specific
 branches to `src/game/*` or projection components.
+
+## Local WebSocket Procedure
+
+A local runtime can send newline-free JSON messages to:
+
+```plain text
+ws://localhost:8765/events
+```
+
+Each message should be either a canonical `AgentEvent` or a source-shaped event
+covered by the WebSocket mapping table above. The app's Import Source panel can
+connect to that URL, and every accepted message is appended to the current
+WebSocket run before replay.
 
 ## Adding Another Source
 
