@@ -195,6 +195,13 @@ targets, and missing tool names are quarantined before replay. The current UI
 button uses a deterministic fixture response; it does not call a live LLM
 provider and does not give the renderer model-owned runtime facts.
 
+`llmPlannerAdapter.ts` also exposes an OpenAI Responses provider boundary for
+local/server-side runtimes. `buildOpenAiResponsesPlannerBody` creates a
+`store: false` JSON-schema request, and `callOpenAiLlmPlanner` calls the
+provider through injected/runtime `fetch`, extracts `output_text`, then reuses
+the same parser, validation, and quarantine path. API keys must stay outside
+browser code; the UI still uses the deterministic fixture.
+
 ## Smallville Evaluation
 
 `src/events/smallvilleEvaluation.ts` computes a structural Smallville-oriented

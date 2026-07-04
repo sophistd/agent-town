@@ -40,15 +40,15 @@ intact.
    shape for observation, memory retrieval, reflection, planning, social
    diffusion, routine scheduling, deterministic routine-conflict resolution,
    natural-language intervention, durable memory recall, agent-addressable
-   memory planning, model-planner contract parsing/quarantine, replay-derived
-   relationship state, structural Smallville capability/ablation evaluation,
-   and action at 25-agent scale. The next
+   memory planning, model-planner contract parsing/quarantine, OpenAI Responses
+   provider-boundary request/parse coverage, replay-derived relationship state,
+   structural Smallville capability/ablation evaluation, and action at 25-agent scale. The next
    Smallville-oriented runtime session should choose
    exactly one of:
 
-   - connect a real provider-backed LLM call behind the existing LLM planner
-     contract, with keys kept out of browser code and deterministic fixtures
-     preserved for tests
+   - run and evidence a real provider-backed LLM call through the existing
+     planner boundary, with keys kept out of browser code and deterministic
+     fixtures preserved for tests
    - use the agent-addressable memory retrieval stream inside provider-backed
      planning while preserving parser quarantine and replay validation
    - turn deterministic routine schedules into adapter-produced daily plans

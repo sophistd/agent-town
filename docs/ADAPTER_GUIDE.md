@@ -169,8 +169,19 @@ Rules:
 - Accepted events receive `metadata.source = "llm"` and
   `metadata.llmPlanner` with request id, prompt hash, model role, model name,
   response step id, prior-run context, and selected memory record IDs.
-- The current UI source uses a deterministic model-shaped fixture response. It
-  proves the adapter contract, not a live provider integration.
+- `buildOpenAiResponsesPlannerBody` builds an OpenAI Responses request with
+  `store: false`, JSON schema output formatting, developer/user messages, and
+  planner metadata.
+- `callOpenAiLlmPlanner` is the provider-backed boundary. It requires an API
+  key supplied by the local runtime, calls the Responses API through injected or
+  runtime `fetch`, extracts `output_text`, then sends the model text through the
+  same parser, validation, and quarantine path.
+- The current UI source still uses a deterministic model-shaped fixture
+  response. Browser code does not receive API keys and does not call the live
+  provider.
+- Tests use an injected mock `fetch` to prove provider request construction and
+  provider output parsing. A live provider call requires `OPENAI_API_KEY` in the
+  local runtime.
 
 ## Adding Another Source
 

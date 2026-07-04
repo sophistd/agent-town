@@ -51,7 +51,7 @@ runtime facts.
 | Planning | Higher-level plans decomposed into actions | Generator emits planning-stage `decision` events with `planStep` and routine segment metadata | Initial |
 | Action/conversation | Agents act, talk, coordinate | Generator emits `handoff`, `message`, `tool_call`, and `done` events through the existing projection path; Social day emits 25 invitation messages | Partial |
 | Emergent social behavior | Information spreads and coordination emerges from agent interaction over time | `Social day` deterministically models a user-seeded Valentine's invitation spreading through a 25-agent relationship graph, and replay now derives inspectable relationship state from messages, handoffs, declarations, and diffusion metadata | Initial |
-| LLM behavior generation | LLM produces observations/reflections/plans/actions | `LLM plan` builds a model-ready request, parses a model-shaped response into canonical events, and quarantines invalid output; current UI source uses a deterministic fixture and no live provider call | Initial |
+| LLM behavior generation | LLM produces observations/reflections/plans/actions | `LLM plan` builds a model-ready request, parses model-shaped responses into canonical events, quarantines invalid output, and now has an OpenAI Responses provider boundary with mock-fetch coverage; current UI source still uses a deterministic fixture and no live provider call was run without an API key | Initial |
 | Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, recalls it as `memory_read` events, and feeds agent-addressable planning events; not yet a server-backed world database or autonomous memory engine | Initial |
 | Many agents | Reference environment used 25 agents | `Social day` and `Routine day` fixtures use 25 agents and 150 canonical events each | Initial |
 | Human intervention | User can inject natural-language changes into the town | `Intervention` source turns an operator prompt into canonical observation/retrieval/reflection/planning/action/closure events with prior-run context | Initial |
@@ -86,6 +86,8 @@ The current slice adds deterministic cognitive evidence:
   - `persistentMemoryAdapter`
 - `src/adapters/llmPlannerAdapter.ts`
   - `buildSmallvilleLlmPlannerRequest`
+  - `buildOpenAiResponsesPlannerBody`
+  - `callOpenAiLlmPlanner`
   - `parseLlmPlannerResponse`
   - `buildDeterministicLlmPlannerResult`
   - `llmPlannerAdapter`
@@ -211,6 +213,9 @@ This slice can pass if:
 - a model-planner contract can build a JSON request from prior events and
   durable memory records, parse a model-shaped response into canonical events,
   and quarantine invalid model output before replay
+- an OpenAI Responses provider boundary can build a `store: false` JSON-schema
+  request, call through injected/runtime `fetch`, and pass provider
+  `output_text` through the same parser/quarantine path
 - social relationship state is derived from canonical event evidence and remains
   deterministic across replay
 - the Run Summary can display a structural Smallville evaluation report derived
@@ -226,7 +231,7 @@ This slice cannot claim:
 - autonomous social emergence
 - autonomous/adaptive daily scheduling
 - complete persistent agent memory across devices or server sessions
-- provider-backed autonomous LLM-generated behavior
+- live-verified provider-backed autonomous LLM-generated behavior
 - human believability ratings or empirical ablation-study results
 - free-form natural-language understanding beyond deterministic intent routing
 - unscripted 25-agent-scale simulation
@@ -236,9 +241,9 @@ This slice cannot claim:
 
 The next meaningful move is not more labels. It is one of:
 
-- connect a real provider-backed LLM call behind the existing planner contract,
-  keeping API keys out of browser code and preserving deterministic fixtures
-- use agent-addressable memory retrieval inside provider-backed planning
+- run and evidence a real provider-backed LLM call with a local/server-side API
+  key while keeping keys out of browser code
+- use agent-addressable memory retrieval inside live provider-backed planning
 - turn routine schedules into adapter-produced daily plans that can revise
   themselves from observation and memory evidence
 - persist the intervention memory stream beyond browser-local storage

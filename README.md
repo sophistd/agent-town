@@ -347,9 +347,11 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
 - Routine scheduling is currently deterministic fixture evidence. The app can
   show routine phases and crowding-resolution events for 25 agents, but it is
   not yet an adaptive autonomous scheduler.
-- The `LLM plan` source proves the request/response parser contract for future
-  model-backed planning, but it does not call a live provider and does not put
-  API keys or model execution in browser code.
+- The `LLM plan` source proves the request/response parser contract and the
+  adapter now includes an OpenAI Responses provider boundary for local or
+  server-side runtimes. The browser UI still uses a deterministic fixture and
+  does not receive API keys; a live provider run requires `OPENAI_API_KEY`
+  outside browser code.
 - The graph and memory views are represented through current projection data,
   detail, summary, edges, persistent memory recall, and memory events; separate
   dedicated tabs are future work.

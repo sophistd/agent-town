@@ -29,6 +29,8 @@ const LLM_PLANNER_CONTRACT_VERSION = 1;
 const DEFAULT_LLM_PLAN_TIMESTAMP = "2026-07-04T19:00:00.000Z";
 const DEFAULT_MAX_REQUEST_AGENTS = 8;
 const DEFAULT_MAX_REQUEST_MEMORIES = 12;
+const DEFAULT_OPENAI_RESPONSES_BASE_URL = "https://api.openai.com/v1";
+const DEFAULT_OPENAI_RESPONSES_MODEL = "gpt-5.1-mini";
 
 export type LlmPlannerCognitiveStage =
   | "observation"
@@ -160,6 +162,59 @@ export type LlmPlannerRequestInput = {
 export type LlmPlannerAdapterInput = LlmPlannerRequestInput & {
   request?: LlmPlannerRequest;
   response: LlmPlannerResponse | string | unknown;
+};
+
+export type OpenAiResponsesFetchInput = string | URL;
+
+export type OpenAiResponsesFetchInit = {
+  body?: string;
+  headers?: Record<string, string>;
+  method?: string;
+};
+
+export type OpenAiResponsesFetchResponse = {
+  ok: boolean;
+  status: number;
+  statusText?: string;
+  text: () => Promise<string>;
+};
+
+export type OpenAiResponsesFetch = (
+  input: OpenAiResponsesFetchInput,
+  init: OpenAiResponsesFetchInit,
+) => Promise<OpenAiResponsesFetchResponse>;
+
+export type OpenAiPlannerCallInput = LlmPlannerRequestInput & {
+  apiKey?: string;
+  baseUrl?: string;
+  fetchImpl?: OpenAiResponsesFetch;
+  maxOutputTokens?: number;
+  model?: string;
+  request?: LlmPlannerRequest;
+};
+
+export type OpenAiPlannerRequestBody = {
+  input: Array<{
+    content: Array<{
+      text: string;
+      type: "input_text";
+    }>;
+    role: "developer" | "user";
+    type: "message";
+  }>;
+  instructions: string;
+  max_output_tokens: number;
+  metadata: Record<string, string>;
+  model: string;
+  store: false;
+  text: {
+    format: {
+      name: string;
+      schema: Record<string, unknown>;
+      strict: false;
+      type: "json_schema";
+    };
+  };
 };
 
 const LLM_COGNITIVE_STAGES = [
@@ -473,6 +528,195 @@ export function buildSmallvilleLlmPlannerRequest(
       selectedRecords,
     },
   };
+}
+
+function buildOpenAiPlannerSchema(): Record<string, unknown> {
+  return {
+    type: "object",
+    additionalProperties: true,
+    required: ["steps"],
+    properties: {
+      requestId: { type: "string" },
+      runId: { type: "string" },
+      taskId: { type: "string" },
+      model: { type: "string" },
+      generatedAt: { type: "string" },
+      warnings: {
+        type: "array",
+        items: { type: "string" },
+      },
+      steps: {
+        type: "array",
+        minItems: 1,
+        maxItems: 16,
+        items: {
+          type: "object",
+          additionalProperties: true,
+          required: ["agentId", "agentName", "agentRole", "type", "content"],
+          properties: {
+            stepId: { type: "string" },
+            eventId: { type: "string" },
+            parentEventId: { type: "string" },
+            timestamp: { type: "string" },
+            sequence: { type: "number" },
+            agentId: { type: "string" },
+            agentName: { type: "string" },
+            agentRole: { enum: AGENT_ROLES },
+            type: { enum: AGENT_EVENT_TYPES },
+            content: { type: "string" },
+            summary: { type: "string" },
+            targetAgentId: { type: "string" },
+            targetTaskId: { type: "string" },
+            toolName: { type: "string" },
+            toolInput: { type: "object", additionalProperties: true },
+            toolOutputSummary: { type: "string" },
+            artifactIds: {
+              type: "array",
+              items: { type: "string" },
+            },
+            filePath: { type: "string" },
+            locationHint: { enum: AGENT_LOCATIONS },
+            status: { enum: AGENT_EVENT_STATUSES },
+            cognitiveStage: { enum: LLM_COGNITIVE_STAGES },
+            subLocationId: { type: "string" },
+            activity: { type: "string" },
+            selectedMemoryRecordIds: {
+              type: "array",
+              items: { type: "string" },
+            },
+            derivedFromStepIds: {
+              type: "array",
+              items: { type: "string" },
+            },
+            planStep: { type: "object", additionalProperties: true },
+            metadata: { type: "object", additionalProperties: true },
+          },
+        },
+      },
+    },
+  };
+}
+
+function openAiResponsesEndpoint(baseUrl: string): string {
+  return `${baseUrl.replace(/\/$/, "")}/responses`;
+}
+
+function buildOpenAiPlannerInstructions(request: LlmPlannerRequest): string {
+  return [
+    "You are the provider-backed planner for Agent Town.",
+    "Return one JSON object that matches the provided schema.",
+    "Every step must be accepted later as one canonical AgentEvent.",
+    "Use only the allowed event types, roles, locations, statuses, and cognitive stages.",
+    "Do not make the renderer, sprites, map objects, or UI state own runtime facts.",
+    "Use memory and agent context from the planner request when selecting actions.",
+    "If a message or handoff targets another agent, include targetAgentId.",
+    "If a step calls a tool, include toolName.",
+    `Request id: ${request.requestId}.`,
+    `Prompt hash: ${request.promptHash}.`,
+  ].join("\n");
+}
+
+function buildOpenAiPlannerUserPayload(request: LlmPlannerRequest): string {
+  return JSON.stringify(
+    {
+      outputContract: {
+        root: "LlmPlannerResponse",
+        steps: "Every step maps to one AgentEvent after adapter validation.",
+      },
+      plannerRequest: request,
+    },
+    null,
+    2,
+  );
+}
+
+export function buildOpenAiResponsesPlannerBody(input: {
+  maxOutputTokens?: number;
+  model?: string;
+  request: LlmPlannerRequest;
+}): OpenAiPlannerRequestBody {
+  return {
+    input: [
+      {
+        role: "developer",
+        type: "message",
+        content: [
+          {
+            type: "input_text",
+            text: input.request.instructions.join("\n"),
+          },
+        ],
+      },
+      {
+        role: "user",
+        type: "message",
+        content: [
+          {
+            type: "input_text",
+            text: buildOpenAiPlannerUserPayload(input.request),
+          },
+        ],
+      },
+    ],
+    instructions: buildOpenAiPlannerInstructions(input.request),
+    max_output_tokens: input.maxOutputTokens ?? 1800,
+    metadata: {
+      agent_town_contract: "llm_planner_v1",
+      prompt_hash: input.request.promptHash,
+      request_id: input.request.requestId,
+    },
+    model: input.model ?? DEFAULT_OPENAI_RESPONSES_MODEL,
+    store: false,
+    text: {
+      format: {
+        name: "agent_town_llm_planner_response",
+        schema: buildOpenAiPlannerSchema(),
+        strict: false,
+        type: "json_schema",
+      },
+    },
+  };
+}
+
+export function extractOpenAiResponsesText(response: unknown): string | undefined {
+  if (!isRecord(response)) {
+    return undefined;
+  }
+
+  const directText = response.output_text;
+  if (typeof directText === "string" && directText.trim().length > 0) {
+    return directText;
+  }
+
+  const output = response.output;
+  if (!Array.isArray(output)) {
+    return undefined;
+  }
+
+  const textParts: string[] = [];
+
+  for (const item of output) {
+    if (!isRecord(item) || !Array.isArray(item.content)) {
+      continue;
+    }
+
+    for (const content of item.content) {
+      if (!isRecord(content)) {
+        continue;
+      }
+
+      const text = content.text;
+      if (
+        content.type === "output_text" &&
+        typeof text === "string" &&
+        text.trim().length > 0
+      ) {
+        textParts.push(text);
+      }
+    }
+  }
+
+  return textParts.length > 0 ? textParts.join("\n") : undefined;
 }
 
 function pickAgent(
@@ -936,6 +1180,177 @@ export function parseLlmPlannerResponse(input: LlmPlannerAdapterInput): AdapterR
     quarantinedEvents,
     source: LLM_PLANNER_SOURCE,
     warnings,
+  };
+}
+
+function providerWarning(input: {
+  code: string;
+  message: string;
+}): AdapterWarning {
+  return {
+    code: input.code,
+    message: input.message,
+    source: LLM_PLANNER_SOURCE,
+  };
+}
+
+function globalFetch(): OpenAiResponsesFetch | undefined {
+  return typeof globalThis.fetch === "function"
+    ? (globalThis.fetch as unknown as OpenAiResponsesFetch)
+    : undefined;
+}
+
+export async function callOpenAiLlmPlanner(
+  input: OpenAiPlannerCallInput = {},
+): Promise<AdapterResult> {
+  const request =
+    input.request ??
+    buildSmallvilleLlmPlannerRequest({
+      maxAgents: input.maxAgents,
+      maxMemoryRecords: input.maxMemoryRecords,
+      now: input.now,
+      previousEvents: input.previousEvents,
+      records: input.records,
+    });
+  const apiKey = input.apiKey?.trim();
+
+  if (apiKey === undefined || apiKey.length === 0) {
+    return {
+      events: [],
+      quarantinedEvents: [],
+      source: LLM_PLANNER_SOURCE,
+      warnings: [
+        providerWarning({
+          code: "missing_openai_api_key",
+          message:
+            "OPENAI_API_KEY is required for a live provider-backed LLM planner call.",
+        }),
+      ],
+    };
+  }
+
+  const fetchImpl = input.fetchImpl ?? globalFetch();
+
+  if (fetchImpl === undefined) {
+    return {
+      events: [],
+      quarantinedEvents: [],
+      source: LLM_PLANNER_SOURCE,
+      warnings: [
+        providerWarning({
+          code: "missing_fetch",
+          message:
+            "A fetch implementation is required for a live provider-backed LLM planner call.",
+        }),
+      ],
+    };
+  }
+
+  const body = buildOpenAiResponsesPlannerBody({
+    maxOutputTokens: input.maxOutputTokens,
+    model: input.model,
+    request,
+  });
+  const response = await fetchImpl(
+    openAiResponsesEndpoint(input.baseUrl ?? DEFAULT_OPENAI_RESPONSES_BASE_URL),
+    {
+      body: JSON.stringify(body),
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+    },
+  );
+  const rawResponseText = await response.text();
+
+  if (!response.ok) {
+    return {
+      events: [],
+      quarantinedEvents: [
+        quarantine({
+          code: "openai_responses_http_error",
+          input: {
+            status: response.status,
+            statusText: response.statusText,
+          },
+          message: `OpenAI Responses request failed with HTTP ${response.status}.`,
+          path: "$",
+          raw: rawResponseText,
+        }),
+      ],
+      source: LLM_PLANNER_SOURCE,
+      warnings: [],
+    };
+  }
+
+  let providerResponse: unknown;
+
+  try {
+    providerResponse = JSON.parse(rawResponseText) as unknown;
+  } catch (error) {
+    return {
+      events: [],
+      quarantinedEvents: [
+        quarantine({
+          code: "invalid_openai_responses_json",
+          input: rawResponseText,
+          message:
+            error instanceof Error
+              ? `OpenAI Responses payload must be valid JSON: ${error.message}`
+              : "OpenAI Responses payload must be valid JSON.",
+          path: "$",
+          raw: rawResponseText,
+        }),
+      ],
+      source: LLM_PLANNER_SOURCE,
+      warnings: [],
+    };
+  }
+
+  const plannerText = extractOpenAiResponsesText(providerResponse);
+
+  if (plannerText === undefined) {
+    return {
+      events: [],
+      quarantinedEvents: [
+        quarantine({
+          code: "missing_openai_responses_text",
+          input: providerResponse,
+          message:
+            "OpenAI Responses payload did not include output_text or message content output_text.",
+          path: "output",
+          raw: rawResponseText,
+        }),
+      ],
+      source: LLM_PLANNER_SOURCE,
+      warnings: [],
+    };
+  }
+
+  const parsed = parseLlmPlannerResponse({
+    maxAgents: input.maxAgents,
+    maxMemoryRecords: input.maxMemoryRecords,
+    now: input.now,
+    previousEvents: input.previousEvents,
+    records: input.records,
+    request,
+    response: plannerText,
+  });
+  const responseId = isRecord(providerResponse) ? readString(providerResponse, "id") : undefined;
+
+  return {
+    ...parsed,
+    warnings: [
+      ...parsed.warnings,
+      providerWarning({
+        code: "openai_responses_provider_call",
+        message:
+          responseId === undefined
+            ? "Parsed provider-backed OpenAI Responses output through the LLM planner adapter."
+            : `Parsed provider-backed OpenAI Responses output ${responseId} through the LLM planner adapter.`,
+      }),
+    ],
   };
 }
 
