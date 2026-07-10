@@ -180,6 +180,23 @@ time, and memory file from the checkpoint unless explicitly configured. If an
 explicit resume setting conflicts with the checkpoint, the scheduler fails fast
 instead of silently restarting or changing the run shape.
 
+Run the scheduler inside a supervised elapsed-time window:
+
+```bash
+AGENT_TOWN_WORLD_MEMORY_FILE=/tmp/agent-town-scheduler-memory.json \
+AGENT_TOWN_SCHEDULER_CHECKPOINT=/tmp/agent-town-scheduler-checkpoint.json \
+AGENT_TOWN_SCHEDULER_TICKS=10 \
+AGENT_TOWN_SCHEDULER_TICK_DELAY_MS=20 \
+AGENT_TOWN_SCHEDULER_MAX_ELAPSED_MS=55 \
+  pnpm smallville:scheduler
+```
+
+`AGENT_TOWN_SCHEDULER_MAX_ELAPSED_MS` is a supervision control, not a replay
+fact. The scheduler finishes the current canonical tick, writes a checkpoint,
+then stops with `supervision.stopReason:
+"elapsed_time_limit_reached"` when the wall-clock window is exhausted. Resume
+uses the same checkpoint path and continues from the next tick.
+
 Required checks before finishing code or evidence work:
 
 ```bash
@@ -307,6 +324,11 @@ Quick path:
     `AGENT_TOWN_SCHEDULER_CHECKPOINT` and `AGENT_TOWN_SCHEDULER_RESUME=true`
     to prove the same schedule can continue from the next tick across process
     invocations without resetting memory.
+22. Run `pnpm smallville:scheduler` with
+    `AGENT_TOWN_SCHEDULER_MAX_ELAPSED_MS` and
+    `AGENT_TOWN_SCHEDULER_TICK_DELAY_MS` to prove a supervised wall-clock
+    window can stop the scheduler after completed ticks, write a checkpoint,
+    and resume from that checkpoint.
 
 Relevant screenshots and evidence:
 
@@ -318,6 +340,7 @@ Relevant screenshots and evidence:
 - `docs/evidence/M5/smallville-external-runtime-stream.md`
 - `docs/evidence/M5/smallville-autonomous-scheduler.md`
 - `docs/evidence/M5/smallville-supervised-scheduler-resume.md`
+- `docs/evidence/M5/smallville-supervised-scheduler-elapsed.md`
 - `docs/evidence/M4/source-switcher.png`
 - `docs/SMALLVILLE_PARITY.md`
 
@@ -494,9 +517,10 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
   external runtime ticks into the same route. `pnpm smallville:scheduler` adds
   a bounded world-clock phase plan over routine, cognitive, and social ticks
   while keeping each tick replayable as canonical events. The scheduler can
-  also write a checkpoint and resume from it across process invocations without
-  resetting the file-backed memory store. This is still not a multi-user
-  database or full autonomous memory engine.
+  also write a checkpoint, resume from it across process invocations, and stop
+  after a supervised elapsed-time window without resetting the file-backed
+  memory store. This is still not a multi-user database or full autonomous
+  memory engine.
 - Routine scheduling is still deterministic fixture evidence plus a bounded
   scheduler runner. The app can show routine phases and crowding-resolution
   events for 25 agents, but it is not yet an unbounded autonomous day planner.

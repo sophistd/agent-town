@@ -56,6 +56,7 @@ export type SmallvilleAutonomousSchedulerInput = {
   fetchImpl?: OpenAiResponsesFetch;
   host?: string;
   maxAgents?: number;
+  maxElapsedMs?: number;
   maxMemoryRecords?: number;
   maxOutputTokens?: number;
   maxRecords?: number;
@@ -63,6 +64,7 @@ export type SmallvilleAutonomousSchedulerInput = {
   memoryFilePath: string;
   memoryPlanMaxAgents?: number;
   model?: string;
+  nowMs?: () => number;
   outputPath?: string;
   phasePlan?: readonly SmallvilleAutonomousSchedulerPhasePlan[];
   port?: number;
@@ -157,6 +159,16 @@ export type SmallvilleAutonomousSchedulerSummary = {
   };
   source: "smallville-autonomous-scheduler";
   startTimestamp: string;
+  supervision: {
+    elapsedMs: number;
+    finishedAt: string;
+    maxElapsedMs?: number;
+    requestedTickCount: number;
+    startedAt: string;
+    stopReason:
+      | "elapsed_time_limit_reached"
+      | "tick_count_reached";
+  };
   taskId: string;
   tickCount: number;
   tickDelayMs: number;
@@ -323,6 +335,21 @@ function requireNonNegativeInteger(value: number | undefined, fallback: number):
   }
 
   return selectedValue;
+}
+
+function requireOptionalPositiveInteger(
+  value: number | undefined,
+  name: string,
+): number | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (!Number.isInteger(value) || value <= 0) {
+    throw new Error(`${name} must be a positive integer, received ${value}.`);
+  }
+
+  return value;
 }
 
 function readStringField(
@@ -719,16 +746,21 @@ function buildSummary(input: {
   emittedEvents: readonly AgentEvent[];
   eventLogPath?: string;
   eventsPerTick: number;
+  finishedAtMs: number;
+  maxElapsedMs?: number;
   memoryFilePath: string;
   outputPath?: string;
   previousCompletedTickCount: number;
   providerLoopResults: readonly WorldMemoryProviderLoopHttpResult[];
   resumeRequested: boolean;
   resumed: boolean;
+  requestedTickCount: number;
   scheduleId: string;
   server: StartedWorldMemoryHttpServer;
   startTimestamp: string;
   startTickIndex: number;
+  startedAtMs: number;
+  stopReason: SmallvilleAutonomousSchedulerSummary["supervision"]["stopReason"];
   tickDelayMs: number;
   tickMinutes: number;
   tickSummaries: readonly SmallvilleAutonomousSchedulerTickSummary[];
@@ -770,6 +802,14 @@ function buildSummary(input: {
     },
     source: "smallville-autonomous-scheduler",
     startTimestamp: input.startTimestamp,
+    supervision: {
+      elapsedMs: Math.max(0, input.finishedAtMs - input.startedAtMs),
+      finishedAt: new Date(input.finishedAtMs).toISOString(),
+      maxElapsedMs: input.maxElapsedMs,
+      requestedTickCount: input.requestedTickCount,
+      startedAt: new Date(input.startedAtMs).toISOString(),
+      stopReason: input.stopReason,
+    },
     taskId:
       input.emittedEvents[0]?.taskId ??
       `task-smallville-scheduler-${input.scheduleId}`,
@@ -865,6 +905,10 @@ export async function runSmallvilleAutonomousScheduler(
   );
   const tickCount = requirePositiveInteger(input.tickCount, DEFAULT_TICK_COUNT);
   const tickDelayMs = requireNonNegativeInteger(input.tickDelayMs, 0);
+  const maxElapsedMs = requireOptionalPositiveInteger(
+    input.maxElapsedMs,
+    "maxElapsedMs",
+  );
   const tickMinutes = requirePositiveInteger(
     input.tickMinutes,
     checkpoint?.tickMinutes ?? DEFAULT_TICK_MINUTES,
@@ -877,6 +921,10 @@ export async function runSmallvilleAutonomousScheduler(
   const selectedPhasePlan = checkpoint?.phasePlan ?? [...phasePlan];
   const startTickIndex = checkpoint?.nextTickIndex ?? 0;
   const previousCompletedTickCount = checkpoint?.completedTickCount ?? 0;
+  const nowMs = input.nowMs ?? Date.now;
+  const startedAtMs = nowMs();
+  let stopReason: SmallvilleAutonomousSchedulerSummary["supervision"]["stopReason"] =
+    "tick_count_reached";
 
   if (checkpoint !== undefined) {
     assertCompatibleCheckpoint({
@@ -920,6 +968,15 @@ export async function runSmallvilleAutonomousScheduler(
       tickIndex < startTickIndex + tickCount;
       tickIndex += 1
     ) {
+      if (
+        maxElapsedMs !== undefined &&
+        tickSummaries.length > 0 &&
+        nowMs() - startedAtMs >= maxElapsedMs
+      ) {
+        stopReason = "elapsed_time_limit_reached";
+        break;
+      }
+
       const phasePlanForTick = phasePlanAt(selectedPhasePlan, tickIndex);
       const batch = normalizeTickEvents({
         eventsPerTick,
@@ -983,27 +1040,55 @@ export async function runSmallvilleAutonomousScheduler(
         await writeJsonFileAtomic(input.checkpointPath, checkpointOutput);
       }
 
+      if (
+        maxElapsedMs !== undefined &&
+        tickIndex < startTickIndex + tickCount - 1 &&
+        nowMs() - startedAtMs >= maxElapsedMs
+      ) {
+        stopReason = "elapsed_time_limit_reached";
+        break;
+      }
+
       if (tickDelayMs > 0 && tickIndex < startTickIndex + tickCount - 1) {
-        await delay(tickDelayMs);
+        const delayMs =
+          maxElapsedMs === undefined
+            ? tickDelayMs
+            : Math.min(
+                tickDelayMs,
+                Math.max(0, maxElapsedMs - (nowMs() - startedAtMs)),
+              );
+
+        if (delayMs <= 0) {
+          stopReason = "elapsed_time_limit_reached";
+          break;
+        }
+
+        await delay(delayMs);
       }
     }
 
+    const finishedAtMs = nowMs();
     const summary = buildSummary({
       apiKeyProvided: apiKey !== undefined && apiKey.length > 0,
       checkpointPath: input.checkpointPath,
       emittedEvents,
       eventLogPath: input.eventLogPath,
       eventsPerTick,
+      finishedAtMs,
+      maxElapsedMs,
       memoryFilePath: input.memoryFilePath,
       outputPath: input.outputPath,
       previousCompletedTickCount,
       providerLoopResults,
       resumeRequested: input.resume === true,
       resumed: checkpoint !== undefined,
+      requestedTickCount: tickCount,
       scheduleId,
       server,
       startTimestamp,
       startTickIndex,
+      startedAtMs,
+      stopReason,
       tickDelayMs,
       tickMinutes,
       tickSummaries,

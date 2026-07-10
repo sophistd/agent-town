@@ -229,6 +229,11 @@ next tick index, phase plan, tick shape, last completed tick summary, and memory
 file path so a later process can resume emitting canonical events. The
 checkpoint itself is not replayed into `WorldState` and does not define runtime
 facts.
+Scheduler elapsed-time supervision is also control-plane state only.
+`AGENT_TOWN_SCHEDULER_MAX_ELAPSED_MS` can stop the runner after a completed
+tick and a checkpoint write, but it does not create, delete, or reorder
+canonical events. The summary records the stop reason under
+`supervision.stopReason`; replay still reads only emitted `AgentEvent` batches.
 
 The deterministic `Memory plan` source uses the same persistent records as an
 agent-addressable memory stream. Each durable-memory agent receives a query

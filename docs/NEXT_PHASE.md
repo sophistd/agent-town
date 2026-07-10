@@ -46,7 +46,8 @@ intact.
    evidence, replay-derived relationship state, dedicated Graph View
    inspection, structural Smallville capability/ablation evaluation, deterministic
    external runtime ticks, bounded world-clock scheduler ticks, scheduler
-   checkpoint/resume evidence, and action at 25-agent scale. The next
+   checkpoint/resume evidence, supervised elapsed-time scheduler evidence, and
+   action at 25-agent scale. The next
    Smallville-oriented runtime session should choose
    exactly one of:
 
@@ -61,8 +62,8 @@ intact.
      bypass `AgentEvent`
    - run and evidence a live provider-backed call through the resumable
      scheduler loop while keeping each tick replayable as canonical events
-   - extend the resumable scheduler into a longer supervised runtime window
-     with elapsed-time, pause/resume, and memory-continuity checks
+   - extend the resumable scheduler into a longer observed runtime window with
+     pause/resume, memory-continuity checks, and stronger wall-clock evidence
    - turn the structural Smallville evaluator into a human-review rubric,
      provider-backed benchmark, or dedicated evaluation dashboard
    - profile replay/rendering for 25-agent and larger cognitive/routine
@@ -80,8 +81,8 @@ intact.
    runtime ingestion, HTTP server ingestion, JSONL provider-loop sender runs,
    live HTTP provider-loop sender runs, Provider HTTP workbench imports,
    external runtime stream ticks, bounded scheduler ticks, scheduler
-   checkpoint/resume runs, provider-loop request construction, or
-   provider-backed planning.
+   checkpoint/resume runs, supervised elapsed-time scheduler windows,
+   provider-loop request construction, or provider-backed planning.
 
 6. Runtime adapter hardening
 

@@ -1,0 +1,96 @@
+{
+  "completedTickCount": 3,
+  "eventsPerTick": 8,
+  "lastCompletedTick": {
+    "acceptedInputEventCount": 8,
+    "emittedEventCount": 8,
+    "firstSequence": 16,
+    "lastSequence": 23,
+    "memoryPlanEventCount": 6,
+    "phase": "midday_social",
+    "phaseIntent": "The town social graph spreads a public invitation across relationships.",
+    "providerRecordCount": 13,
+    "providerRequest": {
+      "memoryRecordCount": 13,
+      "promptHash": "a5ae6082",
+      "requestId": "llm-plan-request-a5ae6082",
+      "retrievalCount": 2,
+      "selectedRecordCount": 6
+    },
+    "providerResult": {
+      "eventCount": 0,
+      "quarantineCodes": [],
+      "warningCodes": [
+        "missing_openai_api_key"
+      ]
+    },
+    "quarantinedEventCodes": [],
+    "recallEventCount": 13,
+    "scenario": "social",
+    "sourceOffset": 0,
+    "tickId": "scheduler-tick-002",
+    "tickIndex": 2,
+    "virtualClock": {
+      "dayIndex": 0,
+      "minuteOfDay": 480,
+      "timestamp": "2026-07-05T08:00:00.000Z"
+    },
+    "warningCodes": [
+      "missing_openai_api_key"
+    ],
+    "worldMemoryIngest": {
+      "acceptedEventCount": 8,
+      "incomingRecordCount": 4,
+      "persistedRecordCount": 13,
+      "quarantineCodes": [],
+      "warningCodes": []
+    }
+  },
+  "lastEventSequence": 23,
+  "lastUpdatedAt": "2026-07-05T08:26:00.000Z",
+  "memoryFilePath": "/tmp/agent-town-supervised-scheduler-elapsed-memory.json",
+  "nextTickIndex": 3,
+  "phasePlan": [
+    {
+      "intent": "Agents wake into planned routines and write early memory evidence.",
+      "phase": "morning_routine",
+      "scenario": "routine",
+      "sourceOffset": 0
+    },
+    {
+      "intent": "Coordinators retrieve prior evidence and decide the day's shared work.",
+      "phase": "work_coordination",
+      "scenario": "cognitive",
+      "sourceOffset": 0
+    },
+    {
+      "intent": "The town social graph spreads a public invitation across relationships.",
+      "phase": "midday_social",
+      "scenario": "social",
+      "sourceOffset": 0
+    },
+    {
+      "intent": "Agents continue routine work with memory from the morning already persisted.",
+      "phase": "afternoon_routine",
+      "scenario": "routine",
+      "sourceOffset": 60
+    },
+    {
+      "intent": "Reviewers and memory agents reflect on the day's accumulated evidence.",
+      "phase": "evening_reflection",
+      "scenario": "cognitive",
+      "sourceOffset": 15
+    },
+    {
+      "intent": "Late social coordination closes the day in the public square.",
+      "phase": "evening_social",
+      "scenario": "social",
+      "sourceOffset": 90
+    }
+  ],
+  "scheduleId": "day-001",
+  "schemaVersion": 1,
+  "source": "smallville-autonomous-scheduler-checkpoint",
+  "startTimestamp": "2026-07-05T07:00:00.000Z",
+  "tickMinutes": 30
+}

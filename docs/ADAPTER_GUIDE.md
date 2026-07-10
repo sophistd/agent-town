@@ -404,6 +404,10 @@ Autonomous scheduler rules:
 - `AGENT_TOWN_SCHEDULER_TICKS`, `AGENT_TOWN_SCHEDULER_EVENTS_PER_TICK`,
   `AGENT_TOWN_SCHEDULER_TICK_MINUTES`, and
   `AGENT_TOWN_SCHEDULER_TICK_DELAY_MS` bound the run for repeatable evidence.
+- `AGENT_TOWN_SCHEDULER_MAX_ELAPSED_MS` adds a supervised wall-clock window.
+  The scheduler completes the current canonical tick, writes the checkpoint,
+  then records `supervision.stopReason` as
+  `"elapsed_time_limit_reached"` if the elapsed-time limit is reached.
 - `AGENT_TOWN_SCHEDULER_CHECKPOINT` writes a checkpoint after each completed
   tick.
 - `AGENT_TOWN_SCHEDULER_RESUME=true` resumes from the checkpoint's

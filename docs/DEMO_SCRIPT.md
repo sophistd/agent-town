@@ -144,7 +144,15 @@ the runtime path instead of only watching a happy-path animation.
    checkpoint's `nextTickIndex`, continues event sequences, and keeps memory
    accumulation from the same file-backed world-memory store.
 
-16. Quarantine expectation.
+16. Supervised elapsed-time scheduler window.
+
+   Run the scheduler with `AGENT_TOWN_SCHEDULER_MAX_ELAPSED_MS` and
+   `AGENT_TOWN_SCHEDULER_TICK_DELAY_MS`. Show that the runner stops with
+   `supervision.stopReason: "elapsed_time_limit_reached"` after completed
+   ticks, writes a checkpoint, and can resume from the checkpoint instead of
+   pretending the requested tick count completed.
+
+17. Quarantine expectation.
 
    If a bad input is tested, show that accepted events continue to replay while
    invalid events are quarantined. Do not let invalid input become a renderer
@@ -178,6 +186,8 @@ the runtime path instead of only watching a happy-path animation.
   clock and phase plan without bypassing canonical `AgentEvent` replay?
 - Can the reviewer see scheduler resume continue from the checkpoint's
   `nextTickIndex` instead of restarting from tick 0?
+- Can the reviewer see elapsed-time supervision stop after completed ticks and
+  preserve the next resumable tick in the checkpoint?
 - Can the reviewer name the current known limitation: generated placeholder
   visuals are deliberate until visual polish becomes the highest-risk work?
 

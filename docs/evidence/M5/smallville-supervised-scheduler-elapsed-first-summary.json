@@ -1,0 +1,158 @@
+{
+  "apiKeyProvided": false,
+  "bounded": true,
+  "checkpoint": {
+    "path": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-supervised-scheduler-elapsed-checkpoint.json",
+    "previousCompletedTickCount": 0,
+    "resumeRequested": false,
+    "resumed": false,
+    "startTickIndex": 0,
+    "written": true
+  },
+  "emittedEventCount": 16,
+  "eventLogPath": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-supervised-scheduler-elapsed-first-events.jsonl",
+  "eventsPerTick": 8,
+  "memoryFilePath": "/tmp/agent-town-supervised-scheduler-elapsed-memory.json",
+  "outputPath": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-supervised-scheduler-elapsed-first-summary.json",
+  "phaseCounts": {
+    "afternoon_routine": 0,
+    "evening_reflection": 0,
+    "evening_social": 0,
+    "midday_social": 0,
+    "morning_routine": 1,
+    "work_coordination": 1
+  },
+  "runId": "run-smallville-scheduler-day-001",
+  "scheduleId": "day-001",
+  "scenarioCounts": {
+    "cognitive": 1,
+    "routine": 1,
+    "social": 0
+  },
+  "server": {
+    "url": "http://127.0.0.1:52460"
+  },
+  "source": "smallville-autonomous-scheduler",
+  "startTimestamp": "2026-07-05T07:00:00.000Z",
+  "supervision": {
+    "elapsedMs": 60,
+    "finishedAt": "2026-07-10T12:13:22.861Z",
+    "maxElapsedMs": 55,
+    "requestedTickCount": 10,
+    "startedAt": "2026-07-10T12:13:22.801Z",
+    "stopReason": "elapsed_time_limit_reached"
+  },
+  "taskId": "task-smallville-scheduler-day-001",
+  "tickCount": 2,
+  "tickDelayMs": 20,
+  "tickMinutes": 30,
+  "ticks": [
+    {
+      "acceptedInputEventCount": 8,
+      "emittedEventCount": 8,
+      "firstSequence": 0,
+      "lastSequence": 7,
+      "memoryPlanEventCount": 6,
+      "phase": "morning_routine",
+      "phaseIntent": "Agents wake into planned routines and write early memory evidence.",
+      "providerRecordCount": 5,
+      "providerRequest": {
+        "memoryRecordCount": 5,
+        "promptHash": "992a7400",
+        "requestId": "llm-plan-request-992a7400",
+        "retrievalCount": 2,
+        "selectedRecordCount": 5
+      },
+      "providerResult": {
+        "eventCount": 0,
+        "quarantineCodes": [],
+        "warningCodes": [
+          "missing_openai_api_key"
+        ]
+      },
+      "quarantinedEventCodes": [],
+      "recallEventCount": 5,
+      "scenario": "routine",
+      "sourceOffset": 0,
+      "tickId": "scheduler-tick-000",
+      "tickIndex": 0,
+      "virtualClock": {
+        "dayIndex": 0,
+        "minuteOfDay": 420,
+        "timestamp": "2026-07-05T07:00:00.000Z"
+      },
+      "warningCodes": [
+        "persistent_memory_file_missing",
+        "missing_openai_api_key"
+      ],
+      "worldMemoryIngest": {
+        "acceptedEventCount": 8,
+        "incomingRecordCount": 5,
+        "persistedRecordCount": 5,
+        "quarantineCodes": [],
+        "warningCodes": [
+          "persistent_memory_file_missing"
+        ]
+      }
+    },
+    {
+      "acceptedInputEventCount": 8,
+      "emittedEventCount": 8,
+      "firstSequence": 8,
+      "lastSequence": 15,
+      "memoryPlanEventCount": 6,
+      "phase": "work_coordination",
+      "phaseIntent": "Coordinators retrieve prior evidence and decide the day's shared work.",
+      "providerRecordCount": 9,
+      "providerRequest": {
+        "memoryRecordCount": 9,
+        "promptHash": "81757c5a",
+        "requestId": "llm-plan-request-81757c5a",
+        "retrievalCount": 2,
+        "selectedRecordCount": 6
+      },
+      "providerResult": {
+        "eventCount": 0,
+        "quarantineCodes": [],
+        "warningCodes": [
+          "missing_openai_api_key"
+        ]
+      },
+      "quarantinedEventCodes": [],
+      "recallEventCount": 9,
+      "scenario": "cognitive",
+      "sourceOffset": 0,
+      "tickId": "scheduler-tick-001",
+      "tickIndex": 1,
+      "virtualClock": {
+        "dayIndex": 0,
+        "minuteOfDay": 450,
+        "timestamp": "2026-07-05T07:30:00.000Z"
+      },
+      "warningCodes": [
+        "missing_openai_api_key"
+      ],
+      "worldMemoryIngest": {
+        "acceptedEventCount": 8,
+        "incomingRecordCount": 4,
+        "persistedRecordCount": 9,
+        "quarantineCodes": [],
+        "warningCodes": []
+      }
+    }
+  ],
+  "totals": {
+    "acceptedInputEventCount": 16,
+    "finalPersistedRecordCount": 9,
+    "memoryPlanEventCount": 12,
+    "providerEventCount": 0,
+    "providerRecordCount": 14,
+    "quarantinedEventCount": 0,
+    "recallEventCount": 14,
+    "warningCount": 3
+  },
+  "warningCodes": [
+    "persistent_memory_file_missing",
+    "missing_openai_api_key"
+  ]
+}

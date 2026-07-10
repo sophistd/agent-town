@@ -30,6 +30,16 @@ function readPositiveInteger(rawValue, name, fallback) {
   return value;
 }
 
+function readOptionalPositiveInteger(rawValue, name) {
+  const value = readOptionalInteger(rawValue, name);
+
+  if (value !== undefined && value <= 0) {
+    throw new Error(`${name} must be a positive integer, received ${value}.`);
+  }
+
+  return value;
+}
+
 function readBooleanFlag(rawValue, name) {
   if (rawValue === undefined || rawValue.trim().length === 0) {
     return false;
@@ -103,6 +113,10 @@ try {
     maxAgents: readOptionalInteger(
       process.env.AGENT_TOWN_PROVIDER_LOOP_MAX_AGENTS,
       "AGENT_TOWN_PROVIDER_LOOP_MAX_AGENTS",
+    ),
+    maxElapsedMs: readOptionalPositiveInteger(
+      process.env.AGENT_TOWN_SCHEDULER_MAX_ELAPSED_MS,
+      "AGENT_TOWN_SCHEDULER_MAX_ELAPSED_MS",
     ),
     maxMemoryRecords: readOptionalInteger(
       process.env.AGENT_TOWN_PROVIDER_LOOP_MAX_MEMORY_RECORDS,

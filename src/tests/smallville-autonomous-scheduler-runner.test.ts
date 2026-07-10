@@ -262,4 +262,56 @@ describe("smallville autonomous scheduler runner", () => {
       expect(JSON.stringify(secondRun.summary)).not.toContain("test-api-key");
     });
   });
+
+  it("stops at a supervised elapsed-time limit after a completed checkpointed tick", async () => {
+    await withTempDirectory(async (directory) => {
+      const memoryFilePath = join(directory, "world-memory.json");
+      const checkpointPath = join(directory, "checkpoint.json");
+      const outputPath = join(directory, "summary.json");
+      let clockMs = 1_000;
+      const nowMs = () => {
+        clockMs += 10;
+
+        return clockMs;
+      };
+
+      const result = await runSmallvilleAutonomousScheduler({
+        checkpointPath,
+        eventsPerTick: 4,
+        maxAgents: 2,
+        maxElapsedMs: 35,
+        maxMemoryRecords: 8,
+        memoryFilePath,
+        nowMs,
+        outputPath,
+        scheduleId: "elapsed-day",
+        startTimestamp,
+        tickCount: 10,
+        tickMinutes: 30,
+      });
+      const savedSummary = JSON.parse(
+        await readFile(outputPath, "utf8"),
+      ) as SmallvilleAutonomousSchedulerSummary;
+      const checkpoint = JSON.parse(
+        await readFile(checkpointPath, "utf8"),
+      ) as SmallvilleAutonomousSchedulerCheckpoint;
+
+      expect(result.summary.tickCount).toBe(2);
+      expect(result.summary.emittedEventCount).toBe(8);
+      expect(result.summary.supervision).toMatchObject({
+        maxElapsedMs: 35,
+        requestedTickCount: 10,
+        stopReason: "elapsed_time_limit_reached",
+      });
+      expect(result.summary.supervision.elapsedMs).toBeGreaterThanOrEqual(35);
+      expect(result.summary.ticks.map((tick) => tick.tickIndex)).toEqual([0, 1]);
+      expect(checkpoint).toMatchObject({
+        completedTickCount: 2,
+        nextTickIndex: 2,
+        scheduleId: "elapsed-day",
+      });
+      expect(checkpoint.lastCompletedTick?.tickIndex).toBe(1);
+      expect(savedSummary).toEqual(result.summary);
+    });
+  });
 });
