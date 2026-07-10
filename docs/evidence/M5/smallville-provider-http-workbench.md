@@ -93,6 +93,24 @@ Pixel evidence from the canvas screenshots:
 - Desktop canvas crop: 446 sampled colors, 25,891 opaque samples.
 - Mobile canvas crop: 499 sampled colors, 30,039 opaque samples.
 
+## External Write-Back
+
+Actual writes completed and read back:
+
+- Notion S15 / M5 runbook page comment:
+  `399acb4b-b6e6-81e2-bda5-001d046ce9d9`.
+- Linear MDL-129 comment:
+  `8fab125c-8a29-4c48-af7d-706819f4948f`.
+- Linear MDL-152 red-check comment:
+  `9f733de4-bf68-47b4-9242-82f9f9761dce`.
+
+Scope truth:
+
+- The Notion write is a page-level comment; no Notion page body was replaced.
+- No Linear issue state was changed.
+- No Linear issue was closed or reopened.
+- No merge was performed.
+
 ## Scope Truth
 
 - This connects the browser workbench to a local/server Provider HTTP source.
