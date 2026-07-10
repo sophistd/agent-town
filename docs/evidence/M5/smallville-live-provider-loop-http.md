@@ -98,6 +98,32 @@ Known build warning:
 - This does not connect the browser UI to the provider loop yet.
 - This does not claim final Stanford Smallville parity.
 
+## External Write-Back
+
+Actual writes:
+
+- Notion page-level comment:
+  `399acb4b-b6e6-8117-88f7-001d41e1b8ec`.
+- Linear `MDL-129` comment:
+  `e8feb13b-e1a9-4d00-b44d-583e441eaeed`.
+- Linear `MDL-152` red-check comment:
+  `074da65d-eb12-4f9b-9dca-02115c600a63`.
+
+Read-back verification:
+
+- Notion `get comments` returned comment
+  `399acb4b-b6e6-8117-88f7-001d41e1b8ec` with commit
+  `88d27e2 feat: add live provider loop http sender`.
+- Linear `MDL-129` comments returned
+  `e8feb13b-e1a9-4d00-b44d-583e441eaeed` with the same commit,
+  verification summary, and scope truth.
+- Linear `MDL-152` comments returned
+  `074da65d-eb12-4f9b-9dca-02115c600a63` with the red-check pass/fail
+  summary and remaining gaps.
+
+No issue state was changed, no Notion page body was replaced, no merge was
+performed, and no API key or secret was written.
+
 ## Next Session Candidate
 
 Connect the browser/workbench or a real external runtime stream to
