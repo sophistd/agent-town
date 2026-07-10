@@ -147,6 +147,25 @@ Pixel evidence from the canvas screenshots:
 - No merge was performed.
 - This does not claim final Stanford Smallville parity.
 
+## External Write-Back
+
+Actual writes completed and verified by read-back:
+
+- Notion S15 / M5 runbook page comment:
+  `399acb4b-b6e6-8100-956d-001de21cbf43`.
+- Linear MDL-129 implementation comment:
+  `bd3195ee-3256-4412-b6bf-ad2c1a03357e`.
+- Linear MDL-152 red-check comment:
+  `a3b5656f-8ba7-49b9-8364-2fc346beca38`.
+
+Write-back scope truth:
+
+- Notion write was a page-level comment only; no page body was replaced.
+- Linear writes were comments only; no issue state was changed or closed.
+- PR remained open and unmerged after write-back.
+- The comments explicitly recorded that this slice is a bounded deterministic
+  scheduler, not live OpenAI-backed Stanford Smallville parity.
+
 ## Next Session Candidate
 
 Run and evidence a live provider-backed planner call through
