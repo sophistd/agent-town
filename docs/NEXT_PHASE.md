@@ -42,17 +42,17 @@ intact.
    adapter-produced routine revision from observation and memory evidence,
    natural-language intervention, durable memory recall, agent-addressable
    memory planning, model-planner contract parsing/quarantine, OpenAI Responses
-   provider-boundary request/parse coverage, replay-derived relationship state,
-   dedicated Graph View inspection, structural Smallville capability/ablation
-   evaluation, and action at 25-agent scale. The next
+   provider-boundary request/parse coverage with agent-addressable retrieval
+   evidence, replay-derived relationship state, dedicated Graph View
+   inspection, structural Smallville capability/ablation evaluation, and action
+   at 25-agent scale. The next
    Smallville-oriented runtime session should choose
    exactly one of:
 
    - run and evidence a real provider-backed LLM call through the existing
      planner boundary, with keys kept out of browser code and deterministic
-     fixtures preserved for tests
-   - use the agent-addressable memory retrieval stream inside provider-backed
-     planning while preserving parser quarantine and replay validation
+     fixtures preserved for tests, using the existing agent-addressable memory
+     retrieval evidence in the provider request
    - turn adaptive routine revision into provider-backed planning while
      preserving parser quarantine and replay validation
    - move durable memory from browser-local storage to a real world-state

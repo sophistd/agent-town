@@ -160,6 +160,8 @@ Rules:
 
 - The request builder summarizes prior canonical events and durable memory
   records into a model-ready JSON contract.
+- The request builder retrieves memory per agent by relevance, importance,
+  recency, and agent affinity instead of passing only a global memory list.
 - The parser accepts either an object or JSON string response.
 - Each response step must map to one canonical `AgentEvent`.
 - Missing required event fields are quarantined.
@@ -168,10 +170,14 @@ Rules:
 - Duplicate event IDs and duplicate `(runId, sequence)` pairs are quarantined.
 - Accepted events receive `metadata.source = "llm"` and
   `metadata.llmPlanner` with request id, prompt hash, model role, model name,
-  response step id, prior-run context, and selected memory record IDs.
+  response step id, prior-run context, selected memory record IDs, selected
+  memory source event IDs, and agent-addressable retrieval counts.
+- Accepted events also receive `metadata.agentAddressableMemory` with selected
+  memory records, retrieval scores, per-agent retrieval snapshots, source event
+  IDs, selected-for agent IDs, and retrieval weights.
 - `buildOpenAiResponsesPlannerBody` builds an OpenAI Responses request with
-  `store: false`, JSON schema output formatting, developer/user messages, and
-  planner metadata.
+  `store: false`, JSON schema output formatting, developer/user messages,
+  planner metadata, and the same agent-addressable memory retrieval evidence.
 - `callOpenAiLlmPlanner` is the provider-backed boundary. It requires an API
   key supplied by the local runtime, calls the Responses API through injected or
   runtime `fetch`, extracts `output_text`, then sends the model text through the

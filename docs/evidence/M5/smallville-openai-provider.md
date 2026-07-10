@@ -94,6 +94,17 @@ OpenAI-backed planner run still needs a local/server-side `OPENAI_API_KEY` and
 durable evidence of the returned model output replaying as canonical
 `AgentEvent`.
 
+## Continuation
+
+2026-07-10 follow-up evidence:
+
+- `docs/evidence/M5/smallville-agent-addressable-provider-memory.md`
+
+That continuation updates the provider request shape so it carries
+agent-addressable memory retrieval snapshots, selected records, source event
+IDs, retrieval scores, selected-for agent IDs, and retrieval weights. It still
+does not run a live provider call without a local/server-side API key.
+
 ## Next Session Candidate
 
 Run the provider-backed planner with a local/server-side API key, persist the

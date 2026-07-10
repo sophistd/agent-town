@@ -6,7 +6,9 @@ import {
 } from "../events/constants";
 import {
   comparePersistentMemoryRecords,
+  retrievePersistentMemoryRecords,
   type PersistentMemoryRecord,
+  type RetrievedPersistentMemoryRecord,
 } from "../events/persistentMemory";
 import type {
   AgentEvent,
@@ -29,6 +31,7 @@ const LLM_PLANNER_CONTRACT_VERSION = 1;
 const DEFAULT_LLM_PLAN_TIMESTAMP = "2026-07-04T19:00:00.000Z";
 const DEFAULT_MAX_REQUEST_AGENTS = 8;
 const DEFAULT_MAX_REQUEST_MEMORIES = 12;
+const DEFAULT_MEMORIES_PER_REQUEST_AGENT = 3;
 const DEFAULT_OPENAI_RESPONSES_BASE_URL = "https://api.openai.com/v1";
 const DEFAULT_OPENAI_RESPONSES_MODEL = "gpt-5.1-mini";
 
@@ -72,6 +75,29 @@ export type LlmPlannerMemorySnapshot = {
   summary?: string;
   importance?: number;
   tags: string[];
+  relevanceScore?: number;
+  importanceScore?: number;
+  recencyScore?: number;
+  agentAffinityScore?: number;
+  retrievalScore?: number;
+  selectedForAgentIds?: string[];
+};
+
+export type LlmPlannerMemoryRetrievalSnapshot = {
+  agentId: string;
+  agentName: string;
+  agentRole: AgentRole;
+  retrievalQuery: string;
+  candidateRecordIds: string[];
+  selectedRecordIds: string[];
+  selectedSourceEventIds: string[];
+  averageCandidateScore: number;
+  weights: {
+    relevance: 0.35;
+    importance: 0.25;
+    recency: 0.2;
+    agentAffinity: 0.2;
+  };
 };
 
 export type LlmPlannerRequest = {
@@ -107,7 +133,9 @@ export type LlmPlannerRequest = {
   agents: readonly LlmPlannerAgentSnapshot[];
   memory: {
     recordCount: number;
+    retrievals: readonly LlmPlannerMemoryRetrievalSnapshot[];
     selectedRecords: readonly LlmPlannerMemorySnapshot[];
+    weights: LlmPlannerMemoryRetrievalSnapshot["weights"];
   };
 };
 
@@ -357,7 +385,70 @@ function summarizePriorRun(previousEvents: readonly AgentEvent[]): LlmPlannerReq
   };
 }
 
-function selectMemoryRecords(
+const LLM_MEMORY_RETRIEVAL_WEIGHTS = {
+  relevance: 0.35,
+  importance: 0.25,
+  recency: 0.2,
+  agentAffinity: 0.2,
+} as const satisfies LlmPlannerMemoryRetrievalSnapshot["weights"];
+
+type LlmPlannerAddressableMemoryRecordMetadata = {
+  recordId: string;
+  sourceEventId: string;
+  sourceRunId: string;
+  sourceType: "memory_read" | "memory_write";
+  agentId: string;
+  agentName: string;
+  agentRole: AgentRole;
+  relevanceScore?: number;
+  importanceScore?: number;
+  recencyScore?: number;
+  agentAffinityScore?: number;
+  retrievalScore?: number;
+  selectedForAgentIds?: string[];
+};
+
+type LlmPlannerAgentAddressableMemoryMetadata = {
+  schemaVersion: 1;
+  contractVersion: number;
+  requestId: string;
+  promptHash: string;
+  selectedRecordIds: string[];
+  selectedSourceEventIds: string[];
+  selectedForAgentIds: string[];
+  selectedRecords: LlmPlannerAddressableMemoryRecordMetadata[];
+  retrievals: LlmPlannerMemoryRetrievalSnapshot[];
+  weights: LlmPlannerMemoryRetrievalSnapshot["weights"];
+};
+
+function memorySnapshotFromRecord(
+  record: PersistentMemoryRecord,
+  retrieval?: RetrievedPersistentMemoryRecord,
+  selectedForAgentIds: readonly string[] = [],
+): LlmPlannerMemorySnapshot {
+  return {
+    recordId: record.id,
+    sourceEventId: record.sourceEventId,
+    sourceRunId: record.sourceRunId,
+    sourceType: record.sourceType,
+    sourceTimestamp: record.sourceTimestamp,
+    agentId: record.agentId,
+    agentName: record.agentName,
+    agentRole: record.agentRole,
+    content: record.content,
+    summary: record.summary,
+    importance: record.importance,
+    tags: record.tags,
+    relevanceScore: retrieval?.relevanceScore,
+    importanceScore: retrieval?.importanceScore,
+    recencyScore: retrieval?.recencyScore,
+    agentAffinityScore: retrieval?.agentAffinityScore,
+    retrievalScore: retrieval?.score,
+    selectedForAgentIds: selectedForAgentIds.length > 0 ? [...selectedForAgentIds] : undefined,
+  };
+}
+
+function selectSeedMemoryRecords(
   records: readonly PersistentMemoryRecord[],
   limit: number,
 ): LlmPlannerMemorySnapshot[] {
@@ -372,20 +463,134 @@ function selectMemoryRecords(
       return comparePersistentMemoryRecords(left, right);
     })
     .slice(0, Math.max(0, limit))
-    .map((record) => ({
-      recordId: record.id,
-      sourceEventId: record.sourceEventId,
-      sourceRunId: record.sourceRunId,
-      sourceType: record.sourceType,
-      sourceTimestamp: record.sourceTimestamp,
-      agentId: record.agentId,
-      agentName: record.agentName,
-      agentRole: record.agentRole,
-      content: record.content,
-      summary: record.summary,
-      importance: record.importance,
-      tags: record.tags,
-    }));
+    .map((record) => memorySnapshotFromRecord(record));
+}
+
+function averageRetrievalScore(
+  records: readonly RetrievedPersistentMemoryRecord[],
+): number {
+  if (records.length === 0) {
+    return 0;
+  }
+
+  return Math.round(
+    (records.reduce((sum, record) => sum + record.score, 0) / records.length) * 1000,
+  ) / 1000;
+}
+
+function plannerMemoryQueryForAgent(agent: LlmPlannerAgentSnapshot): string {
+  return [
+    agent.agentName,
+    agent.agentRole,
+    agent.latestSummary,
+    agent.latestContent,
+    agent.activity,
+    agent.locationHint,
+    agent.subLocationId,
+    "Smallville provider planner next action memory relationship routine evidence",
+  ]
+    .filter((value): value is string => typeof value === "string" && value.length > 0)
+    .join(" ");
+}
+
+function selectAgentAddressableMemoryRecords(input: {
+  agents: readonly LlmPlannerAgentSnapshot[];
+  currentTimestamp: string;
+  maxMemoryRecords: number;
+  memoriesPerAgent: number;
+  records: readonly PersistentMemoryRecord[];
+}): {
+  retrievals: LlmPlannerMemoryRetrievalSnapshot[];
+  selectedRecords: LlmPlannerMemorySnapshot[];
+} {
+  if (input.records.length === 0) {
+    return { retrievals: [], selectedRecords: [] };
+  }
+
+  const recordById = new Map(input.records.map((record) => [record.id, record]));
+  const candidatesByAgent = input.agents.map((agent) => {
+    const query = plannerMemoryQueryForAgent(agent);
+    const candidates = retrievePersistentMemoryRecords(input.records, {
+      agentId: agent.agentId,
+      agentName: agent.agentName,
+      agentRole: agent.agentRole,
+      currentTimestamp: input.currentTimestamp,
+      limit: input.memoriesPerAgent,
+      query,
+    });
+
+    return { agent, candidates, query };
+  });
+  const selectedIds: string[] = [];
+  const selectedAgentIdsByRecord = new Map<string, Set<string>>();
+  const retrievalByRecord = new Map<string, RetrievedPersistentMemoryRecord>();
+  const maxRecords = Math.max(0, input.maxMemoryRecords);
+
+  for (let depth = 0; selectedIds.length < maxRecords; depth += 1) {
+    let advanced = false;
+
+    for (const candidateSet of candidatesByAgent) {
+      const candidate = candidateSet.candidates[depth];
+
+      if (candidate === undefined) {
+        continue;
+      }
+
+      advanced = true;
+      const selectedForAgentIds = selectedAgentIdsByRecord.get(candidate.recordId) ?? new Set();
+      selectedForAgentIds.add(candidateSet.agent.agentId);
+      selectedAgentIdsByRecord.set(candidate.recordId, selectedForAgentIds);
+
+      const existing = retrievalByRecord.get(candidate.recordId);
+      if (existing === undefined || candidate.score > existing.score) {
+        retrievalByRecord.set(candidate.recordId, candidate);
+      }
+
+      if (!selectedIds.includes(candidate.recordId) && selectedIds.length < maxRecords) {
+        selectedIds.push(candidate.recordId);
+      }
+    }
+
+    if (!advanced || depth >= input.memoriesPerAgent - 1) {
+      break;
+    }
+  }
+
+  const selectedIdSet = new Set(selectedIds);
+  const retrievals = candidatesByAgent.map(({ agent, candidates, query }) => {
+    const selectedCandidates = candidates.filter((candidate) =>
+      selectedIdSet.has(candidate.recordId),
+    );
+
+    return {
+      agentId: agent.agentId,
+      agentName: agent.agentName,
+      agentRole: agent.agentRole,
+      retrievalQuery: query,
+      candidateRecordIds: candidates.map((candidate) => candidate.recordId),
+      selectedRecordIds: selectedCandidates.map((candidate) => candidate.recordId),
+      selectedSourceEventIds: selectedCandidates.map((candidate) => candidate.sourceEventId),
+      averageCandidateScore: averageRetrievalScore(candidates),
+      weights: LLM_MEMORY_RETRIEVAL_WEIGHTS,
+    };
+  });
+  const selectedRecords = selectedIds.flatMap((recordId) => {
+    const record = recordById.get(recordId);
+
+    if (record === undefined) {
+      return [];
+    }
+
+    return [
+      memorySnapshotFromRecord(
+        record,
+        retrievalByRecord.get(recordId),
+        [...(selectedAgentIdsByRecord.get(recordId) ?? [])].sort(),
+      ),
+    ];
+  });
+
+  return { retrievals, selectedRecords };
 }
 
 function buildAgentSnapshots(input: {
@@ -394,13 +599,19 @@ function buildAgentSnapshots(input: {
   maxAgents: number;
 }): LlmPlannerAgentSnapshot[] {
   const contexts = new Map<string, LlmPlannerAgentSnapshot>();
-  const recordsByAgent = new Map<string, string[]>();
+  const recordsByAgent = new Map<string, Set<string>>();
 
   for (const record of input.selectedRecords) {
-    recordsByAgent.set(record.agentId, [
-      ...(recordsByAgent.get(record.agentId) ?? []),
-      record.recordId,
-    ]);
+    const selectedForAgentIds =
+      record.selectedForAgentIds !== undefined && record.selectedForAgentIds.length > 0
+        ? record.selectedForAgentIds
+        : [record.agentId];
+
+    for (const agentId of selectedForAgentIds) {
+      const recordIds = recordsByAgent.get(agentId) ?? new Set<string>();
+      recordIds.add(record.recordId);
+      recordsByAgent.set(agentId, recordIds);
+    }
   }
 
   for (const event of [...input.previousEvents].sort(
@@ -425,7 +636,7 @@ function buildAgentSnapshots(input: {
         readEventMetadataString(event, "subLocationId") ?? current?.subLocationId,
       activity: readEventMetadataString(event, "activity") ?? current?.activity,
       previousEventCount,
-      selectedMemoryRecordIds: recordsByAgent.get(event.agentId) ?? [],
+      selectedMemoryRecordIds: [...(recordsByAgent.get(event.agentId) ?? [])],
     });
   }
 
@@ -447,7 +658,7 @@ function buildAgentSnapshots(input: {
       subLocationId: "archive_shelves",
       activity: "plans from durable memory",
       previousEventCount: 0,
-      selectedMemoryRecordIds: recordsByAgent.get(record.agentId) ?? [],
+      selectedMemoryRecordIds: [...(recordsByAgent.get(record.agentId) ?? [])],
     });
   }
 
@@ -470,21 +681,34 @@ export function buildSmallvilleLlmPlannerRequest(
   const previousEvents = input.previousEvents ?? [];
   const records = input.records ?? [];
   const generatedAt = validTimestampOrFallback(input.now, DEFAULT_LLM_PLAN_TIMESTAMP);
-  const selectedRecords = selectMemoryRecords(
+  const seedRecords = selectSeedMemoryRecords(
     records,
     input.maxMemoryRecords ?? DEFAULT_MAX_REQUEST_MEMORIES,
   );
+  const seedAgents = buildAgentSnapshots({
+    maxAgents: input.maxAgents ?? DEFAULT_MAX_REQUEST_AGENTS,
+    previousEvents,
+    selectedRecords: seedRecords,
+  });
+  const memorySelection = selectAgentAddressableMemoryRecords({
+    agents: seedAgents,
+    currentTimestamp: generatedAt,
+    maxMemoryRecords: input.maxMemoryRecords ?? DEFAULT_MAX_REQUEST_MEMORIES,
+    memoriesPerAgent: DEFAULT_MEMORIES_PER_REQUEST_AGENT,
+    records,
+  });
   const agents = buildAgentSnapshots({
     maxAgents: input.maxAgents ?? DEFAULT_MAX_REQUEST_AGENTS,
     previousEvents,
-    selectedRecords,
+    selectedRecords: memorySelection.selectedRecords,
   });
   const priorRun = summarizePriorRun(previousEvents);
   const promptPayload = JSON.stringify({
     agents,
     generatedAt,
+    memoryRetrievals: memorySelection.retrievals,
     priorRun,
-    selectedRecordIds: selectedRecords.map((record) => record.recordId),
+    selectedRecordIds: memorySelection.selectedRecords.map((record) => record.recordId),
   });
   const promptHash = hashText(promptPayload);
 
@@ -525,7 +749,9 @@ export function buildSmallvilleLlmPlannerRequest(
     agents,
     memory: {
       recordCount: records.length,
-      selectedRecords,
+      retrievals: memorySelection.retrievals,
+      selectedRecords: memorySelection.selectedRecords,
+      weights: LLM_MEMORY_RETRIEVAL_WEIGHTS,
     },
   };
 }
@@ -971,6 +1197,93 @@ function normalizeResponse(
   return { response, quarantinedEvents: [] };
 }
 
+function uniqueSortedStrings(values: readonly string[]): string[] {
+  return [...new Set(values)].sort((left, right) => left.localeCompare(right));
+}
+
+function addressableRecordMetadata(
+  record: LlmPlannerMemorySnapshot,
+): LlmPlannerAddressableMemoryRecordMetadata {
+  return {
+    recordId: record.recordId,
+    sourceEventId: record.sourceEventId,
+    sourceRunId: record.sourceRunId,
+    sourceType: record.sourceType,
+    agentId: record.agentId,
+    agentName: record.agentName,
+    agentRole: record.agentRole,
+    relevanceScore: record.relevanceScore,
+    importanceScore: record.importanceScore,
+    recencyScore: record.recencyScore,
+    agentAffinityScore: record.agentAffinityScore,
+    retrievalScore: record.retrievalScore,
+    selectedForAgentIds: record.selectedForAgentIds,
+  };
+}
+
+function filterRetrievalForRecords(input: {
+  recordsById: ReadonlyMap<string, LlmPlannerMemorySnapshot>;
+  recordIds: ReadonlySet<string>;
+  retrieval: LlmPlannerMemoryRetrievalSnapshot;
+}): LlmPlannerMemoryRetrievalSnapshot | undefined {
+  const selectedRecordIds = input.retrieval.selectedRecordIds.filter((recordId) =>
+    input.recordIds.has(recordId),
+  );
+
+  if (selectedRecordIds.length === 0) {
+    return undefined;
+  }
+
+  return {
+    ...input.retrieval,
+    selectedRecordIds,
+    selectedSourceEventIds: selectedRecordIds.flatMap((recordId) => {
+      const record = input.recordsById.get(recordId);
+
+      return record === undefined ? [] : [record.sourceEventId];
+    }),
+  };
+}
+
+function buildAgentAddressableMemoryMetadata(input: {
+  request: LlmPlannerRequest;
+  selectedMemoryRecordIds: readonly string[];
+}): LlmPlannerAgentAddressableMemoryMetadata {
+  const selectedIdSet = new Set(input.selectedMemoryRecordIds);
+  const selectedRecords = input.request.memory.selectedRecords.filter((record) =>
+    selectedIdSet.has(record.recordId),
+  );
+  const selectedRecordsById = new Map(
+    selectedRecords.map((record) => [record.recordId, record]),
+  );
+  const retrievals = input.request.memory.retrievals.flatMap((retrieval) => {
+    const filteredRetrieval = filterRetrievalForRecords({
+      recordsById: selectedRecordsById,
+      recordIds: selectedIdSet,
+      retrieval,
+    });
+
+    return filteredRetrieval === undefined ? [] : [filteredRetrieval];
+  });
+
+  return {
+    schemaVersion: 1,
+    contractVersion: input.request.contractVersion,
+    requestId: input.request.requestId,
+    promptHash: input.request.promptHash,
+    selectedRecordIds: selectedRecords.map((record) => record.recordId),
+    selectedSourceEventIds: uniqueSortedStrings(
+      selectedRecords.map((record) => record.sourceEventId),
+    ),
+    selectedForAgentIds: uniqueSortedStrings(
+      selectedRecords.flatMap((record) => record.selectedForAgentIds ?? []),
+    ),
+    selectedRecords: selectedRecords.map((record) => addressableRecordMetadata(record)),
+    retrievals,
+    weights: input.request.memory.weights,
+  };
+}
+
 function buildCandidateEvents(input: {
   request: LlmPlannerRequest;
   response: Record<string, unknown>;
@@ -1048,11 +1361,15 @@ function buildCandidateEvents(input: {
     const stepId = readString(rawStep, "stepId") ?? `step-${String(index).padStart(3, "0")}`;
     const stepSelectedMemoryIds =
       readStringArray(rawStep, "selectedMemoryRecordIds") ?? selectedMemoryRecordIds;
+    const agentAddressableMemory = buildAgentAddressableMemoryMetadata({
+      request: input.request,
+      selectedMemoryRecordIds: stepSelectedMemoryIds,
+    });
     const tags = [
       "llm-planner",
       "smallville-contract",
       ...(cognitiveStage !== undefined ? [cognitiveStage] : []),
-      ...stepSelectedMemoryIds.slice(0, 4),
+      ...agentAddressableMemory.selectedRecordIds.slice(0, 4),
     ];
 
     return [
@@ -1091,6 +1408,7 @@ function buildCandidateEvents(input: {
           subLocationId,
           activity,
           selectedMemoryRecordIds: stepSelectedMemoryIds,
+          agentAddressableMemory,
           derivedFromStepIds: readStringArray(rawStep, "derivedFromStepIds"),
           planStep: readRecord(rawStep, "planStep"),
           llmPlanner: {
@@ -1108,6 +1426,10 @@ function buildCandidateEvents(input: {
             previousRunId: input.request.priorRun.runId,
             previousEventCount: input.request.priorRun.eventCount,
             selectedMemoryRecordIds: stepSelectedMemoryIds,
+            selectedMemorySourceEventIds: agentAddressableMemory.selectedSourceEventIds,
+            agentAddressableRetrievalCount: agentAddressableMemory.retrievals.length,
+            agentAddressableSelectedRecordCount:
+              agentAddressableMemory.selectedRecordIds.length,
           },
         },
       },

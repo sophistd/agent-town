@@ -199,19 +199,23 @@ The browser store remains an adapter boundary, not a projection fact.
 
 The deterministic `LLM plan` source defines the contract for future
 provider-backed model behavior. It builds a model-ready JSON request from prior
-events and durable memory records, then parses a model-shaped JSON response into
-canonical events with `metadata.llmPlanner`. Invalid JSON, invalid step objects,
-duplicate event IDs, duplicate `(runId, sequence)` pairs, missing message
-targets, and missing tool names are quarantined before replay. The current UI
-button uses a deterministic fixture response; it does not call a live LLM
-provider and does not give the renderer model-owned runtime facts.
+events and agent-addressable durable-memory retrieval. Each request records
+per-agent retrieval queries, candidate record IDs, selected record IDs, source
+event IDs, retrieval scores, and retrieval weights before parsing a
+model-shaped JSON response into canonical events with `metadata.llmPlanner` and
+`metadata.agentAddressableMemory`. Invalid JSON, invalid step objects, duplicate
+event IDs, duplicate `(runId, sequence)` pairs, missing message targets, and
+missing tool names are quarantined before replay. The current UI button uses a
+deterministic fixture response; it does not call a live LLM provider and does
+not give the renderer model-owned runtime facts.
 
 `llmPlannerAdapter.ts` also exposes an OpenAI Responses provider boundary for
 local/server-side runtimes. `buildOpenAiResponsesPlannerBody` creates a
-`store: false` JSON-schema request, and `callOpenAiLlmPlanner` calls the
-provider through injected/runtime `fetch`, extracts `output_text`, then reuses
-the same parser, validation, and quarantine path. API keys must stay outside
-browser code; the UI still uses the deterministic fixture.
+`store: false` JSON-schema request that includes the same agent-addressable
+memory retrieval evidence, and `callOpenAiLlmPlanner` calls the provider through
+injected/runtime `fetch`, extracts `output_text`, then reuses the same parser,
+validation, and quarantine path. API keys must stay outside browser code; the
+UI still uses the deterministic fixture.
 
 ## Smallville Evaluation
 

@@ -167,9 +167,11 @@ Quick path:
    recency, then emit retrieval, reflection, and planning evidence as canonical
    events.
 13. Use Import Source -> LLM plan to inspect the model-planner contract path:
-   a model-shaped JSON response is parsed, validated, quarantined if invalid,
-   and replayed only as canonical `AgentEvent` evidence. This is still a
-   deterministic contract fixture, not a live model provider call.
+   the request is built from prior events plus agent-addressable memory
+   retrieval evidence, then a model-shaped JSON response is parsed, validated,
+   quarantined if invalid, and replayed only as canonical `AgentEvent`
+   evidence. This is still a deterministic contract fixture in the browser, not
+   a live model provider call.
 14. Use Run Summary -> Smallville Eval on Cognitive, Social day, Routine day,
     Memory plan, or LLM plan sources to inspect the structural score, top gaps,
     and ablation coverage. This is a projection report, not a human
@@ -295,9 +297,10 @@ generative agents. The current `Cognitive`, `Social day`, `Routine day`,
 observation, memory retrieval, reflection, planning, action/conversation, social
 diffusion, routine scheduling, deterministic routine-conflict resolution,
 natural-language intervention, durable memory recall, agent-addressable memory
-planning, model-planner contract parsing/quarantine, and closure as canonical
-`AgentEvent` records. They are testable event contracts for future
-provider-backed LLM behavior, not a claim that the app already has autonomous
+planning, model-planner requests that include agent-addressable retrieval
+scores, model-planner contract parsing/quarantine, and closure as canonical
+`AgentEvent` records. They are testable event contracts for future live
+provider-backed behavior, not a claim that the app already has autonomous
 social emergence, adaptive schedules, or complete persistent agent cognition.
 
 ## Adding An Adapter
@@ -353,9 +356,11 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
   not yet an adaptive autonomous scheduler.
 - The `LLM plan` source proves the request/response parser contract and the
   adapter now includes an OpenAI Responses provider boundary for local or
-  server-side runtimes. The browser UI still uses a deterministic fixture and
-  does not receive API keys; a live provider run requires `OPENAI_API_KEY`
-  outside browser code.
+  server-side runtimes. Provider requests now include agent-addressable memory
+  retrieval snapshots, selected records, source event IDs, and retrieval
+  weights. The browser UI still uses a deterministic fixture and does not
+  receive API keys; a live provider run requires `OPENAI_API_KEY` outside
+  browser code.
 - The graph and memory views are represented through current projection data,
   detail, summary, edges, persistent memory recall, and memory events; separate
   dedicated tabs are future work.

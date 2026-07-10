@@ -51,7 +51,7 @@ runtime facts.
 | Planning | Higher-level plans decomposed into actions | Generator emits planning-stage `decision` events with `planStep` and routine segment metadata | Initial |
 | Action/conversation | Agents act, talk, coordinate | Generator emits `handoff`, `message`, `tool_call`, and `done` events through the existing projection path; Social day emits 25 invitation messages | Partial |
 | Emergent social behavior | Information spreads and coordination emerges from agent interaction over time | `Social day` deterministically models a user-seeded Valentine's invitation spreading through a 25-agent relationship graph; replay derives inspectable relationship state and Graph View exposes filtering plus evidence jumps | Initial |
-| LLM behavior generation | LLM produces observations/reflections/plans/actions | `LLM plan` builds a model-ready request, parses model-shaped responses into canonical events, quarantines invalid output, and now has an OpenAI Responses provider boundary with mock-fetch coverage; current UI source still uses a deterministic fixture and no live provider call was run without an API key | Initial |
+| LLM behavior generation | LLM produces observations/reflections/plans/actions | `LLM plan` builds a model-ready request from prior events plus agent-addressable memory retrieval, parses model-shaped responses into canonical events, quarantines invalid output, and has an OpenAI Responses provider boundary with mock-fetch coverage; current UI source still uses a deterministic fixture and no live provider call was run without an API key | Initial |
 | Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, recalls it as `memory_read` events, and feeds agent-addressable planning events; not yet a server-backed world database or autonomous memory engine | Initial |
 | Many agents | Reference environment used 25 agents | `Social day` and `Routine day` fixtures use 25 agents and 150 canonical events each | Initial |
 | Human intervention | User can inject natural-language changes into the town | `Intervention` source turns an operator prompt into canonical observation/retrieval/reflection/planning/action/closure events with prior-run context | Initial |
@@ -192,6 +192,9 @@ The current slice adds deterministic cognitive evidence:
   - `agentAddressableMemory.retrievalQuery`
   - `agentAddressableMemory.selectedRecordIds`
   - `agentAddressableMemory.selectedSourceEventIds`
+  - `agentAddressableMemory.selectedForAgentIds`
+  - `agentAddressableMemory.selectedRecords`
+  - `agentAddressableMemory.retrievals`
   - `agentAddressableMemory.averageScore`
   - `agentAddressableMemory.weights`
 - LLM planner metadata:
@@ -206,6 +209,9 @@ The current slice adds deterministic cognitive evidence:
   - `llmPlanner.previousRunId`
   - `llmPlanner.previousEventCount`
   - `llmPlanner.selectedMemoryRecordIds`
+  - `llmPlanner.selectedMemorySourceEventIds`
+  - `llmPlanner.agentAddressableRetrievalCount`
+  - `llmPlanner.agentAddressableSelectedRecordCount`
 - Smallville evaluation projection:
   - `Smallville Eval` in Run Summary
   - overall structural score
@@ -242,12 +248,13 @@ This slice can pass if:
 - prior routine evidence can be adapted into 25 revised daily plans from new
   observation and memory evidence, with old/revised projection anchors and
   selected memory event IDs inspectable in `metadata.routineRevision`
-- a model-planner contract can build a JSON request from prior events and
-  durable memory records, parse a model-shaped response into canonical events,
-  and quarantine invalid model output before replay
+- a model-planner contract can build a JSON request from prior events plus
+  agent-addressable memory retrieval records, parse a model-shaped response
+  into canonical events, and quarantine invalid model output before replay
 - an OpenAI Responses provider boundary can build a `store: false` JSON-schema
-  request, call through injected/runtime `fetch`, and pass provider
-  `output_text` through the same parser/quarantine path
+  request with agent-addressable memory retrieval evidence, call through
+  injected/runtime `fetch`, and pass provider `output_text` through the same
+  parser/quarantine path
 - social relationship state is derived from canonical event evidence and remains
   deterministic across replay
 - the dedicated Graph View filters and jumps through relationship evidence
@@ -278,8 +285,8 @@ This slice cannot claim:
 The next meaningful move is not more labels. It is one of:
 
 - run and evidence a real provider-backed LLM call with a local/server-side API
-  key while keeping keys out of browser code
-- use agent-addressable memory retrieval inside live provider-backed planning
+  key while keeping keys out of browser code and consuming the existing
+  agent-addressable memory request evidence
 - persist the intervention memory stream beyond browser-local storage
 - turn the structural evaluator into a human-review rubric or provider-backed
   benchmark while keeping evaluation evidence event-derived

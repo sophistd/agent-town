@@ -15,6 +15,21 @@ import { mockSmallvilleRoutineRun } from "../events/generativeRuntime";
 const savedAt = "2026-07-04T19:10:00.000Z";
 const records = extractPersistentMemoryRecords(mockSmallvilleRoutineRun, savedAt);
 
+function expectRecord(value: unknown): Record<string, unknown> {
+  expect(value).toBeDefined();
+  expect(value).not.toBeNull();
+  expect(typeof value).toBe("object");
+  expect(Array.isArray(value)).toBe(false);
+
+  return value as Record<string, unknown>;
+}
+
+function expectArray(value: unknown): unknown[] {
+  expect(Array.isArray(value)).toBe(true);
+
+  return value as unknown[];
+}
+
 describe("llm planner adapter", () => {
   it("builds a model-ready request without giving the renderer runtime facts", () => {
     const request = buildSmallvilleLlmPlannerRequest({
@@ -36,6 +51,32 @@ describe("llm planner adapter", () => {
     });
     expect(request.agents.length).toBeGreaterThan(0);
     expect(request.memory.selectedRecords.length).toBeGreaterThan(0);
+    expect(request.memory.retrievals.length).toBeGreaterThan(0);
+    expect(request.memory.weights).toEqual({
+      relevance: 0.35,
+      importance: 0.25,
+      recency: 0.2,
+      agentAffinity: 0.2,
+    });
+    expect(
+      request.memory.selectedRecords.some(
+        (record) =>
+          typeof record.retrievalScore === "number" &&
+          (record.selectedForAgentIds?.length ?? 0) > 0,
+      ),
+    ).toBe(true);
+    const agentWithMemory = request.agents.find(
+      (agent) => agent.selectedMemoryRecordIds.length > 0,
+    );
+
+    expect(agentWithMemory).toBeDefined();
+    expect(
+      request.memory.retrievals.some(
+        (retrieval) =>
+          retrieval.agentId === agentWithMemory?.agentId &&
+          retrieval.selectedRecordIds.length > 0,
+      ),
+    ).toBe(true);
     expect(request.promptHash).toMatch(/^[0-9a-f]{8}$/);
   });
 
@@ -49,6 +90,7 @@ describe("llm planner adapter", () => {
       model: "gpt-5.1-mini",
       request,
     });
+    const userPayload = body.input[1]?.content[0]?.text ?? "";
     const serializedBody = JSON.stringify(body);
 
     expect(body.model).toBe("gpt-5.1-mini");
@@ -65,6 +107,9 @@ describe("llm planner adapter", () => {
       type: "json_schema",
     });
     expect(serializedBody).toContain(request.requestId);
+    expect(userPayload).toContain("\"retrievals\"");
+    expect(userPayload).toContain("\"agentAffinityScore\"");
+    expect(userPayload).toContain("\"selectedForAgentIds\"");
     expect(serializedBody).not.toContain("OPENAI_API_KEY");
     expect(serializedBody).not.toContain("test-provider-key");
   });
@@ -96,6 +141,37 @@ describe("llm planner adapter", () => {
       generatedBy: "deterministic-contract-fixture",
       previousEventCount: 150,
     });
+    const firstEventMetadata = expectRecord(result.events[0]?.metadata);
+    const agentAddressableMemory = expectRecord(
+      firstEventMetadata.agentAddressableMemory,
+    );
+    const addressableRetrievals = expectArray(agentAddressableMemory.retrievals);
+    const addressableSelectedRecords = expectArray(
+      agentAddressableMemory.selectedRecords,
+    );
+    const llmPlannerMetadata = expectRecord(firstEventMetadata.llmPlanner);
+
+    expect(agentAddressableMemory).toMatchObject({
+      requestId: expect.stringMatching(/^llm-plan-request-[0-9a-f]{8}$/),
+      weights: {
+        relevance: 0.35,
+        importance: 0.25,
+        recency: 0.2,
+        agentAffinity: 0.2,
+      },
+    });
+    expect(addressableRetrievals.length).toBeGreaterThan(0);
+    expect(addressableSelectedRecords[0]).toMatchObject({
+      recordId: expect.any(String),
+      retrievalScore: expect.any(Number),
+    });
+    expect(llmPlannerMetadata).toMatchObject({
+      agentAddressableRetrievalCount: expect.any(Number),
+      agentAddressableSelectedRecordCount: expect.any(Number),
+    });
+    expect(
+      expectArray(llmPlannerMetadata.selectedMemorySourceEventIds).length,
+    ).toBeGreaterThan(0);
     expect(result.events[3]).toMatchObject({
       type: "message",
       targetAgentId: expect.any(String),
@@ -194,6 +270,25 @@ describe("llm planner adapter", () => {
       generatedBy: "gpt-5.1-mini",
       requestId: request.requestId,
     });
+    const providerMetadata = expectRecord(result.events[0]?.metadata);
+    const providerAddressableMemory = expectRecord(
+      providerMetadata.agentAddressableMemory,
+    );
+    const providerLlmPlannerMetadata = expectRecord(providerMetadata.llmPlanner);
+
+    expect(expectArray(providerAddressableMemory.selectedRecordIds).length).toBeGreaterThan(
+      0,
+    );
+    expect(
+      expectArray(providerAddressableMemory.selectedSourceEventIds).length,
+    ).toBeGreaterThan(0);
+    expect(expectArray(providerAddressableMemory.retrievals).length).toBeGreaterThan(0);
+    expect(expectArray(providerAddressableMemory.selectedRecords)[0]).toMatchObject({
+      retrievalScore: expect.any(Number),
+    });
+    expect(
+      expectArray(providerLlmPlannerMetadata.selectedMemorySourceEventIds).length,
+    ).toBeGreaterThan(0);
     expect(result.warnings).toEqual([
       expect.objectContaining({
         code: "openai_responses_provider_call",
