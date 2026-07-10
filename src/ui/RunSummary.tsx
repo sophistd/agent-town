@@ -11,6 +11,7 @@ import {
 } from "../events/selectors";
 import {
   evaluateSmallvilleRun,
+  type SmallvilleBelievabilityCriterion,
   type SmallvilleCapabilityScore,
 } from "../events/smallvilleEvaluation";
 import type { AgentEvent, RelationshipState, WorldState } from "../events/types";
@@ -175,8 +176,8 @@ const evaluationStatusStyle = {
   textTransform: "uppercase",
 } satisfies CSSProperties;
 
-function statusLabel(capability: SmallvilleCapabilityScore): string {
-  return `${capability.status} ${capability.score}`;
+function statusLabel(item: { status: string; score: number }): string {
+  return `${item.status} ${item.score}`;
 }
 
 const evidencePriority: Record<string, number> = {
@@ -202,6 +203,32 @@ function topPassedCapabilities(
     .sort(
       (left, right) =>
         evidencePriority[left.key] - evidencePriority[right.key] ||
+        right.score - left.score ||
+        right.evidenceCount - left.evidenceCount ||
+        left.label.localeCompare(right.label),
+    )
+    .slice(0, 2);
+}
+
+const rubricPriority: Record<SmallvilleBelievabilityCriterion["key"], number> = {
+  experience_action_chain: 0,
+  memory_grounding: 1,
+  social_propagation: 2,
+  routine_continuity: 3,
+  adaptive_response: 4,
+  spatial_continuity: 5,
+  identity_continuity: 6,
+  reviewability: 7,
+};
+
+function topPassedRubricCriteria(
+  criteria: readonly SmallvilleBelievabilityCriterion[],
+): SmallvilleBelievabilityCriterion[] {
+  return [...criteria]
+    .filter((criterion) => criterion.status === "passed")
+    .sort(
+      (left, right) =>
+        rubricPriority[left.key] - rubricPriority[right.key] ||
         right.score - left.score ||
         right.evidenceCount - left.evidenceCount ||
         left.label.localeCompare(right.label),
@@ -274,6 +301,9 @@ export function RunSummary({ events, onJumpToEvent, worldState }: RunSummaryProp
     (check) => check.status !== "missing",
   ).length;
   const topEvidence = topPassedCapabilities(smallvilleEvaluation.capabilityScores);
+  const topReviewEvidence = topPassedRubricCriteria(
+    smallvilleEvaluation.humanReviewRubric.criteria,
+  );
 
   const metrics = [
     ["Events", summary.totalEvents],
@@ -330,6 +360,23 @@ export function RunSummary({ events, onJumpToEvent, worldState }: RunSummaryProp
             </>
           ) : null}
 
+          <div style={evaluationMetaStyle}>
+            Human rubric {smallvilleEvaluation.humanReviewRubric.overallScore}/100;{" "}
+            {smallvilleEvaluation.humanReviewRubric.summary}
+          </div>
+
+          {topReviewEvidence.length > 0 ? (
+            <>
+              <div style={evaluationMetaStyle}>Human-review evidence</div>
+              {topReviewEvidence.map((criterion) => (
+                <div key={criterion.key} style={evaluationRowStyle}>
+                  <span>{criterion.label}</span>
+                  <span style={evaluationStatusStyle}>{statusLabel(criterion)}</span>
+                </div>
+              ))}
+            </>
+          ) : null}
+
           <div style={evaluationMetaStyle}>Gaps</div>
           {smallvilleEvaluation.topGaps.slice(0, 3).map((capability) => (
             <div key={capability.key} style={evaluationRowStyle}>
@@ -337,6 +384,20 @@ export function RunSummary({ events, onJumpToEvent, worldState }: RunSummaryProp
               <span style={evaluationStatusStyle}>{statusLabel(capability)}</span>
             </div>
           ))}
+
+          {smallvilleEvaluation.humanReviewRubric.topReviewGaps.length > 0 ? (
+            <>
+              <div style={evaluationMetaStyle}>Human-review gaps</div>
+              {smallvilleEvaluation.humanReviewRubric.topReviewGaps
+                .slice(0, 2)
+                .map((criterion) => (
+                  <div key={criterion.key} style={evaluationRowStyle}>
+                    <span>{criterion.label}</span>
+                    <span style={evaluationStatusStyle}>{statusLabel(criterion)}</span>
+                  </div>
+                ))}
+            </>
+          ) : null}
         </div>
       ) : null}
 

@@ -9,7 +9,21 @@ import {
 import { mockFailureRun } from "../events/mockFailureRun";
 import { extractPersistentMemoryRecords } from "../events/persistentMemory";
 import { replay } from "../events/reducer";
-import { evaluateSmallvilleRun } from "../events/smallvilleEvaluation";
+import {
+  evaluateSmallvilleRun,
+  type SmallvilleBelievabilityCriterion,
+  type SmallvilleBelievabilityCriterionKey,
+} from "../events/smallvilleEvaluation";
+
+function rubricCriterion(
+  criteria: readonly SmallvilleBelievabilityCriterion[],
+  key: SmallvilleBelievabilityCriterionKey,
+): SmallvilleBelievabilityCriterion {
+  const criterion = criteria.find((item) => item.key === key);
+  expect(criterion).toBeDefined();
+
+  return criterion as SmallvilleBelievabilityCriterion;
+}
 
 describe("Smallville evaluation report", () => {
   it("does not classify the generic failure fixture as Smallville-like", () => {
@@ -22,6 +36,12 @@ describe("Smallville evaluation report", () => {
       status: "missing",
       score: 0,
     });
+    expect(
+      rubricCriterion(report.humanReviewRubric.criteria, "identity_continuity"),
+    ).toMatchObject({ status: "missing", score: 0 });
+    expect(
+      rubricCriterion(report.humanReviewRubric.criteria, "experience_action_chain"),
+    ).toMatchObject({ status: "missing", score: 0 });
   });
 
   it("scores the 25-agent social diffusion run with event-derived relationships", () => {
@@ -41,6 +61,15 @@ describe("Smallville evaluation report", () => {
     expect(
       report.capabilityScores.find((score) => score.key === "relationship_graph"),
     ).toMatchObject({ status: "passed", score: 100 });
+    const socialRubric = rubricCriterion(
+      report.humanReviewRubric.criteria,
+      "social_propagation",
+    );
+    expect(socialRubric).toMatchObject({ status: "passed", score: 4 });
+    expect(socialRubric.evidenceAgentIds).toHaveLength(25);
+    expect(
+      rubricCriterion(report.humanReviewRubric.criteria, "experience_action_chain"),
+    ).toMatchObject({ status: "passed", score: 4, evidenceCount: 25 });
     expect(report.topGaps.map((gap) => gap.key)).toContain("routine_schedule");
     expect(report.topGaps.map((gap) => gap.key)).toContain("llm_contract");
   });
@@ -54,6 +83,9 @@ describe("Smallville evaluation report", () => {
     expect(
       report.capabilityScores.find((score) => score.key === "routine_schedule"),
     ).toMatchObject({ status: "passed", score: 100 });
+    expect(
+      rubricCriterion(report.humanReviewRubric.criteria, "routine_continuity"),
+    ).toMatchObject({ status: "passed", score: 4, evidenceCount: 6 });
     expect(
       report.ablationChecks.find((check) => check.component === "Routine schedule"),
     ).toMatchObject({ status: "passed", evidenceCount: 6 });
@@ -76,6 +108,12 @@ describe("Smallville evaluation report", () => {
     expect(
       report.capabilityScores.find((score) => score.key === "llm_contract"),
     ).toMatchObject({ status: "passed", score: 100 });
+    expect(rubricCriterion(report.humanReviewRubric.criteria, "adaptive_response")).toMatchObject({
+      status: "passed",
+      score: 4,
+      evidenceCount: 8,
+    });
+    expect(report.humanReviewRubric.summary).toContain("human-review criteria");
     expect(
       report.ablationChecks.find((check) => check.component === "LLM planner contract"),
     ).toMatchObject({ status: "passed", evidenceCount: 8 });
@@ -93,6 +131,10 @@ describe("Smallville evaluation report", () => {
     expect(
       report.capabilityScores.find((score) => score.key === "adaptive_routine"),
     ).toMatchObject({ status: "passed", score: 100 });
+    expect(rubricCriterion(report.humanReviewRubric.criteria, "adaptive_response")).toMatchObject({
+      status: "passed",
+      score: 4,
+    });
     expect(
       report.ablationChecks.find((check) => check.component === "Adaptive routine"),
     ).toMatchObject({ status: "passed", evidenceCount: 25 });

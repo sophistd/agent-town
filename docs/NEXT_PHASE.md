@@ -64,8 +64,8 @@ intact.
      scheduler loop while keeping each tick replayable as canonical events
    - extend the resumable scheduler into a longer observed runtime window with
      pause/resume, memory-continuity checks, and stronger wall-clock evidence
-   - turn the structural Smallville evaluator into a human-review rubric,
-     provider-backed benchmark, or dedicated evaluation dashboard
+   - back the human-review Smallville rubric with a provider-backed benchmark,
+     external reviewer study, or dedicated evaluation dashboard
    - profile replay/rendering for 25-agent and larger cognitive/routine
      fixtures
 

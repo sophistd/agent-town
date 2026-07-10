@@ -280,12 +280,16 @@ The report includes:
 - ablation checks for observation, retrieval, reflection, planning,
   relationship graph, routine schedule, adaptive routine revision, and LLM
   planner contract
+- a human-review rubric for identity continuity, experience-to-action chains,
+  memory grounding, social propagation, routine continuity, adaptive response,
+  spatial continuity, and reviewability
 - event, agent, relationship, social, and routine evidence counts
 
 This evaluator is a projection/inspection helper. It does not create
 `AgentEvent` records, mutate `WorldState`, change replay semantics, or give
-React/Phaser ownership of behavior. It is not a human believability study and
-does not claim autonomous Stanford Smallville parity.
+React/Phaser ownership of behavior. The rubric makes event evidence and review
+gaps auditable by a human reviewer; it is not a completed human-subject
+believability study and does not claim autonomous Stanford Smallville parity.
 
 ## WorldState
 

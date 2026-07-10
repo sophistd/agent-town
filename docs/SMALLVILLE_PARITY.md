@@ -55,7 +55,7 @@ runtime facts.
 | Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, file-backed local/server snapshots now use the same schema, a local/server HTTP process can ingest canonical event streams into that store, recall emits `memory_read` events, Memory plan feeds agent-addressable planning, provider-loop request evidence can be built from server recall, a JSONL external-sender runner can drive the loop, `POST /provider-loop` accepts live HTTP sender events, the browser workbench can call that route as a Provider HTTP source, `pnpm smallville:runtime-stream` can emit deterministic external runtime ticks into the same route, and `pnpm smallville:scheduler` can run, stop under elapsed-time supervision, and resume a bounded world-clock phase plan with cross-tick and cross-process memory accumulation; not yet a multi-user world database or autonomous memory engine | Initial |
 | Many agents | Reference environment used 25 agents | `Social day` and `Routine day` fixtures use 25 agents and 150 canonical events each | Initial |
 | Human intervention | User can inject natural-language changes into the town | `Intervention` source turns an operator prompt into canonical observation/retrieval/reflection/planning/action/closure events with prior-run context | Initial |
-| Evaluation | Believability and ablation evidence | `evaluateSmallvilleRun` now computes a structural capability score, top gaps, and ablation coverage from canonical events plus replayed `WorldState`; no human believability study yet | Initial |
+| Evaluation | Believability and ablation evidence | `evaluateSmallvilleRun` now computes a structural capability score, top gaps, ablation coverage, and a human-review rubric from canonical events plus replayed `WorldState`; no completed human-subject believability study yet | Initial |
 
 ## Current M5 Implementation Spine
 
@@ -106,6 +106,7 @@ deterministic external runtime stream, and bounded scheduler runner:
   - structural capability scores
   - top missing/partial gaps
   - ablation coverage checks
+  - human-review believability rubric
 - `src/state/persistentMemoryStore.ts`
   - versioned browser storage for durable memory records
 - `src/state/filePersistentMemoryStore.ts`

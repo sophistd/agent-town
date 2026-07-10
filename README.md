@@ -302,8 +302,9 @@ Quick path:
    a live model provider call.
 14. Use Run Summary -> Smallville Eval on Cognitive, Social day, Routine day,
     Memory plan, or LLM plan sources to inspect the structural score, top gaps,
-    and ablation coverage. This is a projection report, not a human
-    believability study.
+    ablation coverage, and human-review believability rubric. This is a
+    projection report that makes evidence reviewable; it is not a completed
+    human-subject believability study.
 15. Use Detail to inspect the selected event fields.
 16. Use Import Source -> JSONL to import the native JSONL sample in the text
    area.
@@ -451,9 +452,14 @@ diffusion, routine scheduling, deterministic routine-conflict resolution,
 natural-language intervention, durable memory recall, agent-addressable memory
 planning, model-planner requests that include agent-addressable retrieval
 scores, model-planner contract parsing/quarantine, and closure as canonical
-`AgentEvent` records. They are testable event contracts for future live
-provider-backed behavior, not a claim that the app already has autonomous
-social emergence, adaptive schedules, or complete persistent agent cognition.
+`AgentEvent` records. Run Summary also derives a human-review rubric from those
+events plus replayed `WorldState`, so reviewers can inspect identity continuity,
+experience-to-action chains, memory grounding, social propagation, routines,
+adaptation, spatial continuity, and review gaps without reading renderer state.
+They are testable event contracts for future live provider-backed behavior, not
+a claim that the app already has autonomous social emergence, adaptive
+schedules, complete persistent agent cognition, or a completed human
+believability study.
 
 ## Adding An Adapter
 

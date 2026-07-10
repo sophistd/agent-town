@@ -107,12 +107,15 @@ Scope truth:
 
 ## Remaining Limitations
 
-This is not full Stanford Smallville parity. The evaluator is structural and
-deterministic; it is not a human believability study, provider-backed benchmark,
-autonomous social emergence, server-backed memory, or empirical ablation study.
+This is not full Stanford Smallville parity. This original evaluator slice was
+structural and deterministic; the later
+`smallville-human-believability-rubric.md` slice adds reviewable human-rubric
+criteria, but it is still not a completed human-subject study,
+provider-backed benchmark, autonomous social emergence, server-backed memory,
+or empirical ablation study.
 
 ## Next Session Candidate
 
-Turn the structural evaluator into a human-review rubric, provider-backed eval
-benchmark, or dedicated evaluation dashboard while keeping all evidence derived
-from canonical events and replayed `WorldState`.
+Back the human-review rubric with a provider-backed eval benchmark, external
+reviewer study, or dedicated evaluation dashboard while keeping all evidence
+derived from canonical events and replayed `WorldState`.
