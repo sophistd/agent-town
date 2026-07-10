@@ -55,8 +55,8 @@ intact.
      evidence
    - turn adaptive routine revision into provider-backed planning while
      preserving parser quarantine and replay validation
-   - connect a real external runtime event sender to the world-memory provider
-     loop, without letting HTTP state bypass `AgentEvent`
+   - connect a live external runtime source, beyond file-based JSONL, to the
+     world-memory provider loop, without letting HTTP state bypass `AgentEvent`
    - turn the structural Smallville evaluator into a human-review rubric,
      provider-backed benchmark, or dedicated evaluation dashboard
    - profile replay/rendering for 25-agent and larger cognitive/routine
@@ -71,8 +71,8 @@ intact.
    durable memory records, recall evidence, and agent-addressable retrieval
    scores into a dedicated Memory view only after the server/provider boundary
    can make it clear whether records came from browser storage, file-backed
-   runtime ingestion, HTTP server ingestion, provider-loop request construction,
-   or provider-backed planning.
+   runtime ingestion, HTTP server ingestion, JSONL provider-loop sender runs,
+   provider-loop request construction, or provider-backed planning.
 
 6. Runtime adapter hardening
 

@@ -309,6 +309,23 @@ Rules:
 - Provider output still has to pass through `parseLlmPlannerResponse` and
   canonical event validation before replay.
 
+`src/server/worldMemoryProviderLoopRunner.ts` and
+`pnpm world-memory:provider-loop` make the provider loop runnable from an
+external JSONL event stream.
+
+Runner rules:
+
+- The input is the existing native JSONL format: one canonical `AgentEvent`
+  object per non-empty line.
+- JSONL parsing uses `parseNativeJsonl`; malformed lines and invalid events are
+  quarantined before the loop receives accepted events.
+- The runner starts a local world-memory server for the configured memory file,
+  runs the provider loop, closes the server, and prints a secret-free summary.
+- The summary includes event counts, warning codes, quarantine codes, provider
+  request IDs, prompt hash, and memory counts. It does not include API keys.
+- `AGENT_TOWN_PROVIDER_LOOP_OUTPUT` can write the same summary to a file for
+  evidence capture.
+
 ## Adding Another Source
 
 1. Create `src/adapters/<source>Adapter.ts`.

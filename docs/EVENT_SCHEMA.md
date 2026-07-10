@@ -204,6 +204,9 @@ recall and plan responses remain adapter-shaped canonical event output.
 adding a new schema: it reconstructs provider request records from canonical
 recall events, uses server Memory plan events as prior context, and still sends
 provider output through `parseLlmPlannerResponse` before replay.
+`src/server/worldMemoryProviderLoopRunner.ts` drives the same path from the
+native JSONL event format, so external runtime sender files remain canonical
+`AgentEvent` lines rather than a new provider-loop schema.
 
 The deterministic `Memory plan` source uses the same persistent records as an
 agent-addressable memory stream. Each durable-memory agent receives a query

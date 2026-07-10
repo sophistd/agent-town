@@ -98,6 +98,19 @@ Memory plan context, and then calls the same OpenAI Responses planner adapter.
 Without an API key it still builds inspectable server-backed provider request
 evidence but does not call the provider.
 
+Run the JSONL external-sender provider loop:
+
+```bash
+AGENT_TOWN_WORLD_MEMORY_FILE=/tmp/agent-town-provider-loop-memory.json \
+  pnpm world-memory:provider-loop docs/samples/sample-native.jsonl
+```
+
+This starts a temporary local world-memory server, sends the JSONL events
+through the provider loop, and prints a secret-free summary. Set
+`OPENAI_API_KEY` only in the local/server environment to attempt a live provider
+call; without it, the runner still produces request evidence and returns the
+existing `missing_openai_api_key` warning.
+
 Required checks before finishing code or evidence work:
 
 ```bash
@@ -385,8 +398,10 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
   `src/server/worldMemoryHttpServer.ts` and `pnpm world-memory:server` expose
   that boundary as a long-running local/server HTTP process.
   `src/adapters/worldMemoryProviderLoop.ts` can feed server-backed durable
-  memory into the OpenAI planner boundary. This is still not a multi-user
-  database or full autonomous memory engine.
+  memory into the OpenAI planner boundary, and
+  `pnpm world-memory:provider-loop` can drive that path from canonical JSONL
+  event streams. This is still not a multi-user database or full autonomous
+  memory engine.
 - Routine scheduling is currently deterministic fixture evidence. The app can
   show routine phases and crowding-resolution events for 25 agents, but it is
   not yet an adaptive autonomous scheduler.
