@@ -52,7 +52,7 @@ runtime facts.
 | Action/conversation | Agents act, talk, coordinate | Generator emits `handoff`, `message`, `tool_call`, and `done` events through the existing projection path; Social day emits 25 invitation messages | Partial |
 | Emergent social behavior | Information spreads and coordination emerges from agent interaction over time | `Social day` deterministically models a user-seeded Valentine's invitation spreading through a 25-agent relationship graph; replay derives inspectable relationship state and Graph View exposes filtering plus evidence jumps | Initial |
 | LLM behavior generation | LLM produces observations/reflections/plans/actions | `LLM plan` builds a model-ready request from prior events plus agent-addressable memory retrieval, parses model-shaped responses into canonical events, quarantines invalid output, and has an OpenAI Responses provider boundary with mock-fetch coverage; current UI source still uses a deterministic fixture and no live provider call was run without an API key | Initial |
-| Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, recalls it as `memory_read` events, and feeds agent-addressable planning events; not yet a server-backed world database or autonomous memory engine | Initial |
+| Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, file-backed local/server snapshots now use the same schema, recall emits `memory_read` events, and Memory plan feeds agent-addressable planning; not yet a multi-user world database or autonomous memory engine | Initial |
 | Many agents | Reference environment used 25 agents | `Social day` and `Routine day` fixtures use 25 agents and 150 canonical events each | Initial |
 | Human intervention | User can inject natural-language changes into the town | `Intervention` source turns an operator prompt into canonical observation/retrieval/reflection/planning/action/closure events with prior-run context | Initial |
 | Evaluation | Believability and ablation evidence | `evaluateSmallvilleRun` now computes a structural capability score, top gaps, and ablation coverage from canonical events plus replayed `WorldState`; no human believability study yet | Initial |
@@ -102,6 +102,8 @@ The current slice adds deterministic cognitive evidence:
   - ablation coverage checks
 - `src/state/persistentMemoryStore.ts`
   - versioned browser storage for durable memory records
+- `src/state/filePersistentMemoryStore.ts`
+  - local/server-side file-backed snapshot store for durable memory records
 - UI sources: `Cognitive`, `Social day`, `Routine day`, `Intervention`,
   `Adaptive routine`, `Memory`, `Memory plan`, `LLM plan`
 - Replay-derived social projection:
@@ -185,6 +187,10 @@ The current slice adds deterministic cognitive evidence:
   - `durableMemory.memoryId`
   - `durableMemory.retrievalQuery`
   - `durableMemory.savedAt`
+- File-backed persistent memory store:
+  - same snapshot schema as browser persistent memory
+  - atomic temporary file + rename writes
+  - explicit warnings for missing, unreadable, invalid, or unwritable files
 - Agent-addressable memory metadata:
   - `agentAddressableMemory.schemaVersion`
   - `agentAddressableMemory.agentId`
@@ -242,6 +248,8 @@ This slice can pass if:
   adapter, not through renderer or UI-owned facts
 - memory events from imported runs persist into a versioned browser memory bank
   and recall as canonical `memory_read` events
+- local/server runtimes can persist the same memory snapshot schema into a
+  file-backed world-memory store with explicit failure warnings
 - each durable-memory agent can retrieve persistent records by persona/query,
   importance, recency, and agent affinity, then emit canonical retrieval,
   reflection, and planning evidence
@@ -287,7 +295,7 @@ The next meaningful move is not more labels. It is one of:
 - run and evidence a real provider-backed LLM call with a local/server-side API
   key while keeping keys out of browser code and consuming the existing
   agent-addressable memory request evidence
-- persist the intervention memory stream beyond browser-local storage
+- wire the file-backed memory store into a local/server runtime source or API
 - turn the structural evaluator into a human-review rubric or provider-backed
   benchmark while keeping evaluation evidence event-derived
 - profile replay/rendering for 25-agent and larger fixtures

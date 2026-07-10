@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 import {
   buildAgentAddressableMemoryPlanResult,
@@ -11,6 +14,11 @@ import {
 } from "../events/persistentMemory";
 import { mockSmallvilleSocialRun } from "../events/generativeRuntime";
 import { replay } from "../events/reducer";
+import {
+  loadFilePersistentMemoryRecords,
+  mergeFilePersistentMemoryRecords,
+  saveFilePersistentMemoryRecords,
+} from "../state/filePersistentMemoryStore";
 import {
   loadPersistentMemoryRecords,
   PERSISTENT_MEMORY_STORAGE_KEY,
@@ -31,6 +39,18 @@ class MemoryStorage implements StorageLike {
 
   setItem(key: string, value: string): void {
     this.values.set(key, value);
+  }
+}
+
+async function withTempMemoryFile<T>(
+  run: (filePath: string) => Promise<T>,
+): Promise<T> {
+  const directory = await mkdtemp(join(tmpdir(), "agent-town-memory-"));
+
+  try {
+    return await run(join(directory, "world-memory.json"));
+  } finally {
+    await rm(directory, { force: true, recursive: true });
   }
 }
 
@@ -90,6 +110,85 @@ describe("persistent memory stream", () => {
     );
     expect(loaded.warnings).toHaveLength(0);
     expect(loaded.records).toEqual(records);
+  });
+
+  it("round-trips records through a file-backed world memory store", async () => {
+    await withTempMemoryFile(async (filePath) => {
+      const records = extractPersistentMemoryRecords(
+        mockSmallvilleSocialRun.slice(0, 12),
+        "2026-07-04T18:10:00.000Z",
+      );
+      const saveWarnings = await saveFilePersistentMemoryRecords(
+        filePath,
+        records,
+        "2026-07-04T18:12:00.000Z",
+      );
+      const rawSnapshot = await readFile(filePath, "utf8");
+      const loaded = await loadFilePersistentMemoryRecords(filePath);
+
+      expect(saveWarnings).toHaveLength(0);
+      expect(rawSnapshot).toContain("\"schemaVersion\":1");
+      expect(loaded.warnings).toHaveLength(0);
+      expect(loaded.records).toEqual(records);
+    });
+  });
+
+  it("merges canonical memory into a file-backed world memory store", async () => {
+    await withTempMemoryFile(async (filePath) => {
+      const firstRecords = extractPersistentMemoryRecords(
+        mockSmallvilleSocialRun.slice(0, 12),
+        "2026-07-04T18:10:00.000Z",
+      );
+      const nextRecords = extractPersistentMemoryRecords(
+        mockSmallvilleSocialRun.slice(6, 18),
+        "2026-07-04T18:20:00.000Z",
+      );
+      const expectedMerged = mergePersistentMemoryRecords(firstRecords, nextRecords);
+      const firstMerge = await mergeFilePersistentMemoryRecords({
+        filePath,
+        incomingRecords: firstRecords,
+        savedAt: "2026-07-04T18:12:00.000Z",
+      });
+      const secondMerge = await mergeFilePersistentMemoryRecords({
+        filePath,
+        incomingRecords: nextRecords,
+        savedAt: "2026-07-04T18:22:00.000Z",
+      });
+      const loaded = await loadFilePersistentMemoryRecords(filePath);
+
+      expect(firstMerge.warnings).toEqual([
+        expect.objectContaining({
+          code: "persistent_memory_file_missing",
+        }),
+      ]);
+      expect(secondMerge.warnings).toHaveLength(0);
+      expect(secondMerge.records).toEqual(expectedMerged);
+      expect(loaded.warnings).toHaveLength(0);
+      expect(loaded.records).toEqual(secondMerge.records);
+    });
+  });
+
+  it("surfaces file-backed memory load failures as warnings", async () => {
+    await withTempMemoryFile(async (filePath) => {
+      const missing = await loadFilePersistentMemoryRecords(filePath);
+
+      await writeFile(filePath, "{not json", "utf8");
+
+      const invalid = await loadFilePersistentMemoryRecords(filePath);
+
+      expect(missing.records).toHaveLength(0);
+      expect(missing.warnings).toEqual([
+        expect.objectContaining({
+          code: "persistent_memory_file_missing",
+        }),
+      ]);
+      expect(invalid.records).toHaveLength(0);
+      expect(invalid.warnings).toEqual([
+        expect.objectContaining({
+          code: "invalid_persistent_memory_json",
+        }),
+      ]);
+    });
   });
 
   it("recalls persistent records as canonical AgentEvent evidence", () => {

@@ -215,6 +215,24 @@ Rules:
 - Phaser, map objects, sprites, and React state do not revise schedules. They
   only project the accepted `AgentEvent -> WorldState` result.
 
+## File-Backed Persistent Memory Store
+
+`src/state/filePersistentMemoryStore.ts` extends persistent memory beyond the
+browser-only storage boundary for local or server-side runtimes.
+
+Rules:
+
+- It uses the same `PersistentMemoryRecord` and versioned snapshot schema as
+  `src/state/persistentMemoryStore.ts`.
+- It writes snapshots to a caller-provided file path with an atomic temporary
+  file plus rename.
+- It can merge incoming canonical memory records into the file-backed snapshot
+  through `mergePersistentMemoryRecords`.
+- Missing, unreadable, invalid, or unwritable files return explicit adapter
+  warnings; they are not treated as silent success.
+- File-backed memory remains an adapter/backing-store boundary. The renderer
+  still receives only canonical `AgentEvent[]` replayed into `WorldState`.
+
 ## Adding Another Source
 
 1. Create `src/adapters/<source>Adapter.ts`.

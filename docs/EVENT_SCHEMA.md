@@ -188,6 +188,10 @@ boundary. The store saves only evidence extracted from canonical
 `memory_read` / `memory_write` events. When recalled, those records become new
 canonical `memory_read` events with `metadata.durableMemory`; localStorage is
 not replayed directly and does not give the renderer runtime facts.
+`src/state/filePersistentMemoryStore.ts` provides the same snapshot contract for
+local/server-side file-backed world memory. Missing, unreadable, or invalid file
+snapshots surface explicit warnings instead of silently becoming successful
+memory loads.
 
 The deterministic `Memory plan` source uses the same persistent records as an
 agent-addressable memory stream. Each durable-memory agent receives a query
