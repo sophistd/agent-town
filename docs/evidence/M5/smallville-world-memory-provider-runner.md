@@ -95,6 +95,32 @@ Known build warning:
 - This does not connect the browser UI to the provider loop yet.
 - This does not claim final Stanford Smallville parity.
 
+## External Write-Back
+
+Actual writes:
+
+- Notion page-level comment:
+  `399acb4b-b6e6-81a9-836c-001d5bee73e8`.
+- Linear `MDL-129` comment:
+  `ab04bd9e-e8d4-437a-9db2-1093d96971fa`.
+- Linear `MDL-152` red-check comment:
+  `64d1d234-ee48-42dd-a634-893ab8bfe53e`.
+
+Read-back verification:
+
+- Notion `get comments` returned comment
+  `399acb4b-b6e6-81a9-836c-001d5bee73e8` with commit
+  `2d550e1 feat: add world memory provider runner`.
+- Linear `MDL-129` comments returned
+  `ab04bd9e-e8d4-437a-9db2-1093d96971fa` with the same commit,
+  verification summary, and scope truth.
+- Linear `MDL-152` comments returned
+  `64d1d234-ee48-42dd-a634-893ab8bfe53e` with the red-check pass/fail
+  summary and remaining gaps.
+
+No issue state was changed, no Notion page body was replaced, no merge was
+performed, and no API key or secret was written.
+
 ## Next Session Candidate
 
 Run and evidence a real provider-backed planner call through this runner using
