@@ -252,6 +252,35 @@ Rules:
   local/server runtime can call without giving files or the renderer ownership
   of world facts.
 
+`src/server/worldMemoryHttpServer.ts` exposes that runtime as a long-running
+local/server HTTP process. `pnpm world-memory:server` starts it through the
+existing Vite toolchain without adding a new runtime dependency.
+
+Routes:
+
+- `GET /health`
+- `POST /memory/ingest`
+- `GET /memory/recall`
+- `POST /memory/plan`
+
+Rules:
+
+- The server requires `AGENT_TOWN_WORLD_MEMORY_FILE` or a file path argument so
+  the durable memory location is explicit.
+- The default bind host is `127.0.0.1`; callers may override host or port for a
+  local/server deployment.
+- `/memory/ingest` accepts event-shaped JSON, validates it through the canonical
+  event validator, quarantines invalid events, and persists only canonical
+  memory events.
+- `/memory/plan` also validates `previousEvents` before using them as planning
+  context. Invalid context events are quarantined as
+  `invalid_world_memory_plan_context_event`.
+- `/memory/recall` and `/memory/plan` return adapter-shaped canonical event
+  output. Callers still have to replay those events into `WorldState`; the HTTP
+  process does not own projection facts.
+- Malformed JSON and oversized request bodies return explicit JSON errors
+  instead of being silently accepted.
+
 ## Adding Another Source
 
 1. Create `src/adapters/<source>Adapter.ts`.

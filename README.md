@@ -69,6 +69,27 @@ Open the Vite URL printed by the command, usually:
 http://127.0.0.1:5173/
 ```
 
+Run the local world-memory server:
+
+```bash
+AGENT_TOWN_WORLD_MEMORY_FILE=/tmp/agent-town-world-memory.json pnpm world-memory:server
+```
+
+The server binds to `127.0.0.1:8787` by default. Override it with `HOST`,
+`PORT`, `AGENT_TOWN_WORLD_MEMORY_HOST`, or `AGENT_TOWN_WORLD_MEMORY_PORT`.
+
+It exposes:
+
+- `GET /health`
+- `POST /memory/ingest`
+- `GET /memory/recall`
+- `POST /memory/plan`
+
+The server accepts event-shaped JSON input, validates it through the canonical
+event validator, persists only canonical memory events, and returns recall or
+planning output as canonical `AgentEvent` evidence. The file remains a backing
+store; it does not become `WorldState` or renderer-owned truth.
+
 Required checks before finishing code or evidence work:
 
 ```bash
@@ -352,8 +373,10 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
   importance, recency, and agent affinity. `src/state/filePersistentMemoryStore.ts`
   adds a local/server-side file-backed store using the same snapshot schema, and
   `src/adapters/worldMemoryRuntime.ts` can ingest canonical event streams into
-  that file store before building recall or Memory plan output. This is still
-  not a long-running multi-user database or full autonomous memory engine.
+  that file store before building recall or Memory plan output.
+  `src/server/worldMemoryHttpServer.ts` and `pnpm world-memory:server` expose
+  that boundary as a long-running local/server HTTP process. This is still not a
+  multi-user database or full autonomous memory engine.
 - Routine scheduling is currently deterministic fixture evidence. The app can
   show routine phases and crowding-resolution events for 25 agents, but it is
   not yet an adaptive autonomous scheduler.

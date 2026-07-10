@@ -195,6 +195,11 @@ memory loads. `src/adapters/worldMemoryRuntime.ts` connects that store to local
 or server runtimes: incoming event-shaped input is validated first, invalid
 events are quarantined, only canonical memory events are persisted, and recall
 or plan output still re-enters replay as canonical `AgentEvent` evidence.
+`src/server/worldMemoryHttpServer.ts` exposes the same boundary as a
+long-running local/server HTTP process. Its routes do not define a new event
+schema: `/memory/ingest` still accepts event-shaped input only after canonical
+validation, `/memory/plan` validates prior-event context before use, and both
+recall and plan responses remain adapter-shaped canonical event output.
 
 The deterministic `Memory plan` source uses the same persistent records as an
 agent-addressable memory stream. Each durable-memory agent receives a query
