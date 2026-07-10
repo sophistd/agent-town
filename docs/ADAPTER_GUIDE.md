@@ -284,6 +284,8 @@ Rules:
   secret-free summary.
 - `/provider-loop` rejects API keys in request bodies. Provider credentials, if
   used, must come from local/server configuration such as `OPENAI_API_KEY`.
+- Local browser CORS is allowed for loopback HTTP origins such as Vite dev
+  servers. Remote origins are not granted CORS access.
 - Malformed JSON and oversized request bodies return explicit JSON errors
   instead of being silently accepted.
 
@@ -332,6 +334,22 @@ Live sender rules:
   events, warnings, quarantines, and a secret-free summary.
 - Request bodies containing `apiKey`, `openAiApiKey`, or `OPENAI_API_KEY` are
   rejected so secrets do not enter runtime sender payloads or evidence logs.
+
+`src/adapters/providerLoopHttpAdapter.ts` is the browser/workbench adapter for
+that live route.
+
+Workbench rules:
+
+- The Import Source panel posts the current canonical event stream to the
+  configured `/provider-loop` URL.
+- The adapter never sends provider credentials.
+- The adapter validates returned recall, Memory plan, and provider events again
+  before replay.
+- If no API key is configured on the local server, provider events may be empty,
+  but returned recall and Memory plan events can still become replayable
+  canonical evidence.
+- Fetch failures and server error envelopes become warnings instead of hidden
+  success.
 
 `src/server/worldMemoryProviderLoopRunner.ts` and
 `pnpm world-memory:provider-loop` make the provider loop runnable from an

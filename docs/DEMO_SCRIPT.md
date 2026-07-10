@@ -105,13 +105,23 @@ the runtime path instead of only watching a happy-path animation.
    `trace-websocket-sample`, and `metadata.source`. Explain that source-shaped
    input is normalized before projection.
 
-12. Quarantine expectation.
+12. Provider HTTP workbench source.
+
+   Start `pnpm world-memory:server` with an explicit
+   `AGENT_TOWN_WORLD_MEMORY_FILE`, then click `Provider HTTP`. Explain that the
+   browser posts the current event stream to `/provider-loop`, the local server
+   performs ingest, recall, Memory plan, and provider request construction, and
+   the browser replays returned canonical events. Without a local API key, this
+   still proves server-backed memory planning and surfaces
+   `missing_openai_api_key`.
+
+13. Quarantine expectation.
 
    If a bad input is tested, show that accepted events continue to replay while
    invalid events are quarantined. Do not let invalid input become a renderer
    branch.
 
-13. Graph View.
+14. Graph View.
 
    Click `Social day`, then inspect Graph View in the right panel. Toggle
    message, handoff, declared, and diffusion filters; type an agent name or
@@ -131,6 +141,8 @@ the runtime path instead of only watching a happy-path animation.
   produced it?
 - Can the reviewer see that JSONL and WebSocket paths use the same projection
   pipeline?
+- Can the reviewer see that Provider HTTP goes through the live local/server
+  provider-loop route before replay?
 - Can the reviewer name the current known limitation: generated placeholder
   visuals are deliberate until visual polish becomes the highest-risk work?
 

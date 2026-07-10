@@ -114,6 +114,11 @@ come from the local/server environment such as `OPENAI_API_KEY`; without them
 the route returns the existing `missing_openai_api_key` warning and does not
 call the provider.
 
+The Import Source panel includes a `Provider HTTP` action that posts the current
+workbench event stream to `http://127.0.0.1:8787/provider-loop`. The server only
+allows local browser CORS origins. With no API key, the workbench still replays
+the returned recall and Memory plan events as canonical evidence.
+
 Run the JSONL external-sender provider loop:
 
 ```bash
@@ -160,7 +165,7 @@ The current surface includes:
 - a Detail panel for the selected event and run summary
 - an Import Source panel for mock, Town day, Cognitive, Social day,
   Routine day, natural-language Intervention, persistent Memory, Memory plan,
-  LLM plan, native JSONL, and WebSocket-shaped input
+  LLM plan, native JSONL, WebSocket-shaped input, and Provider HTTP
 - adapter warnings and quarantine counts
 
 ## Architecture
@@ -239,6 +244,10 @@ Quick path:
    area.
 17. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
    the same projection pipeline.
+18. Start `pnpm world-memory:server`, then use Import Source -> Provider HTTP
+    to post the current run to `/provider-loop`. With no local API key, the
+    workbench should still replay server-backed recall and Memory plan evidence
+    and show `missing_openai_api_key` as a warning.
 
 Relevant screenshots and evidence:
 
@@ -417,8 +426,10 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
   memory into the OpenAI planner boundary, and
   `pnpm world-memory:provider-loop` can drive that path from canonical JSONL
   event streams. The long-running server also exposes `POST /provider-loop` for
-  live HTTP sender events without accepting secrets in request bodies. This is
-  still not a multi-user database or full autonomous memory engine.
+  live HTTP sender events without accepting secrets in request bodies, and the
+  browser workbench can post its current event stream to that route as a
+  Provider HTTP source. This is still not a multi-user database or full
+  autonomous memory engine.
 - Routine scheduling is currently deterministic fixture evidence. The app can
   show routine phases and crowding-resolution events for 25 agents, but it is
   not yet an adaptive autonomous scheduler.

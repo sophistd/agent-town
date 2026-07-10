@@ -55,9 +55,9 @@ intact.
      evidence
    - turn adaptive routine revision into provider-backed planning while
      preserving parser quarantine and replay validation
-   - connect the browser/workbench or a real external runtime stream to the
-     live `/provider-loop` route, without letting HTTP state bypass
-     `AgentEvent`
+   - connect a real external runtime stream to the live `/provider-loop` route,
+     or run a live provider-backed call through that route, without letting HTTP
+     state bypass `AgentEvent`
    - turn the structural Smallville evaluator into a human-review rubric,
      provider-backed benchmark, or dedicated evaluation dashboard
    - profile replay/rendering for 25-agent and larger cognitive/routine
@@ -73,8 +73,8 @@ intact.
    scores into a dedicated Memory view only after the server/provider boundary
    can make it clear whether records came from browser storage, file-backed
    runtime ingestion, HTTP server ingestion, JSONL provider-loop sender runs,
-   live HTTP provider-loop sender runs, provider-loop request construction, or
-   provider-backed planning.
+   live HTTP provider-loop sender runs, Provider HTTP workbench imports,
+   provider-loop request construction, or provider-backed planning.
 
 6. Runtime adapter hardening
 

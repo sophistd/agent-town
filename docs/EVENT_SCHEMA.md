@@ -211,6 +211,9 @@ native JSONL event format, so external runtime sender files remain canonical
 loop for live HTTP sender events. The route still accepts event-shaped input,
 quarantines invalid candidates, rejects secrets in request bodies, and returns
 canonical provider events rather than introducing an HTTP-owned event schema.
+The Provider HTTP workbench source posts the current canonical event stream to
+that route and validates returned recall, Memory plan, and provider events again
+before replay; the browser source does not define a new event schema.
 
 The deterministic `Memory plan` source uses the same persistent records as an
 agent-addressable memory stream. Each durable-memory agent receives a query

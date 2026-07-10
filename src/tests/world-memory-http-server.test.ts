@@ -199,6 +199,30 @@ describe("world memory HTTP server", () => {
     });
   });
 
+  it("allows local browser preflight without opening CORS to remote origins", async () => {
+    await withTempWorldMemoryServer(async ({ server }) => {
+      const localPreflight = await fetch(`${server.url}/provider-loop`, {
+        headers: {
+          origin: "http://127.0.0.1:5173",
+        },
+        method: "OPTIONS",
+      });
+      const remotePreflight = await fetch(`${server.url}/provider-loop`, {
+        headers: {
+          origin: "https://example.com",
+        },
+        method: "OPTIONS",
+      });
+
+      expect(localPreflight.status).toBe(204);
+      expect(localPreflight.headers.get("access-control-allow-origin")).toBe(
+        "http://127.0.0.1:5173",
+      );
+      expect(remotePreflight.status).toBe(204);
+      expect(remotePreflight.headers.get("access-control-allow-origin")).toBeNull();
+    });
+  });
+
   it("accepts live provider-loop HTTP sender events without calling a missing-key provider", async () => {
     let providerCalled = false;
     const fetchImpl: OpenAiResponsesFetch = async () => {

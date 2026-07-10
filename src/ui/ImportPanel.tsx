@@ -11,6 +11,7 @@ export type ImportSourceKind =
   | "memory"
   | "memory-plan"
   | "mock"
+  | "provider-loop-http"
   | "routine"
   | "smallville"
   | "social"
@@ -27,6 +28,7 @@ type ImportPanelProps = {
   eventCount: number;
   initialInterventionPrompt: string;
   initialJsonlInput: string;
+  isProviderLoopLoading: boolean;
   onConnectWebSocket: (url: string) => void;
   onDisconnectWebSocket: () => void;
   onImportIntervention: (prompt: string) => void;
@@ -41,7 +43,9 @@ type ImportPanelProps = {
   onLoadSocialRun: () => void;
   onLoadSmallvilleDay: () => void;
   onLoadWebSocketSample: () => void;
+  onRunProviderLoopHttp: (url: string) => void;
   persistentMemoryCount: number;
+  providerLoopHttpUrl: string;
   quarantinedEvents: readonly AdapterQuarantinedEvent[];
   status: ImportPanelStatus;
   warnings: readonly AdapterWarning[];
@@ -172,11 +176,19 @@ function buttonStyleFor(source: ImportSourceKind, activeSource: ImportSourceKind
   return source === activeSource ? activeButtonStyle : buttonStyle;
 }
 
+function warningSummary(warnings: readonly AdapterWarning[]): string {
+  return warnings
+    .slice(0, 4)
+    .map((warning) => warning.code)
+    .join(", ");
+}
+
 export function ImportPanel({
   activeSource,
   eventCount,
   initialInterventionPrompt,
   initialJsonlInput,
+  isProviderLoopLoading,
   onConnectWebSocket,
   onDisconnectWebSocket,
   onImportIntervention,
@@ -191,7 +203,9 @@ export function ImportPanel({
   onLoadSocialRun,
   onLoadSmallvilleDay,
   onLoadWebSocketSample,
+  onRunProviderLoopHttp,
   persistentMemoryCount,
+  providerLoopHttpUrl,
   quarantinedEvents,
   status,
   warnings,
@@ -199,6 +213,7 @@ export function ImportPanel({
 }: ImportPanelProps) {
   const [interventionPrompt, setInterventionPrompt] = useState(initialInterventionPrompt);
   const [jsonlInput, setJsonlInput] = useState(initialJsonlInput);
+  const [providerLoopInput, setProviderLoopInput] = useState(providerLoopHttpUrl);
   const [urlInput, setUrlInput] = useState(webSocketUrl);
 
   return (
@@ -307,6 +322,15 @@ export function ImportPanel({
         >
           WS sample
         </button>
+        <button
+          type="button"
+          style={buttonStyleFor("provider-loop-http", activeSource)}
+          onClick={() => onRunProviderLoopHttp(providerLoopInput)}
+          aria-pressed={activeSource === "provider-loop-http"}
+          disabled={isProviderLoopLoading}
+        >
+          Provider HTTP
+        </button>
       </div>
 
       <p style={mutedTextStyle}>Memory bank · {persistentMemoryCount} records</p>
@@ -326,6 +350,23 @@ export function ImportPanel({
         aria-label="JSONL import input"
         spellCheck={false}
       />
+
+      <div style={actionRowStyle}>
+        <input
+          style={inputStyle}
+          value={providerLoopInput}
+          onChange={(event) => setProviderLoopInput(event.currentTarget.value)}
+          aria-label="Provider loop HTTP URL"
+        />
+        <button
+          type="button"
+          style={buttonStyle}
+          onClick={() => onRunProviderLoopHttp(providerLoopInput)}
+          disabled={isProviderLoopLoading}
+        >
+          Run loop
+        </button>
+      </div>
 
       <div style={actionRowStyle}>
         <input
@@ -357,6 +398,12 @@ export function ImportPanel({
         <p style={mutedTextStyle}>
           Latest quarantine: {quarantinedEvents[0]?.code} ·{" "}
           {quarantinedEvents[0]?.issues[0]?.message ?? "unknown issue"}
+        </p>
+      ) : null}
+
+      {warnings.length > 0 ? (
+        <p style={mutedTextStyle}>
+          Warning codes: {warningSummary(warnings)}
         </p>
       ) : null}
     </section>

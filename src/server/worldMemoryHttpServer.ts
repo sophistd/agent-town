@@ -151,6 +151,50 @@ function writeJson<T>(
   response.end(`${JSON.stringify(body, null, 2)}\n`);
 }
 
+function allowedCorsOrigin(origin: string | undefined): string | undefined {
+  if (origin === undefined || origin.trim().length === 0) {
+    return undefined;
+  }
+
+  try {
+    const url = new URL(origin);
+
+    if (
+      url.protocol === "http:" &&
+      (url.hostname === "localhost" ||
+        url.hostname === "127.0.0.1" ||
+        url.hostname === "[::1]")
+    ) {
+      return origin;
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
+}
+
+function applyCorsHeaders(
+  request: IncomingMessage,
+  response: ServerResponse,
+): void {
+  const origin = allowedCorsOrigin(request.headers.origin);
+
+  if (origin === undefined) {
+    return;
+  }
+
+  response.setHeader("access-control-allow-origin", origin);
+  response.setHeader("access-control-allow-methods", "GET, POST, OPTIONS");
+  response.setHeader("access-control-allow-headers", "content-type");
+  response.setHeader("vary", "origin");
+}
+
+function okNoContent(response: ServerResponse): void {
+  response.statusCode = 204;
+  response.end();
+}
+
 function ok<T>(response: ServerResponse, data: T): void {
   writeJson(response, 200, { data, ok: true });
 }
@@ -526,8 +570,15 @@ export function createWorldMemoryHttpServer(
 
   return createServer((request, response) => {
     void (async () => {
+      applyCorsHeaders(request, response);
+
       const url = requestUrl(request);
       const method = request.method ?? "GET";
+
+      if (method === "OPTIONS") {
+        okNoContent(response);
+        return;
+      }
 
       if (method === "GET" && url.pathname === "/health") {
         ok(response, {

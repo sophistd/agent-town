@@ -9,6 +9,7 @@ import {
 import { parseNativeJsonl } from "../adapters/jsonlAdapter";
 import { buildAdaptiveRoutinePlanResult } from "../adapters/adaptiveRoutineAdapter";
 import type { AdapterQuarantinedEvent, AdapterResult, AdapterWarning } from "../adapters/types";
+import { callProviderLoopHttp } from "../adapters/providerLoopHttpAdapter";
 import {
   connectWebSocketIngest,
   parseWebSocketMessages,
@@ -63,6 +64,7 @@ import {
 } from "./projectionFilters";
 
 const DEFAULT_WEBSOCKET_URL = "ws://localhost:8765/events";
+const DEFAULT_PROVIDER_LOOP_HTTP_URL = "http://127.0.0.1:8787/provider-loop";
 
 const jsonlSampleEvents = mockEvents.slice(0, 3).map((event) => ({
   ...event,
@@ -208,6 +210,7 @@ export function App() {
     DEFAULT_EVENT_TYPE_FILTERS,
   );
   const [importStatus, setImportStatus] = useState<ImportPanelStatus>(mockStatus);
+  const [isProviderLoopLoading, setIsProviderLoopLoading] = useState(false);
   const [projectionSettings, setProjectionSettings] = useState(
     DEFAULT_TOWN_PROJECTION_SETTINGS,
   );
@@ -487,6 +490,41 @@ export function App() {
     [appendWebSocketResult, disconnectWebSocket],
   );
 
+  const runProviderLoopHttp = useCallback(
+    async (url: string) => {
+      disconnectWebSocket();
+
+      if (url.trim().length === 0) {
+        setImportStatus({ level: "error", message: "Provider HTTP URL is empty." });
+        return;
+      }
+
+      setIsProviderLoopLoading(true);
+      setImportStatus({
+        level: "idle",
+        message: "Provider HTTP request running.",
+      });
+
+      try {
+        const result = await callProviderLoopHttp({
+          events: eventsRef.current,
+          maxAgents: 3,
+          maxMemoryRecords: 12,
+          url: url.trim(),
+        });
+
+        applyAdapterResult(
+          "provider-loop-http",
+          result,
+          "Provider HTTP loop",
+        );
+      } finally {
+        setIsProviderLoopLoading(false);
+      }
+    },
+    [applyAdapterResult, disconnectWebSocket],
+  );
+
   const jumpToEvent = useCallback((event: AgentEvent) => {
     const index = events.findIndex((candidate) => candidate.id === event.id);
 
@@ -549,6 +587,7 @@ export function App() {
             eventCount={events.length}
             initialInterventionPrompt={INITIAL_INTERVENTION_PROMPT}
             initialJsonlInput={INITIAL_JSONL_INPUT}
+            isProviderLoopLoading={isProviderLoopLoading}
             onConnectWebSocket={connectWebSocket}
             onDisconnectWebSocket={disconnectWebSocket}
             onImportIntervention={importIntervention}
@@ -563,7 +602,11 @@ export function App() {
             onLoadSocialRun={loadSocialRun}
             onLoadSmallvilleDay={loadSmallvilleDay}
             onLoadWebSocketSample={loadWebSocketSample}
+            onRunProviderLoopHttp={(url) => {
+              void runProviderLoopHttp(url);
+            }}
             persistentMemoryCount={persistentMemoryRecords.length}
+            providerLoopHttpUrl={DEFAULT_PROVIDER_LOOP_HTTP_URL}
             quarantinedEvents={quarantinedEvents}
             status={importStatus}
             warnings={warnings}
