@@ -75,6 +75,15 @@ Known build warning:
 - Vite reports the existing Phaser-sized bundle warning:
   `Some chunks are larger than 500 kB after minification.`
 
+## Notion / Linear Write-Back
+
+Actual write-back completed and read back:
+
+- Notion S15 / M5 runbook page comment:
+  `399acb4b-b6e6-816c-9e0e-001d89348394`.
+- Linear MDL-129 comment: `776e146a-9687-4848-a198-7ec6d72a60f7`.
+- Linear MDL-152 comment: `cbc324bc-4a89-43c2-903e-9f1b6709a520`.
+
 ## Scope Truth
 
 - This is a provider-loop adapter with mock-provider coverage, not a
