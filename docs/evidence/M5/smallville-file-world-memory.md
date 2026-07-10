@@ -68,6 +68,23 @@ Known build warning:
 - Vite reports the existing Phaser-sized bundle warning:
   `Some chunks are larger than 500 kB after minification.`
 
+## Notion / Linear / GitHub Write-Back
+
+Actual write-back and read-back completed:
+
+- GitHub PR #1 body updated to include this file-backed world-memory
+  continuation, commit `6092f38`, verification, and scope truth.
+- Notion S15 / M5 runbook page comment:
+  `399acb4b-b6e6-811f-ae51-001d1c0b137c`
+- Linear MDL-129 comment: `dd1c0312-b86f-4370-a7e0-a1742d54057b`
+- Linear MDL-152 comment: `6991f007-7761-4be5-8371-914407fc4775`
+
+Scope truth:
+
+- No Notion page content was replaced; this was a page-level comment.
+- No Linear issue state was changed.
+- No GitHub PR was merged or closed.
+
 ## Scope Truth
 
 - This is a local/server-side file-backed store, not a multi-user database.
