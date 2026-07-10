@@ -67,6 +67,15 @@ Known build warning:
 - Vite reports the existing Phaser-sized bundle warning:
   `Some chunks are larger than 500 kB after minification.`
 
+## Notion / Linear Write-Back
+
+Actual write-back completed and read back:
+
+- Notion S15 / M5 runbook page comment:
+  `399acb4b-b6e6-8144-bcc8-001d26f4efe8`.
+- Linear MDL-129 comment: `3bd17441-0568-4d3c-9cc7-396449d1941c`.
+- Linear MDL-152 comment: `a757e5a9-ef63-4bb7-8cd7-55445101f764`.
+
 ## Scope Truth
 
 - This is a local/server runtime API, not a long-running process or deployed
