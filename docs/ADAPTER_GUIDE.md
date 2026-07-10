@@ -387,6 +387,29 @@ External runtime stream rules:
 - The stream is deterministic runtime evidence, not a live LLM-backed
   autonomous simulation claim.
 
+`src/server/smallvilleAutonomousSchedulerRunner.ts` and
+`pnpm smallville:scheduler` add a bounded world-clock scheduler on top of the
+same route.
+
+Autonomous scheduler rules:
+
+- The scheduler cycles through explicit routine, cognitive, and social phases.
+- Each phase emits canonical `AgentEvent` batches with
+  `metadata.source: "custom"` and `metadata.scheduler` provenance.
+- `metadata.scheduler` records phase, phase intent, scenario, virtual clock,
+  original event provenance, and tick identity; it does not create `WorldState`
+  directly.
+- Each tick posts only canonical events to `/provider-loop`; the local/server
+  file-backed world-memory store is what carries memory across ticks.
+- `AGENT_TOWN_SCHEDULER_TICKS`, `AGENT_TOWN_SCHEDULER_EVENTS_PER_TICK`,
+  `AGENT_TOWN_SCHEDULER_TICK_MINUTES`, and
+  `AGENT_TOWN_SCHEDULER_TICK_DELAY_MS` bound the run for repeatable evidence.
+- The scheduler writes a secret-free summary and can write emitted events as
+  JSONL.
+- Without a local/server API key, provider events remain empty and
+  `missing_openai_api_key` is returned as a warning instead of being hidden.
+- This is bounded scheduler evidence, not a live LLM-backed free-running town.
+
 ## Adding Another Source
 
 1. Create `src/adapters/<source>Adapter.ts`.

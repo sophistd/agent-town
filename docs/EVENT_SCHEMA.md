@@ -219,6 +219,11 @@ sender on the same schema: it emits canonical `AgentEvent` batches, marks them
 with `metadata.source: "custom"` plus `metadata.externalRuntime`, and posts each
 tick to `/provider-loop`. The external runtime annotation is provenance only;
 the accepted facts still enter replay through `AgentEvent -> WorldState`.
+`pnpm smallville:scheduler` adds a bounded world-clock scheduler on the same
+schema: it cycles routine, cognitive, and social phases, marks emitted events
+with `metadata.source: "custom"` plus `metadata.scheduler`, and posts each tick
+to `/provider-loop`. Scheduler metadata records phase and virtual-clock
+provenance only; it does not create a second event schema or bypass replay.
 
 The deterministic `Memory plan` source uses the same persistent records as an
 agent-addressable memory stream. Each durable-memory agent receives a query

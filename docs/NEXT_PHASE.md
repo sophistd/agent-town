@@ -44,7 +44,8 @@ intact.
    memory planning, model-planner contract parsing/quarantine, OpenAI Responses
    provider-boundary request/parse coverage with agent-addressable retrieval
    evidence, replay-derived relationship state, dedicated Graph View
-   inspection, structural Smallville capability/ablation evaluation, and action
+   inspection, structural Smallville capability/ablation evaluation, deterministic
+   external runtime ticks, bounded world-clock scheduler ticks, and action
    at 25-agent scale. The next
    Smallville-oriented runtime session should choose
    exactly one of:
@@ -58,8 +59,10 @@ intact.
    - run and evidence a live provider-backed call through the external runtime
      stream or `/provider-loop` route, without letting HTTP/provider state
      bypass `AgentEvent`
-   - extend the deterministic external runtime stream into a longer-lived
-     scheduler loop while keeping each tick replayable as canonical events
+   - run and evidence a live provider-backed call through the bounded scheduler
+     loop while keeping each tick replayable as canonical events
+   - extend the bounded scheduler into a longer-lived supervised runtime with
+     pause/resume evidence and memory continuity checks
    - turn the structural Smallville evaluator into a human-review rubric,
      provider-backed benchmark, or dedicated evaluation dashboard
    - profile replay/rendering for 25-agent and larger cognitive/routine
@@ -76,8 +79,8 @@ intact.
    can make it clear whether records came from browser storage, file-backed
    runtime ingestion, HTTP server ingestion, JSONL provider-loop sender runs,
    live HTTP provider-loop sender runs, Provider HTTP workbench imports,
-   external runtime stream ticks, provider-loop request construction, or
-   provider-backed planning.
+   external runtime stream ticks, bounded scheduler ticks, provider-loop request
+   construction, or provider-backed planning.
 
 6. Runtime adapter hardening
 

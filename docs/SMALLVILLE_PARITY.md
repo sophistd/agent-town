@@ -43,7 +43,7 @@ runtime facts.
 | --- | --- | --- | --- |
 | Top-down town | Small town with homes/workplaces and many agents | Original generated pixel town, stable zones, interior anchors, sprites, bubbles, edges | Partial |
 | Agent identity | Persona, routine, relationships, and memory history | Agent role/name from `AgentEvent`; cognitive/social/routine seed personas, daily intentions, routine segments, and replay-derived `WorldState.relationships` now present | Partial |
-| Daily routines | Agents follow and revise believable daily schedules across places and time | `Routine day` deterministically emits six routine phases for each of 25 agents; `Adaptive routine` now revises those schedules from new observations plus prior memory/routine evidence, then writes revised plans back as canonical events | Initial |
+| Daily routines | Agents follow and revise believable daily schedules across places and time | `Routine day` deterministically emits six routine phases for each of 25 agents; `Adaptive routine` revises those schedules from new observations plus prior memory/routine evidence; `pnpm smallville:scheduler` now cycles routine, cognitive, and social phases over a bounded virtual clock while keeping each tick canonical | Initial |
 | Observation | Agents perceive events and environment changes | `generativeRuntime.ts` emits observation-stage `memory_write` events | Initial |
 | Memory stream | Chronological natural-language record of experiences | `MemoryRecord` stream exists inside deterministic generator; browser-persisted Memory source now recalls extracted `memory_read` / `memory_write` evidence across imported runs | Initial |
 | Retrieval | Dynamic memory retrieval by relevance, importance, recency | `retrieveMemories` scores fixture memory; persistent `Memory plan` now retrieves durable records per agent by relevance, importance, recency, and agent affinity | Initial |
@@ -52,7 +52,7 @@ runtime facts.
 | Action/conversation | Agents act, talk, coordinate | Generator emits `handoff`, `message`, `tool_call`, and `done` events through the existing projection path; Social day emits 25 invitation messages | Partial |
 | Emergent social behavior | Information spreads and coordination emerges from agent interaction over time | `Social day` deterministically models a user-seeded Valentine's invitation spreading through a 25-agent relationship graph; replay derives inspectable relationship state and Graph View exposes filtering plus evidence jumps | Initial |
 | LLM behavior generation | LLM produces observations/reflections/plans/actions | `LLM plan` builds a model-ready request from prior events plus agent-addressable memory retrieval, parses model-shaped responses into canonical events, quarantines invalid output, and has an OpenAI Responses provider boundary with mock-fetch coverage; the world-memory provider loop can feed server-backed recall evidence into that boundary, but no live provider call was run without an API key | Initial |
-| Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, file-backed local/server snapshots now use the same schema, a local/server HTTP process can ingest canonical event streams into that store, recall emits `memory_read` events, Memory plan feeds agent-addressable planning, provider-loop request evidence can be built from server recall, a JSONL external-sender runner can drive the loop, `POST /provider-loop` accepts live HTTP sender events, the browser workbench can call that route as a Provider HTTP source, and `pnpm smallville:runtime-stream` can emit deterministic external runtime ticks into the same route; not yet a multi-user world database or autonomous memory engine | Initial |
+| Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, file-backed local/server snapshots now use the same schema, a local/server HTTP process can ingest canonical event streams into that store, recall emits `memory_read` events, Memory plan feeds agent-addressable planning, provider-loop request evidence can be built from server recall, a JSONL external-sender runner can drive the loop, `POST /provider-loop` accepts live HTTP sender events, the browser workbench can call that route as a Provider HTTP source, `pnpm smallville:runtime-stream` can emit deterministic external runtime ticks into the same route, and `pnpm smallville:scheduler` can run a bounded world-clock phase plan with cross-tick memory accumulation; not yet a multi-user world database or autonomous memory engine | Initial |
 | Many agents | Reference environment used 25 agents | `Social day` and `Routine day` fixtures use 25 agents and 150 canonical events each | Initial |
 | Human intervention | User can inject natural-language changes into the town | `Intervention` source turns an operator prompt into canonical observation/retrieval/reflection/planning/action/closure events with prior-run context | Initial |
 | Evaluation | Believability and ablation evidence | `evaluateSmallvilleRun` now computes a structural capability score, top gaps, and ablation coverage from canonical events plus replayed `WorldState`; no human believability study yet | Initial |
@@ -61,7 +61,7 @@ runtime facts.
 
 The current M5 branch now includes deterministic cognitive evidence, durable
 memory boundaries, provider-loop bridges, browser workbench integration, and a
-deterministic external runtime stream:
+deterministic external runtime stream, and bounded scheduler runner:
 
 - `src/events/generativeRuntime.ts`
   - `MemoryRecord`
@@ -242,6 +242,16 @@ deterministic external runtime stream:
   - annotates each emitted event with `metadata.externalRuntime`
   - posts each tick to the live `/provider-loop` route
   - writes a secret-free summary plus optional emitted-event JSONL evidence
+- Bounded autonomous scheduler:
+  - `src/server/smallvilleAutonomousSchedulerRunner.ts`
+  - `scripts/smallville-autonomous-scheduler.mjs`
+  - `pnpm smallville:scheduler`
+  - cycles routine, cognitive, and social phases over a virtual world clock
+  - annotates each emitted event with `metadata.scheduler`
+  - posts each tick to the live `/provider-loop` route
+  - carries memory across ticks through the local/server file-backed
+    world-memory store
+  - writes a secret-free summary plus optional emitted-event JSONL evidence
 - Agent-addressable memory metadata:
   - `agentAddressableMemory.schemaVersion`
   - `agentAddressableMemory.agentId`
@@ -320,6 +330,9 @@ This slice can pass if:
 - the browser workbench can post its current event stream to `/provider-loop`
   as a Provider HTTP source, validate returned events again, and replay
   server-backed recall / Memory plan evidence without sending secrets
+- a bounded scheduler runner can cycle routine, cognitive, and social phases
+  through `/provider-loop` under a virtual world clock while memory accumulates
+  across ticks in the local/server world-memory store
 - each durable-memory agent can retrieve persistent records by persona/query,
   importance, recency, and agent affinity, then emit canonical retrieval,
   reflection, and planning evidence
@@ -350,7 +363,7 @@ This slice can pass if:
 This slice cannot claim:
 
 - autonomous social emergence
-- autonomous daily scheduling
+- unbounded autonomous daily scheduling
 - complete persistent agent memory across devices or server sessions
 - live-verified provider-backed autonomous LLM-generated behavior
 - human believability ratings or empirical ablation-study results
@@ -365,8 +378,9 @@ The next meaningful move is not more labels. It is one of:
 - run and evidence a real provider-backed LLM call with a local/server-side API
   key while keeping keys out of browser code and consuming the existing
   world-memory provider-loop / external-runtime-stream request evidence
-- extend the deterministic external runtime stream into a longer-lived
-  scheduler loop while keeping each tick replayable as canonical events
+- run the bounded scheduler with a live provider-backed call or extend it into a
+  longer-lived supervised scheduler while keeping each tick replayable as
+  canonical events
 - turn the structural evaluator into a human-review rubric or provider-backed
   benchmark while keeping evaluation evidence event-derived
 - profile replay/rendering for 25-agent and larger fixtures

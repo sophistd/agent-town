@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "smallville:scheduler": "node scripts/smallville-autonomous-scheduler.mjs",
     "smallville:runtime-stream": "node scripts/smallville-runtime-stream.mjs",
     "world-memory:server": "node scripts/world-memory-server.mjs",
     "world-memory:provider-loop": "node scripts/world-memory-provider-loop.mjs",

@@ -146,6 +146,20 @@ external runtime sender path without introducing a new event schema. Without a
 local/server API key, provider events remain empty and
 `missing_openai_api_key` is surfaced instead of being hidden.
 
+Run a bounded Smallville-style scheduler:
+
+```bash
+AGENT_TOWN_WORLD_MEMORY_FILE=/tmp/agent-town-scheduler-memory.json \
+  pnpm smallville:scheduler
+```
+
+The scheduler adds a virtual world clock and phase plan over routine,
+cognitive, and social ticks. Each tick still emits canonical `AgentEvent`
+batches and sends them to `/provider-loop`; the scheduler summary only records
+phase counts, virtual time, memory/provider-loop counts, warnings, and
+provenance. Without a local/server API key, provider events remain empty and
+`missing_openai_api_key` is surfaced instead of being hidden.
+
 Required checks before finishing code or evidence work:
 
 ```bash
@@ -265,6 +279,10 @@ Quick path:
 19. Run `pnpm smallville:runtime-stream` with an explicit
     `AGENT_TOWN_WORLD_MEMORY_FILE` to prove a deterministic external runtime can
     emit ticked canonical event batches into the live `/provider-loop` route.
+20. Run `pnpm smallville:scheduler` with an explicit
+    `AGENT_TOWN_WORLD_MEMORY_FILE` to prove a bounded world-clock schedule can
+    cycle routine, cognitive, and social ticks through the same provider-loop
+    route while memory accumulates across ticks.
 
 Relevant screenshots and evidence:
 
@@ -274,6 +292,7 @@ Relevant screenshots and evidence:
 - `docs/evidence/M5/final-demo-notes.md`
 - `docs/evidence/M5/smallville-graph-view.md`
 - `docs/evidence/M5/smallville-external-runtime-stream.md`
+- `docs/evidence/M5/smallville-autonomous-scheduler.md`
 - `docs/evidence/M4/source-switcher.png`
 - `docs/SMALLVILLE_PARITY.md`
 
@@ -447,11 +466,13 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
   live HTTP sender events without accepting secrets in request bodies, and the
   browser workbench can post its current event stream to that route as a
   Provider HTTP source. `pnpm smallville:runtime-stream` can emit deterministic
-  external runtime ticks into the same route. This is still not a multi-user
-  database or full autonomous memory engine.
-- Routine scheduling is currently deterministic fixture evidence. The app can
-  show routine phases and crowding-resolution events for 25 agents, but it is
-  not yet an adaptive autonomous scheduler.
+  external runtime ticks into the same route. `pnpm smallville:scheduler` adds
+  a bounded world-clock phase plan over routine, cognitive, and social ticks
+  while keeping each tick replayable as canonical events. This is still not a
+  multi-user database or full autonomous memory engine.
+- Routine scheduling is still deterministic fixture evidence plus a bounded
+  scheduler runner. The app can show routine phases and crowding-resolution
+  events for 25 agents, but it is not yet an unbounded autonomous day planner.
 - The `LLM plan` source proves the request/response parser contract and the
   adapter now includes an OpenAI Responses provider boundary for local or
   server-side runtimes. Provider requests now include agent-addressable memory

@@ -125,13 +125,24 @@ the runtime path instead of only watching a happy-path animation.
    records a secret-free summary. Without a local API key, provider events stay
    empty and `missing_openai_api_key` remains visible.
 
-14. Quarantine expectation.
+14. Bounded scheduler.
+
+   Run `pnpm smallville:scheduler` with explicit
+   `AGENT_TOWN_WORLD_MEMORY_FILE`, `AGENT_TOWN_SCHEDULER_OUTPUT`, and
+   `AGENT_TOWN_SCHEDULER_EVENTS_OUTPUT`. Explain that the scheduler adds a
+   virtual world clock and phase plan over routine, cognitive, and social ticks.
+   Each tick still emits canonical events and goes through `/provider-loop`;
+   memory accumulation across ticks is visible in the summary. Without a local
+   API key, provider events stay empty and `missing_openai_api_key` remains
+   visible.
+
+15. Quarantine expectation.
 
    If a bad input is tested, show that accepted events continue to replay while
    invalid events are quarantined. Do not let invalid input become a renderer
    branch.
 
-15. Graph View.
+16. Graph View.
 
    Click `Social day`, then inspect Graph View in the right panel. Toggle
    message, handoff, declared, and diffusion filters; type an agent name or
@@ -155,6 +166,8 @@ the runtime path instead of only watching a happy-path animation.
   provider-loop route before replay?
 - Can the reviewer see that `pnpm smallville:runtime-stream` sends ticked
   external runtime batches through the same live provider-loop route?
+- Can the reviewer see that `pnpm smallville:scheduler` adds a bounded virtual
+  clock and phase plan without bypassing canonical `AgentEvent` replay?
 - Can the reviewer name the current known limitation: generated placeholder
   visuals are deliberate until visual polish becomes the highest-risk work?
 
