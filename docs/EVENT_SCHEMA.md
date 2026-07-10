@@ -207,6 +207,10 @@ provider output through `parseLlmPlannerResponse` before replay.
 `src/server/worldMemoryProviderLoopRunner.ts` drives the same path from the
 native JSONL event format, so external runtime sender files remain canonical
 `AgentEvent` lines rather than a new provider-loop schema.
+`POST /provider-loop` on the long-running world-memory server exposes the same
+loop for live HTTP sender events. The route still accepts event-shaped input,
+quarantines invalid candidates, rejects secrets in request bodies, and returns
+canonical provider events rather than introducing an HTTP-owned event schema.
 
 The deterministic `Memory plan` source uses the same persistent records as an
 agent-addressable memory stream. Each durable-memory agent receives a query

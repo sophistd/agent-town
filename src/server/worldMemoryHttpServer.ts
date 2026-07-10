@@ -6,8 +6,20 @@ import {
   buildFileWorldMemoryRecallResult,
   ingestEventsIntoFileWorldMemory,
 } from "../adapters/worldMemoryRuntime";
-import type { AdapterQuarantinedEvent } from "../adapters/types";
-import type { AgentEventSource, QuarantinedEvent } from "../events/types";
+import type { OpenAiResponsesFetch } from "../adapters/llmPlannerAdapter";
+import type {
+  AdapterQuarantinedEvent,
+  AdapterWarning,
+} from "../adapters/types";
+import {
+  runWorldMemoryProviderLoop,
+  type WorldMemoryProviderLoopResult,
+} from "../adapters/worldMemoryProviderLoop";
+import type {
+  AgentEvent,
+  AgentEventSource,
+  QuarantinedEvent,
+} from "../events/types";
 import { validateEventStream } from "../events/validators";
 
 const DEFAULT_HOST = "127.0.0.1";
@@ -20,6 +32,7 @@ export type WorldMemoryHttpServerOptions = {
   maxBodyBytes?: number;
   maxRecords?: number;
   now?: () => string;
+  providerLoop?: WorldMemoryHttpProviderLoopOptions;
 };
 
 export type WorldMemoryHttpServerListenOptions = WorldMemoryHttpServerOptions & {
@@ -31,6 +44,63 @@ export type StartedWorldMemoryHttpServer = {
   close: () => Promise<void>;
   server: Server;
   url: string;
+};
+
+export type WorldMemoryHttpProviderLoopOptions = {
+  apiKey?: string;
+  baseUrl?: string;
+  fetchImpl?: OpenAiResponsesFetch;
+  maxAgents?: number;
+  maxMemoryRecords?: number;
+  maxOutputTokens?: number;
+  memoryPlanMaxAgents?: number;
+  memoriesPerAgent?: number;
+  model?: string;
+};
+
+export type WorldMemoryProviderLoopHttpSummary = {
+  acceptedInputEventCount: number;
+  apiKeyProvided: boolean;
+  memoryFilePath: string;
+  memoryPlanEventCount: number;
+  providerRecordCount: number;
+  providerRequest: {
+    memoryRecordCount: number;
+    promptHash: string;
+    requestId: string;
+    retrievalCount: number;
+    selectedRecordCount: number;
+  };
+  providerResult: {
+    eventCount: number;
+    quarantineCodes: string[];
+    warningCodes: string[];
+  };
+  quarantinedEventCodes: string[];
+  recallEventCount: number;
+  source: "world-memory-provider-loop-http";
+  warningCodes: string[];
+  worldMemoryBaseUrl: string;
+  worldMemoryIngest: {
+    acceptedEventCount: number;
+    incomingRecordCount: number;
+    persistedRecordCount: number;
+    quarantineCodes: string[];
+    warningCodes: string[];
+  };
+};
+
+export type WorldMemoryProviderLoopHttpResult = {
+  events: AgentEvent[];
+  memoryPlanEvents: AgentEvent[];
+  quarantinedEvents: AdapterQuarantinedEvent[];
+  recallEvents: AgentEvent[];
+  summary: WorldMemoryProviderLoopHttpSummary;
+  warnings: AdapterWarning[];
+};
+
+type ActiveWorldMemoryHttpServerOptions = WorldMemoryHttpServerOptions & {
+  selfBaseUrl?: () => string | undefined;
 };
 
 type JsonSuccess<T> = {
@@ -115,6 +185,21 @@ function readOptionalString(
     400,
     "invalid_world_memory_request",
     `${key} must be a non-empty string when provided.`,
+  );
+}
+
+function rejectRequestSecrets(body: Record<string, unknown>): void {
+  const secretKeys = ["apiKey", "openAiApiKey", "OPENAI_API_KEY"];
+  const providedSecretKey = secretKeys.find((key) => body[key] !== undefined);
+
+  if (providedSecretKey === undefined) {
+    return;
+  }
+
+  throw new WorldMemoryHttpError(
+    400,
+    "world_memory_provider_loop_secret_in_request",
+    `${providedSecretKey} is not accepted in provider-loop request bodies. Configure provider credentials in the local/server environment instead.`,
   );
 }
 
@@ -243,6 +328,71 @@ function requestUrl(request: IncomingMessage): URL {
   return new URL(request.url ?? "/", "http://127.0.0.1");
 }
 
+function requestOrigin(request: IncomingMessage): string {
+  const host = request.headers.host;
+
+  if (host === undefined || host.trim().length === 0) {
+    throw new WorldMemoryHttpError(
+      400,
+      "invalid_world_memory_request",
+      "Host header is required for provider-loop self calls.",
+    );
+  }
+
+  return `http://${host}`;
+}
+
+function worldMemoryBaseUrl(
+  request: IncomingMessage,
+  options: ActiveWorldMemoryHttpServerOptions,
+): string {
+  return options.selfBaseUrl?.() ?? requestOrigin(request);
+}
+
+function codes(items: readonly { code: string }[]): string[] {
+  return items.map((item) => item.code);
+}
+
+function providerLoopSummary(input: {
+  apiKeyProvided: boolean;
+  loopResult: WorldMemoryProviderLoopResult;
+  memoryFilePath: string;
+  worldMemoryBaseUrl: string;
+}): WorldMemoryProviderLoopHttpSummary {
+  return {
+    acceptedInputEventCount: input.loopResult.acceptedInputEvents.length,
+    apiKeyProvided: input.apiKeyProvided,
+    memoryFilePath: input.memoryFilePath,
+    memoryPlanEventCount: input.loopResult.memoryPlanResult.events.length,
+    providerRecordCount: input.loopResult.providerRecords.length,
+    providerRequest: {
+      memoryRecordCount: input.loopResult.providerRequest.memory.recordCount,
+      promptHash: input.loopResult.providerRequest.promptHash,
+      requestId: input.loopResult.providerRequest.requestId,
+      retrievalCount: input.loopResult.providerRequest.memory.retrievals.length,
+      selectedRecordCount:
+        input.loopResult.providerRequest.memory.selectedRecords.length,
+    },
+    providerResult: {
+      eventCount: input.loopResult.providerResult.events.length,
+      quarantineCodes: codes(input.loopResult.providerResult.quarantinedEvents),
+      warningCodes: codes(input.loopResult.providerResult.warnings),
+    },
+    quarantinedEventCodes: codes(input.loopResult.quarantinedEvents),
+    recallEventCount: input.loopResult.recallResult.events.length,
+    source: "world-memory-provider-loop-http",
+    warningCodes: codes(input.loopResult.warnings),
+    worldMemoryBaseUrl: input.worldMemoryBaseUrl,
+    worldMemoryIngest: {
+      acceptedEventCount: input.loopResult.ingestResult.acceptedEventCount,
+      incomingRecordCount: input.loopResult.ingestResult.incomingRecordCount,
+      persistedRecordCount: input.loopResult.ingestResult.persistedRecordCount,
+      quarantineCodes: codes(input.loopResult.ingestResult.quarantinedEvents),
+      warningCodes: codes(input.loopResult.ingestResult.warnings),
+    },
+  };
+}
+
 async function handleIngest(
   request: IncomingMessage,
   response: ServerResponse,
@@ -308,9 +458,72 @@ async function handlePlan(
   });
 }
 
+async function handleProviderLoop(
+  request: IncomingMessage,
+  response: ServerResponse,
+  options: ActiveWorldMemoryHttpServerOptions,
+): Promise<void> {
+  const body = await readJsonBody(
+    request,
+    options.maxBodyBytes ?? DEFAULT_MAX_BODY_BYTES,
+  );
+
+  rejectRequestSecrets(body);
+
+  const providerLoopOptions = options.providerLoop ?? {};
+  const apiKey = providerLoopOptions.apiKey?.trim();
+  const baseUrl = worldMemoryBaseUrl(request, options);
+  const requestNow = readOptionalString(body, "now") ?? now(options);
+  const loopResult = await runWorldMemoryProviderLoop({
+    apiKey,
+    baseUrl: providerLoopOptions.baseUrl,
+    events: readEvents(body, "events"),
+    fetchImpl: providerLoopOptions.fetchImpl,
+    maxAgents:
+      readOptionalPositiveInteger(body, "maxAgents") ??
+      providerLoopOptions.maxAgents,
+    maxMemoryRecords:
+      readOptionalPositiveInteger(body, "maxMemoryRecords") ??
+      providerLoopOptions.maxMemoryRecords,
+    maxOutputTokens:
+      readOptionalPositiveInteger(body, "maxOutputTokens") ??
+      providerLoopOptions.maxOutputTokens,
+    maxRecords:
+      readOptionalPositiveInteger(body, "maxRecords") ?? options.maxRecords,
+    memoriesPerAgent:
+      readOptionalPositiveInteger(body, "memoriesPerAgent") ??
+      providerLoopOptions.memoriesPerAgent,
+    memoryPlanMaxAgents:
+      readOptionalPositiveInteger(body, "memoryPlanMaxAgents") ??
+      providerLoopOptions.memoryPlanMaxAgents,
+    model: readOptionalString(body, "model") ?? providerLoopOptions.model,
+    now: requestNow,
+    savedAt: readOptionalString(body, "savedAt") ?? requestNow,
+    worldMemoryBaseUrl: baseUrl,
+  });
+  const summary = providerLoopSummary({
+    apiKeyProvided: apiKey !== undefined && apiKey.length > 0,
+    loopResult,
+    memoryFilePath: options.filePath,
+    worldMemoryBaseUrl: baseUrl,
+  });
+  const result: WorldMemoryProviderLoopHttpResult = {
+    events: loopResult.providerResult.events,
+    memoryPlanEvents: loopResult.memoryPlanResult.events,
+    quarantinedEvents: loopResult.quarantinedEvents,
+    recallEvents: loopResult.recallResult.events,
+    summary,
+    warnings: loopResult.warnings,
+  };
+
+  ok(response, result);
+}
+
 export function createWorldMemoryHttpServer(
   options: WorldMemoryHttpServerOptions,
 ): Server {
+  const activeOptions: ActiveWorldMemoryHttpServerOptions = options;
+
   return createServer((request, response) => {
     void (async () => {
       const url = requestUrl(request);
@@ -336,6 +549,11 @@ export function createWorldMemoryHttpServer(
 
       if (method === "POST" && url.pathname === "/memory/plan") {
         await handlePlan(request, response, options);
+        return;
+      }
+
+      if (method === "POST" && url.pathname === "/provider-loop") {
+        await handleProviderLoop(request, response, activeOptions);
         return;
       }
 
@@ -387,7 +605,12 @@ export async function startWorldMemoryHttpServer(
 ): Promise<StartedWorldMemoryHttpServer> {
   const host = options.host ?? DEFAULT_HOST;
   const port = options.port ?? DEFAULT_PORT;
-  const server = createWorldMemoryHttpServer(options);
+  let serverUrl: string | undefined;
+  const activeOptions: ActiveWorldMemoryHttpServerOptions = {
+    ...options,
+    selfBaseUrl: () => serverUrl,
+  };
+  const server = createWorldMemoryHttpServer(activeOptions);
 
   await new Promise<void>((resolve, reject) => {
     const onError = (error: Error): void => {
@@ -400,6 +623,8 @@ export async function startWorldMemoryHttpServer(
       resolve();
     });
   });
+
+  serverUrl = listenUrl(server, host);
 
   return {
     close: () =>
@@ -414,6 +639,6 @@ export async function startWorldMemoryHttpServer(
         });
       }),
     server,
-    url: listenUrl(server, host),
+    url: serverUrl,
   };
 }

@@ -84,6 +84,7 @@ It exposes:
 - `POST /memory/ingest`
 - `GET /memory/recall`
 - `POST /memory/plan`
+- `POST /provider-loop`
 
 The server accepts event-shaped JSON input, validates it through the canonical
 event validator, persists only canonical memory events, and returns recall or
@@ -97,6 +98,21 @@ provider request records from that recall evidence, asks the server for a
 Memory plan context, and then calls the same OpenAI Responses planner adapter.
 Without an API key it still builds inspectable server-backed provider request
 evidence but does not call the provider.
+
+The long-running server can also accept live HTTP sender events directly:
+
+```bash
+curl -X POST http://127.0.0.1:8787/provider-loop \
+  -H 'content-type: application/json' \
+  --data '{"events":[...],"maxAgents":2}'
+```
+
+`/provider-loop` accepts canonical event-shaped JSON, rejects API keys in the
+request body, runs the same server-backed provider loop, and returns canonical
+provider events plus a secret-free summary. Provider credentials, if used, must
+come from the local/server environment such as `OPENAI_API_KEY`; without them
+the route returns the existing `missing_openai_api_key` warning and does not
+call the provider.
 
 Run the JSONL external-sender provider loop:
 
@@ -400,8 +416,9 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
   `src/adapters/worldMemoryProviderLoop.ts` can feed server-backed durable
   memory into the OpenAI planner boundary, and
   `pnpm world-memory:provider-loop` can drive that path from canonical JSONL
-  event streams. This is still not a multi-user database or full autonomous
-  memory engine.
+  event streams. The long-running server also exposes `POST /provider-loop` for
+  live HTTP sender events without accepting secrets in request bodies. This is
+  still not a multi-user database or full autonomous memory engine.
 - Routine scheduling is currently deterministic fixture evidence. The app can
   show routine phases and crowding-resolution events for 25 agents, but it is
   not yet an adaptive autonomous scheduler.

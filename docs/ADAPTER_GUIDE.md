@@ -262,6 +262,7 @@ Routes:
 - `POST /memory/ingest`
 - `GET /memory/recall`
 - `POST /memory/plan`
+- `POST /provider-loop`
 
 Rules:
 
@@ -278,6 +279,11 @@ Rules:
 - `/memory/recall` and `/memory/plan` return adapter-shaped canonical event
   output. Callers still have to replay those events into `WorldState`; the HTTP
   process does not own projection facts.
+- `/provider-loop` accepts live HTTP sender events, runs the same
+  server-backed provider loop, and returns canonical provider events plus a
+  secret-free summary.
+- `/provider-loop` rejects API keys in request bodies. Provider credentials, if
+  used, must come from local/server configuration such as `OPENAI_API_KEY`.
 - Malformed JSON and oversized request bodies return explicit JSON errors
   instead of being silently accepted.
 
@@ -308,6 +314,24 @@ Rules:
   `invalid_world_memory_provider_loop_input_event`.
 - Provider output still has to pass through `parseLlmPlannerResponse` and
   canonical event validation before replay.
+
+`POST /provider-loop` exposes the same loop as a live HTTP sender path on the
+long-running world-memory process.
+
+Live sender rules:
+
+- The request body is JSON with `events`, plus optional non-secret controls such
+  as `maxAgents`, `maxMemoryRecords`, `maxOutputTokens`, `maxRecords`,
+  `memoriesPerAgent`, `memoryPlanMaxAgents`, `model`, `now`, and `savedAt`.
+- The route validates and quarantines event-shaped input through
+  `runWorldMemoryProviderLoop`; HTTP state does not become `WorldState`.
+- The route calls its own `/memory/ingest`, `/memory/recall`, and
+  `/memory/plan` routes, so durable memory remains in the existing server
+  boundary.
+- The response includes canonical provider events, recall events, Memory plan
+  events, warnings, quarantines, and a secret-free summary.
+- Request bodies containing `apiKey`, `openAiApiKey`, or `OPENAI_API_KEY` are
+  rejected so secrets do not enter runtime sender payloads or evidence logs.
 
 `src/server/worldMemoryProviderLoopRunner.ts` and
 `pnpm world-memory:provider-loop` make the provider loop runnable from an
