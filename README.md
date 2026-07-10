@@ -350,8 +350,10 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
   `memory_read` / `memory_write` evidence extracted from imported runs. The
   `Memory plan` source can retrieve those records per agent by query relevance,
   importance, recency, and agent affinity. `src/state/filePersistentMemoryStore.ts`
-  adds a local/server-side file-backed store using the same snapshot schema, but
-  this is still not a multi-user database or full autonomous memory engine.
+  adds a local/server-side file-backed store using the same snapshot schema, and
+  `src/adapters/worldMemoryRuntime.ts` can ingest canonical event streams into
+  that file store before building recall or Memory plan output. This is still
+  not a long-running multi-user database or full autonomous memory engine.
 - Routine scheduling is currently deterministic fixture evidence. The app can
   show routine phases and crowding-resolution events for 25 agents, but it is
   not yet an adaptive autonomous scheduler.

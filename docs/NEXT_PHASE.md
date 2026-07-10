@@ -55,8 +55,9 @@ intact.
      retrieval evidence in the provider request
    - turn adaptive routine revision into provider-backed planning while
      preserving parser quarantine and replay validation
-   - wire the file-backed durable memory store into a local/server runtime API
-     so live runs can share world memory without browser-local storage
+   - expose the file-backed durable memory runtime through a long-running
+     local/server process so live runs can share world memory without
+     browser-local storage
    - turn the structural Smallville evaluator into a human-review rubric,
      provider-backed benchmark, or dedicated evaluation dashboard
    - profile replay/rendering for 25-agent and larger cognitive/routine
@@ -70,8 +71,8 @@ intact.
    and evidence jumps. The next projection-view candidate is Memory: promote
    durable memory records, recall evidence, and agent-addressable retrieval
    scores into a dedicated Memory view only after the server/provider boundary
-   can make it clear whether records came from browser storage or the
-   file-backed world-memory store.
+   can make it clear whether records came from browser storage, file-backed
+   runtime ingestion, or provider-backed planning.
 
 6. Runtime adapter hardening
 

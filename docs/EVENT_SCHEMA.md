@@ -191,7 +191,10 @@ not replayed directly and does not give the renderer runtime facts.
 `src/state/filePersistentMemoryStore.ts` provides the same snapshot contract for
 local/server-side file-backed world memory. Missing, unreadable, or invalid file
 snapshots surface explicit warnings instead of silently becoming successful
-memory loads.
+memory loads. `src/adapters/worldMemoryRuntime.ts` connects that store to local
+or server runtimes: incoming event-shaped input is validated first, invalid
+events are quarantined, only canonical memory events are persisted, and recall
+or plan output still re-enters replay as canonical `AgentEvent` evidence.
 
 The deterministic `Memory plan` source uses the same persistent records as an
 agent-addressable memory stream. Each durable-memory agent receives a query

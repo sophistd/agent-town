@@ -233,6 +233,25 @@ Rules:
 - File-backed memory remains an adapter/backing-store boundary. The renderer
   still receives only canonical `AgentEvent[]` replayed into `WorldState`.
 
+`src/adapters/worldMemoryRuntime.ts` is the local/server runtime API over that
+store.
+
+Rules:
+
+- `ingestEventsIntoFileWorldMemory` validates incoming event-shaped input,
+  quarantines invalid events, extracts only canonical `memory_read` /
+  `memory_write` records, and merges them into the file-backed store.
+- `buildFileWorldMemoryRecallResult` loads records from the file-backed store
+  and emits canonical recall events through the existing memory adapter path.
+- `buildFileWorldMemoryPlanResult` loads records from the file-backed store and
+  emits agent-addressable retrieval, reflection, and planning events.
+- Non-memory event streams produce an explicit
+  `world_memory_ingest_no_memory_events` warning instead of fabricating durable
+  memory.
+- This API is not a long-running server process by itself. It is the boundary a
+  local/server runtime can call without giving files or the renderer ownership
+  of world facts.
+
 ## Adding Another Source
 
 1. Create `src/adapters/<source>Adapter.ts`.

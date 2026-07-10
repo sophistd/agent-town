@@ -52,7 +52,7 @@ runtime facts.
 | Action/conversation | Agents act, talk, coordinate | Generator emits `handoff`, `message`, `tool_call`, and `done` events through the existing projection path; Social day emits 25 invitation messages | Partial |
 | Emergent social behavior | Information spreads and coordination emerges from agent interaction over time | `Social day` deterministically models a user-seeded Valentine's invitation spreading through a 25-agent relationship graph; replay derives inspectable relationship state and Graph View exposes filtering plus evidence jumps | Initial |
 | LLM behavior generation | LLM produces observations/reflections/plans/actions | `LLM plan` builds a model-ready request from prior events plus agent-addressable memory retrieval, parses model-shaped responses into canonical events, quarantines invalid output, and has an OpenAI Responses provider boundary with mock-fetch coverage; current UI source still uses a deterministic fixture and no live provider call was run without an API key | Initial |
-| Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, file-backed local/server snapshots now use the same schema, recall emits `memory_read` events, and Memory plan feeds agent-addressable planning; not yet a multi-user world database or autonomous memory engine | Initial |
+| Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, file-backed local/server snapshots now use the same schema, runtime API can ingest canonical event streams into that store, recall emits `memory_read` events, and Memory plan feeds agent-addressable planning; not yet a multi-user world database or autonomous memory engine | Initial |
 | Many agents | Reference environment used 25 agents | `Social day` and `Routine day` fixtures use 25 agents and 150 canonical events each | Initial |
 | Human intervention | User can inject natural-language changes into the town | `Intervention` source turns an operator prompt into canonical observation/retrieval/reflection/planning/action/closure events with prior-run context | Initial |
 | Evaluation | Believability and ablation evidence | `evaluateSmallvilleRun` now computes a structural capability score, top gaps, and ablation coverage from canonical events plus replayed `WorldState`; no human believability study yet | Initial |
@@ -84,6 +84,10 @@ The current slice adds deterministic cognitive evidence:
   - `buildPersistentMemoryRecallResult`
   - `buildAgentAddressableMemoryPlanResult`
   - `persistentMemoryAdapter`
+- `src/adapters/worldMemoryRuntime.ts`
+  - `ingestEventsIntoFileWorldMemory`
+  - `buildFileWorldMemoryRecallResult`
+  - `buildFileWorldMemoryPlanResult`
 - `src/adapters/adaptiveRoutineAdapter.ts`
   - `buildAdaptiveRoutinePlanResult`
   - `summarizeAdaptiveRoutineRevisions`
@@ -191,6 +195,11 @@ The current slice adds deterministic cognitive evidence:
   - same snapshot schema as browser persistent memory
   - atomic temporary file + rename writes
   - explicit warnings for missing, unreadable, invalid, or unwritable files
+- File-backed world memory runtime:
+  - validates incoming event-shaped input before persistence
+  - quarantines invalid events
+  - persists only canonical `memory_read` / `memory_write` records
+  - builds recall and agent-addressable plan output from the same file snapshot
 - Agent-addressable memory metadata:
   - `agentAddressableMemory.schemaVersion`
   - `agentAddressableMemory.agentId`
@@ -250,6 +259,9 @@ This slice can pass if:
   and recall as canonical `memory_read` events
 - local/server runtimes can persist the same memory snapshot schema into a
   file-backed world-memory store with explicit failure warnings
+- local/server runtimes can ingest canonical event streams into that file-backed
+  store, then build recall or agent-addressable planning output from the same
+  durable snapshot
 - each durable-memory agent can retrieve persistent records by persona/query,
   importance, recency, and agent affinity, then emit canonical retrieval,
   reflection, and planning evidence
@@ -295,7 +307,8 @@ The next meaningful move is not more labels. It is one of:
 - run and evidence a real provider-backed LLM call with a local/server-side API
   key while keeping keys out of browser code and consuming the existing
   agent-addressable memory request evidence
-- wire the file-backed memory store into a local/server runtime source or API
+- expose the file-backed memory runtime through a long-running local/server
+  process or provider-backed planning loop
 - turn the structural evaluator into a human-review rubric or provider-backed
   benchmark while keeping evaluation evidence event-derived
 - profile replay/rendering for 25-agent and larger fixtures
