@@ -200,6 +200,10 @@ long-running local/server HTTP process. Its routes do not define a new event
 schema: `/memory/ingest` still accepts event-shaped input only after canonical
 validation, `/memory/plan` validates prior-event context before use, and both
 recall and plan responses remain adapter-shaped canonical event output.
+`src/adapters/worldMemoryProviderLoop.ts` consumes that server boundary without
+adding a new schema: it reconstructs provider request records from canonical
+recall events, uses server Memory plan events as prior context, and still sends
+provider output through `parseLlmPlannerResponse` before replay.
 
 The deterministic `Memory plan` source uses the same persistent records as an
 agent-addressable memory stream. Each durable-memory agent receives a query

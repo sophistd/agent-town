@@ -51,8 +51,8 @@ runtime facts.
 | Planning | Higher-level plans decomposed into actions | Generator emits planning-stage `decision` events with `planStep` and routine segment metadata | Initial |
 | Action/conversation | Agents act, talk, coordinate | Generator emits `handoff`, `message`, `tool_call`, and `done` events through the existing projection path; Social day emits 25 invitation messages | Partial |
 | Emergent social behavior | Information spreads and coordination emerges from agent interaction over time | `Social day` deterministically models a user-seeded Valentine's invitation spreading through a 25-agent relationship graph; replay derives inspectable relationship state and Graph View exposes filtering plus evidence jumps | Initial |
-| LLM behavior generation | LLM produces observations/reflections/plans/actions | `LLM plan` builds a model-ready request from prior events plus agent-addressable memory retrieval, parses model-shaped responses into canonical events, quarantines invalid output, and has an OpenAI Responses provider boundary with mock-fetch coverage; current UI source still uses a deterministic fixture and no live provider call was run without an API key | Initial |
-| Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, file-backed local/server snapshots now use the same schema, a local/server HTTP process can ingest canonical event streams into that store, recall emits `memory_read` events, and Memory plan feeds agent-addressable planning; not yet a multi-user world database or autonomous memory engine | Initial |
+| LLM behavior generation | LLM produces observations/reflections/plans/actions | `LLM plan` builds a model-ready request from prior events plus agent-addressable memory retrieval, parses model-shaped responses into canonical events, quarantines invalid output, and has an OpenAI Responses provider boundary with mock-fetch coverage; the world-memory provider loop can feed server-backed recall evidence into that boundary, but no live provider call was run without an API key | Initial |
+| Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, file-backed local/server snapshots now use the same schema, a local/server HTTP process can ingest canonical event streams into that store, recall emits `memory_read` events, Memory plan feeds agent-addressable planning, and provider-loop request evidence can be built from server recall; not yet a multi-user world database or autonomous memory engine | Initial |
 | Many agents | Reference environment used 25 agents | `Social day` and `Routine day` fixtures use 25 agents and 150 canonical events each | Initial |
 | Human intervention | User can inject natural-language changes into the town | `Intervention` source turns an operator prompt into canonical observation/retrieval/reflection/planning/action/closure events with prior-run context | Initial |
 | Evaluation | Believability and ablation evidence | `evaluateSmallvilleRun` now computes a structural capability score, top gaps, and ablation coverage from canonical events plus replayed `WorldState`; no human believability study yet | Initial |
@@ -206,6 +206,13 @@ The current slice adds deterministic cognitive evidence:
   - exposes `/memory/ingest`, `/memory/recall`, and `/memory/plan`
   - validates prior-event planning context before using it
   - keeps HTTP responses adapter-shaped instead of producing `WorldState`
+- World-memory provider loop:
+  - `src/adapters/worldMemoryProviderLoop.ts`
+  - sends external event streams to the world-memory server
+  - reconstructs provider request records from canonical recall events
+  - calls server Memory plan for prior context
+  - sends the result through `callOpenAiLlmPlanner`
+  - preserves missing-key no-call behavior
 - Agent-addressable memory metadata:
   - `agentAddressableMemory.schemaVersion`
   - `agentAddressableMemory.agentId`
@@ -271,6 +278,10 @@ This slice can pass if:
 - a long-running local/server HTTP process can keep that same file-backed
   memory available across separate ingest, recall, and plan requests without
   letting the process own projection facts
+- a provider-loop adapter can feed external event streams through the
+  world-memory process, rebuild provider records from canonical recall events,
+  request server-backed Memory plan context, and call the existing provider
+  planner boundary without bypassing parser/quarantine validation
 - each durable-memory agent can retrieve persistent records by persona/query,
   importance, recency, and agent affinity, then emit canonical retrieval,
   reflection, and planning evidence
@@ -315,9 +326,8 @@ The next meaningful move is not more labels. It is one of:
 
 - run and evidence a real provider-backed LLM call with a local/server-side API
   key while keeping keys out of browser code and consuming the existing
-  agent-addressable memory request evidence
-- connect the long-running world-memory process to a provider-backed planning
-  loop or real external runtime event sender
+  world-memory provider-loop request evidence
+- connect a real external runtime event sender to the world-memory provider loop
 - turn the structural evaluator into a human-review rubric or provider-backed
   benchmark while keeping evaluation evidence event-derived
 - profile replay/rendering for 25-agent and larger fixtures

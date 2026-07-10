@@ -51,13 +51,12 @@ intact.
 
    - run and evidence a real provider-backed LLM call through the existing
      planner boundary, with keys kept out of browser code and deterministic
-     fixtures preserved for tests, using the existing agent-addressable memory
-     retrieval evidence in the provider request
+     fixtures preserved for tests, using the world-memory provider-loop request
+     evidence
    - turn adaptive routine revision into provider-backed planning while
      preserving parser quarantine and replay validation
-   - connect the long-running file-backed world-memory process to a real
-     provider-backed planning loop or external runtime event sender, without
-     letting HTTP state bypass `AgentEvent`
+   - connect a real external runtime event sender to the world-memory provider
+     loop, without letting HTTP state bypass `AgentEvent`
    - turn the structural Smallville evaluator into a human-review rubric,
      provider-backed benchmark, or dedicated evaluation dashboard
    - profile replay/rendering for 25-agent and larger cognitive/routine
@@ -72,7 +71,8 @@ intact.
    durable memory records, recall evidence, and agent-addressable retrieval
    scores into a dedicated Memory view only after the server/provider boundary
    can make it clear whether records came from browser storage, file-backed
-   runtime ingestion, HTTP server ingestion, or provider-backed planning.
+   runtime ingestion, HTTP server ingestion, provider-loop request construction,
+   or provider-backed planning.
 
 6. Runtime adapter hardening
 

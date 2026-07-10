@@ -281,6 +281,34 @@ Rules:
 - Malformed JSON and oversized request bodies return explicit JSON errors
   instead of being silently accepted.
 
+`src/adapters/worldMemoryProviderLoop.ts` connects the long-running
+world-memory process to the existing provider planner boundary.
+
+Loop order:
+
+1. Validate the external event stream locally for planner context.
+2. Send the raw event-shaped stream to `/memory/ingest` so the server persists
+   only canonical memory evidence.
+3. Call `/memory/recall` and reconstruct provider request records from the
+   canonical recall events, including `metadata.durableMemory`.
+4. Call `/memory/plan` to get server-backed agent-addressable memory context as
+   canonical events.
+5. Build `buildSmallvilleLlmPlannerRequest` from accepted input events, server
+   Memory plan events, and reconstructed durable records.
+6. Call `callOpenAiLlmPlanner`, preserving the existing API-key, fetch,
+   provider-response parsing, and quarantine behavior.
+
+Rules:
+
+- The loop does not read the memory file directly.
+- The loop does not accept server state as `WorldState`.
+- Missing API keys produce the existing `missing_openai_api_key` warning and do
+  not call the provider.
+- Invalid input events are quarantined as
+  `invalid_world_memory_provider_loop_input_event`.
+- Provider output still has to pass through `parseLlmPlannerResponse` and
+  canonical event validation before replay.
+
 ## Adding Another Source
 
 1. Create `src/adapters/<source>Adapter.ts`.

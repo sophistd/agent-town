@@ -90,6 +90,14 @@ event validator, persists only canonical memory events, and returns recall or
 planning output as canonical `AgentEvent` evidence. The file remains a backing
 store; it does not become `WorldState` or renderer-owned truth.
 
+`src/adapters/worldMemoryProviderLoop.ts` connects that server to the existing
+provider planner boundary: it sends external event streams into the
+world-memory server, recalls durable memory as canonical events, rebuilds
+provider request records from that recall evidence, asks the server for a
+Memory plan context, and then calls the same OpenAI Responses planner adapter.
+Without an API key it still builds inspectable server-backed provider request
+evidence but does not call the provider.
+
 Required checks before finishing code or evidence work:
 
 ```bash
@@ -375,8 +383,10 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
   `src/adapters/worldMemoryRuntime.ts` can ingest canonical event streams into
   that file store before building recall or Memory plan output.
   `src/server/worldMemoryHttpServer.ts` and `pnpm world-memory:server` expose
-  that boundary as a long-running local/server HTTP process. This is still not a
-  multi-user database or full autonomous memory engine.
+  that boundary as a long-running local/server HTTP process.
+  `src/adapters/worldMemoryProviderLoop.ts` can feed server-backed durable
+  memory into the OpenAI planner boundary. This is still not a multi-user
+  database or full autonomous memory engine.
 - Routine scheduling is currently deterministic fixture evidence. The app can
   show routine phases and crowding-resolution events for 25 agents, but it is
   not yet an adaptive autonomous scheduler.
