@@ -201,6 +201,25 @@ Browser smoke evidence:
 - No merge was performed.
 - This does not claim final Stanford Smallville parity.
 
+## External Write-Back
+
+Actual writes completed and read back on 2026-07-10:
+
+- GitHub PR: https://github.com/sophistd/agent-town/pull/1
+- Notion S15 / M5 runbook page comment:
+  `399acb4b-b6e6-81e1-bc12-001d167a2f42`
+- Linear MDL-129 acceptance comment:
+  `5e1f9788-ef30-49ca-9b26-e75fcba0805c`
+- Linear MDL-152 red-check comment:
+  `3ffb964a-d63b-4c5f-bd2c-f44af62a1dd3`
+
+Scope truth for write-back:
+
+- GitHub PR body is updated separately after this evidence write-back commit.
+- Notion write-back was a page-level comment; no page body was replaced.
+- Linear write-back was additive comments; no issue was closed or state-changed.
+- No merge was performed.
+
 ## Next Session Candidate
 
 Run and evidence a live provider-backed call through the resumable scheduler
