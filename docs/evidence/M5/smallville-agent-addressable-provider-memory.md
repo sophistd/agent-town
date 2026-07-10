@@ -81,6 +81,23 @@ Live provider call:
 - Not executed in this environment because no API key was present.
 - No API key was created, requested, printed, stored, or written.
 
+## Notion / Linear / GitHub Write-Back
+
+Actual write-back and read-back completed:
+
+- GitHub PR #1 body updated to include this provider-memory continuation,
+  commit `5f6b7ec`, verification, and scope truth.
+- Notion S15 / M5 runbook page comment:
+  `399acb4b-b6e6-81a1-8141-001d1a680748`
+- Linear MDL-129 comment: `31a3a215-bec1-4bf5-a486-06d245860ed4`
+- Linear MDL-152 comment: `28524073-a2fe-4e8c-913e-aa33f71ae838`
+
+Scope truth:
+
+- No Notion page content was replaced; this was a page-level comment.
+- No Linear issue state was changed.
+- No GitHub PR was merged or closed.
+
 ## Scope Truth
 
 - This is not a live-verified provider-backed autonomous Smallville simulation.
