@@ -160,6 +160,26 @@ phase counts, virtual time, memory/provider-loop counts, warnings, and
 provenance. Without a local/server API key, provider events remain empty and
 `missing_openai_api_key` is surfaced instead of being hidden.
 
+Persist and resume the scheduler:
+
+```bash
+AGENT_TOWN_WORLD_MEMORY_FILE=/tmp/agent-town-scheduler-memory.json \
+AGENT_TOWN_SCHEDULER_CHECKPOINT=/tmp/agent-town-scheduler-checkpoint.json \
+AGENT_TOWN_SCHEDULER_TICKS=2 \
+  pnpm smallville:scheduler
+
+AGENT_TOWN_WORLD_MEMORY_FILE=/tmp/agent-town-scheduler-memory.json \
+AGENT_TOWN_SCHEDULER_CHECKPOINT=/tmp/agent-town-scheduler-checkpoint.json \
+AGENT_TOWN_SCHEDULER_RESUME=true \
+AGENT_TOWN_SCHEDULER_TICKS=4 \
+  pnpm smallville:scheduler
+```
+
+Resume inherits `eventsPerTick`, `tickMinutes`, phase plan, schedule id, start
+time, and memory file from the checkpoint unless explicitly configured. If an
+explicit resume setting conflicts with the checkpoint, the scheduler fails fast
+instead of silently restarting or changing the run shape.
+
 Required checks before finishing code or evidence work:
 
 ```bash
@@ -283,6 +303,10 @@ Quick path:
     `AGENT_TOWN_WORLD_MEMORY_FILE` to prove a bounded world-clock schedule can
     cycle routine, cognitive, and social ticks through the same provider-loop
     route while memory accumulates across ticks.
+21. Rerun `pnpm smallville:scheduler` with
+    `AGENT_TOWN_SCHEDULER_CHECKPOINT` and `AGENT_TOWN_SCHEDULER_RESUME=true`
+    to prove the same schedule can continue from the next tick across process
+    invocations without resetting memory.
 
 Relevant screenshots and evidence:
 
@@ -293,6 +317,7 @@ Relevant screenshots and evidence:
 - `docs/evidence/M5/smallville-graph-view.md`
 - `docs/evidence/M5/smallville-external-runtime-stream.md`
 - `docs/evidence/M5/smallville-autonomous-scheduler.md`
+- `docs/evidence/M5/smallville-supervised-scheduler-resume.md`
 - `docs/evidence/M4/source-switcher.png`
 - `docs/SMALLVILLE_PARITY.md`
 
@@ -468,8 +493,10 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
   Provider HTTP source. `pnpm smallville:runtime-stream` can emit deterministic
   external runtime ticks into the same route. `pnpm smallville:scheduler` adds
   a bounded world-clock phase plan over routine, cognitive, and social ticks
-  while keeping each tick replayable as canonical events. This is still not a
-  multi-user database or full autonomous memory engine.
+  while keeping each tick replayable as canonical events. The scheduler can
+  also write a checkpoint and resume from it across process invocations without
+  resetting the file-backed memory store. This is still not a multi-user
+  database or full autonomous memory engine.
 - Routine scheduling is still deterministic fixture evidence plus a bounded
   scheduler runner. The app can show routine phases and crowding-resolution
   events for 25 agents, but it is not yet an unbounded autonomous day planner.

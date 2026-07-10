@@ -404,6 +404,13 @@ Autonomous scheduler rules:
 - `AGENT_TOWN_SCHEDULER_TICKS`, `AGENT_TOWN_SCHEDULER_EVENTS_PER_TICK`,
   `AGENT_TOWN_SCHEDULER_TICK_MINUTES`, and
   `AGENT_TOWN_SCHEDULER_TICK_DELAY_MS` bound the run for repeatable evidence.
+- `AGENT_TOWN_SCHEDULER_CHECKPOINT` writes a checkpoint after each completed
+  tick.
+- `AGENT_TOWN_SCHEDULER_RESUME=true` resumes from the checkpoint's
+  `nextTickIndex` and inherits scheduler settings from the checkpoint unless
+  they are explicitly configured.
+- Resume fails fast if explicit schedule id, start time, tick size, tick
+  duration, memory file, or phase plan conflicts with the checkpoint.
 - The scheduler writes a secret-free summary and can write emitted events as
   JSONL.
 - Without a local/server API key, provider events remain empty and

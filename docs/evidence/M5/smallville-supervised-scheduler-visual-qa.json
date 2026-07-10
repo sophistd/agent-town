@@ -1,0 +1,52 @@
+{
+  "source": "smallville-supervised-scheduler-browser-smoke",
+  "url": "http://127.0.0.1:5173/",
+  "results": [
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 960,
+      "canvasBox": {
+        "x": 311,
+        "y": 110,
+        "width": 773.0625,
+        "height": 669
+      },
+      "pageScreenshot": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-supervised-scheduler-desktop.png",
+      "canvasScreenshot": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-supervised-scheduler-desktop-map.png",
+      "noHorizontalOverflow": true,
+      "loadedSocialDay": true,
+      "canvasSample": {
+        "width": 774,
+        "height": 669,
+        "sampledColors": 541,
+        "opaqueSamples": 43262
+      },
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "canvasBox": {
+        "x": 9,
+        "y": 2001.578125,
+        "width": 371.984375,
+        "height": 321.921875
+      },
+      "pageScreenshot": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-supervised-scheduler-mobile.png",
+      "canvasScreenshot": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-supervised-scheduler-mobile-map.png",
+      "noHorizontalOverflow": true,
+      "loadedSocialDay": true,
+      "canvasSample": {
+        "width": 372,
+        "height": 323,
+        "sampledColors": 651,
+        "opaqueSamples": 60078
+      },
+      "consoleErrors": [],
+      "pageErrors": []
+    }
+  ]
+}

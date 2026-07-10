@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 import type { OpenAiResponsesFetch } from "../adapters/llmPlannerAdapter";
 import {
   runSmallvilleAutonomousScheduler,
+  type SmallvilleAutonomousSchedulerCheckpoint,
   type SmallvilleAutonomousSchedulerSummary,
 } from "../server/smallvilleAutonomousSchedulerRunner";
 
@@ -173,6 +174,92 @@ describe("smallville autonomous scheduler runner", () => {
         ),
       ).toBe(true);
       expect(JSON.stringify(result.summary)).not.toContain("test-api-key");
+    });
+  });
+
+  it("resumes from a checkpoint and preserves cross-run memory continuity", async () => {
+    await withTempDirectory(async (directory) => {
+      const memoryFilePath = join(directory, "world-memory.json");
+      const checkpointPath = join(directory, "checkpoint.json");
+      const firstOutputPath = join(directory, "first-summary.json");
+      const secondOutputPath = join(directory, "second-summary.json");
+
+      const firstRun = await runSmallvilleAutonomousScheduler({
+        checkpointPath,
+        eventsPerTick: 6,
+        maxAgents: 3,
+        maxMemoryRecords: 12,
+        memoryFilePath,
+        outputPath: firstOutputPath,
+        scheduleId: "resume-day",
+        startTimestamp,
+        tickCount: 2,
+        tickMinutes: 45,
+      });
+      const checkpointAfterFirstRun = JSON.parse(
+        await readFile(checkpointPath, "utf8"),
+      ) as SmallvilleAutonomousSchedulerCheckpoint;
+
+      expect(firstRun.summary.checkpoint).toMatchObject({
+        previousCompletedTickCount: 0,
+        resumeRequested: false,
+        resumed: false,
+        startTickIndex: 0,
+        written: true,
+      });
+      expect(checkpointAfterFirstRun).toMatchObject({
+        completedTickCount: 2,
+        eventsPerTick: 6,
+        nextTickIndex: 2,
+        scheduleId: "resume-day",
+        source: "smallville-autonomous-scheduler-checkpoint",
+        startTimestamp,
+        tickMinutes: 45,
+      });
+
+      const secondRun = await runSmallvilleAutonomousScheduler({
+        checkpointPath,
+        maxAgents: 3,
+        maxMemoryRecords: 12,
+        memoryFilePath,
+        outputPath: secondOutputPath,
+        resume: true,
+        tickCount: 3,
+      });
+      const checkpointAfterSecondRun = JSON.parse(
+        await readFile(checkpointPath, "utf8"),
+      ) as SmallvilleAutonomousSchedulerCheckpoint;
+
+      expect(secondRun.summary.checkpoint).toMatchObject({
+        previousCompletedTickCount: 2,
+        resumeRequested: true,
+        resumed: true,
+        startTickIndex: 2,
+        written: true,
+      });
+      expect(secondRun.summary.eventsPerTick).toBe(6);
+      expect(secondRun.summary.tickMinutes).toBe(45);
+      expect(secondRun.summary.ticks.map((tick) => tick.tickIndex)).toEqual([
+        2,
+        3,
+        4,
+      ]);
+      expect(secondRun.summary.ticks.map((tick) => tick.phase)).toEqual([
+        "midday_social",
+        "afternoon_routine",
+        "evening_reflection",
+      ]);
+      expect(secondRun.emittedEvents[0]?.sequence).toBe(12);
+      expect(
+        secondRun.summary.totals.finalPersistedRecordCount,
+      ).toBeGreaterThan(firstRun.summary.totals.finalPersistedRecordCount);
+      expect(checkpointAfterSecondRun).toMatchObject({
+        completedTickCount: 5,
+        nextTickIndex: 5,
+        scheduleId: "resume-day",
+      });
+      expect(checkpointAfterSecondRun.lastCompletedTick?.tickIndex).toBe(4);
+      expect(JSON.stringify(secondRun.summary)).not.toContain("test-api-key");
     });
   });
 });

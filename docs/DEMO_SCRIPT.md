@@ -136,13 +136,21 @@ the runtime path instead of only watching a happy-path animation.
    API key, provider events stay empty and `missing_openai_api_key` remains
    visible.
 
-15. Quarantine expectation.
+15. Supervised scheduler resume.
+
+   Run the scheduler once with `AGENT_TOWN_SCHEDULER_CHECKPOINT` and a small
+   `AGENT_TOWN_SCHEDULER_TICKS` value. Then rerun with
+   `AGENT_TOWN_SCHEDULER_RESUME=true`. Show that the second run starts at the
+   checkpoint's `nextTickIndex`, continues event sequences, and keeps memory
+   accumulation from the same file-backed world-memory store.
+
+16. Quarantine expectation.
 
    If a bad input is tested, show that accepted events continue to replay while
    invalid events are quarantined. Do not let invalid input become a renderer
    branch.
 
-16. Graph View.
+17. Graph View.
 
    Click `Social day`, then inspect Graph View in the right panel. Toggle
    message, handoff, declared, and diffusion filters; type an agent name or
@@ -168,6 +176,8 @@ the runtime path instead of only watching a happy-path animation.
   external runtime batches through the same live provider-loop route?
 - Can the reviewer see that `pnpm smallville:scheduler` adds a bounded virtual
   clock and phase plan without bypassing canonical `AgentEvent` replay?
+- Can the reviewer see scheduler resume continue from the checkpoint's
+  `nextTickIndex` instead of restarting from tick 0?
 - Can the reviewer name the current known limitation: generated placeholder
   visuals are deliberate until visual polish becomes the highest-risk work?
 

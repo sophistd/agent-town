@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 
@@ -50,6 +50,7 @@ export type SmallvilleAutonomousSchedulerPhasePlan = {
 export type SmallvilleAutonomousSchedulerInput = {
   apiKey?: string;
   baseUrl?: string;
+  checkpointPath?: string;
   eventLogPath?: string;
   eventsPerTick?: number;
   fetchImpl?: OpenAiResponsesFetch;
@@ -65,11 +66,28 @@ export type SmallvilleAutonomousSchedulerInput = {
   outputPath?: string;
   phasePlan?: readonly SmallvilleAutonomousSchedulerPhasePlan[];
   port?: number;
+  resume?: boolean;
   scheduleId?: string;
   startTimestamp?: string;
   tickCount?: number;
   tickDelayMs?: number;
   tickMinutes?: number;
+};
+
+export type SmallvilleAutonomousSchedulerCheckpoint = {
+  completedTickCount: number;
+  eventsPerTick: number;
+  lastCompletedTick?: SmallvilleAutonomousSchedulerTickSummary;
+  lastEventSequence?: number;
+  lastUpdatedAt: string;
+  memoryFilePath: string;
+  nextTickIndex: number;
+  phasePlan: SmallvilleAutonomousSchedulerPhasePlan[];
+  scheduleId: string;
+  schemaVersion: 1;
+  source: "smallville-autonomous-scheduler-checkpoint";
+  startTimestamp: string;
+  tickMinutes: number;
 };
 
 export type SmallvilleAutonomousSchedulerTickSummary = {
@@ -117,6 +135,14 @@ export type SmallvilleAutonomousSchedulerTickSummary = {
 export type SmallvilleAutonomousSchedulerSummary = {
   apiKeyProvided: boolean;
   bounded: true;
+  checkpoint: {
+    path?: string;
+    previousCompletedTickCount: number;
+    resumeRequested: boolean;
+    resumed: boolean;
+    startTickIndex: number;
+    written: boolean;
+  };
   emittedEventCount: number;
   eventLogPath?: string;
   eventsPerTick: number;
@@ -223,6 +249,10 @@ function codes(items: readonly { code: string }[]): string[] {
   return items.map((item) => item.code);
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
 function uniqueCodes(results: readonly WorldMemoryProviderLoopHttpResult[]): string[] {
   return Array.from(new Set(results.flatMap((result) => codes(result.warnings))));
 }
@@ -293,6 +323,174 @@ function requireNonNegativeInteger(value: number | undefined, fallback: number):
   }
 
   return selectedValue;
+}
+
+function readStringField(
+  record: Record<string, unknown>,
+  key: string,
+): string {
+  const value = record[key];
+
+  if (typeof value !== "string" || value.trim().length === 0) {
+    throw new Error(`Scheduler checkpoint field ${key} must be a non-empty string.`);
+  }
+
+  return value;
+}
+
+function readIntegerField(
+  record: Record<string, unknown>,
+  key: string,
+): number {
+  const value = record[key];
+
+  if (!Number.isInteger(value) || Number(value) < 0) {
+    throw new Error(`Scheduler checkpoint field ${key} must be a non-negative integer.`);
+  }
+
+  return Number(value);
+}
+
+function parsePhasePlan(
+  value: unknown,
+): SmallvilleAutonomousSchedulerPhasePlan[] {
+  if (!Array.isArray(value)) {
+    throw new Error("Scheduler checkpoint phasePlan must be an array.");
+  }
+
+  return value.map((item) => {
+    if (!isRecord(item)) {
+      throw new Error("Scheduler checkpoint phasePlan entries must be objects.");
+    }
+
+    const sourceOffset = item.sourceOffset;
+
+    if (
+      sourceOffset !== undefined &&
+      (!Number.isInteger(sourceOffset) || Number(sourceOffset) < 0)
+    ) {
+      throw new Error(
+        "Scheduler checkpoint phasePlan sourceOffset must be a non-negative integer.",
+      );
+    }
+
+    return {
+      intent: readStringField(item, "intent"),
+      phase: readStringField(item, "phase") as SmallvilleAutonomousSchedulerPhase,
+      scenario: readStringField(item, "scenario") as SmallvilleAutonomousSchedulerScenario,
+      sourceOffset: sourceOffset === undefined ? undefined : Number(sourceOffset),
+    };
+  });
+}
+
+async function readCheckpoint(
+  checkpointPath: string,
+): Promise<SmallvilleAutonomousSchedulerCheckpoint> {
+  let raw: string;
+
+  try {
+    raw = await readFile(checkpointPath, "utf8");
+  } catch (error) {
+    throw new Error(
+      error instanceof Error
+        ? `Unable to read scheduler checkpoint ${checkpointPath}: ${error.message}`
+        : `Unable to read scheduler checkpoint ${checkpointPath}.`,
+    );
+  }
+
+  let parsed: unknown;
+
+  try {
+    parsed = JSON.parse(raw);
+  } catch (error) {
+    throw new Error(
+      error instanceof Error
+        ? `Scheduler checkpoint ${checkpointPath} is not valid JSON: ${error.message}`
+        : `Scheduler checkpoint ${checkpointPath} is not valid JSON.`,
+    );
+  }
+
+  if (!isRecord(parsed)) {
+    throw new Error(`Scheduler checkpoint ${checkpointPath} must be a JSON object.`);
+  }
+
+  if (parsed.source !== "smallville-autonomous-scheduler-checkpoint") {
+    throw new Error(`Scheduler checkpoint ${checkpointPath} has unsupported source.`);
+  }
+
+  if (parsed.schemaVersion !== 1) {
+    throw new Error(
+      `Scheduler checkpoint ${checkpointPath} has unsupported schemaVersion.`,
+    );
+  }
+
+  const eventsPerTick = readIntegerField(parsed, "eventsPerTick");
+  const tickMinutes = readIntegerField(parsed, "tickMinutes");
+
+  if (eventsPerTick <= 0 || tickMinutes <= 0) {
+    throw new Error(
+      `Scheduler checkpoint ${checkpointPath} has invalid positive integer fields.`,
+    );
+  }
+
+  return {
+    completedTickCount: readIntegerField(parsed, "completedTickCount"),
+    eventsPerTick,
+    lastCompletedTick: isRecord(parsed.lastCompletedTick)
+      ? (parsed.lastCompletedTick as SmallvilleAutonomousSchedulerTickSummary)
+      : undefined,
+    lastEventSequence:
+      parsed.lastEventSequence === undefined
+        ? undefined
+        : readIntegerField(parsed, "lastEventSequence"),
+    lastUpdatedAt: readStringField(parsed, "lastUpdatedAt"),
+    memoryFilePath: readStringField(parsed, "memoryFilePath"),
+    nextTickIndex: readIntegerField(parsed, "nextTickIndex"),
+    phasePlan: parsePhasePlan(parsed.phasePlan),
+    scheduleId: readStringField(parsed, "scheduleId"),
+    schemaVersion: 1,
+    source: "smallville-autonomous-scheduler-checkpoint",
+    startTimestamp: readStringField(parsed, "startTimestamp"),
+    tickMinutes,
+  };
+}
+
+function assertCompatibleCheckpoint(input: {
+  checkpoint: SmallvilleAutonomousSchedulerCheckpoint;
+  checkpointPath: string;
+  eventsPerTick: number;
+  memoryFilePath: string;
+  phasePlan: readonly SmallvilleAutonomousSchedulerPhasePlan[];
+  scheduleId: string;
+  startTimestamp: string;
+  tickMinutes: number;
+}): void {
+  const pairs: Array<[string, unknown, unknown]> = [
+    ["scheduleId", input.checkpoint.scheduleId, input.scheduleId],
+    ["startTimestamp", input.checkpoint.startTimestamp, input.startTimestamp],
+    ["eventsPerTick", input.checkpoint.eventsPerTick, input.eventsPerTick],
+    ["tickMinutes", input.checkpoint.tickMinutes, input.tickMinutes],
+    ["memoryFilePath", input.checkpoint.memoryFilePath, input.memoryFilePath],
+  ];
+
+  for (const [key, checkpointValue, requestedValue] of pairs) {
+    if (checkpointValue !== requestedValue) {
+      throw new Error(
+        `Scheduler checkpoint ${input.checkpointPath} ${key} (${String(
+          checkpointValue,
+        )}) does not match requested ${key} (${String(requestedValue)}).`,
+      );
+    }
+  }
+
+  if (
+    JSON.stringify(input.checkpoint.phasePlan) !==
+    JSON.stringify([...input.phasePlan])
+  ) {
+    throw new Error(
+      `Scheduler checkpoint ${input.checkpointPath} phasePlan does not match requested phasePlan.`,
+    );
+  }
 }
 
 function phasePlanAt(
@@ -517,15 +715,20 @@ function emptyScenarioCounts(): Record<SmallvilleAutonomousSchedulerScenario, nu
 
 function buildSummary(input: {
   apiKeyProvided: boolean;
+  checkpointPath?: string;
   emittedEvents: readonly AgentEvent[];
   eventLogPath?: string;
   eventsPerTick: number;
   memoryFilePath: string;
   outputPath?: string;
+  previousCompletedTickCount: number;
   providerLoopResults: readonly WorldMemoryProviderLoopHttpResult[];
+  resumeRequested: boolean;
+  resumed: boolean;
   scheduleId: string;
   server: StartedWorldMemoryHttpServer;
   startTimestamp: string;
+  startTickIndex: number;
   tickDelayMs: number;
   tickMinutes: number;
   tickSummaries: readonly SmallvilleAutonomousSchedulerTickSummary[];
@@ -543,6 +746,14 @@ function buildSummary(input: {
   return {
     apiKeyProvided: input.apiKeyProvided,
     bounded: true,
+    checkpoint: {
+      path: input.checkpointPath,
+      previousCompletedTickCount: input.previousCompletedTickCount,
+      resumeRequested: input.resumeRequested,
+      resumed: input.resumed,
+      startTickIndex: input.startTickIndex,
+      written: input.checkpointPath !== undefined,
+    },
     emittedEventCount: input.emittedEvents.length,
     eventLogPath: input.eventLogPath,
     eventsPerTick: input.eventsPerTick,
@@ -608,6 +819,17 @@ async function writeJsonFile(
   await writeFile(outputPath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
 }
 
+async function writeJsonFileAtomic(
+  outputPath: string,
+  value: unknown,
+): Promise<void> {
+  await mkdir(dirname(outputPath), { recursive: true });
+  const tempPath = `${outputPath}.tmp-${process.pid}-${Date.now()}`;
+
+  await writeFile(tempPath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+  await rename(tempPath, outputPath);
+}
+
 async function writeEventLog(
   eventLogPath: string | undefined,
   events: readonly AgentEvent[],
@@ -627,20 +849,48 @@ async function writeEventLog(
 export async function runSmallvilleAutonomousScheduler(
   input: SmallvilleAutonomousSchedulerInput,
 ): Promise<SmallvilleAutonomousSchedulerResult> {
+  let checkpoint: SmallvilleAutonomousSchedulerCheckpoint | undefined;
+
+  if (input.resume === true) {
+    if (input.checkpointPath === undefined) {
+      throw new Error("Scheduler resume requires checkpointPath.");
+    }
+
+    checkpoint = await readCheckpoint(input.checkpointPath);
+  }
+
   const eventsPerTick = requirePositiveInteger(
     input.eventsPerTick,
-    DEFAULT_EVENTS_PER_TICK,
+    checkpoint?.eventsPerTick ?? DEFAULT_EVENTS_PER_TICK,
   );
   const tickCount = requirePositiveInteger(input.tickCount, DEFAULT_TICK_COUNT);
   const tickDelayMs = requireNonNegativeInteger(input.tickDelayMs, 0);
   const tickMinutes = requirePositiveInteger(
     input.tickMinutes,
-    DEFAULT_TICK_MINUTES,
+    checkpoint?.tickMinutes ?? DEFAULT_TICK_MINUTES,
   );
   const phasePlan =
     input.phasePlan ?? defaultSmallvilleAutonomousSchedulerPhasePlan;
-  const scheduleId = input.scheduleId ?? "day-001";
-  const startTimestamp = input.startTimestamp ?? DEFAULT_START_TIMESTAMP;
+  const scheduleId = input.scheduleId ?? checkpoint?.scheduleId ?? "day-001";
+  const startTimestamp =
+    input.startTimestamp ?? checkpoint?.startTimestamp ?? DEFAULT_START_TIMESTAMP;
+  const selectedPhasePlan = checkpoint?.phasePlan ?? [...phasePlan];
+  const startTickIndex = checkpoint?.nextTickIndex ?? 0;
+  const previousCompletedTickCount = checkpoint?.completedTickCount ?? 0;
+
+  if (checkpoint !== undefined) {
+    assertCompatibleCheckpoint({
+      checkpoint,
+      checkpointPath: input.checkpointPath ?? "",
+      eventsPerTick,
+      memoryFilePath: input.memoryFilePath,
+      phasePlan: selectedPhasePlan,
+      scheduleId,
+      startTimestamp,
+      tickMinutes,
+    });
+  }
+
   const emittedEvents: AgentEvent[] = [];
   const apiKey = input.apiKey?.trim();
   const server = await startWorldMemoryHttpServer({
@@ -665,11 +915,15 @@ export async function runSmallvilleAutonomousScheduler(
     const providerLoopResults: WorldMemoryProviderLoopHttpResult[] = [];
     const tickSummaries: SmallvilleAutonomousSchedulerTickSummary[] = [];
 
-    for (let tickIndex = 0; tickIndex < tickCount; tickIndex += 1) {
-      const selectedPhasePlan = phasePlanAt(phasePlan, tickIndex);
+    for (
+      let tickIndex = startTickIndex;
+      tickIndex < startTickIndex + tickCount;
+      tickIndex += 1
+    ) {
+      const phasePlanForTick = phasePlanAt(selectedPhasePlan, tickIndex);
       const batch = normalizeTickEvents({
         eventsPerTick,
-        phasePlan: selectedPhasePlan,
+        phasePlan: phasePlanForTick,
         scheduleId,
         startTimestamp,
         tickIndex,
@@ -701,28 +955,55 @@ export async function runSmallvilleAutonomousScheduler(
       tickSummaries.push(
         tickSummary({
           batch,
-          phasePlan: selectedPhasePlan,
+          phasePlan: phasePlanForTick,
           result,
           tickIndex,
         }),
       );
 
-      if (tickDelayMs > 0 && tickIndex < tickCount - 1) {
+      if (input.checkpointPath !== undefined) {
+        const lastCompletedTick = tickSummaries[tickSummaries.length - 1];
+        const lastEvent = emittedEvents[emittedEvents.length - 1];
+        const checkpointOutput: SmallvilleAutonomousSchedulerCheckpoint = {
+          completedTickCount: tickIndex + 1,
+          eventsPerTick,
+          lastCompletedTick,
+          lastEventSequence: lastEvent?.sequence,
+          lastUpdatedAt: tickNow,
+          memoryFilePath: input.memoryFilePath,
+          nextTickIndex: tickIndex + 1,
+          phasePlan: [...selectedPhasePlan],
+          scheduleId,
+          schemaVersion: 1,
+          source: "smallville-autonomous-scheduler-checkpoint",
+          startTimestamp,
+          tickMinutes,
+        };
+
+        await writeJsonFileAtomic(input.checkpointPath, checkpointOutput);
+      }
+
+      if (tickDelayMs > 0 && tickIndex < startTickIndex + tickCount - 1) {
         await delay(tickDelayMs);
       }
     }
 
     const summary = buildSummary({
       apiKeyProvided: apiKey !== undefined && apiKey.length > 0,
+      checkpointPath: input.checkpointPath,
       emittedEvents,
       eventLogPath: input.eventLogPath,
       eventsPerTick,
       memoryFilePath: input.memoryFilePath,
       outputPath: input.outputPath,
+      previousCompletedTickCount,
       providerLoopResults,
+      resumeRequested: input.resume === true,
+      resumed: checkpoint !== undefined,
       scheduleId,
       server,
       startTimestamp,
+      startTickIndex,
       tickDelayMs,
       tickMinutes,
       tickSummaries,

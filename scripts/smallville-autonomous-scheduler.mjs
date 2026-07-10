@@ -30,6 +30,22 @@ function readPositiveInteger(rawValue, name, fallback) {
   return value;
 }
 
+function readBooleanFlag(rawValue, name) {
+  if (rawValue === undefined || rawValue.trim().length === 0) {
+    return false;
+  }
+
+  if (["1", "true", "yes"].includes(rawValue.toLowerCase())) {
+    return true;
+  }
+
+  if (["0", "false", "no"].includes(rawValue.toLowerCase())) {
+    return false;
+  }
+
+  throw new Error(`${name} must be true/false, 1/0, or yes/no.`);
+}
+
 const rawMemoryFilePath =
   process.env.AGENT_TOWN_WORLD_MEMORY_FILE ?? process.argv[2] ?? undefined;
 
@@ -49,6 +65,14 @@ const eventLogPath =
   process.env.AGENT_TOWN_SCHEDULER_EVENTS_OUTPUT === undefined
     ? undefined
     : resolve(process.env.AGENT_TOWN_SCHEDULER_EVENTS_OUTPUT);
+const checkpointPath =
+  process.env.AGENT_TOWN_SCHEDULER_CHECKPOINT === undefined
+    ? undefined
+    : resolve(process.env.AGENT_TOWN_SCHEDULER_CHECKPOINT);
+const resume = readBooleanFlag(
+  process.env.AGENT_TOWN_SCHEDULER_RESUME,
+  "AGENT_TOWN_SCHEDULER_RESUME",
+);
 
 const vite = await createViteServer({
   appType: "custom",
@@ -65,12 +89,16 @@ try {
   const result = await runnerModule.runSmallvilleAutonomousScheduler({
     apiKey: process.env.OPENAI_API_KEY,
     baseUrl: process.env.OPENAI_BASE_URL,
+    checkpointPath,
     eventLogPath,
-    eventsPerTick: readPositiveInteger(
-      process.env.AGENT_TOWN_SCHEDULER_EVENTS_PER_TICK,
-      "AGENT_TOWN_SCHEDULER_EVENTS_PER_TICK",
-      DEFAULT_EVENTS_PER_TICK,
-    ),
+    eventsPerTick:
+      resume && process.env.AGENT_TOWN_SCHEDULER_EVENTS_PER_TICK === undefined
+        ? undefined
+        : readPositiveInteger(
+            process.env.AGENT_TOWN_SCHEDULER_EVENTS_PER_TICK,
+            "AGENT_TOWN_SCHEDULER_EVENTS_PER_TICK",
+            DEFAULT_EVENTS_PER_TICK,
+          ),
     host: process.env.AGENT_TOWN_WORLD_MEMORY_HOST ?? "127.0.0.1",
     maxAgents: readOptionalInteger(
       process.env.AGENT_TOWN_PROVIDER_LOOP_MAX_AGENTS,
@@ -103,6 +131,7 @@ try {
       process.env.AGENT_TOWN_WORLD_MEMORY_PORT,
       "AGENT_TOWN_WORLD_MEMORY_PORT",
     ),
+    resume,
     scheduleId: process.env.AGENT_TOWN_SCHEDULER_ID,
     startTimestamp: process.env.AGENT_TOWN_SCHEDULER_START,
     tickCount: readPositiveInteger(
@@ -114,11 +143,14 @@ try {
       process.env.AGENT_TOWN_SCHEDULER_TICK_DELAY_MS,
       "AGENT_TOWN_SCHEDULER_TICK_DELAY_MS",
     ),
-    tickMinutes: readPositiveInteger(
-      process.env.AGENT_TOWN_SCHEDULER_TICK_MINUTES,
-      "AGENT_TOWN_SCHEDULER_TICK_MINUTES",
-      DEFAULT_TICK_MINUTES,
-    ),
+    tickMinutes:
+      resume && process.env.AGENT_TOWN_SCHEDULER_TICK_MINUTES === undefined
+        ? undefined
+        : readPositiveInteger(
+            process.env.AGENT_TOWN_SCHEDULER_TICK_MINUTES,
+            "AGENT_TOWN_SCHEDULER_TICK_MINUTES",
+            DEFAULT_TICK_MINUTES,
+          ),
   });
 
   console.log(JSON.stringify(result.summary, null, 2));

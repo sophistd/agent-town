@@ -224,6 +224,11 @@ schema: it cycles routine, cognitive, and social phases, marks emitted events
 with `metadata.source: "custom"` plus `metadata.scheduler`, and posts each tick
 to `/provider-loop`. Scheduler metadata records phase and virtual-clock
 provenance only; it does not create a second event schema or bypass replay.
+Scheduler checkpoints are control-plane state only. A checkpoint records the
+next tick index, phase plan, tick shape, last completed tick summary, and memory
+file path so a later process can resume emitting canonical events. The
+checkpoint itself is not replayed into `WorldState` and does not define runtime
+facts.
 
 The deterministic `Memory plan` source uses the same persistent records as an
 agent-addressable memory stream. Each durable-memory agent receives a query
