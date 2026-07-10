@@ -1,0 +1,59 @@
+{
+  "appUrl": "http://127.0.0.1:5173/",
+  "browserPath": "python-playwright",
+  "scope": "client projection smoke after server-side external runtime stream addition",
+  "results": [
+    {
+      "canvasBox": {
+        "x": 311,
+        "y": 110,
+        "width": 773.0625,
+        "height": 669
+      },
+      "canvasOk": true,
+      "consoleErrors": [],
+      "mapScreenshot": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-external-runtime-stream-desktop-map.png",
+      "name": "desktop",
+      "noHorizontalOverflow": true,
+      "pageErrors": [],
+      "pixelSummary": {
+        "width": 774,
+        "height": 669,
+        "sampleCount": 25891,
+        "opaqueSamples": 25891,
+        "colors": 425
+      },
+      "screenshot": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-external-runtime-stream-desktop.png",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "canvasBox": {
+        "x": 9,
+        "y": 2001.578125,
+        "width": 371.984375,
+        "height": 321.921875
+      },
+      "canvasOk": true,
+      "consoleErrors": [],
+      "mapScreenshot": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-external-runtime-stream-mobile-map.png",
+      "name": "mobile",
+      "noHorizontalOverflow": true,
+      "pageErrors": [],
+      "pixelSummary": {
+        "width": 372,
+        "height": 323,
+        "sampleCount": 30039,
+        "opaqueSamples": 30039,
+        "colors": 477
+      },
+      "screenshot": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-external-runtime-stream-mobile.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    }
+  ]
+}

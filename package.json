@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "smallville:runtime-stream": "node scripts/smallville-runtime-stream.mjs",
     "world-memory:server": "node scripts/world-memory-server.mjs",
     "world-memory:provider-loop": "node scripts/world-memory-provider-loop.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json",

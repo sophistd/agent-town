@@ -368,6 +368,25 @@ Runner rules:
 - `AGENT_TOWN_PROVIDER_LOOP_OUTPUT` can write the same summary to a file for
   evidence capture.
 
+`src/server/smallvilleExternalRuntimeStreamRunner.ts` and
+`pnpm smallville:runtime-stream` make the route runnable as a deterministic
+external runtime stream.
+
+External runtime stream rules:
+
+- The runner emits canonical `AgentEvent` batches over multiple ticks.
+- Emitted events use `metadata.source: "custom"` and
+  `metadata.externalRuntime` to preserve original event provenance, scenario,
+  and stream identity.
+- Each tick posts only that tick's canonical batch to `/provider-loop`; durable
+  memory accumulates in the local/server file-backed world-memory store.
+- The runner writes a secret-free summary and can write the emitted event log as
+  JSONL for evidence capture.
+- Without a local/server API key, provider events remain empty and
+  `missing_openai_api_key` is returned as a warning instead of being hidden.
+- The stream is deterministic runtime evidence, not a live LLM-backed
+  autonomous simulation claim.
+
 ## Adding Another Source
 
 1. Create `src/adapters/<source>Adapter.ts`.

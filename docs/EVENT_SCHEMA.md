@@ -214,6 +214,11 @@ canonical provider events rather than introducing an HTTP-owned event schema.
 The Provider HTTP workbench source posts the current canonical event stream to
 that route and validates returned recall, Memory plan, and provider events again
 before replay; the browser source does not define a new event schema.
+`pnpm smallville:runtime-stream` adds a deterministic external runtime stream
+sender on the same schema: it emits canonical `AgentEvent` batches, marks them
+with `metadata.source: "custom"` plus `metadata.externalRuntime`, and posts each
+tick to `/provider-loop`. The external runtime annotation is provenance only;
+the accepted facts still enter replay through `AgentEvent -> WorldState`.
 
 The deterministic `Memory plan` source uses the same persistent records as an
 agent-addressable memory stream. Each durable-memory agent receives a query

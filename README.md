@@ -132,6 +132,20 @@ through the provider loop, and prints a secret-free summary. Set
 call; without it, the runner still produces request evidence and returns the
 existing `missing_openai_api_key` warning.
 
+Run a deterministic external runtime stream:
+
+```bash
+AGENT_TOWN_WORLD_MEMORY_FILE=/tmp/agent-town-runtime-stream-memory.json \
+  pnpm smallville:runtime-stream
+```
+
+The runtime stream emits canonical `AgentEvent` batches over multiple ticks,
+annotates them with `metadata.externalRuntime`, posts each tick to the live
+local `/provider-loop` route, and prints a secret-free summary. This proves the
+external runtime sender path without introducing a new event schema. Without a
+local/server API key, provider events remain empty and
+`missing_openai_api_key` is surfaced instead of being hidden.
+
 Required checks before finishing code or evidence work:
 
 ```bash
@@ -248,6 +262,9 @@ Quick path:
     to post the current run to `/provider-loop`. With no local API key, the
     workbench should still replay server-backed recall and Memory plan evidence
     and show `missing_openai_api_key` as a warning.
+19. Run `pnpm smallville:runtime-stream` with an explicit
+    `AGENT_TOWN_WORLD_MEMORY_FILE` to prove a deterministic external runtime can
+    emit ticked canonical event batches into the live `/provider-loop` route.
 
 Relevant screenshots and evidence:
 
@@ -256,6 +273,7 @@ Relevant screenshots and evidence:
 - `docs/evidence/M5/performance-200-events.md`
 - `docs/evidence/M5/final-demo-notes.md`
 - `docs/evidence/M5/smallville-graph-view.md`
+- `docs/evidence/M5/smallville-external-runtime-stream.md`
 - `docs/evidence/M4/source-switcher.png`
 - `docs/SMALLVILLE_PARITY.md`
 
@@ -428,8 +446,9 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
   event streams. The long-running server also exposes `POST /provider-loop` for
   live HTTP sender events without accepting secrets in request bodies, and the
   browser workbench can post its current event stream to that route as a
-  Provider HTTP source. This is still not a multi-user database or full
-  autonomous memory engine.
+  Provider HTTP source. `pnpm smallville:runtime-stream` can emit deterministic
+  external runtime ticks into the same route. This is still not a multi-user
+  database or full autonomous memory engine.
 - Routine scheduling is currently deterministic fixture evidence. The app can
   show routine phases and crowding-resolution events for 25 agents, but it is
   not yet an adaptive autonomous scheduler.

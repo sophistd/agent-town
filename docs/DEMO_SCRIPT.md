@@ -115,13 +115,23 @@ the runtime path instead of only watching a happy-path animation.
    still proves server-backed memory planning and surfaces
    `missing_openai_api_key`.
 
-13. Quarantine expectation.
+13. External runtime stream.
+
+   Run `pnpm smallville:runtime-stream` with explicit
+   `AGENT_TOWN_WORLD_MEMORY_FILE`, `AGENT_TOWN_RUNTIME_STREAM_OUTPUT`, and
+   `AGENT_TOWN_RUNTIME_STREAM_EVENTS_OUTPUT`. Explain that this is no longer a
+   JSONL file import or a browser button: a deterministic external runtime emits
+   canonical event batches over ticks, posts each tick to `/provider-loop`, and
+   records a secret-free summary. Without a local API key, provider events stay
+   empty and `missing_openai_api_key` remains visible.
+
+14. Quarantine expectation.
 
    If a bad input is tested, show that accepted events continue to replay while
    invalid events are quarantined. Do not let invalid input become a renderer
    branch.
 
-14. Graph View.
+15. Graph View.
 
    Click `Social day`, then inspect Graph View in the right panel. Toggle
    message, handoff, declared, and diffusion filters; type an agent name or
@@ -143,6 +153,8 @@ the runtime path instead of only watching a happy-path animation.
   pipeline?
 - Can the reviewer see that Provider HTTP goes through the live local/server
   provider-loop route before replay?
+- Can the reviewer see that `pnpm smallville:runtime-stream` sends ticked
+  external runtime batches through the same live provider-loop route?
 - Can the reviewer name the current known limitation: generated placeholder
   visuals are deliberate until visual polish becomes the highest-risk work?
 

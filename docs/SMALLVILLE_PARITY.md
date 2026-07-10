@@ -52,14 +52,16 @@ runtime facts.
 | Action/conversation | Agents act, talk, coordinate | Generator emits `handoff`, `message`, `tool_call`, and `done` events through the existing projection path; Social day emits 25 invitation messages | Partial |
 | Emergent social behavior | Information spreads and coordination emerges from agent interaction over time | `Social day` deterministically models a user-seeded Valentine's invitation spreading through a 25-agent relationship graph; replay derives inspectable relationship state and Graph View exposes filtering plus evidence jumps | Initial |
 | LLM behavior generation | LLM produces observations/reflections/plans/actions | `LLM plan` builds a model-ready request from prior events plus agent-addressable memory retrieval, parses model-shaped responses into canonical events, quarantines invalid output, and has an OpenAI Responses provider boundary with mock-fetch coverage; the world-memory provider loop can feed server-backed recall evidence into that boundary, but no live provider call was run without an API key | Initial |
-| Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, file-backed local/server snapshots now use the same schema, a local/server HTTP process can ingest canonical event streams into that store, recall emits `memory_read` events, Memory plan feeds agent-addressable planning, provider-loop request evidence can be built from server recall, a JSONL external-sender runner can drive the loop, `POST /provider-loop` accepts live HTTP sender events, and the browser workbench can call that route as a Provider HTTP source; not yet a multi-user world database or autonomous memory engine | Initial |
+| Persistent world/memory | Memory survives across simulation days | Versioned browser memory bank persists canonical memory-event evidence, file-backed local/server snapshots now use the same schema, a local/server HTTP process can ingest canonical event streams into that store, recall emits `memory_read` events, Memory plan feeds agent-addressable planning, provider-loop request evidence can be built from server recall, a JSONL external-sender runner can drive the loop, `POST /provider-loop` accepts live HTTP sender events, the browser workbench can call that route as a Provider HTTP source, and `pnpm smallville:runtime-stream` can emit deterministic external runtime ticks into the same route; not yet a multi-user world database or autonomous memory engine | Initial |
 | Many agents | Reference environment used 25 agents | `Social day` and `Routine day` fixtures use 25 agents and 150 canonical events each | Initial |
 | Human intervention | User can inject natural-language changes into the town | `Intervention` source turns an operator prompt into canonical observation/retrieval/reflection/planning/action/closure events with prior-run context | Initial |
 | Evaluation | Believability and ablation evidence | `evaluateSmallvilleRun` now computes a structural capability score, top gaps, and ablation coverage from canonical events plus replayed `WorldState`; no human believability study yet | Initial |
 
-## Current Implementation Slice
+## Current M5 Implementation Spine
 
-The current slice adds deterministic cognitive evidence:
+The current M5 branch now includes deterministic cognitive evidence, durable
+memory boundaries, provider-loop bridges, browser workbench integration, and a
+deterministic external runtime stream:
 
 - `src/events/generativeRuntime.ts`
   - `MemoryRecord`
@@ -232,6 +234,14 @@ The current slice adds deterministic cognitive evidence:
   - validates returned recall, Memory plan, and provider events before replay
   - replays server-backed memory evidence even when provider events are empty
     because no local API key is configured
+- Deterministic external runtime stream:
+  - `src/server/smallvilleExternalRuntimeStreamRunner.ts`
+  - `scripts/smallville-runtime-stream.mjs`
+  - `pnpm smallville:runtime-stream`
+  - emits canonical `AgentEvent` batches over multiple ticks
+  - annotates each emitted event with `metadata.externalRuntime`
+  - posts each tick to the live `/provider-loop` route
+  - writes a secret-free summary plus optional emitted-event JSONL evidence
 - Agent-addressable memory metadata:
   - `agentAddressableMemory.schemaVersion`
   - `agentAddressableMemory.agentId`
@@ -354,9 +364,9 @@ The next meaningful move is not more labels. It is one of:
 
 - run and evidence a real provider-backed LLM call with a local/server-side API
   key while keeping keys out of browser code and consuming the existing
-  world-memory provider-loop request evidence
-- connect a real external runtime stream to the live `/provider-loop` route, or
-  run a live provider-backed call through that route
+  world-memory provider-loop / external-runtime-stream request evidence
+- extend the deterministic external runtime stream into a longer-lived
+  scheduler loop while keeping each tick replayable as canonical events
 - turn the structural evaluator into a human-review rubric or provider-backed
   benchmark while keeping evaluation evidence event-derived
 - profile replay/rendering for 25-agent and larger fixtures
