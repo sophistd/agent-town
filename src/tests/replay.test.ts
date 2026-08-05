@@ -1,7 +1,12 @@
 import { describe, expect, it } from "vitest";
 
+import {
+  mockSmallvilleCognitiveRun,
+  mockSmallvilleSocialRun,
+} from "../events/generativeRuntime";
 import { mockEvents } from "../events/mockEvents";
 import { mockFailureRun } from "../events/mockFailureRun";
+import { mockSmallvilleDayRun } from "../events/mockSmallvilleDayRun";
 import { mockStressRun } from "../events/mockStressRun";
 import { replay } from "../events/reducer";
 import { clampCursor, getPlaybackEvent } from "../state/playbackStore";
@@ -20,7 +25,14 @@ describe("deterministic replay controls", () => {
   });
 
   it("reconstructs identical WorldState for repeated jumps to the same index", () => {
-    const fixtures = [mockEvents, mockFailureRun, mockStressRun];
+    const fixtures = [
+      mockEvents,
+      mockFailureRun,
+      mockSmallvilleDayRun,
+      mockSmallvilleCognitiveRun,
+      mockSmallvilleSocialRun,
+      mockStressRun,
+    ];
 
     for (const events of fixtures) {
       const cursors = [0, Math.floor(events.length / 2), events.length - 1];

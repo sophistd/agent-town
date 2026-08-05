@@ -1,0 +1,148 @@
+{
+  "date": "2026-07-04",
+  "url": "http://localhost:5173/",
+  "browserPluginDomSnapshot": {
+    "status": "failed_plugin_side",
+    "error": "TypeError: o.incrementalAriaSnapshot is not a function"
+  },
+  "assertions": {
+    "desktopSmallvilleEvalVisible": true,
+    "desktopRelationshipEvidenceVisible": true,
+    "desktopSocialCoordinationEvidenceVisible": true,
+    "desktopRoutineEvidenceVisible": true,
+    "desktopLlmContractEvidenceVisible": true,
+    "desktopInteractionsPassed": true,
+    "desktopCanvasNonblank": true,
+    "desktopNoHorizontalOverflow": true,
+    "mobileSmallvilleEvalVisible": true,
+    "mobileRelationshipEvidenceVisible": true,
+    "mobileSocialCoordinationEvidenceVisible": true,
+    "mobileRoutineEvidenceVisible": true,
+    "mobileLlmContractEvidenceVisible": true,
+    "mobileInteractionsPassed": true,
+    "mobileCanvasNonblank": true,
+    "mobileNoHorizontalOverflow": true,
+    "noPageErrors": true,
+    "noConsoleErrors": true
+  },
+  "desktop": {
+    "viewport": {
+      "width": 1440,
+      "height": 960
+    },
+    "social": {
+      "evalText": "SMALLVILLE EVAL\nAgents 25; events 150; relationships 66\n73\nAblations covered 5/7; routine phases 0/6\nEvidence\nRelationship graph\nPASSED 100\nSocial coordination\nPASSED 100\nGaps\nLLM contract\nMISSING 0\nPersistent memory\nMISSING 0\nRoutine schedule\nMISSING 0",
+      "canvas": {
+        "present": true,
+        "width": 773.0625,
+        "height": 669,
+        "nonblank": true,
+        "sampleCount": 576
+      }
+    },
+    "routine": {
+      "evalText": "SMALLVILLE EVAL\nAgents 25; events 150; relationships 66\n73\nAblations covered 6/7; routine phases 6/6\nEvidence\nRoutine schedule\nPASSED 100\nRelationship graph\nPASSED 100\nGaps\nLLM contract\nMISSING 0\nPersistent memory\nMISSING 0\nSocial coordination\nMISSING 0",
+      "canvas": {
+        "present": true,
+        "width": 773.0625,
+        "height": 669,
+        "nonblank": true,
+        "sampleCount": 576
+      }
+    },
+    "llm": {
+      "evalText": "SMALLVILLE EVAL\nAgents 4; events 8; relationships 1\n39\nAblations covered 5/7; routine phases 0/6\nEvidence\nLLM contract\nPASSED 100\nAgent identity\nPASSED 100\nGaps\nObservation\nMISSING 0\nPersistent memory\nMISSING 0\nRoutine schedule\nMISSING 0",
+      "canvas": {
+        "present": true,
+        "width": 773.0625,
+        "height": 669,
+        "nonblank": true,
+        "sampleCount": 576
+      }
+    },
+    "interaction": {
+      "initial": "cursor 0\nvisible 150/150\nbalanced\n100%",
+      "zoomed": "cursor 0\nvisible 150/150\nbalanced\n105%",
+      "beforeFilterStatus": "cursor 0\nvisible 150/150\nbalanced\n105%",
+      "afterFilterStatus": "cursor 0\nvisible 25/150\nbalanced\n105%",
+      "afterNext": "Playback\n\nCurrent event: social-001\nSelected event: social-000",
+      "afterPlay": "Playback\n\nCurrent event: social-003\nSelected event: social-000"
+    },
+    "horizontalOverflow": false,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "consoleWarnings": [
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x114004e3c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x114004eba00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x114004f2600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x114004eba00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+      }
+    ]
+  },
+  "mobile": {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "social": {
+      "evalText": "SMALLVILLE EVAL\nAgents 25; events 150; relationships 66\n73\nAblations covered 5/7; routine phases 0/6\nEvidence\nRelationship graph\nPASSED 100\nSocial coordination\nPASSED 100\nGaps\nLLM contract\nMISSING 0\nPersistent memory\nMISSING 0\nRoutine schedule\nMISSING 0",
+      "canvas": {
+        "present": true,
+        "width": 371.984375,
+        "height": 321.921875,
+        "nonblank": true,
+        "sampleCount": 576
+      }
+    },
+    "routine": {
+      "evalText": "SMALLVILLE EVAL\nAgents 25; events 150; relationships 66\n73\nAblations covered 6/7; routine phases 6/6\nEvidence\nRoutine schedule\nPASSED 100\nRelationship graph\nPASSED 100\nGaps\nLLM contract\nMISSING 0\nPersistent memory\nMISSING 0\nSocial coordination\nMISSING 0",
+      "canvas": {
+        "present": true,
+        "width": 371.984375,
+        "height": 321.921875,
+        "nonblank": true,
+        "sampleCount": 576
+      }
+    },
+    "llm": {
+      "evalText": "SMALLVILLE EVAL\nAgents 4; events 8; relationships 1\n39\nAblations covered 5/7; routine phases 0/6\nEvidence\nLLM contract\nPASSED 100\nAgent identity\nPASSED 100\nGaps\nObservation\nMISSING 0\nPersistent memory\nMISSING 0\nRoutine schedule\nMISSING 0",
+      "canvas": {
+        "present": true,
+        "width": 371.984375,
+        "height": 321.921875,
+        "nonblank": true,
+        "sampleCount": 576
+      }
+    },
+    "interaction": {
+      "initial": "cursor 0\nvisible 150/150\nbalanced\n100%",
+      "zoomed": "cursor 0\nvisible 150/150\nbalanced\n105%",
+      "beforeFilterStatus": "cursor 0\nvisible 150/150\nbalanced\n105%",
+      "afterFilterStatus": "cursor 0\nvisible 25/150\nbalanced\n105%",
+      "afterNext": "Playback\n\nCurrent event: social-001\nSelected event: social-000",
+      "afterPlay": "Playback\n\nCurrent event: social-003\nSelected event: social-000"
+    },
+    "horizontalOverflow": false,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "consoleWarnings": []
+  },
+  "screenshots": {
+    "desktop": "docs/evidence/M5/smallville-evaluation-desktop.png",
+    "desktopInteraction": "docs/evidence/M5/smallville-evaluation-desktop-interaction.png",
+    "mobile": "docs/evidence/M5/smallville-evaluation-mobile.png",
+    "mobileInteraction": "docs/evidence/M5/smallville-evaluation-mobile-interaction.png",
+    "mobileMap": "docs/evidence/M5/smallville-evaluation-mobile-map.png"
+  }
+}

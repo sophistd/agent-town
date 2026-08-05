@@ -1,0 +1,198 @@
+{
+  "url": "http://127.0.0.1:5173/",
+  "browserPath": {
+    "classification": "Browser invocation failed for required DOM snapshot; Playwright fallback used.",
+    "failure": "Browser tab.playwright.domSnapshot() failed with TypeError: o.incrementalAriaSnapshot is not a function."
+  },
+  "desktop": {
+    "initialHealth": {
+      "title": "Agent Town",
+      "bodyLength": 2723,
+      "hasFrameworkOverlay": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "noHorizontalOverflow": true,
+      "canvasFound": true,
+      "canvasRect": {
+        "x": 311,
+        "y": 110,
+        "width": 773.0625,
+        "height": 669
+      }
+    },
+    "initialTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-failure-agent-town-001\nStatus\npaused\nCursor\n1 / 30\nEvents\n30\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nmock · 30 events\n\nMock\nJSONL\nTown day\nCognitive\nWS sample\nConnect\nDisconnect\nMock failure run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nPlanner\nplanner / thinking / town_hall\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n2 events\nmessage\n7 events\ntool call\n8 events\nhandoff\n3 events\nmemory read\n2 events\nmemory write\n1 events\ndecision\n3 events\nblocked\n2 events\nerror\n1 events\ndone\n1 events\nAll\nNone\nCritical\n\nPlanner / thinking / Plan debug run\n\ncursor 0\nvisible 30/30\nbalanced\n100%\nRUN SUMMARY\nEvents\n30\nAgents\n5\nHandoffs\n3\nTool calls\n8\nMemory actions\n3\nBlocked\n2\nErrors\n1\nFirst blocked: failure-009\nFirst error: failure-008\nBefore error: failure-007\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: failure-000\nSelected event: none\n\nSelected Agent\n\nClick an agent in Town View.\n\nSelected Event\n\nClick a bubb",
+    "afterCognitiveHealth": {
+      "title": "Agent Town",
+      "bodyLength": 4430,
+      "hasFrameworkOverlay": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "noHorizontalOverflow": true,
+      "canvasFound": true,
+      "canvasRect": {
+        "x": 311,
+        "y": 110,
+        "width": 773.0625,
+        "height": 669
+      }
+    },
+    "afterCognitiveTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-smallville-cognitive-001\nStatus\npaused\nCursor\n1 / 30\nEvents\n30\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\ncognitive · 30 events\n\nMock\nJSONL\nTown day\nCognitive\nWS sample\nConnect\nDisconnect\nCognitive loop run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / town_hall\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n5 events\nmessage\n1 events\ntool call\n3 events\nhandoff\n1 events\nmemory read\n5 events\nmemory write\n5 events\ndecision\n5 events\nblocked\n0 events\nerror\n0 events\ndone\n5 events\nAll\nNone\nCritical\n\nIsabella / memory_write / Observe town need\n\ncursor 0\nvisible 30/30\nbalanced\n100%\nRUN SUMMARY\nEvents\n30\nAgents\n5\nHandoffs\n1\nTool calls\n3\nMemory actions\n10\nBlocked\n0\nErrors\n0\nFirst blocked: none\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: cognitive-000\nSelected event: cognitive-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nworking\nLocation\ntown_hall\nSelected Event\nID\ncognitive-000\nSequence\n0\nTimestamp\n2026-07-04T15:00:00.000Z\nRun ID\nrun-smallville-cognitive-001\nTask ID\ntask-smallville-cognitive-loop\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_write\nStatus\nrunning\nSummary\nObserve town need\nContent\nThe town needs a cognition loop, not only a prettier map.\nTarget\nagent=none; task=none\nTool\nnone\nTool input\nnone\nTool output\n",
+    "interaction": {
+      "expandedPressed": "true",
+      "zoomVisible": true,
+      "bubblesBefore": "true",
+      "bubblesAfter": "false",
+      "edgesBefore": "true",
+      "edgesAfter": "false",
+      "criticalFilterVisible": true,
+      "nextAdvancedCursor": true,
+      "playBecamePause": true,
+      "health": {
+        "title": "Agent Town",
+        "bodyLength": 3207,
+        "hasFrameworkOverlay": false,
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "noHorizontalOverflow": true,
+        "canvasFound": true,
+        "canvasRect": {
+          "x": 311,
+          "y": 110,
+          "width": 773.0625,
+          "height": 669
+        }
+      }
+    }
+  },
+  "mobile": {
+    "health": {
+      "title": "Agent Town",
+      "bodyLength": 4430,
+      "hasFrameworkOverlay": false,
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "noHorizontalOverflow": true,
+      "canvasFound": true,
+      "canvasRect": {
+        "x": 9,
+        "y": 1677.78125,
+        "width": 371.984375,
+        "height": 321.921875
+      }
+    },
+    "textSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-smallville-cognitive-001\nStatus\npaused\nCursor\n1 / 30\nEvents\n30\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\ncognitive · 30 events\n\nMock\nJSONL\nTown day\nCognitive\nWS sample\nConnect\nDisconnect\nCognitive loop run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / town_hall\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n5 events\nmessage\n1 events\ntool call\n3 events\nhandoff\n1 events\nmemory read\n5 events\nmemory write\n5 events\ndecision\n5 events\nblocked\n0 events\nerror\n0 events\ndone\n5 events\nAll\nNone\nCritical\n\nIsabella / memory_write / Observe town need\n\ncursor 0\nvisible 30/30\nbalanced\n100%\nRUN SUMMARY\nEvents\n30\nAgents\n5\nHandoffs\n1\nTool calls\n3\nMemory actions\n10\nBlocked\n0\nErrors\n0\nFirst blocked: none\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: cognitive-000\nSelected event: cognitive-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nworking\nLocation\ntown_hall\nSelected Event\nID\ncognitive-000\nSequence\n0\nTimestamp\n2026-07-04T15:00:00.000Z\nRun ID\nrun-smallville-cognitive-001\nTask ID\ntask-smallville-cognitive-loop\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_write\nStatus\nrunning\nSummary\nObserve town need\nContent\nThe town needs a cognition loop, not only a prettier map.\nTarget\nagent=none; task=none\nTool\nnone\nTool input\nnone\nTool output\n",
+    "afterScrollHealth": {
+      "title": "Agent Town",
+      "bodyLength": 4430,
+      "hasFrameworkOverlay": false,
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "noHorizontalOverflow": true,
+      "canvasFound": true,
+      "canvasRect": {
+        "x": 9,
+        "y": 260.78125,
+        "width": 371.984375,
+        "height": 321.921875
+      }
+    }
+  },
+  "assets": [
+    {
+      "asset": "/maps/town-v1.tiled.json",
+      "status": 200,
+      "ok": true,
+      "contentType": "application/json"
+    },
+    {
+      "asset": "/maps/town-v1-preview.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png"
+    },
+    {
+      "asset": "/tilesets/agent-town-v1.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png"
+    },
+    {
+      "asset": "/sprites/agent-roles-v1.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png"
+    },
+    {
+      "asset": "/sprites/buildings-v1.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png"
+    }
+  ],
+  "console": [
+    {
+      "label": "desktop",
+      "type": "warning",
+      "text": "[.WebGL-0x13c00564800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "location": {
+        "url": "http://127.0.0.1:5173/",
+        "line": 0,
+        "column": 0,
+        "lineNumber": 0,
+        "columnNumber": 0
+      },
+      "relevantAppIssue": false
+    },
+    {
+      "label": "desktop",
+      "type": "warning",
+      "text": "[.WebGL-0x13c00569600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "location": {
+        "url": "http://127.0.0.1:5173/",
+        "line": 0,
+        "column": 0,
+        "lineNumber": 0,
+        "columnNumber": 0
+      },
+      "relevantAppIssue": false
+    },
+    {
+      "label": "desktop",
+      "type": "warning",
+      "text": "[.WebGL-0x13c0056ae00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "location": {
+        "url": "http://127.0.0.1:5173/",
+        "line": 0,
+        "column": 0,
+        "lineNumber": 0,
+        "columnNumber": 0
+      },
+      "relevantAppIssue": false
+    },
+    {
+      "label": "desktop",
+      "type": "warning",
+      "text": "[.WebGL-0x13c00569600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+      "location": {
+        "url": "http://127.0.0.1:5173/",
+        "line": 0,
+        "column": 0,
+        "lineNumber": 0,
+        "columnNumber": 0
+      },
+      "relevantAppIssue": false
+    }
+  ],
+  "pageErrors": [],
+  "screenshots": {
+    "desktopCognitive": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-cognitive-desktop.png",
+    "desktopInteraction": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-cognitive-interaction.png",
+    "mobile": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-cognitive-mobile.png",
+    "mobileMap": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-cognitive-mobile-map.png"
+  },
+  "consoleSummary": {
+    "total": 4,
+    "relevantAppIssues": 0,
+    "note": "Only Chromium WebGL ReadPixels performance warnings were observed during screenshot capture."
+  }
+}

@@ -57,7 +57,12 @@ export type ProjectionEdgeKind =
   | "review"
   | "dependency";
 
+export type RelationshipKind = "declared" | "message" | "handoff" | "diffusion";
+
 export type AgentEventSource =
+  | "intervention"
+  | "memory"
+  | "llm"
   | "mock"
   | "jsonl"
   | "websocket"
@@ -130,6 +135,10 @@ export type AgentState = {
   role: AgentRole;
   status: AgentStateStatus;
   location: AgentLocation;
+  subLocationId?: string;
+  activity?: string;
+  previousX?: number;
+  previousY?: number;
   x: number;
   y: number;
   currentTaskId?: string;
@@ -142,6 +151,22 @@ export type ProjectionEdge = {
   toAgentId: string;
   eventId: string;
   kind: ProjectionEdgeKind;
+};
+
+export type RelationshipState = {
+  relationshipId: string;
+  agentIds: [string, string];
+  strength: number;
+  interactionCount: number;
+  messageCount: number;
+  handoffCount: number;
+  declaredCount: number;
+  diffusionCount: number;
+  lastEventId: string;
+  lastInteractionKind: RelationshipKind;
+  lastSequence: number;
+  evidenceEventIds: string[];
+  tags: string[];
 };
 
 export type RunSummary = {
@@ -179,6 +204,7 @@ export type WorldState = {
   agents: Record<string, AgentState>;
   visibleBubbles: Record<string, AgentBubble>;
   edges: ProjectionEdge[];
+  relationships: Record<string, RelationshipState>;
   runSummary: RunSummary;
   warnings: EventWarning[];
   quarantinedEvents: QuarantinedEvent[];

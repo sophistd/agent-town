@@ -1,0 +1,216 @@
+{
+  "url": "http://127.0.0.1:5173/",
+  "identity": {
+    "url": "http://127.0.0.1:5173/",
+    "title": "Agent Town"
+  },
+  "browserPath": {
+    "browserPluginAttempted": true,
+    "browserPluginDomSnapshot": "failed: incrementalAriaSnapshot is not a function",
+    "fallback": "regular Playwright 1.61.1 from bundled Codex runtime used for clean console, screenshots, and interaction proof"
+  },
+  "assets": {
+    "/maps/town-v1.tiled.json": 200,
+    "/maps/town-v1-preview.png": 200,
+    "/tilesets/agent-town-v1.png": 200,
+    "/sprites/agent-roles-v1.png": 200,
+    "/sprites/buildings-v1.png": 200
+  },
+  "metrics": {
+    "desktopMetrics": {
+      "label": "desktop-town-day-expanded",
+      "titleText": "Agent Town",
+      "sourceLine": "smallville · 37 events",
+      "toolbarLine": "cursor 0\nvisible 37/37\nexpanded\n100%",
+      "hasTownDayStatus": true,
+      "hasTownDayAgents": true,
+      "hasFrameworkOverlay": false,
+      "horizontalOverflow": 0,
+      "canvasCount": 1,
+      "canvasRect": {
+        "x": 311,
+        "y": 110,
+        "width": 773,
+        "height": 669
+      },
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-smallville-day-001\nStatus\npaused\nCursor\n1 / 37\nEvents\n37\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nsmallville · 37 events\n\nMock\nJSONL\nTown day\nWS sample\nConnect\nDisconnect\nTown day run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / thinking / town_hall\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n3 events\nmessage\n7 events\ntool call\n7 events\nhandoff\n4 events\nmemory read\n4 events\nmemory write\n3 events\ndecision\n4 events\nblocked\n0 events\nerror\n0 events\ndone\n5 events\nAll\nNone\nCritical\n\nIsabella / thinking / Wake and scan the day plan\n\ncursor 0\nvisible 37/37\nexpanded\n100%\nRUN SUMMARY\nEvents\n37"
+    },
+    "zoomAfterMetrics": {
+      "label": "after-zoom",
+      "titleText": "Agent Town",
+      "sourceLine": "smallville · 37 events",
+      "toolbarLine": "cursor 0\nvisible 37/37\nexpanded\n105%",
+      "hasTownDayStatus": true,
+      "hasTownDayAgents": true,
+      "hasFrameworkOverlay": false,
+      "horizontalOverflow": 0,
+      "canvasCount": 1,
+      "canvasRect": {
+        "x": 311,
+        "y": 110,
+        "width": 773,
+        "height": 669
+      },
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-smallville-day-001\nStatus\npaused\nCursor\n1 / 37\nEvents\n37\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nsmallville · 37 events\n\nMock\nJSONL\nTown day\nWS sample\nConnect\nDisconnect\nTown day run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n105%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / thinking / town_hall\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n3 events\nmessage\n7 events\ntool call\n7 events\nhandoff\n4 events\nmemory read\n4 events\nmemory write\n3 events\ndecision\n4 events\nblocked\n0 events\nerror\n0 events\ndone\n5 events\nAll\nNone\nCritical\n\nIsabella / thinking / Wake and scan the day plan\n\ncursor 0\nvisible 37/37\nexpanded\n105%\nRUN SUMMARY\nEvents\n37"
+    },
+    "filteredMetrics": {
+      "label": "after-critical-filter",
+      "titleText": "Agent Town",
+      "sourceLine": "smallville · 37 events",
+      "toolbarLine": "cursor 0\nvisible 9/37\nexpanded\n105%",
+      "hasTownDayStatus": true,
+      "hasTownDayAgents": true,
+      "hasFrameworkOverlay": false,
+      "horizontalOverflow": 0,
+      "canvasCount": 1,
+      "canvasRect": {
+        "x": 311,
+        "y": 110,
+        "width": 773,
+        "height": 669
+      },
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-smallville-day-001\nStatus\npaused\nCursor\n1 / 37\nEvents\n37\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nsmallville · 37 events\n\nMock\nJSONL\nTown day\nWS sample\nConnect\nDisconnect\nTown day run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n105%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / thinking / town_hall\nEVENT FILTERS\n\n4 / 10 types visible in Timeline.\n\nthinking\n3 events\nmessage\n7 events\ntool call\n7 events\nhandoff\n4 events\nmemory read\n4 events\nmemory write\n3 events\ndecision\n4 events\nblocked\n0 events\nerror\n0 events\ndone\n5 events\nAll\nNone\nCritical\n\nIsabella / thinking / Wake and scan the day plan\n\ncursor 0\nvisible 9/37\nexpanded\n105%\nRUN SUMMARY\nEvents\n37\nA"
+    },
+    "nextMetrics": {
+      "label": "after-next",
+      "titleText": "Agent Town",
+      "sourceLine": "smallville · 37 events",
+      "toolbarLine": "cursor 1\nvisible 9/37\nexpanded\n105%",
+      "hasTownDayStatus": true,
+      "hasTownDayAgents": true,
+      "hasFrameworkOverlay": false,
+      "horizontalOverflow": 0,
+      "canvasCount": 1,
+      "canvasRect": {
+        "x": 311,
+        "y": 110,
+        "width": 773,
+        "height": 669
+      },
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-smallville-day-001\nStatus\npaused\nCursor\n2 / 37\nEvents\n37\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nsmallville · 37 events\n\nMock\nJSONL\nTown day\nWS sample\nConnect\nDisconnect\nTown day run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n105%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / archive\nEVENT FILTERS\n\n4 / 10 types visible in Timeline.\n\nthinking\n3 events\nmessage\n7 events\ntool call\n7 events\nhandoff\n4 events\nmemory read\n4 events\nmemory write\n3 events\ndecision\n4 events\nblocked\n0 events\nerror\n0 events\ndone\n5 events\nAll\nNone\nCritical\n\nIsabella / memory_read / Recall yesterday's blocker\n\ncursor 1\nvisible 9/37\nexpanded\n105%\nRUN SUMMARY\nEvents\n37\nA"
+    },
+    "playMetrics": {
+      "label": "after-play",
+      "titleText": "Agent Town",
+      "sourceLine": "smallville · 37 events",
+      "toolbarLine": "cursor 1\nvisible 9/37\nexpanded\n105%",
+      "hasTownDayStatus": true,
+      "hasTownDayAgents": true,
+      "hasFrameworkOverlay": false,
+      "horizontalOverflow": 0,
+      "canvasCount": 1,
+      "canvasRect": {
+        "x": 311,
+        "y": 110,
+        "width": 773,
+        "height": 669
+      },
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-smallville-day-001\nStatus\nrunning\nCursor\n2 / 37\nEvents\n37\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nsmallville · 37 events\n\nMock\nJSONL\nTown day\nWS sample\nConnect\nDisconnect\nTown day run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n105%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / archive\nEVENT FILTERS\n\n4 / 10 types visible in Timeline.\n\nthinking\n3 events\nmessage\n7 events\ntool call\n7 events\nhandoff\n4 events\nmemory read\n4 events\nmemory write\n3 events\ndecision\n4 events\nblocked\n0 events\nerror\n0 events\ndone\n5 events\nAll\nNone\nCritical\n\nIsabella / memory_read / Recall yesterday's blocker\n\ncursor 1\nvisible 9/37\nexpanded\n105%\nRUN SUMMARY\nEvents\n37\n"
+    },
+    "mobileTopMetrics": {
+      "label": "mobile-top",
+      "titleText": "Agent Town",
+      "sourceLine": "smallville · 37 events",
+      "toolbarLine": "cursor 0\nvisible 37/37\nbalanced\n100%",
+      "hasTownDayStatus": true,
+      "hasTownDayAgents": true,
+      "hasFrameworkOverlay": false,
+      "horizontalOverflow": 0,
+      "canvasCount": 1,
+      "canvasRect": {
+        "x": 9,
+        "y": 1640,
+        "width": 372,
+        "height": 322
+      },
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-smallville-day-001\nStatus\npaused\nCursor\n1 / 37\nEvents\n37\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nsmallville · 37 events\n\nMock\nJSONL\nTown day\nWS sample\nConnect\nDisconnect\nTown day run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / thinking / town_hall\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n3 events\nmessage\n7 events\ntool call\n7 events\nhandoff\n4 events\nmemory read\n4 events\nmemory write\n3 events\ndecision\n4 events\nblocked\n0 events\nerror\n0 events\ndone\n5 events\nAll\nNone\nCritical\n\nIsabella / thinking / Wake and scan the day plan\n\ncursor 0\nvisible 37/37\nbalanced\n100%\nRUN SUMMARY\nEvents\n37"
+    },
+    "mobileMapMetrics": {
+      "label": "mobile-map",
+      "titleText": "Agent Town",
+      "sourceLine": "smallville · 37 events",
+      "toolbarLine": "cursor 0\nvisible 37/37\nbalanced\n100%",
+      "hasTownDayStatus": true,
+      "hasTownDayAgents": true,
+      "hasFrameworkOverlay": false,
+      "horizontalOverflow": 0,
+      "canvasCount": 1,
+      "canvasRect": {
+        "x": 9,
+        "y": 261,
+        "width": 372,
+        "height": 322
+      },
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-smallville-day-001\nStatus\npaused\nCursor\n1 / 37\nEvents\n37\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nsmallville · 37 events\n\nMock\nJSONL\nTown day\nWS sample\nConnect\nDisconnect\nTown day run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / thinking / town_hall\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n3 events\nmessage\n7 events\ntool call\n7 events\nhandoff\n4 events\nmemory read\n4 events\nmemory write\n3 events\ndecision\n4 events\nblocked\n0 events\nerror\n0 events\ndone\n5 events\nAll\nNone\nCritical\n\nIsabella / thinking / Wake and scan the day plan\n\ncursor 0\nvisible 37/37\nbalanced\n100%\nRUN SUMMARY\nEvents\n37"
+    }
+  },
+  "interactions": {
+    "townDayLoaded": true,
+    "expandedDensity": true,
+    "zoomChanged": true,
+    "bubblesToggleChanged": {
+      "before": "true",
+      "after": "false"
+    },
+    "edgesToggleChanged": {
+      "before": "true",
+      "after": "false"
+    },
+    "criticalFilterChangedVisibleSet": true,
+    "nextChangedCursor": true,
+    "playChangedState": true
+  },
+  "consoleMessages": [
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x13400544800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "location": {
+        "url": "http://127.0.0.1:5173/",
+        "line": 0,
+        "column": 0,
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1340054cc00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "location": {
+        "url": "http://127.0.0.1:5173/",
+        "line": 0,
+        "column": 0,
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x13400553800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "location": {
+        "url": "http://127.0.0.1:5173/",
+        "line": 0,
+        "column": 0,
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x1340054cc00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+      "location": {
+        "url": "http://127.0.0.1:5173/",
+        "line": 0,
+        "column": 0,
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    }
+  ],
+  "pageErrors": [],
+  "screenshots": {
+    "desktop": "docs/evidence/M5/smallville-day-desktop.png",
+    "interaction": "docs/evidence/M5/smallville-day-interaction.png",
+    "mobile": "docs/evidence/M5/smallville-day-mobile.png",
+    "mobileMap": "docs/evidence/M5/smallville-day-mobile-map.png"
+  }
+}

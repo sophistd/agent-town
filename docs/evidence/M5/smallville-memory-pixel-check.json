@@ -1,0 +1,30 @@
+[
+  {
+    "file": "docs/evidence/M5/smallville-memory-desktop.png",
+    "width": 1440,
+    "height": 960,
+    "unique_colors_64x64": 318,
+    "nonblank": true
+  },
+  {
+    "file": "docs/evidence/M5/smallville-memory-interaction.png",
+    "width": 1440,
+    "height": 960,
+    "unique_colors_64x64": 252,
+    "nonblank": true
+  },
+  {
+    "file": "docs/evidence/M5/smallville-memory-mobile.png",
+    "width": 780,
+    "height": 1688,
+    "unique_colors_64x64": 168,
+    "nonblank": true
+  },
+  {
+    "file": "docs/evidence/M5/smallville-memory-mobile-map.png",
+    "width": 780,
+    "height": 1688,
+    "unique_colors_64x64": 172,
+    "nonblank": true
+  }
+]

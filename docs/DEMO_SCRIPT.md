@@ -105,11 +105,67 @@ the runtime path instead of only watching a happy-path animation.
    `trace-websocket-sample`, and `metadata.source`. Explain that source-shaped
    input is normalized before projection.
 
-12. Quarantine expectation.
+12. Provider HTTP workbench source.
+
+   Start `pnpm world-memory:server` with an explicit
+   `AGENT_TOWN_WORLD_MEMORY_FILE`, then click `Provider HTTP`. Explain that the
+   browser posts the current event stream to `/provider-loop`, the local server
+   performs ingest, recall, Memory plan, and provider request construction, and
+   the browser replays returned canonical events. Without a local API key, this
+   still proves server-backed memory planning and surfaces
+   `missing_openai_api_key`.
+
+13. External runtime stream.
+
+   Run `pnpm smallville:runtime-stream` with explicit
+   `AGENT_TOWN_WORLD_MEMORY_FILE`, `AGENT_TOWN_RUNTIME_STREAM_OUTPUT`, and
+   `AGENT_TOWN_RUNTIME_STREAM_EVENTS_OUTPUT`. Explain that this is no longer a
+   JSONL file import or a browser button: a deterministic external runtime emits
+   canonical event batches over ticks, posts each tick to `/provider-loop`, and
+   records a secret-free summary. Without a local API key, provider events stay
+   empty and `missing_openai_api_key` remains visible.
+
+14. Bounded scheduler.
+
+   Run `pnpm smallville:scheduler` with explicit
+   `AGENT_TOWN_WORLD_MEMORY_FILE`, `AGENT_TOWN_SCHEDULER_OUTPUT`, and
+   `AGENT_TOWN_SCHEDULER_EVENTS_OUTPUT`. Explain that the scheduler adds a
+   virtual world clock and phase plan over routine, cognitive, and social ticks.
+   Each tick still emits canonical events and goes through `/provider-loop`;
+   memory accumulation across ticks is visible in the summary. Without a local
+   API key, provider events stay empty and `missing_openai_api_key` remains
+   visible.
+
+15. Supervised scheduler resume.
+
+   Run the scheduler once with `AGENT_TOWN_SCHEDULER_CHECKPOINT` and a small
+   `AGENT_TOWN_SCHEDULER_TICKS` value. Then rerun with
+   `AGENT_TOWN_SCHEDULER_RESUME=true`. Show that the second run starts at the
+   checkpoint's `nextTickIndex`, continues event sequences, and keeps memory
+   accumulation from the same file-backed world-memory store.
+
+16. Supervised elapsed-time scheduler window.
+
+   Run the scheduler with `AGENT_TOWN_SCHEDULER_MAX_ELAPSED_MS` and
+   `AGENT_TOWN_SCHEDULER_TICK_DELAY_MS`. Show that the runner stops with
+   `supervision.stopReason: "elapsed_time_limit_reached"` after completed
+   ticks, writes a checkpoint, and can resume from the checkpoint instead of
+   pretending the requested tick count completed.
+
+17. Quarantine expectation.
 
    If a bad input is tested, show that accepted events continue to replay while
    invalid events are quarantined. Do not let invalid input become a renderer
    branch.
+
+17. Graph View.
+
+   Click `Social day`, then inspect Graph View in the right panel. Toggle
+   message, handoff, declared, and diffusion filters; type an agent name or
+   evidence event id; use a `Latest` or sequence button to jump Timeline and
+   Detail back to the canonical event that created the relationship. Explain
+   that the graph reads `WorldState.relationships`; it does not create social
+   facts.
 
 ## Reviewer Checks
 
@@ -118,8 +174,20 @@ the runtime path instead of only watching a happy-path animation.
   memory -> done?
 - Can the reviewer locate where a blocked or error event happened?
 - Can the reviewer inspect a selected event without reading source code?
+- Can the reviewer filter relationship evidence and jump to the event that
+  produced it?
 - Can the reviewer see that JSONL and WebSocket paths use the same projection
   pipeline?
+- Can the reviewer see that Provider HTTP goes through the live local/server
+  provider-loop route before replay?
+- Can the reviewer see that `pnpm smallville:runtime-stream` sends ticked
+  external runtime batches through the same live provider-loop route?
+- Can the reviewer see that `pnpm smallville:scheduler` adds a bounded virtual
+  clock and phase plan without bypassing canonical `AgentEvent` replay?
+- Can the reviewer see scheduler resume continue from the checkpoint's
+  `nextTickIndex` instead of restarting from tick 0?
+- Can the reviewer see elapsed-time supervision stop after completed ticks and
+  preserve the next resumable tick in the checkpoint?
 - Can the reviewer name the current known limitation: generated placeholder
   visuals are deliberate until visual polish becomes the highest-risk work?
 

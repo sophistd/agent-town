@@ -1,0 +1,294 @@
+{
+  "date": "2026-07-10",
+  "url": "http://localhost:5173/",
+  "screenshots": {
+    "desktop": {
+      "path": "docs/evidence/M5/smallville-human-believability-rubric-desktop.png",
+      "bytes": 257515
+    },
+    "desktopInteraction": {
+      "path": "docs/evidence/M5/smallville-human-believability-rubric-desktop-interaction.png",
+      "bytes": 248525
+    },
+    "mobile": {
+      "path": "docs/evidence/M5/smallville-human-believability-rubric-mobile.png",
+      "bytes": 71739
+    },
+    "mobileMap": {
+      "path": "docs/evidence/M5/smallville-human-believability-rubric-mobile-map.png",
+      "bytes": 60684
+    },
+    "mobileSummary": {
+      "path": "docs/evidence/M5/smallville-human-believability-rubric-mobile-summary.png",
+      "bytes": 63925
+    }
+  },
+  "desktop": {
+    "hasHumanRubric": true,
+    "hasHumanReviewEvidence": true,
+    "hasHumanReviewGaps": true,
+    "hasSmallvilleEval": true,
+    "hasSelectedEvent": true,
+    "rubricMatch": "Human rubric 72/100",
+    "timelineEventCount": 150,
+    "firstTimelineLabel": "#00 \u00b7 16:00\nIsabella \u00b7 memory_write\nSeed party intervention",
+    "cursorText": "1 / 150 \u00b7 social-000",
+    "zoomText": "100%",
+    "bubblesPressed": "true",
+    "edgesPressed": "true",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "noHorizontalOverflow": true,
+    "canvas": {
+      "width": 1040,
+      "height": 900,
+      "clientWidth": 773,
+      "clientHeight": 669,
+      "nonzeroSamples": 0,
+      "sampleCount": 0,
+      "nonblank": false
+    }
+  },
+  "interactions": {
+    "zoomChanged": true,
+    "zoomBefore": "100%",
+    "zoomAfter": "105%",
+    "bubblesChanged": true,
+    "bubblesBefore": "true",
+    "bubblesAfter": "false",
+    "edgesChanged": true,
+    "edgesBefore": "true",
+    "edgesAfter": "false",
+    "criticalFilterChangedTimeline": true,
+    "timelineBeforeCritical": 150,
+    "timelineAfterCritical": 25,
+    "nextChangedCursor": true,
+    "cursorBeforeNext": "1 / 150 \u00b7 social-000",
+    "cursorAfterNext": "2 / 150 \u00b7 social-001",
+    "playAdvancedCursor": true,
+    "cursorAfterPlay": "3 / 150 \u00b7 social-002"
+  },
+  "mobile": {
+    "hasHumanRubric": true,
+    "hasHumanReviewEvidence": true,
+    "hasHumanReviewGaps": true,
+    "hasSmallvilleEval": true,
+    "hasSelectedEvent": true,
+    "rubricMatch": "Human rubric 72/100",
+    "timelineEventCount": 25,
+    "firstTimelineLabel": "#125 \u00b7 18:05\nIsabella \u00b7 done\nArrive at party",
+    "cursorText": "3 / 150 \u00b7 social-002",
+    "zoomText": "105%",
+    "bubblesPressed": "false",
+    "edgesPressed": "false",
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "noHorizontalOverflow": true,
+    "canvas": {
+      "width": 1040,
+      "height": 900,
+      "clientWidth": 372,
+      "clientHeight": 322,
+      "nonzeroSamples": 0,
+      "sampleCount": 0,
+      "nonblank": false
+    }
+  },
+  "browserDiagnostics": {
+    "consoleMessages": [
+      {
+        "type": "debug",
+        "text": "[vite] connecting..."
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connected."
+      },
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      },
+      {
+        "type": "log",
+        "text": "%cPhaser v4.2.0 (Canvas | Web Audio)%c https://phaser.io/v402 color: #ffffff; background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAARBJREFUeNpi/P//P0OHsPB/BiCoePuWkYFEwALSXJElzMBgLwE2CNkQxgWr/yMr/p8QimlBu5DQ//+8vBBco/ofzAe6imH+qv/53/6jYJAYSA4ZoxoANYTPKhiuCQZwGcJU+e4dqpMmvsDq14krV2MPAxDha2CMKvoXoiE/PBQUDgQD8j82UFae9B9bOIC8B9UD9gIjjIMN7Ns6lWHn4XMoYu62RgxO3tkMjIyMII2MYAOAtmFVhA+ADHf2ycGMRhANjUq8YO+WKWCvgAORIV8CkpDCrzIwsLIymC1qAtuAD4Bsh3sBmqAY3qcGwL2AC4DCpKtzHlgzOLWihwEuzTCN0GhDJHeYC4gByBphACDAAH2dDIxdjr+VAAAAAElFTkSuQmCC\"), linear-gradient(to bottom, #000814, #001d3d, #003566); background-repeat: no-repeat; background-position: 4px center, 0 0; padding: 2px 6px 2px 24px; background: transparent"
+      },
+      {
+        "type": "log",
+        "text": "%cPhaser v4.2.0 (Canvas | Web Audio)%c https://phaser.io/v402 color: #ffffff; background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAARBJREFUeNpi/P//P0OHsPB/BiCoePuWkYFEwALSXJElzMBgLwE2CNkQxgWr/yMr/p8QimlBu5DQ//+8vBBco/ofzAe6imH+qv/53/6jYJAYSA4ZoxoANYTPKhiuCQZwGcJU+e4dqpMmvsDq14krV2MPAxDha2CMKvoXoiE/PBQUDgQD8j82UFae9B9bOIC8B9UD9gIjjIMN7Ns6lWHn4XMoYu62RgxO3tkMjIyMII2MYAOAtmFVhA+ADHf2ycGMRhANjUq8YO+WKWCvgAORIV8CkpDCrzIwsLIymC1qAtuAD4Bsh3sBmqAY3qcGwL2AC4DCpKtzHlgzOLWihwEuzTCN0GhDJHeYC4gByBphACDAAH2dDIxdjr+VAAAAAElFTkSuQmCC\"), linear-gradient(to bottom, #000814, #001d3d, #003566); background-repeat: no-repeat; background-position: 4px center, 0 0; padding: 2px 6px 2px 24px; background: transparent"
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connecting..."
+      },
+      {
+        "type": "debug",
+        "text": "[vite] connected."
+      },
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      },
+      {
+        "type": "log",
+        "text": "%cPhaser v4.2.0 (Canvas | Web Audio)%c https://phaser.io/v402 color: #ffffff; background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAARBJREFUeNpi/P//P0OHsPB/BiCoePuWkYFEwALSXJElzMBgLwE2CNkQxgWr/yMr/p8QimlBu5DQ//+8vBBco/ofzAe6imH+qv/53/6jYJAYSA4ZoxoANYTPKhiuCQZwGcJU+e4dqpMmvsDq14krV2MPAxDha2CMKvoXoiE/PBQUDgQD8j82UFae9B9bOIC8B9UD9gIjjIMN7Ns6lWHn4XMoYu62RgxO3tkMjIyMII2MYAOAtmFVhA+ADHf2ycGMRhANjUq8YO+WKWCvgAORIV8CkpDCrzIwsLIymC1qAtuAD4Bsh3sBmqAY3qcGwL2AC4DCpKtzHlgzOLWihwEuzTCN0GhDJHeYC4gByBphACDAAH2dDIxdjr+VAAAAAElFTkSuQmCC\"), linear-gradient(to bottom, #000814, #001d3d, #003566); background-repeat: no-repeat; background-position: 4px center, 0 0; padding: 2px 6px 2px 24px; background: transparent"
+      },
+      {
+        "type": "log",
+        "text": "%cPhaser v4.2.0 (Canvas | Web Audio)%c https://phaser.io/v402 color: #ffffff; background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAARBJREFUeNpi/P//P0OHsPB/BiCoePuWkYFEwALSXJElzMBgLwE2CNkQxgWr/yMr/p8QimlBu5DQ//+8vBBco/ofzAe6imH+qv/53/6jYJAYSA4ZoxoANYTPKhiuCQZwGcJU+e4dqpMmvsDq14krV2MPAxDha2CMKvoXoiE/PBQUDgQD8j82UFae9B9bOIC8B9UD9gIjjIMN7Ns6lWHn4XMoYu62RgxO3tkMjIyMII2MYAOAtmFVhA+ADHf2ycGMRhANjUq8YO+WKWCvgAORIV8CkpDCrzIwsLIymC1qAtuAD4Bsh3sBmqAY3qcGwL2AC4DCpKtzHlgzOLWihwEuzTCN0GhDJHeYC4gByBphACDAAH2dDIxdjr+VAAAAAElFTkSuQmCC\"), linear-gradient(to bottom, #000814, #001d3d, #003566); background-repeat: no-repeat; background-position: 4px center, 0 0; padding: 2px 6px 2px 24px; background: transparent"
+      }
+    ],
+    "exceptions": [],
+    "logEntries": [],
+    "ignoredLogEntries": [],
+    "seriousErrorLogEntries": []
+  },
+  "requiredChecks": [
+    {
+      "name": "desktop human rubric",
+      "passed": true
+    },
+    {
+      "name": "desktop smallville eval",
+      "passed": true
+    },
+    {
+      "name": "desktop screenshot nonblank",
+      "passed": true
+    },
+    {
+      "name": "desktop no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "zoom changed",
+      "passed": true
+    },
+    {
+      "name": "bubbles toggle changed",
+      "passed": true
+    },
+    {
+      "name": "edges toggle changed",
+      "passed": true
+    },
+    {
+      "name": "critical filter changed timeline",
+      "passed": true
+    },
+    {
+      "name": "next changed cursor",
+      "passed": true
+    },
+    {
+      "name": "play advanced cursor",
+      "passed": true
+    },
+    {
+      "name": "mobile human rubric",
+      "passed": true
+    },
+    {
+      "name": "mobile screenshot nonblank",
+      "passed": true
+    },
+    {
+      "name": "mobile no horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "no runtime exceptions",
+      "passed": true
+    },
+    {
+      "name": "no serious browser error logs",
+      "passed": true
+    },
+    {
+      "name": "mobile map screenshot captured",
+      "passed": true
+    },
+    {
+      "name": "mobile summary has human rubric",
+      "passed": true
+    },
+    {
+      "name": "playwright desktop screenshot captured",
+      "passed": true
+    },
+    {
+      "name": "playwright mobile screenshot captured",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "screenshotPixelChecks": {
+    "desktop": {
+      "path": "docs/evidence/M5/smallville-human-believability-rubric-desktop.png",
+      "width": 1440,
+      "height": 960,
+      "sampleCount": 25,
+      "uniqueSampleColors": 13,
+      "nonblackSamples": 25,
+      "nonblank": true
+    },
+    "desktopInteraction": {
+      "path": "docs/evidence/M5/smallville-human-believability-rubric-desktop-interaction.png",
+      "width": 1440,
+      "height": 960,
+      "sampleCount": 25,
+      "uniqueSampleColors": 13,
+      "nonblackSamples": 25,
+      "nonblank": true
+    },
+    "mobile": {
+      "path": "docs/evidence/M5/smallville-human-believability-rubric-mobile.png",
+      "width": 390,
+      "height": 844,
+      "sampleCount": 25,
+      "uniqueSampleColors": 6,
+      "nonblackSamples": 25,
+      "nonblank": true
+    },
+    "mobileMap": {
+      "path": "docs/evidence/M5/smallville-human-believability-rubric-mobile-map.png",
+      "width": 390,
+      "height": 844,
+      "sampleCount": 25,
+      "uniqueSampleColors": 11,
+      "nonblackSamples": 25,
+      "nonblank": true
+    },
+    "mobileSummary": {
+      "path": "docs/evidence/M5/smallville-human-believability-rubric-mobile-summary.png",
+      "width": 390,
+      "height": 844,
+      "sampleCount": 25,
+      "uniqueSampleColors": 3,
+      "nonblackSamples": 25,
+      "nonblank": true
+    }
+  },
+  "mobileDedicatedScreens": {
+    "mapVisible": true,
+    "summaryHasHumanRubric": true,
+    "noHorizontalOverflow": true
+  },
+  "playwrightCliScreenshots": {
+    "desktop": {
+      "path": "docs/evidence/M5/smallville-human-believability-rubric-playwright-desktop.png",
+      "width": 1440,
+      "height": 960,
+      "bytes": 182719,
+      "uniqueSampleColors": 5,
+      "nonblank": true
+    },
+    "mobile": {
+      "path": "docs/evidence/M5/smallville-human-believability-rubric-playwright-mobile.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 71678,
+      "uniqueSampleColors": 5,
+      "nonblank": true
+    }
+  }
+}

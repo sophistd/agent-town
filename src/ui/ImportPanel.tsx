@@ -2,7 +2,20 @@ import { useState, type CSSProperties } from "react";
 
 import type { AdapterQuarantinedEvent, AdapterWarning } from "../adapters/types";
 
-export type ImportSourceKind = "jsonl" | "mock" | "websocket";
+export type ImportSourceKind =
+  | "adaptive-routine"
+  | "cognitive"
+  | "intervention"
+  | "jsonl"
+  | "llm-plan"
+  | "memory"
+  | "memory-plan"
+  | "mock"
+  | "provider-loop-http"
+  | "routine"
+  | "smallville"
+  | "social"
+  | "websocket";
 export type ImportStatusLevel = "error" | "idle" | "ok" | "warning";
 
 export type ImportPanelStatus = {
@@ -13,12 +26,26 @@ export type ImportPanelStatus = {
 type ImportPanelProps = {
   activeSource: ImportSourceKind;
   eventCount: number;
+  initialInterventionPrompt: string;
   initialJsonlInput: string;
+  isProviderLoopLoading: boolean;
   onConnectWebSocket: (url: string) => void;
   onDisconnectWebSocket: () => void;
+  onImportIntervention: (prompt: string) => void;
   onImportJsonl: (input: string) => void;
+  onLoadCognitiveRun: () => void;
+  onLoadAgentMemoryPlan: () => void;
+  onLoadAdaptiveRoutineRun: () => void;
+  onLoadLlmPlannerRun: () => void;
+  onLoadPersistentMemory: () => void;
   onLoadMock: () => void;
+  onLoadRoutineRun: () => void;
+  onLoadSocialRun: () => void;
+  onLoadSmallvilleDay: () => void;
   onLoadWebSocketSample: () => void;
+  onRunProviderLoopHttp: (url: string) => void;
+  persistentMemoryCount: number;
+  providerLoopHttpUrl: string;
   quarantinedEvents: readonly AdapterQuarantinedEvent[];
   status: ImportPanelStatus;
   warnings: readonly AdapterWarning[];
@@ -50,13 +77,15 @@ const mutedTextStyle = {
 
 const sourceGridStyle = {
   display: "grid",
-  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
   gap: "6px",
 } satisfies CSSProperties;
 
 const buttonStyle = {
   minHeight: "32px",
-  border: "1px solid rgba(143, 170, 157, 0.24)",
+  borderStyle: "solid",
+  borderWidth: "1px",
+  borderColor: "rgba(143, 170, 157, 0.24)",
   borderRadius: "6px",
   background: "#162427",
   color: "#d9e4de",
@@ -76,7 +105,9 @@ const inputStyle = {
   width: "100%",
   minWidth: 0,
   boxSizing: "border-box",
-  border: "1px solid rgba(143, 170, 157, 0.24)",
+  borderStyle: "solid",
+  borderWidth: "1px",
+  borderColor: "rgba(143, 170, 157, 0.24)",
   borderRadius: "6px",
   background: "#0f181b",
   color: "#d9e4de",
@@ -102,21 +133,29 @@ const actionRowStyle = {
 
 const statusStyleByLevel: Record<ImportStatusLevel, CSSProperties> = {
   error: {
+    borderStyle: "solid",
+    borderWidth: "1px",
     borderColor: "rgba(255, 141, 120, 0.52)",
     background: "#321c1a",
     color: "#ffb5a6",
   },
   idle: {
+    borderStyle: "solid",
+    borderWidth: "1px",
     borderColor: "rgba(143, 170, 157, 0.24)",
     background: "#101a1d",
     color: "#95aaa0",
   },
   ok: {
+    borderStyle: "solid",
+    borderWidth: "1px",
     borderColor: "rgba(117, 201, 164, 0.54)",
     background: "#163027",
     color: "#9ae6b5",
   },
   warning: {
+    borderStyle: "solid",
+    borderWidth: "1px",
     borderColor: "rgba(240, 195, 90, 0.54)",
     background: "#332915",
     color: "#f0d585",
@@ -125,7 +164,6 @@ const statusStyleByLevel: Record<ImportStatusLevel, CSSProperties> = {
 
 function statusBoxStyle(level: ImportStatusLevel): CSSProperties {
   return {
-    border: "1px solid",
     borderRadius: "6px",
     padding: "8px",
     fontSize: "12px",
@@ -138,21 +176,44 @@ function buttonStyleFor(source: ImportSourceKind, activeSource: ImportSourceKind
   return source === activeSource ? activeButtonStyle : buttonStyle;
 }
 
+function warningSummary(warnings: readonly AdapterWarning[]): string {
+  return warnings
+    .slice(0, 4)
+    .map((warning) => warning.code)
+    .join(", ");
+}
+
 export function ImportPanel({
   activeSource,
   eventCount,
+  initialInterventionPrompt,
   initialJsonlInput,
+  isProviderLoopLoading,
   onConnectWebSocket,
   onDisconnectWebSocket,
+  onImportIntervention,
   onImportJsonl,
+  onLoadCognitiveRun,
+  onLoadAgentMemoryPlan,
+  onLoadAdaptiveRoutineRun,
+  onLoadLlmPlannerRun,
+  onLoadPersistentMemory,
   onLoadMock,
+  onLoadRoutineRun,
+  onLoadSocialRun,
+  onLoadSmallvilleDay,
   onLoadWebSocketSample,
+  onRunProviderLoopHttp,
+  persistentMemoryCount,
+  providerLoopHttpUrl,
   quarantinedEvents,
   status,
   warnings,
   webSocketUrl,
 }: ImportPanelProps) {
+  const [interventionPrompt, setInterventionPrompt] = useState(initialInterventionPrompt);
   const [jsonlInput, setJsonlInput] = useState(initialJsonlInput);
+  const [providerLoopInput, setProviderLoopInput] = useState(providerLoopHttpUrl);
   const [urlInput, setUrlInput] = useState(webSocketUrl);
 
   return (
@@ -183,13 +244,104 @@ export function ImportPanel({
         </button>
         <button
           type="button"
+          style={buttonStyleFor("smallville", activeSource)}
+          onClick={onLoadSmallvilleDay}
+          aria-pressed={activeSource === "smallville"}
+        >
+          Town day
+        </button>
+        <button
+          type="button"
+          style={buttonStyleFor("cognitive", activeSource)}
+          onClick={onLoadCognitiveRun}
+          aria-pressed={activeSource === "cognitive"}
+        >
+          Cognitive
+        </button>
+        <button
+          type="button"
+          style={buttonStyleFor("social", activeSource)}
+          onClick={onLoadSocialRun}
+          aria-pressed={activeSource === "social"}
+        >
+          Social day
+        </button>
+        <button
+          type="button"
+          style={buttonStyleFor("routine", activeSource)}
+          onClick={onLoadRoutineRun}
+          aria-pressed={activeSource === "routine"}
+        >
+          Routine day
+        </button>
+        <button
+          type="button"
+          style={buttonStyleFor("adaptive-routine", activeSource)}
+          onClick={onLoadAdaptiveRoutineRun}
+          aria-pressed={activeSource === "adaptive-routine"}
+        >
+          Adaptive routine
+        </button>
+        <button
+          type="button"
+          style={buttonStyleFor("intervention", activeSource)}
+          onClick={() => onImportIntervention(interventionPrompt)}
+          aria-pressed={activeSource === "intervention"}
+        >
+          Intervention
+        </button>
+        <button
+          type="button"
+          style={buttonStyleFor("memory", activeSource)}
+          onClick={onLoadPersistentMemory}
+          aria-pressed={activeSource === "memory"}
+        >
+          Memory
+        </button>
+        <button
+          type="button"
+          style={buttonStyleFor("memory-plan", activeSource)}
+          onClick={onLoadAgentMemoryPlan}
+          aria-pressed={activeSource === "memory-plan"}
+        >
+          Memory plan
+        </button>
+        <button
+          type="button"
+          style={buttonStyleFor("llm-plan", activeSource)}
+          onClick={onLoadLlmPlannerRun}
+          aria-pressed={activeSource === "llm-plan"}
+        >
+          LLM plan
+        </button>
+        <button
+          type="button"
           style={buttonStyleFor("websocket", activeSource)}
           onClick={onLoadWebSocketSample}
           aria-pressed={activeSource === "websocket"}
         >
           WS sample
         </button>
+        <button
+          type="button"
+          style={buttonStyleFor("provider-loop-http", activeSource)}
+          onClick={() => onRunProviderLoopHttp(providerLoopInput)}
+          aria-pressed={activeSource === "provider-loop-http"}
+          disabled={isProviderLoopLoading}
+        >
+          Provider HTTP
+        </button>
       </div>
+
+      <p style={mutedTextStyle}>Memory bank · {persistentMemoryCount} records</p>
+
+      <textarea
+        style={textareaStyle}
+        value={interventionPrompt}
+        onChange={(event) => setInterventionPrompt(event.currentTarget.value)}
+        aria-label="Natural language intervention input"
+        spellCheck={true}
+      />
 
       <textarea
         style={textareaStyle}
@@ -198,6 +350,23 @@ export function ImportPanel({
         aria-label="JSONL import input"
         spellCheck={false}
       />
+
+      <div style={actionRowStyle}>
+        <input
+          style={inputStyle}
+          value={providerLoopInput}
+          onChange={(event) => setProviderLoopInput(event.currentTarget.value)}
+          aria-label="Provider loop HTTP URL"
+        />
+        <button
+          type="button"
+          style={buttonStyle}
+          onClick={() => onRunProviderLoopHttp(providerLoopInput)}
+          disabled={isProviderLoopLoading}
+        >
+          Run loop
+        </button>
+      </div>
 
       <div style={actionRowStyle}>
         <input
@@ -229,6 +398,12 @@ export function ImportPanel({
         <p style={mutedTextStyle}>
           Latest quarantine: {quarantinedEvents[0]?.code} ·{" "}
           {quarantinedEvents[0]?.issues[0]?.message ?? "unknown issue"}
+        </p>
+      ) : null}
+
+      {warnings.length > 0 ? (
+        <p style={mutedTextStyle}>
+          Warning codes: {warningSummary(warnings)}
         </p>
       ) : null}
     </section>

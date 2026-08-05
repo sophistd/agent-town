@@ -1,0 +1,205 @@
+{
+  "url": "http://127.0.0.1:5174/",
+  "source": "Routine day",
+  "screenshots": {
+    "desktop": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-routine-desktop.png",
+    "interaction": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-routine-interaction.png",
+    "mobile": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-routine-mobile.png",
+    "mobileMap": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-routine-mobile-map.png",
+    "qa": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-routine-qa.json",
+    "pixel": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-routine-pixel-check.json"
+  },
+  "desktop": {
+    "state": {
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-smallville-routine-001\nStatus\npaused\nCursor\n1 / 150\nEvents\n150\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nroutine · 150 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nRoutine day\nIntervention\nMemory\nMemory plan\nWS sample\n\nMemory bank · 75 records\n\nConnect\nDisconnect\nRoutine day run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / town_hall\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n19 events\nmessage\n17 events\ntool call\n3 events\nhandoff\n5 events\nmemory read\n25 events\nmemory write\n50 events\ndecision\n25 events\nblocked\n6 events\nerror\n0 events\ndone\n0 events\nAll\nNone\nCritical\n\nIsabella / memory_write / Observe daily intention\n\ncursor 0\nvisible 150/150\nexpanded\n100%\nRUN SUMMARY\nEvents\n150\nAgents\n25\nHandoffs\n5\nTool calls\n3\nMemory actions\n75\nBlocked\n6\nErrors\n0\nFirst blocked: routine-098\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: routine-000\nSelected event: routine-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nworking\nLocation\ntown_hall\nSelected Event\nID\nroutine-000\nSequence\n0\nTimestamp\n2026-07-04T17:00:00.000Z\nRun ID\nrun-smallville-routine-001\nTask ID\ntask-smallville-routine-scheduler\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_write\nStatus\nrunning\nSummary\nObserve daily intention\nContent\nIsabella starts the day intending to host a small Valentine's gathering by the fountain.\nTarget\nagent=none; task=task-smallville-routine-scheduler\nTool\nnone\nTool input\nnone\nTool output\nnone\nArtifacts\nnone\nFile path\nnone\nMetrics\nnone\nMetadata\n{\"source\":\"mock\",\"tags\":[\"smallville-routine\",\"observation\",\"wake\",\"town_hall_table\"],\"cognitiveStage\":\"observation\",\"subLocationId\":\"town_hall_table\",\"activity\":\"checks daily routine\",\"persona\":\"Hosts civic rituals and turns one suggestion into a coordinated plan.\",\"relationships\":[\"agent-klaus\",\"agent-mei\",\"agent-sam\"],\"routine\":{\"dayId\":\"smallville-routine-day-2026-07-04\",\"phase\":\"wake\",\"segmentId\":\"agent-isabella-wake\",\"startMinute\":480,\"endMinute\":485,\"scheduledLocation\":\"town_hall\",\"scheduledSubLocationId\":\"town_hall_table\",\"plannedActivity\":\"checks daily routine\",\"intention\":\"host a small Valentine's gathering by the fountain\"},\"memoryKind\":\"observation\",\"memoryId\":\"agent-isabella-observation-000\",\"importance\":8}\n{\n  \"id\": \"routine-000\",\n  \"runId\": \"run-smallville-",
+      "canvasCount": 1,
+      "canvasRect": {
+        "x": 311,
+        "y": 110,
+        "width": 773,
+        "height": 669
+      },
+      "expandedPressed": "true",
+      "headerText": "ATAgent TownAgentEvent-driven runtime projectionRun IDrun-smallville-routine-001StatuspausedCursor1 / 150Events150Warnings0Quarantine0",
+      "horizontalOverflow": 0,
+      "importSource": "routine · 150 events",
+      "statusLine": "Routine day run loaded.warnings=0; quarantined=0",
+      "toolbarText": "Isabella / memory_write / Observe daily intentioncursor 0visible 150/150expanded100%",
+      "visibleCount": "visible 150/150",
+      "zoomInputValue": "1",
+      "zoomLabel": "Town zoom100%"
+    },
+    "afterZoomState": {
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-smallville-routine-001\nStatus\npaused\nCursor\n1 / 150\nEvents\n150\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nroutine · 150 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nRoutine day\nIntervention\nMemory\nMemory plan\nWS sample\n\nMemory bank · 75 records\n\nConnect\nDisconnect\nRoutine day run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n105%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / town_hall\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n19 events\nmessage\n17 events\ntool call\n3 events\nhandoff\n5 events\nmemory read\n25 events\nmemory write\n50 events\ndecision\n25 events\nblocked\n6 events\nerror\n0 events\ndone\n0 events\nAll\nNone\nCritical\n\nIsabella / memory_write / Observe daily intention\n\ncursor 0\nvisible 150/150\nexpanded\n105%\nRUN SUMMARY\nEvents\n150\nAgents\n25\nHandoffs\n5\nTool calls\n3\nMemory actions\n75\nBlocked\n6\nErrors\n0\nFirst blocked: routine-098\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: routine-000\nSelected event: routine-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nworking\nLocation\ntown_hall\nSelected Event\nID\nroutine-000\nSequence\n0\nTimestamp\n2026-07-04T17:00:00.000Z\nRun ID\nrun-smallville-routine-001\nTask ID\ntask-smallville-routine-scheduler\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_write\nStatus\nrunning\nSummary\nObserve daily intention\nContent\nIsabella starts the day intending to host a small Valentine's gathering by the fountain.\nTarget\nagent=none; task=task-smallville-routine-scheduler\nTool\nnone\nTool input\nnone\nTool output\nnone\nArtifacts\nnone\nFile path\nnone\nMetrics\nnone\nMetadata\n{\"source\":\"mock\",\"tags\":[\"smallville-routine\",\"observation\",\"wake\",\"town_hall_table\"],\"cognitiveStage\":\"observation\",\"subLocationId\":\"town_hall_table\",\"activity\":\"checks daily routine\",\"persona\":\"Hosts civic rituals and turns one suggestion into a coordinated plan.\",\"relationships\":[\"agent-klaus\",\"agent-mei\",\"agent-sam\"],\"routine\":{\"dayId\":\"smallville-routine-day-2026-07-04\",\"phase\":\"wake\",\"segmentId\":\"agent-isabella-wake\",\"startMinute\":480,\"endMinute\":485,\"scheduledLocation\":\"town_hall\",\"scheduledSubLocationId\":\"town_hall_table\",\"plannedActivity\":\"checks daily routine\",\"intention\":\"host a small Valentine's gathering by the fountain\"},\"memoryKind\":\"observation\",\"memoryId\":\"agent-isabella-observation-000\",\"importance\":8}\n{\n  \"id\": \"routine-000\",\n  \"runId\": \"run-smallville-",
+      "canvasCount": 1,
+      "canvasRect": {
+        "x": 311,
+        "y": 110,
+        "width": 773,
+        "height": 669
+      },
+      "expandedPressed": "true",
+      "headerText": "ATAgent TownAgentEvent-driven runtime projectionRun IDrun-smallville-routine-001StatuspausedCursor1 / 150Events150Warnings0Quarantine0",
+      "horizontalOverflow": 0,
+      "importSource": "routine · 150 events",
+      "statusLine": "Routine day run loaded.warnings=0; quarantined=0",
+      "toolbarText": "Isabella / memory_write / Observe daily intentioncursor 0visible 150/150expanded105%",
+      "visibleCount": "visible 150/150",
+      "zoomInputValue": "1.05",
+      "zoomLabel": "Town zoom105%"
+    },
+    "afterCriticalState": {
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-smallville-routine-001\nStatus\npaused\nCursor\n1 / 150\nEvents\n150\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nroutine · 150 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nRoutine day\nIntervention\nMemory\nMemory plan\nWS sample\n\nMemory bank · 75 records\n\nConnect\nDisconnect\nRoutine day run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n105%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / town_hall\nEVENT FILTERS\n\n4 / 10 types visible in Timeline.\n\nthinking\n19 events\nmessage\n17 events\ntool call\n3 events\nhandoff\n5 events\nmemory read\n25 events\nmemory write\n50 events\ndecision\n25 events\nblocked\n6 events\nerror\n0 events\ndone\n0 events\nAll\nNone\nCritical\n\nIsabella / memory_write / Observe daily intention\n\ncursor 0\nvisible 11/150\nexpanded\n105%\nRUN SUMMARY\nEvents\n150\nAgents\n25\nHandoffs\n5\nTool calls\n3\nMemory actions\n75\nBlocked\n6\nErrors\n0\nFirst blocked: routine-098\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: routine-000\nSelected event: routine-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nworking\nLocation\ntown_hall\nSelected Event\nID\nroutine-000\nSequence\n0\nTimestamp\n2026-07-04T17:00:00.000Z\nRun ID\nrun-smallville-routine-001\nTask ID\ntask-smallville-routine-scheduler\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_write\nStatus\nrunning\nSummary\nObserve daily intention\nContent\nIsabella starts the day intending to host a small Valentine's gathering by the fountain.\nTarget\nagent=none; task=task-smallville-routine-scheduler\nTool\nnone\nTool input\nnone\nTool output\nnone\nArtifacts\nnone\nFile path\nnone\nMetrics\nnone\nMetadata\n{\"source\":\"mock\",\"tags\":[\"smallville-routine\",\"observation\",\"wake\",\"town_hall_table\"],\"cognitiveStage\":\"observation\",\"subLocationId\":\"town_hall_table\",\"activity\":\"checks daily routine\",\"persona\":\"Hosts civic rituals and turns one suggestion into a coordinated plan.\",\"relationships\":[\"agent-klaus\",\"agent-mei\",\"agent-sam\"],\"routine\":{\"dayId\":\"smallville-routine-day-2026-07-04\",\"phase\":\"wake\",\"segmentId\":\"agent-isabella-wake\",\"startMinute\":480,\"endMinute\":485,\"scheduledLocation\":\"town_hall\",\"scheduledSubLocationId\":\"town_hall_table\",\"plannedActivity\":\"checks daily routine\",\"intention\":\"host a small Valentine's gathering by the fountain\"},\"memoryKind\":\"observation\",\"memoryId\":\"agent-isabella-observation-000\",\"importance\":8}\n{\n  \"id\": \"routine-000\",\n  \"runId\": \"run-smallville-ro",
+      "canvasCount": 1,
+      "canvasRect": {
+        "x": 311,
+        "y": 110,
+        "width": 773,
+        "height": 669
+      },
+      "expandedPressed": "true",
+      "headerText": "ATAgent TownAgentEvent-driven runtime projectionRun IDrun-smallville-routine-001StatuspausedCursor1 / 150Events150Warnings0Quarantine0",
+      "horizontalOverflow": 0,
+      "importSource": "routine · 150 events",
+      "statusLine": "Routine day run loaded.warnings=0; quarantined=0",
+      "toolbarText": "Isabella / memory_write / Observe daily intentioncursor 0visible 11/150expanded105%",
+      "visibleCount": "visible 11/150",
+      "zoomInputValue": "1.05",
+      "zoomLabel": "Town zoom105%"
+    },
+    "canvasSample": {
+      "canvasCount": 1,
+      "width": 774,
+      "height": 669,
+      "nonblank": true,
+      "sampledUniqueColors": 179,
+      "sampledNonWhitePixels": 4354
+    },
+    "checks": {
+      "sourceLoaded": true,
+      "statusLoaded": true,
+      "runIdVisible": true,
+      "eventCountVisible": true,
+      "agentCountVisible": true,
+      "memoryActionsVisible": true,
+      "blockedCountVisible": true,
+      "warningsZero": true,
+      "quarantineZero": true,
+      "expandedDensity": true,
+      "horizontalOverflowZero": true
+    },
+    "interactions": {
+      "zoomChanged": true,
+      "zoomBefore": "1",
+      "zoomAfter": "1.05",
+      "bubblesToggle": {
+        "before": "true",
+        "after": "false"
+      },
+      "edgesToggle": {
+        "before": "true",
+        "after": "false"
+      },
+      "criticalVisibleChanged": true,
+      "nextChangedCursor": true,
+      "playChangedStatus": true
+    },
+    "assetResponses": [
+      {
+        "url": "http://127.0.0.1:5174/maps/town-v1-preview.png",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:5174/tilesets/agent-town-v1.png",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:5174/sprites/agent-roles-v1.png",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:5174/sprites/buildings-v1.png",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:5174/maps/town-v1-preview.png",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:5174/tilesets/agent-town-v1.png",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:5174/sprites/agent-roles-v1.png",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:5174/sprites/buildings-v1.png",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:5174/maps/town-v1.tiled.json",
+        "status": 200
+      }
+    ],
+    "pageErrors": [],
+    "relevantConsoleIssues": [],
+    "rawConsoleIssueCount": 9
+  },
+  "mobile": {
+    "state": {
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-smallville-routine-001\nStatus\npaused\nCursor\n1 / 150\nEvents\n150\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nroutine · 150 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nRoutine day\nIntervention\nMemory\nMemory plan\nWS sample\n\nMemory bank · 75 records\n\nConnect\nDisconnect\nRoutine day run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / town_hall\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n19 events\nmessage\n17 events\ntool call\n3 events\nhandoff\n5 events\nmemory read\n25 events\nmemory write\n50 events\ndecision\n25 events\nblocked\n6 events\nerror\n0 events\ndone\n0 events\nAll\nNone\nCritical\n\nIsabella / memory_write / Observe daily intention\n\ncursor 0\nvisible 150/150\nbalanced\n100%\nRUN SUMMARY\nEvents\n150\nAgents\n25\nHandoffs\n5\nTool calls\n3\nMemory actions\n75\nBlocked\n6\nErrors\n0\nFirst blocked: routine-098\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: routine-000\nSelected event: routine-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nworking\nLocation\ntown_hall\nSelected Event\nID\nroutine-000\nSequence\n0\nTimestamp\n2026-07-04T17:00:00.000Z\nRun ID\nrun-smallville-routine-001\nTask ID\ntask-smallville-routine-scheduler\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_write\nStatus\nrunning\nSummary\nObserve daily intention\nContent\nIsabella starts the day intending to host a small Valentine's gathering by the fountain.\nTarget\nagent=none; task=task-smallville-routine-scheduler\nTool\nnone\nTool input\nnone\nTool output\nnone\nArtifacts\nnone\nFile path\nnone\nMetrics\nnone\nMetadata\n{\"source\":\"mock\",\"tags\":[\"smallville-routine\",\"observation\",\"wake\",\"town_hall_table\"],\"cognitiveStage\":\"observation\",\"subLocationId\":\"town_hall_table\",\"activity\":\"checks daily routine\",\"persona\":\"Hosts civic rituals and turns one suggestion into a coordinated plan.\",\"relationships\":[\"agent-klaus\",\"agent-mei\",\"agent-sam\"],\"routine\":{\"dayId\":\"smallville-routine-day-2026-07-04\",\"phase\":\"wake\",\"segmentId\":\"agent-isabella-wake\",\"startMinute\":480,\"endMinute\":485,\"scheduledLocation\":\"town_hall\",\"scheduledSubLocationId\":\"town_hall_table\",\"plannedActivity\":\"checks daily routine\",\"intention\":\"host a small Valentine's gathering by the fountain\"},\"memoryKind\":\"observation\",\"memoryId\":\"agent-isabella-observation-000\",\"importance\":8}\n{\n  \"id\": \"routine-000\",\n  \"runId\": \"run-smallville-",
+      "canvasCount": 1,
+      "canvasRect": {
+        "x": 9,
+        "y": 1883,
+        "width": 372,
+        "height": 322
+      },
+      "expandedPressed": "false",
+      "headerText": "ATAgent TownAgentEvent-driven runtime projectionRun IDrun-smallville-routine-001StatuspausedCursor1 / 150Events150Warnings0Quarantine0",
+      "horizontalOverflow": 0,
+      "importSource": "routine · 150 events",
+      "statusLine": "Routine day run loaded.warnings=0; quarantined=0",
+      "toolbarText": "Isabella / memory_write / Observe daily intentioncursor 0visible 150/150balanced100%",
+      "visibleCount": "visible 150/150",
+      "zoomInputValue": "1",
+      "zoomLabel": "Town zoom100%"
+    },
+    "mapState": {
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-smallville-routine-001\nStatus\npaused\nCursor\n1 / 150\nEvents\n150\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nroutine · 150 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nRoutine day\nIntervention\nMemory\nMemory plan\nWS sample\n\nMemory bank · 75 records\n\nConnect\nDisconnect\nRoutine day run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / town_hall\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n19 events\nmessage\n17 events\ntool call\n3 events\nhandoff\n5 events\nmemory read\n25 events\nmemory write\n50 events\ndecision\n25 events\nblocked\n6 events\nerror\n0 events\ndone\n0 events\nAll\nNone\nCritical\n\nIsabella / memory_write / Observe daily intention\n\ncursor 0\nvisible 150/150\nbalanced\n100%\nRUN SUMMARY\nEvents\n150\nAgents\n25\nHandoffs\n5\nTool calls\n3\nMemory actions\n75\nBlocked\n6\nErrors\n0\nFirst blocked: routine-098\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: routine-000\nSelected event: routine-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nworking\nLocation\ntown_hall\nSelected Event\nID\nroutine-000\nSequence\n0\nTimestamp\n2026-07-04T17:00:00.000Z\nRun ID\nrun-smallville-routine-001\nTask ID\ntask-smallville-routine-scheduler\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_write\nStatus\nrunning\nSummary\nObserve daily intention\nContent\nIsabella starts the day intending to host a small Valentine's gathering by the fountain.\nTarget\nagent=none; task=task-smallville-routine-scheduler\nTool\nnone\nTool input\nnone\nTool output\nnone\nArtifacts\nnone\nFile path\nnone\nMetrics\nnone\nMetadata\n{\"source\":\"mock\",\"tags\":[\"smallville-routine\",\"observation\",\"wake\",\"town_hall_table\"],\"cognitiveStage\":\"observation\",\"subLocationId\":\"town_hall_table\",\"activity\":\"checks daily routine\",\"persona\":\"Hosts civic rituals and turns one suggestion into a coordinated plan.\",\"relationships\":[\"agent-klaus\",\"agent-mei\",\"agent-sam\"],\"routine\":{\"dayId\":\"smallville-routine-day-2026-07-04\",\"phase\":\"wake\",\"segmentId\":\"agent-isabella-wake\",\"startMinute\":480,\"endMinute\":485,\"scheduledLocation\":\"town_hall\",\"scheduledSubLocationId\":\"town_hall_table\",\"plannedActivity\":\"checks daily routine\",\"intention\":\"host a small Valentine's gathering by the fountain\"},\"memoryKind\":\"observation\",\"memoryId\":\"agent-isabella-observation-000\",\"importance\":8}\n{\n  \"id\": \"routine-000\",\n  \"runId\": \"run-smallville-",
+      "canvasCount": 1,
+      "canvasRect": {
+        "x": 9,
+        "y": 261,
+        "width": 372,
+        "height": 322
+      },
+      "expandedPressed": "false",
+      "headerText": "ATAgent TownAgentEvent-driven runtime projectionRun IDrun-smallville-routine-001StatuspausedCursor1 / 150Events150Warnings0Quarantine0",
+      "horizontalOverflow": 0,
+      "importSource": "routine · 150 events",
+      "statusLine": "Routine day run loaded.warnings=0; quarantined=0",
+      "toolbarText": "Isabella / memory_write / Observe daily intentioncursor 0visible 150/150balanced100%",
+      "visibleCount": "visible 150/150",
+      "zoomInputValue": "1",
+      "zoomLabel": "Town zoom100%"
+    },
+    "canvasSample": {
+      "canvasCount": 1,
+      "width": 744,
+      "height": 646,
+      "nonblank": true,
+      "sampledUniqueColors": 197,
+      "sampledNonWhitePixels": 4420
+    },
+    "checks": {
+      "sourceLoaded": true,
+      "horizontalOverflowZero": true,
+      "canvasVisible": true
+    },
+    "pageErrors": [],
+    "relevantConsoleIssues": [],
+    "rawConsoleIssueCount": 5
+  }
+}

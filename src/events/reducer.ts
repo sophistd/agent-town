@@ -10,6 +10,8 @@ import type {
   EventWarning,
   ProjectionEdge,
   ProjectionEdgeKind,
+  RelationshipKind,
+  RelationshipState,
   RunSummary,
   WorldState,
 } from "./types";
@@ -27,6 +29,7 @@ export function createInitialWorldState(runId: string): WorldState {
     agents: {},
     visibleBubbles: {},
     edges: [],
+    relationships: {},
     runSummary: { ...DEFAULT_RUN_SUMMARY },
     warnings: [],
     quarantinedEvents: [],
@@ -165,12 +168,161 @@ function appendDefined<T>(items: T[], item: T | undefined): T[] {
   return item === undefined ? items : [...items, item];
 }
 
+function readStringMetadata(event: AgentEvent, key: string): string | undefined {
+  const value = event.metadata?.[key];
+
+  return typeof value === "string" && value.trim().length > 0 ? value : undefined;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function readStringArrayMetadata(event: AgentEvent, key: string): string[] {
+  const value = event.metadata?.[key];
+
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+}
+
+function relationshipIdFor(leftAgentId: string, rightAgentId: string): string {
+  return [leftAgentId, rightAgentId].sort((left, right) => left.localeCompare(right)).join("__");
+}
+
+function strengthForRelationshipKind(kind: RelationshipKind): number {
+  switch (kind) {
+    case "message":
+      return 4;
+    case "handoff":
+      return 3;
+    case "diffusion":
+      return 2;
+    case "declared":
+      return 1;
+  }
+}
+
+function appendEvidenceEventId(existingIds: readonly string[], eventId: string): string[] {
+  const nextIds = existingIds.includes(eventId) ? [...existingIds] : [...existingIds, eventId];
+
+  return nextIds.slice(-12);
+}
+
+function mergeRelationshipTags(
+  existingTags: readonly string[],
+  incomingTags: readonly string[],
+): string[] {
+  return [...new Set([...existingTags, ...incomingTags])].sort();
+}
+
+function addRelationship(
+  relationships: Record<string, RelationshipState>,
+  event: AgentEvent,
+  targetAgentId: string,
+  kind: RelationshipKind,
+): Record<string, RelationshipState> {
+  if (targetAgentId === event.agentId) {
+    return relationships;
+  }
+
+  const relationshipId = relationshipIdFor(event.agentId, targetAgentId);
+  const existing = relationships[relationshipId];
+  const agentIds = relationshipId.split("__") as [string, string];
+  const tags = readStringArrayMetadata(event, "tags");
+  const strength = (existing?.strength ?? 0) + strengthForRelationshipKind(kind);
+  const nextRelationship: RelationshipState = {
+    relationshipId,
+    agentIds: existing?.agentIds ?? agentIds,
+    strength,
+    interactionCount: (existing?.interactionCount ?? 0) + 1,
+    messageCount: (existing?.messageCount ?? 0) + (kind === "message" ? 1 : 0),
+    handoffCount: (existing?.handoffCount ?? 0) + (kind === "handoff" ? 1 : 0),
+    declaredCount: (existing?.declaredCount ?? 0) + (kind === "declared" ? 1 : 0),
+    diffusionCount: (existing?.diffusionCount ?? 0) + (kind === "diffusion" ? 1 : 0),
+    lastEventId: event.id,
+    lastInteractionKind: kind,
+    lastSequence: event.sequence,
+    evidenceEventIds: appendEvidenceEventId(existing?.evidenceEventIds ?? [], event.id),
+    tags: mergeRelationshipTags(existing?.tags ?? [], tags),
+  };
+
+  return {
+    ...relationships,
+    [relationshipId]: nextRelationship,
+  };
+}
+
+function addRelationshipTargets(
+  relationships: Record<string, RelationshipState>,
+  event: AgentEvent,
+  targetAgentIds: readonly string[],
+  kind: RelationshipKind,
+): Record<string, RelationshipState> {
+  return targetAgentIds.reduce<Record<string, RelationshipState>>(
+    (nextRelationships, targetAgentId) =>
+      addRelationship(nextRelationships, event, targetAgentId, kind),
+    relationships,
+  );
+}
+
+function deriveRelationships(
+  relationships: Record<string, RelationshipState>,
+  event: AgentEvent,
+): Record<string, RelationshipState> {
+  let nextRelationships = addRelationshipTargets(
+    relationships,
+    event,
+    readStringArrayMetadata(event, "relationships"),
+    "declared",
+  );
+
+  if (event.type === "message" && event.targetAgentId !== undefined) {
+    nextRelationships = addRelationship(nextRelationships, event, event.targetAgentId, "message");
+  }
+
+  if (event.type === "handoff" && event.targetAgentId !== undefined) {
+    nextRelationships = addRelationship(nextRelationships, event, event.targetAgentId, "handoff");
+  }
+
+  const diffusion = event.metadata?.socialDiffusion;
+  if (isRecord(diffusion)) {
+    if (typeof diffusion.heardFromAgentId === "string") {
+      nextRelationships = addRelationship(
+        nextRelationships,
+        event,
+        diffusion.heardFromAgentId,
+        "diffusion",
+      );
+    }
+
+    if (Array.isArray(diffusion.spreadsToAgentIds)) {
+      const targetAgentIds = diffusion.spreadsToAgentIds.filter(
+        (targetAgentId): targetAgentId is string =>
+          typeof targetAgentId === "string" && targetAgentId.trim().length > 0,
+      );
+      nextRelationships = addRelationshipTargets(
+        nextRelationships,
+        event,
+        targetAgentIds,
+        "diffusion",
+      );
+    }
+  }
+
+  return nextRelationships;
+}
+
 export function reduceEvent(prev: WorldState, event: AgentEvent): WorldState {
   const location = routeEventToLocation(event);
   const coordinates = getLocationCoordinates(location);
   const status = toAgentStatus(event);
   const bubble = toBubble(event);
   const previousAgent = prev.agents[event.agentId];
+  const subLocationId = readStringMetadata(event, "subLocationId");
+  const activity = readStringMetadata(event, "activity");
   const nextAgent: AgentState = {
     ...previousAgent,
     agentId: event.agentId,
@@ -178,6 +330,10 @@ export function reduceEvent(prev: WorldState, event: AgentEvent): WorldState {
     role: event.agentRole,
     status,
     location,
+    subLocationId,
+    activity,
+    previousX: previousAgent?.x,
+    previousY: previousAgent?.y,
     x: coordinates.x,
     y: coordinates.y,
     currentTaskId: event.targetTaskId ?? event.taskId,
@@ -217,6 +373,7 @@ export function reduceEvent(prev: WorldState, event: AgentEvent): WorldState {
       [event.agentId]: bubble,
     },
     edges: appendDefined(prev.edges, nextEdge),
+    relationships: deriveRelationships(prev.relationships, event),
     runSummary: incrementSummary(prev.runSummary, event),
     warnings,
   };

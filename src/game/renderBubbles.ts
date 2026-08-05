@@ -4,6 +4,7 @@ import type { AgentBubble, AgentState, WorldState } from "../events/types";
 import { selectEvent } from "../state/selectionStore";
 import type { TownProjectionSettings } from "./projectionSettings";
 import { getAgentRenderPositions } from "./renderAgents";
+import type { TownMapDefinition } from "./townMap";
 import { BUBBLE_VISUALS } from "./visualMapping";
 
 function truncateBubbleText(text: string, settings: TownProjectionSettings): string {
@@ -75,8 +76,9 @@ export function renderBubbles(
   layer: Phaser.GameObjects.Container,
   worldState: WorldState,
   settings: TownProjectionSettings,
+  townMap?: TownMapDefinition,
 ): void {
-  const positions = getAgentRenderPositions(worldState);
+  const positions = getAgentRenderPositions(worldState, townMap);
 
   for (const agent of Object.values(worldState.agents)) {
     if (agent.bubble === undefined) {

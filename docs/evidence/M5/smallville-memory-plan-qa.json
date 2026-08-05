@@ -1,0 +1,3181 @@
+{
+  "url": "http://127.0.0.1:5173/",
+  "flow": "app -> clear local memory once -> Social day persists 50 memory records -> reload keeps 50 records -> Memory plan emits 75 agent-addressable retrieval/reflection/planning events for durable-memory agents",
+  "browserPlugin": {
+    "attempted": true,
+    "domSnapshotError": "TypeError: o.incrementalAriaSnapshot is not a function",
+    "reasonForPlaywrightFallback": "Browser DOM snapshot failed and long-lived dev logs contained stale prior-session errors; fresh Playwright context used for authoritative console/screenshot evidence."
+  },
+  "initialFacts": {
+    "title": "Agent Town",
+    "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-failure-agent-town-001\nStatus\npaused\nCursor\n1 / 30\nEvents\n30\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nmock · 30 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nIntervention\nMemory\nMemory plan\nWS sample\n\nMemory bank · 0 records\n\nConnect\nDisconnect\nMock failure run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nPlanner\nplanner / thinking / town_hall\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n2 events\nmessage\n7 events\ntool call\n8 events\nhandoff\n3 events\nmemory read\n2 events\nmemory write\n1 events\ndecision\n3 events\nblocked\n2 events\nerror\n1 events\ndone\n1 events\nAll\nNone\nCritical\n\nPlanner / thinking / Plan debug run\n\ncursor 0\nvisible 30/30\nbalanced\n100%\nRUN SUMMARY\nEvents\n30\nAgents\n5\nHandoffs\n3\nTool calls\n8\nMemory actions\n3\nBlocked\n2\nErrors\n1\nFirst blocked: failure-009\nFirst error: failure-008\nBefore error: failure-007\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: failure-000\nSelected event: none\n\nSelected Agent\n\nClick an agent in Town View.\n\nSelected Event\n\nClick a bubble or timeline event.\n\nTIMELINE\nPrev\nPlay\nNext\nSpeed\n0.7x\n1x\n2x\n1 / 30 · failure-000\n#00 · 13:00\nPlanner · thinking\nPlan debug run\n#01 · 13:01\nPlanner · decision\nReproduce first\n#02 · 13:02\nPlanner · handoff\nAssign research\n#03 · 13:03\nResearcher · memory_read\nRead schema note\n#04 · 13:04\nResearcher · tool_call\nRead M1 spec\n#05 · 13:05\nResearcher · message\nReport invariant\n#06 · 13:06\nCoder · thinking\nInspect fixture\n#07 · 13:07\nCoder · tool_call\nRun ordering check\n#08 · 13:08\nCoder · error\nDuplicate sequence\n#09 · 13:09\nCoder · blocked\nNeeds source decision\n#10 · 13:10\nCoder · message\nAsk planner\n#11 · 13:11\nPlanner · decision\nSequence wins\n#12 · 13:12\nPlanner · handoff\nSend repair task\n#13 · 13:13\nCoder · tool_call\nPatch fixture\n#14 · 13:14\nCoder · tool_call\nRun ordering check again\n#15 · 13:15\nCoder · message\nRepair ready\n#16 · 13:16\nReviewer · tool_call\nReview repair\n#17 · 13:17\nReviewer · blocked\nMissing memory note\n#18 · 13:18\nReviewer · handoff\nRequest memory write\n#19 · 13:19\nMemory · memory_write\nSave sequence policy\n#20 · 13:20\nMemory · message\nPolicy saved\n#21 · 13:21\nReviewer · tool_call\nRun final revi",
+    "headerText": "ATAgent TownAgentEvent-driven runtime projectionRun IDrun-failure-agent-town-001StatuspausedCursor1 / 30Events30Warnings0Quarantine0",
+    "importPanelText": "Import Sourcemock · 30 eventsMockJSONLTown dayCognitiveSocial dayInterventionMemoryMemory planWS sampleMemory bank · 0 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}} {\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}} {\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-002\"}}ConnectDisconnectMock failure run loaded.warnings=0; quarantined=0",
+    "timelineText": "TimelinePrevPlayNextSpeed0.7x1x2x1 / 30 · failure-000#00 · 13:00Planner · thinkingPlan debug run#01 · 13:01Planner · decisionReproduce first#02 · 13:02Planner · handoffAssign research#03 · 13:03Researcher · memory_readRead schema note#04 · 13:04Researcher · tool_callRead M1 spec#05 · 13:05Researcher · messageReport invariant#06 · 13:06Coder · thinkingInspect fixture#07 · 13:07Coder · tool_callRun ordering check#08 · 13:08Coder · errorDuplicate sequence#09 · 13:09Coder · blockedNeeds source decision#10 · 13:10Coder · messageAsk planner#11 · 13:11Planner · decisionSequence wins#12 · 13:12Planner · handoffSend repair task#13 · 13:13Coder · tool_callPatch fixture#14 · 13:14Coder · tool_callRun ordering check again#15 · 13:15Coder · messageRepair ready#16 · 13:16Reviewer · tool_callReview repair#17 · 13:17Reviewer · blockedMissing memory note#18 · 13:18Reviewer · handoffRequest memory write#19 · 13:19Memory · memory_writeSave sequence policy#20 · 13:20Memory · messagePolicy saved#21 · 13:21Reviewer · tool_callRun final review#22 · 13:22Reviewer · messageApprove repair#23 · 13:23Researcher · tool_callCheck docs#24 · 13:24Researcher · messageDocs confirmed#25 · 13:25Planner · decisionResume finalization#26 · 13:26Coder · tool_callCapture failure evidence#27 · 13:27Memory · memory_readRead final state#28 · 13:28Reviewer · messageReady to close#29 · 13:29Planner · doneFailure run repaired",
+    "detailText": "Run SummaryEvents30Agents5Handoffs3Tool calls8Memory actions3Blocked2Errors1First blocked: failure-009First error: failure-008Before error: failure-007Event / Agent DetailPlaybackCurrent event: failure-000Selected event: noneSelected AgentClick an agent in Town View.Selected EventClick a bubble or timeline event.",
+    "agentRows": [
+      "Planner"
+    ],
+    "memoryRecordCount": 0,
+    "memorySchemaVersion": null,
+    "memoryStorageBytes": 0,
+    "canvas": {
+      "width": 1040,
+      "height": 900,
+      "clientWidth": 773,
+      "clientHeight": 669
+    },
+    "overflowX": 0,
+    "buttons": [
+      {
+        "text": "Mock",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "JSONL",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Town day",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Cognitive",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Social day",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Intervention",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Memory plan",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "WS sample",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Connect",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Disconnect",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Compact",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Balanced",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "Expanded",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "-",
+        "ariaLabel": "Zoom out",
+        "ariaPressed": null
+      },
+      {
+        "text": "+",
+        "ariaLabel": "Zoom in",
+        "ariaPressed": null
+      },
+      {
+        "text": "",
+        "ariaLabel": "Toggle event bubbles",
+        "ariaPressed": "true"
+      },
+      {
+        "text": "",
+        "ariaLabel": "Toggle handoff edges",
+        "ariaPressed": "true"
+      },
+      {
+        "text": "Reset projection",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Plannerplanner / thinking / town_hall",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "thinking2 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "message7 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "tool call8 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "handoff3 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "memory read2 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "memory write1 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "decision3 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "blocked2 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "error1 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "done1 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "All",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "None",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Critical",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "First blocked: failure-009",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "First error: failure-008",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Before error: failure-007",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Prev",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Play",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Next",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "#00 · 13:00Planner · thinkingPlan debug run",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#01 · 13:01Planner · decisionReproduce first",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#02 · 13:02Planner · handoffAssign research",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#03 · 13:03Researcher · memory_readRead schema note",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#04 · 13:04Researcher · tool_callRead M1 spec",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#05 · 13:05Researcher · messageReport invariant",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#06 · 13:06Coder · thinkingInspect fixture",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#07 · 13:07Coder · tool_callRun ordering check",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#08 · 13:08Coder · errorDuplicate sequence",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#09 · 13:09Coder · blockedNeeds source decision",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#10 · 13:10Coder · messageAsk planner",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#11 · 13:11Planner · decisionSequence wins",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#12 · 13:12Planner · handoffSend repair task",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#13 · 13:13Coder · tool_callPatch fixture",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#14 · 13:14Coder · tool_callRun ordering check again",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#15 · 13:15Coder · messageRepair ready",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#16 · 13:16Reviewer · tool_callReview repair",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#17 · 13:17Reviewer · blockedMissing memory note",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#18 · 13:18Reviewer · handoffRequest memory write",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#19 · 13:19Memory · memory_writeSave sequence policy",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#20 · 13:20Memory · messagePolicy saved",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#21 · 13:21Reviewer · tool_callRun final review",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#22 · 13:22Reviewer · messageApprove repair",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#23 · 13:23Researcher · tool_callCheck docs",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#24 · 13:24Researcher · messageDocs confirmed",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#25 · 13:25Planner · decisionResume finalization",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#26 · 13:26Coder · tool_callCapture failure evidence",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#27 · 13:27Memory · memory_readRead final state",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#28 · 13:28Reviewer · messageReady to close",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#29 · 13:29Planner · doneFailure run repaired",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      }
+    ]
+  },
+  "afterSocialFacts": {
+    "title": "Agent Town",
+    "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-smallville-social-001\nStatus\npaused\nCursor\n1 / 150\nEvents\n150\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nsocial · 150 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nIntervention\nMemory\nMemory plan\nWS sample\n\nMemory bank · 50 records\n\nConnect\nDisconnect\nSocial diffusion run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / town_hall\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n25 events\nmessage\n25 events\ntool call\n0 events\nhandoff\n0 events\nmemory read\n25 events\nmemory write\n25 events\ndecision\n25 events\nblocked\n0 events\nerror\n0 events\ndone\n25 events\nAll\nNone\nCritical\n\nIsabella / memory_write / Seed party intervention\n\ncursor 0\nvisible 150/150\nbalanced\n100%\nRUN SUMMARY\nEvents\n150\nAgents\n25\nHandoffs\n0\nTool calls\n0\nMemory actions\n50\nBlocked\n0\nErrors\n0\nFirst blocked: none\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: social-000\nSelected event: social-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nworking\nLocation\ntown_hall\nSelected Event\nID\nsocial-000\nSequence\n0\nTimestamp\n2026-07-04T16:00:00.000Z\nRun ID\nrun-smallville-social-001\nTask ID\ntask-valentine-social-diffusion\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_write\nStatus\nrunning\nSummary\nSeed party intervention\nContent\nA user suggests that Isabella should host a Valentine's gathering by the fountain.\nTarget\nagent=none; task=task-valentine-social-diffusion\nTool\nnone\nTool input\nnone\nTool output\nnone\nArtifacts\nnone\nFile path\nnone\nMetrics\nnone\nMetadata\n{\"source\":\"mock\",\"tags\":[\"smallville-social\",\"observation\",\"town_hall_table\",\"wave-0\"],\"cognitiveStage\":\"observation\",\"subLocationId\":\"town_hall_table\",\"activity\":\"receives intervention\",\"persona\":\"Hosts civic rituals and turns one suggestion into a coordinated plan.\",\"relationships\":[\"agent-klaus\",\"agent-mei\",\"agent-sam\"],\"memoryKind\":\"observation\",\"intervention\":{\"source\":\"user\",\"prompt\":\"Isabella wants to host a Valentine's gathering.\"},\"socialDiffusion\":{\"eventId\":\"valentine-party\",\"wave\":0,\"spreadsToAgentIds\":[\"agent-klaus\"],\"knowsParty\":true},\"memoryId\":\"agent-isabella-observation-000\",\"importance\"",
+    "headerText": "ATAgent TownAgentEvent-driven runtime projectionRun IDrun-smallville-social-001StatuspausedCursor1 / 150Events150Warnings0Quarantine0",
+    "importPanelText": "Import Sourcesocial · 150 eventsMockJSONLTown dayCognitiveSocial dayInterventionMemoryMemory planWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}} {\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}} {\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-002\"}}ConnectDisconnectSocial diffusion run loaded.warnings=0; quarantined=0",
+    "timelineText": "TimelinePrevPlayNextSpeed0.7x1x2x1 / 150 · social-000#00 · 16:00Isabella · memory_writeSeed party intervention#01 · 16:01Isabella · memory_readRetrieve social memory#02 · 16:02Isabella · thinkingReflect on social path#03 · 16:03Isabella · decisionPlan invitation relay#04 · 16:04Isabella · messageSpread party invitation#05 · 16:05Klaus · memory_writeHear party invitation#06 · 16:06Klaus · memory_readRetrieve social memory#07 · 16:07Klaus · thinkingReflect on social path#08 · 16:08Klaus · decisionPlan invitation relay#09 · 16:09Klaus · messageSpread party invitation#10 · 16:10Mei · memory_writeHear party invitation#11 · 16:11Mei · memory_readRetrieve social memory#12 · 16:12Mei · thinkingReflect on social path#13 · 16:13Mei · decisionPlan invitation relay#14 · 16:14Mei · messageSpread party invitation#15 · 16:15Sam · memory_writeHear party invitation#16 · 16:16Sam · memory_readRetrieve social memory#17 · 16:17Sam · thinkingReflect on social path#18 · 16:18Sam · decisionPlan invitation relay#19 · 16:19Sam · messageSpread party invitation#20 · 16:20Maria · memory_writeHear party invitation#21 · 16:21Maria · memory_readRetrieve social memory#22 · 16:22Maria · thinkingReflect on social path#23 · 16:23Maria · decisionPlan invitation relay#24 · 16:24Maria · messageSpread party invitation#25 · 16:25Nora · memory_writeHear party invitation#26 · 16:26Nora · memory_readRetrieve social memory#27 · 16:27Nora · thinkingReflect on social path#28 · 16:28Nora · decisionPlan invitation relay#29 · 16:29Nora · messageSpread party invitation#30 · 16:30Teo · memory_writeHear party invitation#31 ·",
+    "detailText": "Run SummaryEvents150Agents25Handoffs0Tool calls0Memory actions50Blocked0Errors0First blocked: noneFirst error: noneBefore error: noneEvent / Agent DetailPlaybackCurrent event: social-000Selected event: social-000Selected AgentNameIsabellaRoleplannerStatusworkingLocationtown_hallSelected EventIDsocial-000Sequence0Timestamp2026-07-04T16:00:00.000ZRun IDrun-smallville-social-001Task IDtask-valentine-social-diffusionAgentIsabella (agent-isabella)RoleplannerTypememory_writeStatusrunningSummarySeed party interventionContentA user suggests that Isabella should host a Valentine's gathering by the fountain.Targetagent=none; task=task-valentine-social-diffusionToolnoneTool inputnoneTool outputnoneArtifactsnoneFile pathnoneMetricsnoneMetadata{\"source\":\"mock\",\"tags\":[\"smallville-social\",\"observation\",\"town_hall_table\",\"wave-0\"],\"cognitiveStage\":\"observation\",\"subLocationId\":\"town_hall_table\",\"activity\":\"receives intervention\",\"persona\":\"Hosts civic rituals and turns one suggestion into a coordinated plan.\",\"relationships\":[\"agent-klaus\",\"agent-mei\",\"agent-sam\"],\"memoryKind\":\"observation\",\"intervention\":{\"source\":\"user\",\"prompt\":\"Isabella wants to host a Valentine's gathering.\"},\"socialDiffusion\":{\"eventId\":\"valentine-party\",\"wave\":0,\"spreadsToAgentIds\":[\"agent-klaus\"],\"knowsParty\":true},\"memoryId\":\"agent-isabella-observation-000\",\"importance\":9}{ \"id\": \"social-000\", \"runId\": \"run-smallville-social-001\", \"taskId\": \"task-valentine-social-diffusion\", \"timestamp\": \"2026-07-04T16:00:00.000Z\", \"sequence\": 0, \"agentId\": \"agent-isabella\", \"agentName\": \"Isabella\", \"agentRole\": \"planner\", \"type\"",
+    "agentRows": [
+      "Isabella"
+    ],
+    "memoryRecordCount": 50,
+    "memorySchemaVersion": 1,
+    "memoryStorageBytes": 39266,
+    "canvas": {
+      "width": 1040,
+      "height": 900,
+      "clientWidth": 773,
+      "clientHeight": 669
+    },
+    "overflowX": 0,
+    "buttons": [
+      {
+        "text": "Mock",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "JSONL",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Town day",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Cognitive",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Social day",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "Intervention",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Memory plan",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "WS sample",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Connect",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Disconnect",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Compact",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Balanced",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "Expanded",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "-",
+        "ariaLabel": "Zoom out",
+        "ariaPressed": null
+      },
+      {
+        "text": "+",
+        "ariaLabel": "Zoom in",
+        "ariaPressed": null
+      },
+      {
+        "text": "",
+        "ariaLabel": "Toggle event bubbles",
+        "ariaPressed": "true"
+      },
+      {
+        "text": "",
+        "ariaLabel": "Toggle handoff edges",
+        "ariaPressed": "true"
+      },
+      {
+        "text": "Reset projection",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Isabellaplanner / working / town_hall",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "thinking25 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "message25 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "tool call0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "handoff0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "memory read25 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "memory write25 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "decision25 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "blocked0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "error0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "done25 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "All",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "None",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Critical",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "First blocked: none",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "First error: none",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Before error: none",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Prev",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Play",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Next",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "#00 · 16:00Isabella · memory_writeSeed party intervention",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "#01 · 16:01Isabella · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#02 · 16:02Isabella · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#03 · 16:03Isabella · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#04 · 16:04Isabella · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#05 · 16:05Klaus · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#06 · 16:06Klaus · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#07 · 16:07Klaus · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#08 · 16:08Klaus · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#09 · 16:09Klaus · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#10 · 16:10Mei · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#11 · 16:11Mei · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#12 · 16:12Mei · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#13 · 16:13Mei · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#14 · 16:14Mei · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#15 · 16:15Sam · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#16 · 16:16Sam · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#17 · 16:17Sam · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#18 · 16:18Sam · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#19 · 16:19Sam · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#20 · 16:20Maria · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#21 · 16:21Maria · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#22 · 16:22Maria · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#23 · 16:23Maria · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#24 · 16:24Maria · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#25 · 16:25Nora · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#26 · 16:26Nora · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#27 · 16:27Nora · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#28 · 16:28Nora · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#29 · 16:29Nora · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#30 · 16:30Teo · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#31 · 16:31Teo · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#32 · 16:32Teo · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#33 · 16:33Teo · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#34 · 16:34Teo · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#35 · 16:35Priya · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#36 · 16:36Priya · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#37 · 16:37Priya · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#38 · 16:38Priya · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#39 · 16:39Priya · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#40 · 16:40Pavel · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#41 · 16:41Pavel · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#42 · 16:42Pavel · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#43 · 16:43Pavel · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#44 · 16:44Pavel · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#45 · 16:45Zara · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#46 · 16:46Zara · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#47 · 16:47Zara · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#48 · 16:48Zara · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#49 · 16:49Zara · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#50 · 16:50Iris · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#51 · 16:51Iris · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#52 · 16:52Iris · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#53 · 16:53Iris · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#54 · 16:54Iris · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#55 · 16:55Omar · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#56 · 16:56Omar · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#57 · 16:57Omar · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#58 · 16:58Omar · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#59 · 16:59Omar · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#60 · 17:00June · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#61 · 17:01June · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#62 · 17:02June · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#63 · 17:03June · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#64 · 17:04June · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#65 · 17:05Victor · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#66 · 17:06Victor · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#67 · 17:07Victor · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#68 · 17:08Victor · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#69 · 17:09Victor · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#70 · 17:10Lina · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#71 · 17:11Lina · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#72 · 17:12Lina · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#73 · 17:13Lina · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#74 · 17:14Lina · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#75 · 17:15Marco · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#76 · 17:16Marco · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#77 · 17:17Marco · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#78 · 17:18Marco · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#79 · 17:19Marco · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#80 · 17:20Rafa · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#81 · 17:21Rafa · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#82 · 17:22Rafa · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#83 · 17:23Rafa · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#84 · 17:24Rafa · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#85 · 17:25Anika · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#86 · 17:26Anika · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#87 · 17:27Anika · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#88 · 17:28Anika · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#89 · 17:29Anika · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#90 · 17:30Celine · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#91 · 17:31Celine · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#92 · 17:32Celine · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#93 · 17:33Celine · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#94 · 17:34Celine · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#95 · 17:35Haruto · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#96 · 17:36Haruto · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#97 · 17:37Haruto · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#98 · 17:38Haruto · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#99 · 17:39Haruto · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#100 · 17:40Yuna · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#101 · 17:41Yuna · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#102 · 17:42Yuna · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#103 · 17:43Yuna · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#104 · 17:44Yuna · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#105 · 17:45Sol · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#106 · 17:46Sol · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#107 · 17:47Sol · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#108 · 17:48Sol · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#109 · 17:49Sol · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#110 · 17:50Elena · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#111 · 17:51Elena · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#112 · 17:52Elena · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#113 · 17:53Elena · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#114 · 17:54Elena · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#115 · 17:55Noah · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#116 · 17:56Noah · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#117 · 17:57Noah · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#118 · 17:58Noah · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#119 · 17:59Noah · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#120 · 18:00Diego · memory_writeHear party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#121 · 18:01Diego · memory_readRetrieve social memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#122 · 18:02Diego · thinkingReflect on social path",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#123 · 18:03Diego · decisionPlan invitation relay",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#124 · 18:04Diego · messageSpread party invitation",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#125 · 18:05Isabella · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#126 · 18:06Klaus · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#127 · 18:07Mei · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#128 · 18:08Sam · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#129 · 18:09Maria · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#130 · 18:10Nora · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#131 · 18:11Teo · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#132 · 18:12Priya · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#133 · 18:13Pavel · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#134 · 18:14Zara · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#135 · 18:15Iris · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#136 · 18:16Omar · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#137 · 18:17June · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#138 · 18:18Victor · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#139 · 18:19Lina · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#140 · 18:20Marco · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#141 · 18:21Rafa · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#142 · 18:22Anika · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#143 · 18:23Celine · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#144 · 18:24Haruto · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#145 · 18:25Yuna · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#146 · 18:26Sol · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#147 · 18:27Elena · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#148 · 18:28Noah · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#149 · 18:29Diego · doneArrive at party",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      }
+    ]
+  },
+  "afterReloadFacts": {
+    "title": "Agent Town",
+    "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-failure-agent-town-001\nStatus\npaused\nCursor\n1 / 30\nEvents\n30\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nmock · 30 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nIntervention\nMemory\nMemory plan\nWS sample\n\nMemory bank · 50 records\n\nConnect\nDisconnect\nMock failure run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nPlanner\nplanner / thinking / town_hall\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n2 events\nmessage\n7 events\ntool call\n8 events\nhandoff\n3 events\nmemory read\n2 events\nmemory write\n1 events\ndecision\n3 events\nblocked\n2 events\nerror\n1 events\ndone\n1 events\nAll\nNone\nCritical\n\nPlanner / thinking / Plan debug run\n\ncursor 0\nvisible 30/30\nbalanced\n100%\nRUN SUMMARY\nEvents\n30\nAgents\n5\nHandoffs\n3\nTool calls\n8\nMemory actions\n3\nBlocked\n2\nErrors\n1\nFirst blocked: failure-009\nFirst error: failure-008\nBefore error: failure-007\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: failure-000\nSelected event: none\n\nSelected Agent\n\nClick an agent in Town View.\n\nSelected Event\n\nClick a bubble or timeline event.\n\nTIMELINE\nPrev\nPlay\nNext\nSpeed\n0.7x\n1x\n2x\n1 / 30 · failure-000\n#00 · 13:00\nPlanner · thinking\nPlan debug run\n#01 · 13:01\nPlanner · decision\nReproduce first\n#02 · 13:02\nPlanner · handoff\nAssign research\n#03 · 13:03\nResearcher · memory_read\nRead schema note\n#04 · 13:04\nResearcher · tool_call\nRead M1 spec\n#05 · 13:05\nResearcher · message\nReport invariant\n#06 · 13:06\nCoder · thinking\nInspect fixture\n#07 · 13:07\nCoder · tool_call\nRun ordering check\n#08 · 13:08\nCoder · error\nDuplicate sequence\n#09 · 13:09\nCoder · blocked\nNeeds source decision\n#10 · 13:10\nCoder · message\nAsk planner\n#11 · 13:11\nPlanner · decision\nSequence wins\n#12 · 13:12\nPlanner · handoff\nSend repair task\n#13 · 13:13\nCoder · tool_call\nPatch fixture\n#14 · 13:14\nCoder · tool_call\nRun ordering check again\n#15 · 13:15\nCoder · message\nRepair ready\n#16 · 13:16\nReviewer · tool_call\nReview repair\n#17 · 13:17\nReviewer · blocked\nMissing memory note\n#18 · 13:18\nReviewer · handoff\nRequest memory write\n#19 · 13:19\nMemory · memory_write\nSave sequence policy\n#20 · 13:20\nMemory · message\nPolicy saved\n#21 · 13:21\nReviewer · tool_call\nRun final rev",
+    "headerText": "ATAgent TownAgentEvent-driven runtime projectionRun IDrun-failure-agent-town-001StatuspausedCursor1 / 30Events30Warnings0Quarantine0",
+    "importPanelText": "Import Sourcemock · 30 eventsMockJSONLTown dayCognitiveSocial dayInterventionMemoryMemory planWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}} {\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}} {\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-002\"}}ConnectDisconnectMock failure run loaded.warnings=0; quarantined=0",
+    "timelineText": "TimelinePrevPlayNextSpeed0.7x1x2x1 / 30 · failure-000#00 · 13:00Planner · thinkingPlan debug run#01 · 13:01Planner · decisionReproduce first#02 · 13:02Planner · handoffAssign research#03 · 13:03Researcher · memory_readRead schema note#04 · 13:04Researcher · tool_callRead M1 spec#05 · 13:05Researcher · messageReport invariant#06 · 13:06Coder · thinkingInspect fixture#07 · 13:07Coder · tool_callRun ordering check#08 · 13:08Coder · errorDuplicate sequence#09 · 13:09Coder · blockedNeeds source decision#10 · 13:10Coder · messageAsk planner#11 · 13:11Planner · decisionSequence wins#12 · 13:12Planner · handoffSend repair task#13 · 13:13Coder · tool_callPatch fixture#14 · 13:14Coder · tool_callRun ordering check again#15 · 13:15Coder · messageRepair ready#16 · 13:16Reviewer · tool_callReview repair#17 · 13:17Reviewer · blockedMissing memory note#18 · 13:18Reviewer · handoffRequest memory write#19 · 13:19Memory · memory_writeSave sequence policy#20 · 13:20Memory · messagePolicy saved#21 · 13:21Reviewer · tool_callRun final review#22 · 13:22Reviewer · messageApprove repair#23 · 13:23Researcher · tool_callCheck docs#24 · 13:24Researcher · messageDocs confirmed#25 · 13:25Planner · decisionResume finalization#26 · 13:26Coder · tool_callCapture failure evidence#27 · 13:27Memory · memory_readRead final state#28 · 13:28Reviewer · messageReady to close#29 · 13:29Planner · doneFailure run repaired",
+    "detailText": "Run SummaryEvents30Agents5Handoffs3Tool calls8Memory actions3Blocked2Errors1First blocked: failure-009First error: failure-008Before error: failure-007Event / Agent DetailPlaybackCurrent event: failure-000Selected event: noneSelected AgentClick an agent in Town View.Selected EventClick a bubble or timeline event.",
+    "agentRows": [
+      "Planner"
+    ],
+    "memoryRecordCount": 50,
+    "memorySchemaVersion": 1,
+    "memoryStorageBytes": 39266,
+    "canvas": {
+      "width": 1040,
+      "height": 900,
+      "clientWidth": 773,
+      "clientHeight": 669
+    },
+    "overflowX": 0,
+    "buttons": [
+      {
+        "text": "Mock",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "JSONL",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Town day",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Cognitive",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Social day",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Intervention",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Memory plan",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "WS sample",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Connect",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Disconnect",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Compact",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Balanced",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "Expanded",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "-",
+        "ariaLabel": "Zoom out",
+        "ariaPressed": null
+      },
+      {
+        "text": "+",
+        "ariaLabel": "Zoom in",
+        "ariaPressed": null
+      },
+      {
+        "text": "",
+        "ariaLabel": "Toggle event bubbles",
+        "ariaPressed": "true"
+      },
+      {
+        "text": "",
+        "ariaLabel": "Toggle handoff edges",
+        "ariaPressed": "true"
+      },
+      {
+        "text": "Reset projection",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Plannerplanner / thinking / town_hall",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "thinking2 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "message7 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "tool call8 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "handoff3 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "memory read2 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "memory write1 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "decision3 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "blocked2 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "error1 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "done1 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "All",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "None",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Critical",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "First blocked: failure-009",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "First error: failure-008",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Before error: failure-007",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Prev",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Play",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Next",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "#00 · 13:00Planner · thinkingPlan debug run",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#01 · 13:01Planner · decisionReproduce first",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#02 · 13:02Planner · handoffAssign research",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#03 · 13:03Researcher · memory_readRead schema note",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#04 · 13:04Researcher · tool_callRead M1 spec",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#05 · 13:05Researcher · messageReport invariant",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#06 · 13:06Coder · thinkingInspect fixture",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#07 · 13:07Coder · tool_callRun ordering check",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#08 · 13:08Coder · errorDuplicate sequence",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#09 · 13:09Coder · blockedNeeds source decision",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#10 · 13:10Coder · messageAsk planner",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#11 · 13:11Planner · decisionSequence wins",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#12 · 13:12Planner · handoffSend repair task",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#13 · 13:13Coder · tool_callPatch fixture",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#14 · 13:14Coder · tool_callRun ordering check again",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#15 · 13:15Coder · messageRepair ready",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#16 · 13:16Reviewer · tool_callReview repair",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#17 · 13:17Reviewer · blockedMissing memory note",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#18 · 13:18Reviewer · handoffRequest memory write",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#19 · 13:19Memory · memory_writeSave sequence policy",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#20 · 13:20Memory · messagePolicy saved",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#21 · 13:21Reviewer · tool_callRun final review",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#22 · 13:22Reviewer · messageApprove repair",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#23 · 13:23Researcher · tool_callCheck docs",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#24 · 13:24Researcher · messageDocs confirmed",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#25 · 13:25Planner · decisionResume finalization",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#26 · 13:26Coder · tool_callCapture failure evidence",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#27 · 13:27Memory · memory_readRead final state",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#28 · 13:28Reviewer · messageReady to close",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#29 · 13:29Planner · doneFailure run repaired",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      }
+    ]
+  },
+  "afterMemoryPlanFacts": {
+    "title": "Agent Town",
+    "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-agent-memory-plan-8a0ab12a\nStatus\npaused\nCursor\n1 / 75\nEvents\n75\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nmemory-plan · 75 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nIntervention\nMemory\nMemory plan\nWS sample\n\nMemory bank · 50 records\n\nConnect\nDisconnect\nAgent-addressable memory plan: 75 events accepted.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / archive\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n25 events\nmessage\n0 events\ntool call\n0 events\nhandoff\n0 events\nmemory read\n25 events\nmemory write\n0 events\ndecision\n25 events\nblocked\n0 events\nerror\n0 events\ndone\n0 events\nAll\nNone\nCritical\n\nIsabella / memory_read / Retrieve agent-addressable memory\n\ncursor 0\nvisible 75/75\nbalanced\n100%\nRUN SUMMARY\nEvents\n75\nAgents\n25\nHandoffs\n0\nTool calls\n0\nMemory actions\n25\nBlocked\n0\nErrors\n0\nFirst blocked: none\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: run-agent-memory-plan-8a0ab12a-000\nSelected event: run-agent-memory-plan-8a0ab12a-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nworking\nLocation\narchive\nSelected Event\nID\nrun-agent-memory-plan-8a0ab12a-000\nSequence\n0\nTimestamp\n2026-07-04T18:30:00.000Z\nRun ID\nrun-agent-memory-plan-8a0ab12a\nTask ID\ntask-agent-addressable-memory-plan\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_read\nStatus\nrunning\nSummary\nRetrieve agent-addressable memory\nContent\nIsabella retrieves 3 durable memories for: Isabella planner Seed party intervention A user suggests that Isabella should host a Valentine's gathering by the fountain. smallville-social observation town_hall_table wave-0 persistent memory next plan relationship location evidence\nTarget\nagent=none; task=none\nTool\nnone\nTool input\nnone\nTool output\nnone\nArtifacts\nnone\nFile path\nnone\nMetrics\nnone\nMetadata\n{\"source\":\"memory\",\"tags\":[\"persistent-memory\",\"agent-addressable\",\"smallville-memory-plan\",\"agent-isabella\"],\"subLocationId\":\"archive_shelves\",\"activity\":\"retrieves durable memory\",\"agentAddressableMemory\":{\"schemaVersion\":1,\"agentId\":\"agent-isabella\",\"previousEventCount\":0,\"retrievalQuery\":\"Isabella planner Seed party int",
+    "headerText": "ATAgent TownAgentEvent-driven runtime projectionRun IDrun-agent-memory-plan-8a0ab12aStatuspausedCursor1 / 75Events75Warnings0Quarantine0",
+    "importPanelText": "Import Sourcememory-plan · 75 eventsMockJSONLTown dayCognitiveSocial dayInterventionMemoryMemory planWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}} {\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}} {\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-002\"}}ConnectDisconnectAgent-addressable memory plan: 75 events accepted.warnings=0; quarantined=0",
+    "timelineText": "TimelinePrevPlayNextSpeed0.7x1x2x1 / 75 · run-agent-memory-plan-8a0ab12a-000#00 · 18:30Isabella · memory_readRetrieve agent-addressable memory#01 · 18:31Isabella · thinkingReflect on persistent memory#02 · 18:32Isabella · decisionPlan from persistent memory#03 · 18:33Klaus · memory_readRetrieve agent-addressable memory#04 · 18:34Klaus · thinkingReflect on persistent memory#05 · 18:35Klaus · decisionPlan from persistent memory#06 · 18:36Mei · memory_readRetrieve agent-addressable memory#07 · 18:37Mei · thinkingReflect on persistent memory#08 · 18:38Mei · decisionPlan from persistent memory#09 · 18:39Sam · memory_readRetrieve agent-addressable memory#10 · 18:40Sam · thinkingReflect on persistent memory#11 · 18:41Sam · decisionPlan from persistent memory#12 · 18:42Maria · memory_readRetrieve agent-addressable memory#13 · 18:43Maria · thinkingReflect on persistent memory#14 · 18:44Maria · decisionPlan from persistent memory#15 · 18:45Nora · memory_readRetrieve agent-addressable memory#16 · 18:46Nora · thinkingReflect on persistent memory#17 · 18:47Nora · decisionPlan from persistent memory#18 · 18:48Teo · memory_readRetrieve agent-addressable memory#19 · 18:49Teo · thinkingReflect on persistent memory#20 · 18:50Teo · decisionPlan from persistent memory#21 · 18:51Priya · memory_readRetrieve agent-addressable memory#22 · 18:52Priya · thinkingReflect on persistent memory#23 · 18:53Priya · decisionPlan from persistent memory#24 · 18:54Pavel · memory_readRetrieve agent-addressable memory#25 · 18:55Pavel · thinkingReflect on persistent memory#26 · 18:56Pavel · decisionPlan from persi",
+    "detailText": "Run SummaryEvents75Agents25Handoffs0Tool calls0Memory actions25Blocked0Errors0First blocked: noneFirst error: noneBefore error: noneEvent / Agent DetailPlaybackCurrent event: run-agent-memory-plan-8a0ab12a-000Selected event: run-agent-memory-plan-8a0ab12a-000Selected AgentNameIsabellaRoleplannerStatusworkingLocationarchiveSelected EventIDrun-agent-memory-plan-8a0ab12a-000Sequence0Timestamp2026-07-04T18:30:00.000ZRun IDrun-agent-memory-plan-8a0ab12aTask IDtask-agent-addressable-memory-planAgentIsabella (agent-isabella)RoleplannerTypememory_readStatusrunningSummaryRetrieve agent-addressable memoryContentIsabella retrieves 3 durable memories for: Isabella planner Seed party intervention A user suggests that Isabella should host a Valentine's gathering by the fountain. smallville-social observation town_hall_table wave-0 persistent memory next plan relationship location evidenceTargetagent=none; task=noneToolnoneTool inputnoneTool outputnoneArtifactsnoneFile pathnoneMetricsnoneMetadata{\"source\":\"memory\",\"tags\":[\"persistent-memory\",\"agent-addressable\",\"smallville-memory-plan\",\"agent-isabella\"],\"subLocationId\":\"archive_shelves\",\"activity\":\"retrieves durable memory\",\"agentAddressableMemory\":{\"schemaVersion\":1,\"agentId\":\"agent-isabella\",\"previousEventCount\":0,\"retrievalQuery\":\"Isabella planner Seed party intervention A user suggests that Isabella should host a Valentine's gathering by the fountain. smallville-social observation town_hall_table wave-0 persistent memory next plan relationship location evidence\",\"selectedRecordIds\":[\"memory:run-smallville-social-001:social-000\",\"memor",
+    "agentRows": [
+      "Isabella"
+    ],
+    "memoryRecordCount": 50,
+    "memorySchemaVersion": 1,
+    "memoryStorageBytes": 39266,
+    "canvas": {
+      "width": 1040,
+      "height": 900,
+      "clientWidth": 773,
+      "clientHeight": 669
+    },
+    "overflowX": 0,
+    "buttons": [
+      {
+        "text": "Mock",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "JSONL",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Town day",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Cognitive",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Social day",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Intervention",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Memory plan",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "WS sample",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Connect",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Disconnect",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Compact",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Balanced",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "Expanded",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "-",
+        "ariaLabel": "Zoom out",
+        "ariaPressed": null
+      },
+      {
+        "text": "+",
+        "ariaLabel": "Zoom in",
+        "ariaPressed": null
+      },
+      {
+        "text": "",
+        "ariaLabel": "Toggle event bubbles",
+        "ariaPressed": "true"
+      },
+      {
+        "text": "",
+        "ariaLabel": "Toggle handoff edges",
+        "ariaPressed": "true"
+      },
+      {
+        "text": "Reset projection",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Isabellaplanner / working / archive",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "thinking25 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "message0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "tool call0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "handoff0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "memory read25 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "memory write0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "decision25 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "blocked0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "error0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "done0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "All",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "None",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Critical",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "First blocked: none",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "First error: none",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Before error: none",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Prev",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Play",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Next",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "#00 · 18:30Isabella · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "#01 · 18:31Isabella · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#02 · 18:32Isabella · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#03 · 18:33Klaus · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#04 · 18:34Klaus · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#05 · 18:35Klaus · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#06 · 18:36Mei · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#07 · 18:37Mei · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#08 · 18:38Mei · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#09 · 18:39Sam · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#10 · 18:40Sam · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#11 · 18:41Sam · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#12 · 18:42Maria · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#13 · 18:43Maria · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#14 · 18:44Maria · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#15 · 18:45Nora · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#16 · 18:46Nora · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#17 · 18:47Nora · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#18 · 18:48Teo · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#19 · 18:49Teo · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#20 · 18:50Teo · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#21 · 18:51Priya · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#22 · 18:52Priya · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#23 · 18:53Priya · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#24 · 18:54Pavel · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#25 · 18:55Pavel · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#26 · 18:56Pavel · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#27 · 18:57Zara · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#28 · 18:58Zara · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#29 · 18:59Zara · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#30 · 19:00Iris · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#31 · 19:01Iris · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#32 · 19:02Iris · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#33 · 19:03Omar · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#34 · 19:04Omar · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#35 · 19:05Omar · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#36 · 19:06June · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#37 · 19:07June · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#38 · 19:08June · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#39 · 19:09Victor · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#40 · 19:10Victor · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#41 · 19:11Victor · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#42 · 19:12Lina · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#43 · 19:13Lina · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#44 · 19:14Lina · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#45 · 19:15Marco · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#46 · 19:16Marco · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#47 · 19:17Marco · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#48 · 19:18Rafa · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#49 · 19:19Rafa · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#50 · 19:20Rafa · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#51 · 19:21Anika · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#52 · 19:22Anika · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#53 · 19:23Anika · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#54 · 19:24Celine · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#55 · 19:25Celine · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#56 · 19:26Celine · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#57 · 19:27Haruto · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#58 · 19:28Haruto · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#59 · 19:29Haruto · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#60 · 19:30Yuna · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#61 · 19:31Yuna · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#62 · 19:32Yuna · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#63 · 19:33Sol · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#64 · 19:34Sol · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#65 · 19:35Sol · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#66 · 19:36Elena · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#67 · 19:37Elena · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#68 · 19:38Elena · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#69 · 19:39Noah · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#70 · 19:40Noah · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#71 · 19:41Noah · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#72 · 19:42Diego · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#73 · 19:43Diego · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#74 · 19:44Diego · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      }
+    ]
+  },
+  "interaction": {
+    "beforeZoom": "PROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection",
+    "afterZoom": "PROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n105%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection",
+    "bubblesBefore": "true",
+    "bubblesAfter": "false",
+    "edgesBefore": "true",
+    "edgesAfter": "false",
+    "afterCriticalTimeline": "TIMELINE\nPrev\nPlay\nNext\nSpeed\n0.7x\n1x\n2x\n1 / 75 · run-agent-memory-plan-8a0ab12a-000\nNo events match the active filters.",
+    "afterNextHeader": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-agent-memory-plan-8a0ab12a\nStatus\npaused\nCursor\n2 / 75\nEvents\n75\nWarnings\n0\nQuarantine\n0",
+    "afterPlayHeader": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-agent-memory-plan-8a0ab12a\nStatus\nrunning\nCursor\n2 / 75\nEvents\n75\nWarnings\n0\nQuarantine\n0",
+    "afterInteractionFacts": {
+      "title": "Agent Town",
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-agent-memory-plan-8a0ab12a\nStatus\nrunning\nCursor\n2 / 75\nEvents\n75\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nmemory-plan · 75 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nIntervention\nMemory\nMemory plan\nWS sample\n\nMemory bank · 50 records\n\nConnect\nDisconnect\nAgent-addressable memory plan: 75 events accepted.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n105%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / thinking / town_hall\nEVENT FILTERS\n\n4 / 10 types visible in Timeline.\n\nthinking\n25 events\nmessage\n0 events\ntool call\n0 events\nhandoff\n0 events\nmemory read\n25 events\nmemory write\n0 events\ndecision\n25 events\nblocked\n0 events\nerror\n0 events\ndone\n0 events\nAll\nNone\nCritical\n\nIsabella / thinking / Reflect on persistent memory\n\ncursor 1\nvisible 0/75\nexpanded\n105%\nRUN SUMMARY\nEvents\n75\nAgents\n25\nHandoffs\n0\nTool calls\n0\nMemory actions\n25\nBlocked\n0\nErrors\n0\nFirst blocked: none\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: run-agent-memory-plan-8a0ab12a-001\nSelected event: run-agent-memory-plan-8a0ab12a-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nthinking\nLocation\ntown_hall\nSelected Event\nID\nrun-agent-memory-plan-8a0ab12a-000\nSequence\n0\nTimestamp\n2026-07-04T18:30:00.000Z\nRun ID\nrun-agent-memory-plan-8a0ab12a\nTask ID\ntask-agent-addressable-memory-plan\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_read\nStatus\nrunning\nSummary\nRetrieve agent-addressable memory\nContent\nIsabella retrieves 3 durable memories for: Isabella planner Seed party intervention A user suggests that Isabella should host a Valentine's gathering by the fountain. smallville-social observation town_hall_table wave-0 persistent memory next plan relationship location evidence\nTarget\nagent=none; task=none\nTool\nnone\nTool input\nnone\nTool output\nnone\nArtifacts\nnone\nFile path\nnone\nMetrics\nnone\nMetadata\n{\"source\":\"memory\",\"tags\":[\"persistent-memory\",\"agent-addressable\",\"smallville-memory-plan\",\"agent-isabella\"],\"subLocationId\":\"archive_shelves\",\"activity\":\"retrieves durable memory\",\"agentAddressableMemory\":{\"schemaVersion\":1,\"agentId\":\"agent-isabella\",\"previousEventCount\":0,\"retrievalQuery\":\"Isabella planner Seed party interv",
+      "headerText": "ATAgent TownAgentEvent-driven runtime projectionRun IDrun-agent-memory-plan-8a0ab12aStatusrunningCursor2 / 75Events75Warnings0Quarantine0",
+      "importPanelText": "Import Sourcememory-plan · 75 eventsMockJSONLTown dayCognitiveSocial dayInterventionMemoryMemory planWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}} {\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}} {\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-002\"}}ConnectDisconnectAgent-addressable memory plan: 75 events accepted.warnings=0; quarantined=0",
+      "timelineText": "TimelinePrevPauseNextSpeed0.7x1x2x2 / 75 · run-agent-memory-plan-8a0ab12a-001No events match the active filters.",
+      "detailText": "Run SummaryEvents75Agents25Handoffs0Tool calls0Memory actions25Blocked0Errors0First blocked: noneFirst error: noneBefore error: noneEvent / Agent DetailPlaybackCurrent event: run-agent-memory-plan-8a0ab12a-001Selected event: run-agent-memory-plan-8a0ab12a-000Selected AgentNameIsabellaRoleplannerStatusthinkingLocationtown_hallSelected EventIDrun-agent-memory-plan-8a0ab12a-000Sequence0Timestamp2026-07-04T18:30:00.000ZRun IDrun-agent-memory-plan-8a0ab12aTask IDtask-agent-addressable-memory-planAgentIsabella (agent-isabella)RoleplannerTypememory_readStatusrunningSummaryRetrieve agent-addressable memoryContentIsabella retrieves 3 durable memories for: Isabella planner Seed party intervention A user suggests that Isabella should host a Valentine's gathering by the fountain. smallville-social observation town_hall_table wave-0 persistent memory next plan relationship location evidenceTargetagent=none; task=noneToolnoneTool inputnoneTool outputnoneArtifactsnoneFile pathnoneMetricsnoneMetadata{\"source\":\"memory\",\"tags\":[\"persistent-memory\",\"agent-addressable\",\"smallville-memory-plan\",\"agent-isabella\"],\"subLocationId\":\"archive_shelves\",\"activity\":\"retrieves durable memory\",\"agentAddressableMemory\":{\"schemaVersion\":1,\"agentId\":\"agent-isabella\",\"previousEventCount\":0,\"retrievalQuery\":\"Isabella planner Seed party intervention A user suggests that Isabella should host a Valentine's gathering by the fountain. smallville-social observation town_hall_table wave-0 persistent memory next plan relationship location evidence\",\"selectedRecordIds\":[\"memory:run-smallville-social-001:social-000\",\"me",
+      "agentRows": [
+        "Isabella"
+      ],
+      "memoryRecordCount": 50,
+      "memorySchemaVersion": 1,
+      "memoryStorageBytes": 39266,
+      "canvas": {
+        "width": 1040,
+        "height": 900,
+        "clientWidth": 773,
+        "clientHeight": 669
+      },
+      "overflowX": 0,
+      "buttons": [
+        {
+          "text": "Mock",
+          "ariaLabel": null,
+          "ariaPressed": "false"
+        },
+        {
+          "text": "JSONL",
+          "ariaLabel": null,
+          "ariaPressed": "false"
+        },
+        {
+          "text": "Town day",
+          "ariaLabel": null,
+          "ariaPressed": "false"
+        },
+        {
+          "text": "Cognitive",
+          "ariaLabel": null,
+          "ariaPressed": "false"
+        },
+        {
+          "text": "Social day",
+          "ariaLabel": null,
+          "ariaPressed": "false"
+        },
+        {
+          "text": "Intervention",
+          "ariaLabel": null,
+          "ariaPressed": "false"
+        },
+        {
+          "text": "Memory",
+          "ariaLabel": null,
+          "ariaPressed": "false"
+        },
+        {
+          "text": "Memory plan",
+          "ariaLabel": null,
+          "ariaPressed": "true"
+        },
+        {
+          "text": "WS sample",
+          "ariaLabel": null,
+          "ariaPressed": "false"
+        },
+        {
+          "text": "Connect",
+          "ariaLabel": null,
+          "ariaPressed": null
+        },
+        {
+          "text": "Disconnect",
+          "ariaLabel": null,
+          "ariaPressed": null
+        },
+        {
+          "text": "Compact",
+          "ariaLabel": null,
+          "ariaPressed": "false"
+        },
+        {
+          "text": "Balanced",
+          "ariaLabel": null,
+          "ariaPressed": "false"
+        },
+        {
+          "text": "Expanded",
+          "ariaLabel": null,
+          "ariaPressed": "true"
+        },
+        {
+          "text": "-",
+          "ariaLabel": "Zoom out",
+          "ariaPressed": null
+        },
+        {
+          "text": "+",
+          "ariaLabel": "Zoom in",
+          "ariaPressed": null
+        },
+        {
+          "text": "",
+          "ariaLabel": "Toggle event bubbles",
+          "ariaPressed": "false"
+        },
+        {
+          "text": "",
+          "ariaLabel": "Toggle handoff edges",
+          "ariaPressed": "false"
+        },
+        {
+          "text": "Reset projection",
+          "ariaLabel": null,
+          "ariaPressed": null
+        },
+        {
+          "text": "Isabellaplanner / thinking / town_hall",
+          "ariaLabel": null,
+          "ariaPressed": "true"
+        },
+        {
+          "text": "thinking25 events",
+          "ariaLabel": null,
+          "ariaPressed": "false"
+        },
+        {
+          "text": "message0 events",
+          "ariaLabel": null,
+          "ariaPressed": "false"
+        },
+        {
+          "text": "tool call0 events",
+          "ariaLabel": null,
+          "ariaPressed": "false"
+        },
+        {
+          "text": "handoff0 events",
+          "ariaLabel": null,
+          "ariaPressed": "true"
+        },
+        {
+          "text": "memory read25 events",
+          "ariaLabel": null,
+          "ariaPressed": "false"
+        },
+        {
+          "text": "memory write0 events",
+          "ariaLabel": null,
+          "ariaPressed": "false"
+        },
+        {
+          "text": "decision25 events",
+          "ariaLabel": null,
+          "ariaPressed": "false"
+        },
+        {
+          "text": "blocked0 events",
+          "ariaLabel": null,
+          "ariaPressed": "true"
+        },
+        {
+          "text": "error0 events",
+          "ariaLabel": null,
+          "ariaPressed": "true"
+        },
+        {
+          "text": "done0 events",
+          "ariaLabel": null,
+          "ariaPressed": "true"
+        },
+        {
+          "text": "All",
+          "ariaLabel": null,
+          "ariaPressed": null
+        },
+        {
+          "text": "None",
+          "ariaLabel": null,
+          "ariaPressed": null
+        },
+        {
+          "text": "Critical",
+          "ariaLabel": null,
+          "ariaPressed": null
+        },
+        {
+          "text": "First blocked: none",
+          "ariaLabel": null,
+          "ariaPressed": null
+        },
+        {
+          "text": "First error: none",
+          "ariaLabel": null,
+          "ariaPressed": null
+        },
+        {
+          "text": "Before error: none",
+          "ariaLabel": null,
+          "ariaPressed": null
+        },
+        {
+          "text": "Prev",
+          "ariaLabel": null,
+          "ariaPressed": null
+        },
+        {
+          "text": "Pause",
+          "ariaLabel": null,
+          "ariaPressed": null
+        },
+        {
+          "text": "Next",
+          "ariaLabel": null,
+          "ariaPressed": null
+        }
+      ]
+    }
+  },
+  "mobileFacts": {
+    "title": "Agent Town",
+    "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-agent-memory-plan-8a0ab12a\nStatus\npaused\nCursor\n1 / 75\nEvents\n75\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nmemory-plan · 75 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nIntervention\nMemory\nMemory plan\nWS sample\n\nMemory bank · 50 records\n\nConnect\nDisconnect\nAgent-addressable memory plan: 75 events accepted.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / archive\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n25 events\nmessage\n0 events\ntool call\n0 events\nhandoff\n0 events\nmemory read\n25 events\nmemory write\n0 events\ndecision\n25 events\nblocked\n0 events\nerror\n0 events\ndone\n0 events\nAll\nNone\nCritical\n\nIsabella / memory_read / Retrieve agent-addressable memory\n\ncursor 0\nvisible 75/75\nbalanced\n100%\nRUN SUMMARY\nEvents\n75\nAgents\n25\nHandoffs\n0\nTool calls\n0\nMemory actions\n25\nBlocked\n0\nErrors\n0\nFirst blocked: none\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: run-agent-memory-plan-8a0ab12a-000\nSelected event: run-agent-memory-plan-8a0ab12a-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nworking\nLocation\narchive\nSelected Event\nID\nrun-agent-memory-plan-8a0ab12a-000\nSequence\n0\nTimestamp\n2026-07-04T18:30:00.000Z\nRun ID\nrun-agent-memory-plan-8a0ab12a\nTask ID\ntask-agent-addressable-memory-plan\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_read\nStatus\nrunning\nSummary\nRetrieve agent-addressable memory\nContent\nIsabella retrieves 3 durable memories for: Isabella planner Arrive at party Isabella arrives at the fountain knowing who carried the invitation through town. smallville-social closure square_fountain_edge wave-0 persistent memory next plan relationship location evidence\nTarget\nagent=none; task=none\nTool\nnone\nTool input\nnone\nTool output\nnone\nArtifacts\nnone\nFile path\nnone\nMetrics\nnone\nMetadata\n{\"source\":\"memory\",\"tags\":[\"persistent-memory\",\"agent-addressable\",\"smallville-memory-plan\",\"agent-isabella\"],\"subLocationId\":\"archive_shelves\",\"activity\":\"retrieves durable memory\",\"agentAddressableMemory\":{\"schemaVersion\":1,\"agentId\":\"agent-isabella\",\"latestEventId\":\"social-125\",\"latestRunId\":\"run-smallville-social-001\",\"latestTa",
+    "headerText": "ATAgent TownAgentEvent-driven runtime projectionRun IDrun-agent-memory-plan-8a0ab12aStatuspausedCursor1 / 75Events75Warnings0Quarantine0",
+    "importPanelText": "Import Sourcememory-plan · 75 eventsMockJSONLTown dayCognitiveSocial dayInterventionMemoryMemory planWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}} {\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}} {\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-002\"}}ConnectDisconnectAgent-addressable memory plan: 75 events accepted.warnings=0; quarantined=0",
+    "timelineText": "TimelinePrevPlayNextSpeed0.7x1x2x1 / 75 · run-agent-memory-plan-8a0ab12a-000#00 · 18:30Isabella · memory_readRetrieve agent-addressable memory#01 · 18:31Isabella · thinkingReflect on persistent memory#02 · 18:32Isabella · decisionPlan from persistent memory#03 · 18:33Klaus · memory_readRetrieve agent-addressable memory#04 · 18:34Klaus · thinkingReflect on persistent memory#05 · 18:35Klaus · decisionPlan from persistent memory#06 · 18:36Mei · memory_readRetrieve agent-addressable memory#07 · 18:37Mei · thinkingReflect on persistent memory#08 · 18:38Mei · decisionPlan from persistent memory#09 · 18:39Sam · memory_readRetrieve agent-addressable memory#10 · 18:40Sam · thinkingReflect on persistent memory#11 · 18:41Sam · decisionPlan from persistent memory#12 · 18:42Maria · memory_readRetrieve agent-addressable memory#13 · 18:43Maria · thinkingReflect on persistent memory#14 · 18:44Maria · decisionPlan from persistent memory#15 · 18:45Nora · memory_readRetrieve agent-addressable memory#16 · 18:46Nora · thinkingReflect on persistent memory#17 · 18:47Nora · decisionPlan from persistent memory#18 · 18:48Teo · memory_readRetrieve agent-addressable memory#19 · 18:49Teo · thinkingReflect on persistent memory#20 · 18:50Teo · decisionPlan from persistent memory#21 · 18:51Priya · memory_readRetrieve agent-addressable memory#22 · 18:52Priya · thinkingReflect on persistent memory#23 · 18:53Priya · decisionPlan from persistent memory#24 · 18:54Pavel · memory_readRetrieve agent-addressable memory#25 · 18:55Pavel · thinkingReflect on persistent memory#26 · 18:56Pavel · decisionPlan from persi",
+    "detailText": "Run SummaryEvents75Agents25Handoffs0Tool calls0Memory actions25Blocked0Errors0First blocked: noneFirst error: noneBefore error: noneEvent / Agent DetailPlaybackCurrent event: run-agent-memory-plan-8a0ab12a-000Selected event: run-agent-memory-plan-8a0ab12a-000Selected AgentNameIsabellaRoleplannerStatusworkingLocationarchiveSelected EventIDrun-agent-memory-plan-8a0ab12a-000Sequence0Timestamp2026-07-04T18:30:00.000ZRun IDrun-agent-memory-plan-8a0ab12aTask IDtask-agent-addressable-memory-planAgentIsabella (agent-isabella)RoleplannerTypememory_readStatusrunningSummaryRetrieve agent-addressable memoryContentIsabella retrieves 3 durable memories for: Isabella planner Arrive at party Isabella arrives at the fountain knowing who carried the invitation through town. smallville-social closure square_fountain_edge wave-0 persistent memory next plan relationship location evidenceTargetagent=none; task=noneToolnoneTool inputnoneTool outputnoneArtifactsnoneFile pathnoneMetricsnoneMetadata{\"source\":\"memory\",\"tags\":[\"persistent-memory\",\"agent-addressable\",\"smallville-memory-plan\",\"agent-isabella\"],\"subLocationId\":\"archive_shelves\",\"activity\":\"retrieves durable memory\",\"agentAddressableMemory\":{\"schemaVersion\":1,\"agentId\":\"agent-isabella\",\"latestEventId\":\"social-125\",\"latestRunId\":\"run-smallville-social-001\",\"latestTaskId\":\"task-valentine-social-diffusion\",\"previousEventCount\":6,\"retrievalQuery\":\"Isabella planner Arrive at party Isabella arrives at the fountain knowing who carried the invitation through town. smallville-social closure square_fountain_edge wave-0 persistent memory next plan r",
+    "agentRows": [
+      "Isabella"
+    ],
+    "memoryRecordCount": 50,
+    "memorySchemaVersion": 1,
+    "memoryStorageBytes": 39266,
+    "canvas": {
+      "width": 1040,
+      "height": 900,
+      "clientWidth": 372,
+      "clientHeight": 322
+    },
+    "overflowX": 0,
+    "buttons": [
+      {
+        "text": "Mock",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "JSONL",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Town day",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Cognitive",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Social day",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Intervention",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Memory plan",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "WS sample",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Connect",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Disconnect",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Compact",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "Balanced",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "Expanded",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "-",
+        "ariaLabel": "Zoom out",
+        "ariaPressed": null
+      },
+      {
+        "text": "+",
+        "ariaLabel": "Zoom in",
+        "ariaPressed": null
+      },
+      {
+        "text": "",
+        "ariaLabel": "Toggle event bubbles",
+        "ariaPressed": "true"
+      },
+      {
+        "text": "",
+        "ariaLabel": "Toggle handoff edges",
+        "ariaPressed": "true"
+      },
+      {
+        "text": "Reset projection",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Isabellaplanner / working / archive",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "thinking25 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "message0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "tool call0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "handoff0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "memory read25 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "memory write0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "decision25 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "blocked0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "error0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "done0 events",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "All",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "None",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Critical",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "First blocked: none",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "First error: none",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Before error: none",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Prev",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Play",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "Next",
+        "ariaLabel": null,
+        "ariaPressed": null
+      },
+      {
+        "text": "#00 · 18:30Isabella · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "true"
+      },
+      {
+        "text": "#01 · 18:31Isabella · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#02 · 18:32Isabella · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#03 · 18:33Klaus · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#04 · 18:34Klaus · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#05 · 18:35Klaus · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#06 · 18:36Mei · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#07 · 18:37Mei · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#08 · 18:38Mei · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#09 · 18:39Sam · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#10 · 18:40Sam · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#11 · 18:41Sam · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#12 · 18:42Maria · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#13 · 18:43Maria · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#14 · 18:44Maria · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#15 · 18:45Nora · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#16 · 18:46Nora · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#17 · 18:47Nora · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#18 · 18:48Teo · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#19 · 18:49Teo · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#20 · 18:50Teo · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#21 · 18:51Priya · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#22 · 18:52Priya · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#23 · 18:53Priya · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#24 · 18:54Pavel · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#25 · 18:55Pavel · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#26 · 18:56Pavel · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#27 · 18:57Zara · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#28 · 18:58Zara · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#29 · 18:59Zara · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#30 · 19:00Iris · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#31 · 19:01Iris · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#32 · 19:02Iris · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#33 · 19:03Omar · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#34 · 19:04Omar · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#35 · 19:05Omar · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#36 · 19:06June · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#37 · 19:07June · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#38 · 19:08June · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#39 · 19:09Victor · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#40 · 19:10Victor · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#41 · 19:11Victor · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#42 · 19:12Lina · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#43 · 19:13Lina · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#44 · 19:14Lina · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#45 · 19:15Marco · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#46 · 19:16Marco · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#47 · 19:17Marco · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#48 · 19:18Rafa · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#49 · 19:19Rafa · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#50 · 19:20Rafa · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#51 · 19:21Anika · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#52 · 19:22Anika · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#53 · 19:23Anika · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#54 · 19:24Celine · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#55 · 19:25Celine · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#56 · 19:26Celine · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#57 · 19:27Haruto · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#58 · 19:28Haruto · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#59 · 19:29Haruto · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#60 · 19:30Yuna · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#61 · 19:31Yuna · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#62 · 19:32Yuna · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#63 · 19:33Sol · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#64 · 19:34Sol · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#65 · 19:35Sol · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#66 · 19:36Elena · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#67 · 19:37Elena · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#68 · 19:38Elena · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#69 · 19:39Noah · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#70 · 19:40Noah · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#71 · 19:41Noah · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#72 · 19:42Diego · memory_readRetrieve agent-addressable memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#73 · 19:43Diego · thinkingReflect on persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      },
+      {
+        "text": "#74 · 19:44Diego · decisionPlan from persistent memory",
+        "ariaLabel": null,
+        "ariaPressed": "false"
+      }
+    ]
+  },
+  "console": {
+    "desktopPageErrors": [],
+    "desktopRawIssues": [
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x10400544800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x10400549600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x1040054ae00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x10400549600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+      }
+    ],
+    "desktopRelevantIssues": [],
+    "mobilePageErrors": [],
+    "mobileRawIssues": [],
+    "mobileRelevantIssues": []
+  },
+  "assertions": {
+    "initialMemoryRecordsZero": true,
+    "socialPersistedFiftyRecords": true,
+    "reloadKeptFiftyRecords": true,
+    "memoryPlanLoadedSeventyFiveEvents": true,
+    "memoryPlanWarningsZero": true,
+    "memoryPlanQuarantineZero": true,
+    "memoryPlanUsesDurableMemoryAgents": true,
+    "criticalFilterChangedTimeline": true,
+    "criticalFilterExpectedEmpty": true,
+    "nextChangedCursor": true,
+    "playChangedStatus": true,
+    "noDesktopPageErrors": true,
+    "noRelevantDesktopConsoleIssues": true,
+    "noMobilePageErrors": true,
+    "noRelevantMobileConsoleIssues": true,
+    "noDesktopOverflow": true,
+    "noMobileOverflow": true,
+    "screenshotsNonblank": true
+  },
+  "screenshots": {
+    "desktop": "docs/evidence/M5/smallville-memory-plan-desktop.png",
+    "interaction": "docs/evidence/M5/smallville-memory-plan-interaction.png",
+    "mobile": "docs/evidence/M5/smallville-memory-plan-mobile.png",
+    "mobileMap": "docs/evidence/M5/smallville-memory-plan-mobile-map.png",
+    "qa": "docs/evidence/M5/smallville-memory-plan-qa.json",
+    "pixel": "docs/evidence/M5/smallville-memory-plan-pixel-check.json"
+  }
+}

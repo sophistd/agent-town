@@ -1,0 +1,108 @@
+{
+  "generatedAt": "2026-07-04T21:28:27.888Z",
+  "baseUrl": "http://localhost:5173/",
+  "branch": "codex/smallville-asset-pipeline",
+  "desktop": {
+    "initial": {
+      "label": "desktop-social-initial",
+      "url": "http://localhost:5173/",
+      "title": "Agent Town",
+      "bodyTextSample": "\n    ATAgent TownAgentEvent-driven runtime projectionRun IDrun-smallville-social-001StatuspausedCursor1 / 150Events150Warnings0Quarantine0Import Sourcesocial · 150 eventsMockJSONLTown dayCognitiveSocial dayRoutine dayInterventionMemoryMemory planLLM planWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}}\n{\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}}\n{\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-002\"}}ConnectDisconnectSocial diffusion run loaded.warnings=0; quarantined=0Projection controlsTune how WorldState becomes the town view.Layout densityCompactBalancedExpandedTown zoom100%-+Show bubblesShow handoff edgesReset projectionAgent focus1 agents reconstructed from replay.Isabellaplanner / working / town_hallEvent filters10 / 10 types visible in Timeline.thinking25 eventsmessage25 eventstool call0 eventshandoff0 eventsmemory read25 eventsmemory write25 eventsdecision25 eventsblocked0 eventserror0 eventsdon",
+      "hasSocialSource": true,
+      "hasRelationshipsMetric": true,
+      "hasRelationshipCount": true,
+      "hasTopRelationshipEvidence": true,
+      "hasSelectedAgentRelationshipDetail": true,
+      "hasNoHorizontalOverflow": true,
+      "canvas": {
+        "x": 311,
+        "y": 110,
+        "width": 773,
+        "height": 669
+      }
+    },
+    "interaction": {
+      "label": "desktop-social-interaction",
+      "url": "http://localhost:5173/",
+      "title": "Agent Town",
+      "bodyTextSample": "\n    ATAgent TownAgentEvent-driven runtime projectionRun IDrun-smallville-social-001StatusrunningCursor2 / 150Events150Warnings0Quarantine0Import Sourcesocial · 150 eventsMockJSONLTown dayCognitiveSocial dayRoutine dayInterventionMemoryMemory planLLM planWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}}\n{\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}}\n{\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-002\"}}ConnectDisconnectSocial diffusion run loaded.warnings=0; quarantined=0Projection controlsTune how WorldState becomes the town view.Layout densityCompactBalancedExpandedTown zoom105%-+Show bubblesShow handoff edgesReset projectionAgent focus1 agents reconstructed from replay.Isabellaplanner / working / archiveEvent filters4 / 10 types visible in Timeline.thinking25 eventsmessage25 eventstool call0 eventshandoff0 eventsmemory read25 eventsmemory write25 eventsdecision25 eventsblocked0 eventserror0 eventsdone2",
+      "hasSocialSource": true,
+      "hasRelationshipsMetric": true,
+      "hasRelationshipCount": true,
+      "hasTopRelationshipEvidence": true,
+      "hasSelectedAgentRelationshipDetail": true,
+      "hasNoHorizontalOverflow": true,
+      "canvas": {
+        "x": 311,
+        "y": 110,
+        "width": 773,
+        "height": 669
+      }
+    },
+    "interactionChecks": {
+      "zoomVisible": true,
+      "filterOrTimelineChanged": true,
+      "nextOrPlayMovedState": true
+    },
+    "consoleMessages": [
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x12400544800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x1240054ae00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x12400553200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x1240054ae00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+      }
+    ],
+    "pageErrors": []
+  },
+  "mobile": {
+    "state": {
+      "label": "mobile-social",
+      "url": "http://localhost:5173/",
+      "title": "Agent Town",
+      "bodyTextSample": "\n    ATAgent TownAgentEvent-driven runtime projectionRun IDrun-smallville-social-001StatuspausedCursor1 / 150Events150Warnings0Quarantine0Import Sourcesocial · 150 eventsMockJSONLTown dayCognitiveSocial dayRoutine dayInterventionMemoryMemory planLLM planWS sampleMemory bank · 50 recordsMove the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.{\"id\":\"jsonl-ui-0\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:00:00.000Z\",\"sequence\":0,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"thinking\",\"content\":\"Planner identifies product, event, projection, and evidence work.\",\"summary\":\"Break down prototype task\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-000\"}}\n{\"id\":\"jsonl-ui-1\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:01:00.000Z\",\"sequence\":1,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"decision\",\"content\":\"Planner chooses AgentEvent before visuals.\",\"summary\":\"Use event-first plan\",\"locationHint\":\"town_hall\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-001\"}}\n{\"id\":\"jsonl-ui-2\",\"runId\":\"run-jsonl-ui-sample\",\"taskId\":\"task-agent-town-prototype\",\"timestamp\":\"2026-07-04T12:02:00.000Z\",\"sequence\":2,\"agentId\":\"agent-planner\",\"agentName\":\"Planner\",\"agentRole\":\"planner\",\"type\":\"handoff\",\"content\":\"Planner hands runtime-observability research to Researcher.\",\"summary\":\"Assign research\",\"targetAgentId\":\"agent-researcher\",\"targetTaskId\":\"task-research-runtime-ui\",\"locationHint\":\"dispatch_board\",\"status\":\"running\",\"metadata\":{\"source\":\"jsonl\",\"tags\":[\"happy-path\",\"mvp\",\"ui-jsonl-sample\"],\"rawEventId\":\"happy-002\"}}ConnectDisconnectSocial diffusion run loaded.warnings=0; quarantined=0Projection controlsTune how WorldState becomes the town view.Layout densityCompactBalancedExpandedTown zoom100%-+Show bubblesShow handoff edgesReset projectionAgent focus1 agents reconstructed from replay.Isabellaplanner / working / town_hallEvent filters10 / 10 types visible in Timeline.thinking25 eventsmessage25 eventstool call0 eventshandoff0 eventsmemory read25 eventsmemory write25 eventsdecision25 eventsblocked0 eventserror0 eventsdon",
+      "hasSocialSource": true,
+      "hasRelationshipsMetric": true,
+      "hasRelationshipCount": true,
+      "hasTopRelationshipEvidence": true,
+      "hasSelectedAgentRelationshipDetail": true,
+      "hasNoHorizontalOverflow": true,
+      "canvas": {
+        "x": 9,
+        "y": 1921,
+        "width": 372,
+        "height": 322
+      }
+    },
+    "consoleMessages": [],
+    "pageErrors": []
+  },
+  "assertions": {
+    "browserLoadedSocialRun": true,
+    "relationshipsMetricVisible": true,
+    "topRelationshipEvidenceVisible": true,
+    "selectedAgentRelationshipsVisible": true,
+    "desktopNoHorizontalOverflow": true,
+    "mobileNoHorizontalOverflow": true,
+    "desktopCanvasVisible": true,
+    "mobileCanvasVisible": true,
+    "interactionZoomFilterNextPlayChecked": true,
+    "noPageErrors": true,
+    "noRelevantConsoleErrors": true
+  },
+  "screenshots": {
+    "desktop": "docs/evidence/M5/smallville-relationships-desktop.png",
+    "interaction": "docs/evidence/M5/smallville-relationships-interaction.png",
+    "mobile": "docs/evidence/M5/smallville-relationships-mobile.png",
+    "mobileMap": "docs/evidence/M5/smallville-relationships-mobile-map.png"
+  }
+}

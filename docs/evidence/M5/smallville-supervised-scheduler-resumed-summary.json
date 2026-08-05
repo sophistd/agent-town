@@ -1,0 +1,236 @@
+{
+  "apiKeyProvided": false,
+  "bounded": true,
+  "checkpoint": {
+    "path": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-supervised-scheduler-checkpoint.json",
+    "previousCompletedTickCount": 2,
+    "resumeRequested": true,
+    "resumed": true,
+    "startTickIndex": 2,
+    "written": true
+  },
+  "emittedEventCount": 40,
+  "eventLogPath": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-supervised-scheduler-resumed-events.jsonl",
+  "eventsPerTick": 10,
+  "memoryFilePath": "/tmp/agent-town-supervised-scheduler-memory.json",
+  "outputPath": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-supervised-scheduler-resumed-summary.json",
+  "phaseCounts": {
+    "afternoon_routine": 1,
+    "evening_reflection": 1,
+    "evening_social": 1,
+    "midday_social": 1,
+    "morning_routine": 0,
+    "work_coordination": 0
+  },
+  "runId": "run-smallville-scheduler-day-001",
+  "scheduleId": "day-001",
+  "scenarioCounts": {
+    "cognitive": 1,
+    "routine": 1,
+    "social": 2
+  },
+  "server": {
+    "url": "http://127.0.0.1:63319"
+  },
+  "source": "smallville-autonomous-scheduler",
+  "startTimestamp": "2026-07-05T07:00:00.000Z",
+  "taskId": "task-smallville-scheduler-day-001",
+  "tickCount": 4,
+  "tickDelayMs": 0,
+  "tickMinutes": 60,
+  "ticks": [
+    {
+      "acceptedInputEventCount": 10,
+      "emittedEventCount": 10,
+      "firstSequence": 20,
+      "lastSequence": 29,
+      "memoryPlanEventCount": 6,
+      "phase": "midday_social",
+      "phaseIntent": "The town social graph spreads a public invitation across relationships.",
+      "providerRecordCount": 13,
+      "providerRequest": {
+        "memoryRecordCount": 13,
+        "promptHash": "2a184082",
+        "requestId": "llm-plan-request-2a184082",
+        "retrievalCount": 2,
+        "selectedRecordCount": 6
+      },
+      "providerResult": {
+        "eventCount": 0,
+        "quarantineCodes": [],
+        "warningCodes": [
+          "missing_openai_api_key"
+        ]
+      },
+      "quarantinedEventCodes": [],
+      "recallEventCount": 13,
+      "scenario": "social",
+      "sourceOffset": 0,
+      "tickId": "scheduler-tick-002",
+      "tickIndex": 2,
+      "virtualClock": {
+        "dayIndex": 0,
+        "minuteOfDay": 540,
+        "timestamp": "2026-07-05T09:00:00.000Z"
+      },
+      "warningCodes": [
+        "missing_openai_api_key"
+      ],
+      "worldMemoryIngest": {
+        "acceptedEventCount": 10,
+        "incomingRecordCount": 4,
+        "persistedRecordCount": 13,
+        "quarantineCodes": [],
+        "warningCodes": []
+      }
+    },
+    {
+      "acceptedInputEventCount": 10,
+      "emittedEventCount": 10,
+      "firstSequence": 30,
+      "lastSequence": 39,
+      "memoryPlanEventCount": 9,
+      "phase": "afternoon_routine",
+      "phaseIntent": "Agents continue routine work with memory from the morning already persisted.",
+      "providerRecordCount": 18,
+      "providerRequest": {
+        "memoryRecordCount": 18,
+        "promptHash": "1361240e",
+        "requestId": "llm-plan-request-1361240e",
+        "retrievalCount": 3,
+        "selectedRecordCount": 9
+      },
+      "providerResult": {
+        "eventCount": 0,
+        "quarantineCodes": [],
+        "warningCodes": [
+          "missing_openai_api_key"
+        ]
+      },
+      "quarantinedEventCodes": [],
+      "recallEventCount": 18,
+      "scenario": "routine",
+      "sourceOffset": 60,
+      "tickId": "scheduler-tick-003",
+      "tickIndex": 3,
+      "virtualClock": {
+        "dayIndex": 0,
+        "minuteOfDay": 600,
+        "timestamp": "2026-07-05T10:00:00.000Z"
+      },
+      "warningCodes": [
+        "missing_openai_api_key"
+      ],
+      "worldMemoryIngest": {
+        "acceptedEventCount": 10,
+        "incomingRecordCount": 5,
+        "persistedRecordCount": 18,
+        "quarantineCodes": [],
+        "warningCodes": []
+      }
+    },
+    {
+      "acceptedInputEventCount": 10,
+      "emittedEventCount": 10,
+      "firstSequence": 40,
+      "lastSequence": 49,
+      "memoryPlanEventCount": 9,
+      "phase": "evening_reflection",
+      "phaseIntent": "Reviewers and memory agents reflect on the day's accumulated evidence.",
+      "providerRecordCount": 22,
+      "providerRequest": {
+        "memoryRecordCount": 22,
+        "promptHash": "28d21686",
+        "requestId": "llm-plan-request-28d21686",
+        "retrievalCount": 3,
+        "selectedRecordCount": 9
+      },
+      "providerResult": {
+        "eventCount": 0,
+        "quarantineCodes": [],
+        "warningCodes": [
+          "missing_openai_api_key"
+        ]
+      },
+      "quarantinedEventCodes": [],
+      "recallEventCount": 22,
+      "scenario": "cognitive",
+      "sourceOffset": 15,
+      "tickId": "scheduler-tick-004",
+      "tickIndex": 4,
+      "virtualClock": {
+        "dayIndex": 0,
+        "minuteOfDay": 660,
+        "timestamp": "2026-07-05T11:00:00.000Z"
+      },
+      "warningCodes": [
+        "missing_openai_api_key"
+      ],
+      "worldMemoryIngest": {
+        "acceptedEventCount": 10,
+        "incomingRecordCount": 4,
+        "persistedRecordCount": 22,
+        "quarantineCodes": [],
+        "warningCodes": []
+      }
+    },
+    {
+      "acceptedInputEventCount": 10,
+      "emittedEventCount": 10,
+      "firstSequence": 50,
+      "lastSequence": 59,
+      "memoryPlanEventCount": 9,
+      "phase": "evening_social",
+      "phaseIntent": "Late social coordination closes the day in the public square.",
+      "providerRecordCount": 26,
+      "providerRequest": {
+        "memoryRecordCount": 26,
+        "promptHash": "f846ceea",
+        "requestId": "llm-plan-request-f846ceea",
+        "retrievalCount": 3,
+        "selectedRecordCount": 9
+      },
+      "providerResult": {
+        "eventCount": 0,
+        "quarantineCodes": [],
+        "warningCodes": [
+          "missing_openai_api_key"
+        ]
+      },
+      "quarantinedEventCodes": [],
+      "recallEventCount": 26,
+      "scenario": "social",
+      "sourceOffset": 90,
+      "tickId": "scheduler-tick-005",
+      "tickIndex": 5,
+      "virtualClock": {
+        "dayIndex": 0,
+        "minuteOfDay": 720,
+        "timestamp": "2026-07-05T12:00:00.000Z"
+      },
+      "warningCodes": [
+        "missing_openai_api_key"
+      ],
+      "worldMemoryIngest": {
+        "acceptedEventCount": 10,
+        "incomingRecordCount": 4,
+        "persistedRecordCount": 26,
+        "quarantineCodes": [],
+        "warningCodes": []
+      }
+    }
+  ],
+  "totals": {
+    "acceptedInputEventCount": 40,
+    "finalPersistedRecordCount": 26,
+    "memoryPlanEventCount": 33,
+    "providerEventCount": 0,
+    "providerRecordCount": 79,
+    "quarantinedEventCount": 0,
+    "recallEventCount": 79,
+    "warningCount": 4
+  },
+  "warningCodes": [
+    "missing_openai_api_key"
+  ]
+}

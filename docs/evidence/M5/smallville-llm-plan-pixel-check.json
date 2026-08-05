@@ -1,0 +1,38 @@
+{
+  "desktop": {
+    "path": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-llm-plan-desktop.png",
+    "width": 1440,
+    "height": 960,
+    "uniqueColorCount": 5444,
+    "nontransparentRatio": 1.0,
+    "sampledLuminanceRange": 238.0,
+    "nonblank": true
+  },
+  "interaction": {
+    "path": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-llm-plan-interaction.png",
+    "width": 1440,
+    "height": 960,
+    "uniqueColorCount": 4876,
+    "nontransparentRatio": 1.0,
+    "sampledLuminanceRange": 229.67,
+    "nonblank": true
+  },
+  "mobile": {
+    "path": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-llm-plan-mobile.png",
+    "width": 780,
+    "height": 9854,
+    "uniqueColorCount": 6880,
+    "nontransparentRatio": 1.0,
+    "sampledLuminanceRange": 240.33,
+    "nonblank": true
+  },
+  "mobileMap": {
+    "path": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-llm-plan-mobile-map.png",
+    "width": 742,
+    "height": 642,
+    "uniqueColorCount": 1893,
+    "nontransparentRatio": 1.0,
+    "sampledLuminanceRange": 231.33,
+    "nonblank": true
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "generatedAt": "2026-07-04T19:29:15.439Z",
+  "baseUrl": "http://127.0.0.1:5173/",
+  "source": "Intervention",
+  "flow": "app -> Social day prior run -> fill natural-language intervention -> Intervention source -> 8-event canonical run",
+  "prompt": "Move the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.",
+  "browserAttempt": {
+    "tool": "Codex Browser plugin",
+    "title": "Agent Town",
+    "interventionLoaded": true,
+    "domSnapshotError": "Error: Browser Use encountered an error interacting with this webpage: TypeError: o.incrementalAriaSnapshot is not a function",
+    "consoleNote": "Browser dev logs contained stale pre-existing errors from earlier tab lifetime; clean Playwright context below is authoritative for current app console health."
+  },
+  "screenshots": {
+    "desktop": "docs/evidence/M5/smallville-intervention-desktop.png",
+    "interaction": "docs/evidence/M5/smallville-intervention-interaction.png",
+    "mobile": "docs/evidence/M5/smallville-intervention-mobile.png",
+    "mobileMap": "docs/evidence/M5/smallville-intervention-mobile-map.png"
+  },
+  "desktop": {
+    "title": "Agent Town",
+    "horizontalOverflow": 0,
+    "canvasCount": 1,
+    "canvasRects": [
+      {
+        "x": 311,
+        "y": 110,
+        "width": 773,
+        "height": 669
+      }
+    ],
+    "frameworkOverlayPresent": false,
+    "viewport": {
+      "width": 1440,
+      "height": 960,
+      "devicePixelRatio": 1
+    },
+    "toolbarBefore": {
+      "activeSource": true,
+      "statusCopy": true,
+      "runId": true,
+      "headerCursor": true,
+      "toolbarCursor": true,
+      "visibleAll": true,
+      "balanced": true,
+      "zoom100": true,
+      "summaryEvents": true,
+      "summaryAgents": true,
+      "memoryActions": true,
+      "blockedZero": true,
+      "errorsZero": true,
+      "promptVisible": true,
+      "priorRunVisible": true,
+      "targetLocationVisible": true,
+      "generatedByVisible": true
+    },
+    "interaction": {
+      "expandedPressed": true,
+      "zoomChangedTo105": true,
+      "bubblesPressedAfterToggle": "false",
+      "edgesPressedAfterToggle": "false",
+      "criticalFilterVisibleCount": true,
+      "nextChangedCursor": true,
+      "playChangedState": true
+    },
+    "assetResponses": {
+      "/maps/town-v1-preview.png": 200,
+      "/sprites/agent-roles-v1.png": 200,
+      "/tilesets/agent-town-v1.png": 200,
+      "/sprites/buildings-v1.png": 200,
+      "/maps/town-v1.tiled.json": 200
+    },
+    "pageErrors": [],
+    "relevantConsoleIssues": [],
+    "gpuWarningCount": 4
+  },
+  "mobile": {
+    "top": {
+      "title": "Agent Town",
+      "horizontalOverflow": 0,
+      "canvasCount": 1,
+      "canvasRects": [
+        {
+          "x": 9,
+          "y": 1818,
+          "width": 372,
+          "height": 322
+        }
+      ],
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "devicePixelRatio": 2
+      },
+      "interventionLoaded": true
+    },
+    "map": {
+      "horizontalOverflow": 0,
+      "canvasCount": 1,
+      "canvasRects": [
+        {
+          "x": 9,
+          "y": 261,
+          "width": 372,
+          "height": 322
+        }
+      ]
+    }
+  },
+  "consoleSummary": {
+    "totalMessages": 9,
+    "relevantConsoleIssuesCount": 0,
+    "pageErrorCount": 0,
+    "gpuWarningCount": 4
+  }
+}

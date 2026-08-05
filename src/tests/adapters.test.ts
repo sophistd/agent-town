@@ -4,11 +4,14 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { parseNativeJsonl } from "../adapters/jsonlAdapter";
+import { parseNaturalLanguageIntervention } from "../adapters/interventionAdapter";
+import { callProviderLoopHttp } from "../adapters/providerLoopHttpAdapter";
 import {
   connectWebSocketIngest,
   parseWebSocketMessages,
   type WebSocketLike,
 } from "../adapters/websocketAdapter";
+import { mockSmallvilleSocialRun } from "../events/generativeRuntime";
 import type { AgentEvent } from "../events/types";
 import { replay } from "../events/reducer";
 
@@ -121,6 +124,77 @@ describe("jsonl adapter", () => {
   });
 });
 
+describe("natural-language intervention adapter", () => {
+  it("quarantines empty intervention prompts", () => {
+    const result = parseNaturalLanguageIntervention({ prompt: "   " });
+
+    expect(result.source).toBe("intervention");
+    expect(result.events).toHaveLength(0);
+    expect(result.quarantinedEvents).toEqual([
+      expect.objectContaining({
+        code: "invalid_intervention_prompt",
+        source: "intervention",
+      }),
+    ]);
+  });
+
+  it("normalizes a user intervention into canonical AgentEvent evidence", () => {
+    const result = parseNaturalLanguageIntervention({
+      now: "2026-07-04T17:30:00.000Z",
+      previousEvents: mockSmallvilleSocialRun,
+      prompt:
+        "Move the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.",
+    });
+    const finalState = replay(result.events, result.events.length - 1);
+
+    expect(result.source).toBe("intervention");
+    expect(result.quarantinedEvents).toHaveLength(0);
+    expect(result.events).toHaveLength(8);
+    expect(result.events.map((event) => event.type)).toEqual([
+      "memory_write",
+      "memory_read",
+      "thinking",
+      "decision",
+      "message",
+      "tool_call",
+      "done",
+      "done",
+    ]);
+    expect(result.events[0]?.metadata?.source).toBe("intervention");
+    expect(result.events[0]?.metadata?.intervention).toMatchObject({
+      source: "user",
+      intentId: "memory_update",
+      previousRunId: "run-smallville-social-001",
+      previousEventCount: 150,
+      previousMemoryActionCount: 50,
+      previousAgentCount: 25,
+      targetLocation: "library",
+      targetSubLocationId: "library_reading_nook",
+      generatedBy: "deterministic-intervention-adapter",
+    });
+    expect(result.events[4]).toMatchObject({
+      type: "message",
+      targetAgentId: "agent-isabella",
+    });
+    expect(result.events[5]).toMatchObject({
+      agentId: "agent-isabella",
+      locationHint: "library",
+      metadata: expect.objectContaining({
+        subLocationId: "library_reading_nook",
+      }),
+      toolName: "apply_natural_language_intervention",
+    });
+    expect(finalState.warnings).toHaveLength(0);
+    expect(finalState.runSummary).toMatchObject({
+      totalEvents: 8,
+      memoryActionCount: 2,
+      toolCallCount: 1,
+      blockedCount: 0,
+      errorCount: 0,
+    });
+  });
+});
+
 describe("websocket adapter", () => {
   it("parses native AgentEvent messages into the reducer path", () => {
     const result = parseWebSocketMessages(
@@ -219,5 +293,116 @@ describe("websocket adapter", () => {
     expect(statuses).toEqual(["connecting", "open", "closed"]);
     expect(results).toHaveLength(1);
     expect(results[0]?.events[0]?.id).toBe("ws-live-000");
+  });
+});
+
+describe("provider-loop HTTP adapter", () => {
+  it("posts canonical events to the live provider-loop route without request-body secrets", async () => {
+    let requestBody: Record<string, unknown> | undefined;
+    const recallEvent: AgentEvent = {
+      ...baseEvent,
+      agentId: "agent-memory",
+      agentName: "Memory",
+      agentRole: "memory",
+      id: "provider-http-recall-000",
+      runId: "run-provider-http-recall",
+      sequence: 0,
+      type: "memory_read",
+    };
+    const memoryPlanEvent: AgentEvent = {
+      ...baseEvent,
+      id: "provider-http-memory-plan-000",
+      runId: "run-provider-http-memory-plan",
+      sequence: 0,
+      type: "decision",
+    };
+    const providerEvent: AgentEvent = {
+      ...baseEvent,
+      id: "provider-http-provider-000",
+      runId: "run-provider-http-provider",
+      sequence: 0,
+      type: "decision",
+    };
+
+    const result = await callProviderLoopHttp({
+      events: [baseEvent],
+      fetchImpl: async (_input, init) => {
+        requestBody = JSON.parse(init?.body ?? "{}") as Record<string, unknown>;
+
+        return {
+          ok: true,
+          status: 200,
+          statusText: "OK",
+          text: async () =>
+            JSON.stringify({
+              data: {
+                events: [providerEvent],
+                memoryPlanEvents: [memoryPlanEvent],
+                quarantinedEvents: [],
+                recallEvents: [recallEvent],
+                warnings: [
+                  {
+                    code: "missing_openai_api_key",
+                    message: "Provider key is missing.",
+                    source: "llm",
+                  },
+                ],
+              },
+              ok: true,
+            }),
+        };
+      },
+      maxAgents: 2,
+      maxMemoryRecords: 8,
+      url: "http://127.0.0.1:8787/provider-loop",
+    });
+
+    expect(requestBody).toMatchObject({
+      events: [baseEvent],
+      maxAgents: 2,
+      maxMemoryRecords: 8,
+    });
+    expect(JSON.stringify(requestBody)).not.toContain("apiKey");
+    expect(result.source).toBe("custom");
+    expect(result.events.map((event) => event.id)).toEqual([
+      "provider-http-recall-000",
+      "provider-http-memory-plan-000",
+      "provider-http-provider-000",
+    ]);
+    expect(result.quarantinedEvents).toHaveLength(0);
+    expect(result.warnings).toEqual([
+      expect.objectContaining({
+        code: "missing_openai_api_key",
+        source: "llm",
+      }),
+    ]);
+  });
+
+  it("returns warnings when the live provider-loop route fails", async () => {
+    const result = await callProviderLoopHttp({
+      events: [baseEvent],
+      fetchImpl: async () => ({
+        ok: false,
+        status: 400,
+        statusText: "Bad Request",
+        text: async () =>
+          JSON.stringify({
+            error: {
+              code: "world_memory_provider_loop_secret_in_request",
+              message: "Request body contained a secret.",
+            },
+            ok: false,
+          }),
+      }),
+      url: "http://127.0.0.1:8787/provider-loop",
+    });
+
+    expect(result.events).toHaveLength(0);
+    expect(result.quarantinedEvents).toHaveLength(0);
+    expect(result.warnings).toEqual([
+      expect.objectContaining({
+        code: "world_memory_provider_loop_secret_in_request",
+      }),
+    ]);
   });
 });

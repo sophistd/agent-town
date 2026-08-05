@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 
-import { LOCATION_COORDINATES } from "../events/routing";
 import type { WorldState } from "../events/types";
 import {
   DEFAULT_TOWN_PROJECTION_SETTINGS,
@@ -11,6 +10,24 @@ import { renderAgents } from "./renderAgents";
 import { renderBubbles } from "./renderBubbles";
 import { renderEdges } from "./renderEdges";
 import { renderLocations } from "./renderLocations";
+import { renderTownMap } from "./renderTownMap";
+import {
+  AGENT_SPRITESHEET_KEY,
+  AGENT_SPRITESHEET_URL,
+  AGENT_SPRITE_HEIGHT,
+  AGENT_SPRITE_WIDTH,
+  BUILDING_SPRITESHEET_KEY,
+  BUILDING_SPRITESHEET_URL,
+  BUILDING_SPRITE_HEIGHT,
+  BUILDING_SPRITE_WIDTH,
+  DEFAULT_TOWN_MAP,
+  loadTownMap,
+  TOWN_MAP_BACKGROUND_KEY,
+  TOWN_MAP_BACKGROUND_URL,
+  TOWN_MAP_TILESET_KEY,
+  TOWN_MAP_TILESET_URL,
+  type TownMapDefinition,
+} from "./townMap";
 
 export const AGENT_TOWN_SCENE_KEY = "AgentTownScene";
 export const PROJECTION_SETTINGS_REGISTRY_KEY = "agent-town:projection-settings";
@@ -20,12 +37,32 @@ export class AgentTownScene extends Phaser.Scene {
   private projectionSettings: TownProjectionSettings = DEFAULT_TOWN_PROJECTION_SETTINGS;
   private worldState?: WorldState;
   private townLayer?: Phaser.GameObjects.Container;
+  private townMap: TownMapDefinition = DEFAULT_TOWN_MAP;
+  private isShutdown = false;
+  private mapLoadRequestId = 0;
 
   constructor() {
     super(AGENT_TOWN_SCENE_KEY);
   }
 
+  preload(): void {
+    this.load.image(TOWN_MAP_BACKGROUND_KEY, TOWN_MAP_BACKGROUND_URL);
+    this.load.spritesheet(TOWN_MAP_TILESET_KEY, TOWN_MAP_TILESET_URL, {
+      frameWidth: DEFAULT_TOWN_MAP.tileWidth,
+      frameHeight: DEFAULT_TOWN_MAP.tileHeight,
+    });
+    this.load.spritesheet(AGENT_SPRITESHEET_KEY, AGENT_SPRITESHEET_URL, {
+      frameWidth: AGENT_SPRITE_WIDTH,
+      frameHeight: AGENT_SPRITE_HEIGHT,
+    });
+    this.load.spritesheet(BUILDING_SPRITESHEET_KEY, BUILDING_SPRITESHEET_URL, {
+      frameWidth: BUILDING_SPRITE_WIDTH,
+      frameHeight: BUILDING_SPRITE_HEIGHT,
+    });
+  }
+
   create(): void {
+    this.isShutdown = false;
     this.worldState = this.game.registry.get(WORLD_STATE_REGISTRY_KEY) as
       | WorldState
       | undefined;
@@ -45,19 +82,11 @@ export class AgentTownScene extends Phaser.Scene {
       this.handleRegistryProjectionSettings,
       this,
     );
-    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-      this.game.registry.events.off(
-        `changedata-${WORLD_STATE_REGISTRY_KEY}`,
-        this.handleRegistryWorldState,
-        this,
-      );
-      this.game.registry.events.off(
-        `changedata-${PROJECTION_SETTINGS_REGISTRY_KEY}`,
-        this.handleRegistryProjectionSettings,
-        this,
-      );
-    });
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.handleSceneExit, this);
+    this.events.once(Phaser.Scenes.Events.DESTROY, this.handleSceneExit, this);
     this.renderWorldState();
+    const mapLoadRequestId = ++this.mapLoadRequestId;
+    void this.loadProjectionMap(mapLoadRequestId);
   }
 
   setWorldState(worldState: WorldState): void {
@@ -84,103 +113,56 @@ export class AgentTownScene extends Phaser.Scene {
     this.setProjectionSettings(value);
   }
 
-  private renderGround(): void {
-    const ground = this.add.graphics();
-    ground.fillStyle(0xdbe8d4, 1);
-    ground.fillRect(0, 0, this.scale.width, this.scale.height);
+  private handleSceneExit(): void {
+    this.game.registry.events.off(
+      `changedata-${WORLD_STATE_REGISTRY_KEY}`,
+      this.handleRegistryWorldState,
+      this,
+    );
+    this.game.registry.events.off(
+      `changedata-${PROJECTION_SETTINGS_REGISTRY_KEY}`,
+      this.handleRegistryProjectionSettings,
+      this,
+    );
+    this.isShutdown = true;
+    this.mapLoadRequestId += 1;
+    this.townLayer = undefined;
+  }
 
-    for (let x = 34; x < this.scale.width; x += 78) {
-      for (let y = 42; y < this.scale.height; y += 68) {
-        ground.fillStyle((x + y) % 3 === 0 ? 0xcfe1c8 : 0xe3efdc, 0.34);
-        ground.fillRect(x, y, 16, 10);
-      }
+  private async loadProjectionMap(requestId: number): Promise<void> {
+    const townMap = await loadTownMap();
+
+    if (requestId !== this.mapLoadRequestId || !this.canRender()) {
+      return;
     }
 
-    ground.lineStyle(34, 0xc8b88e, 0.9);
-    ground.beginPath();
-    ground.moveTo(LOCATION_COORDINATES.dispatch_board.x, LOCATION_COORDINATES.dispatch_board.y);
-    ground.lineTo(LOCATION_COORDINATES.square.x, LOCATION_COORDINATES.square.y);
-    ground.lineTo(LOCATION_COORDINATES.workshop.x, LOCATION_COORDINATES.workshop.y);
-    ground.moveTo(LOCATION_COORDINATES.square.x, LOCATION_COORDINATES.square.y);
-    ground.lineTo(LOCATION_COORDINATES.town_hall.x, LOCATION_COORDINATES.town_hall.y);
-    ground.moveTo(LOCATION_COORDINATES.square.x, LOCATION_COORDINATES.square.y);
-    ground.lineTo(LOCATION_COORDINATES.library.x, LOCATION_COORDINATES.library.y);
-    ground.moveTo(LOCATION_COORDINATES.square.x, LOCATION_COORDINATES.square.y);
-    ground.lineTo(LOCATION_COORDINATES.archive.x, LOCATION_COORDINATES.archive.y);
-    ground.moveTo(LOCATION_COORDINATES.square.x, LOCATION_COORDINATES.square.y);
-    ground.lineTo(LOCATION_COORDINATES.review_room.x, LOCATION_COORDINATES.review_room.y);
-    ground.strokePath();
+    this.townMap = townMap;
+    this.renderWorldState();
+  }
 
-    ground.lineStyle(10, 0xe8dec2, 0.95);
-    ground.beginPath();
-    ground.moveTo(LOCATION_COORDINATES.dispatch_board.x, LOCATION_COORDINATES.dispatch_board.y);
-    ground.lineTo(LOCATION_COORDINATES.square.x, LOCATION_COORDINATES.square.y);
-    ground.lineTo(LOCATION_COORDINATES.workshop.x, LOCATION_COORDINATES.workshop.y);
-    ground.moveTo(LOCATION_COORDINATES.square.x, LOCATION_COORDINATES.square.y);
-    ground.lineTo(LOCATION_COORDINATES.town_hall.x, LOCATION_COORDINATES.town_hall.y);
-    ground.moveTo(LOCATION_COORDINATES.square.x, LOCATION_COORDINATES.square.y);
-    ground.lineTo(LOCATION_COORDINATES.library.x, LOCATION_COORDINATES.library.y);
-    ground.moveTo(LOCATION_COORDINATES.square.x, LOCATION_COORDINATES.square.y);
-    ground.lineTo(LOCATION_COORDINATES.archive.x, LOCATION_COORDINATES.archive.y);
-    ground.moveTo(LOCATION_COORDINATES.square.x, LOCATION_COORDINATES.square.y);
-    ground.lineTo(LOCATION_COORDINATES.review_room.x, LOCATION_COORDINATES.review_room.y);
-    ground.strokePath();
+  private canRender(): boolean {
+    const sceneSystems = this.sys as Phaser.Scenes.Systems & {
+      displayList?: { add?: unknown } | null;
+      updateList?: unknown;
+    };
+    const gameObjectFactory = this.add as Phaser.GameObjects.GameObjectFactory & {
+      displayList?: { add?: unknown } | null;
+      updateList?: unknown;
+    };
+    const game = this.game as Phaser.Game & { isDestroyed?: boolean };
+    const displayList = gameObjectFactory.displayList;
+    const updateList = gameObjectFactory.updateList;
 
-    const square = LOCATION_COORDINATES.square;
-
-    ground.fillStyle(0x7fb0bf, 0.9);
-    ground.fillCircle(square.x, square.y - 58, 42);
-    ground.lineStyle(5, 0xe6f2ee, 0.92);
-    ground.strokeCircle(square.x, square.y - 58, 42);
-    ground.fillStyle(0x466f79, 0.9);
-    ground.fillCircle(square.x, square.y - 58, 12);
-
-    ground.lineStyle(2, 0x91a87d, 0.7);
-    ground.strokeRoundedRect(18, 18, this.scale.width - 36, this.scale.height - 36, 14);
-    this.townLayer?.add(ground);
-
-    const decor = this.add.graphics();
-    const trees = [
-      [92, 190],
-      [122, 740],
-      [172, 112],
-      [198, 808],
-      [328, 120],
-      [358, 750],
-      [438, 780],
-      [726, 146],
-      [770, 754],
-      [902, 210],
-      [922, 694],
-      [968, 374],
-      [84, 476],
-    ] as const;
-
-    for (const [x, y] of trees) {
-      decor.fillStyle(0x6f8f58, 1);
-      decor.fillCircle(x, y, 18);
-      decor.fillStyle(0x88aa69, 1);
-      decor.fillCircle(x - 10, y + 8, 13);
-      decor.fillCircle(x + 11, y + 7, 13);
-      decor.fillStyle(0x7a5633, 1);
-      decor.fillRect(x - 4, y + 18, 8, 17);
-    }
-
-    const lamps = [
-      [382, 348],
-      [620, 392],
-      [438, 590],
-      [704, 574],
-    ] as const;
-
-    for (const [x, y] of lamps) {
-      decor.fillStyle(0x384840, 1);
-      decor.fillRect(x - 2, y - 12, 4, 24);
-      decor.fillStyle(0xf7d36b, 0.95);
-      decor.fillCircle(x, y - 16, 7);
-    }
-
-    this.townLayer?.add(decor);
+    return (
+      !this.isShutdown &&
+      game.isDestroyed !== true &&
+      this.sys.isActive() &&
+      displayList !== undefined &&
+      displayList !== null &&
+      typeof displayList.add === "function" &&
+      updateList !== undefined &&
+      updateList !== null
+    );
   }
 
   private applyProjectionScale(): void {
@@ -192,11 +174,34 @@ export class AgentTownScene extends Phaser.Scene {
     this.townLayer?.setPosition(offsetX, offsetY);
   }
 
-  private renderWorldState(): void {
-    this.townLayer?.destroy(true);
-    this.townLayer = this.add.container(0, 0);
+  private createTownLayer(): Phaser.GameObjects.Container | undefined {
+    if (!this.canRender()) {
+      return undefined;
+    }
 
-    this.renderGround();
+    try {
+      return this.add.container(0, 0);
+    } catch {
+      return undefined;
+    }
+  }
+
+  private renderWorldState(): void {
+    if (!this.canRender()) {
+      return;
+    }
+
+    this.townLayer?.destroy(true);
+    this.townLayer = undefined;
+    if (!this.canRender()) {
+      return;
+    }
+    this.townLayer = this.createTownLayer();
+    if (this.townLayer === undefined) {
+      return;
+    }
+
+    renderTownMap(this, this.townLayer, this.townMap);
 
     const state = this.worldState;
     if (state === undefined) {
@@ -210,19 +215,19 @@ export class AgentTownScene extends Phaser.Scene {
       return;
     }
 
-    renderLocations(this, this.townLayer, this.projectionSettings);
+    renderLocations(this, this.townLayer, this.projectionSettings, this.townMap);
     if (this.projectionSettings.showEdges) {
-      renderEdges(this, this.townLayer, state, this.projectionSettings);
+      renderEdges(this, this.townLayer, state, this.projectionSettings, this.townMap);
     }
-    renderAgents(this, this.townLayer, state, this.projectionSettings);
+    renderAgents(this, this.townLayer, state, this.projectionSettings, this.townMap);
     if (this.projectionSettings.showBubbles) {
-      renderBubbles(this, this.townLayer, state, this.projectionSettings);
+      renderBubbles(this, this.townLayer, state, this.projectionSettings, this.townMap);
     }
 
     const footer = this.add.text(
       36,
       38,
-      `WorldState / cursor ${state.cursor} / ${state.currentEventId ?? "none"}`,
+      `WorldState / cursor ${state.cursor} / ${state.currentEventId ?? "none"} / map ${this.townMap.id}`,
       {
         backgroundColor: "#132225",
         color: "#e8efe9",

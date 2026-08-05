@@ -1,0 +1,304 @@
+{
+  "checkedAt": "2026-07-04T21:00:00-07:00",
+  "url": "http://localhost:5173/",
+  "desktopViewport": {
+    "width": 1440,
+    "height": 960
+  },
+  "mobileViewport": {
+    "width": 390,
+    "height": 844,
+    "deviceScaleFactor": 2
+  },
+  "desktop": {
+    "initial": {
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-failure-agent-town-001\nStatus\npaused\nCursor\n1 / 30\nEvents\n30\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nmock \u00b7 30 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nRoutine day\nIntervention\nMemory\nMemory plan\nLLM plan\nWS sample\n\nMemory bank \u00b7 0 records\n\nConnect\nDisconnect\nMock failure run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nPlanner\nplanner / thinking / town_hall\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n2 events\nmessage\n7 events\ntool call\n8 events\nhandoff\n3 events\nmemory read\n2 events\nmemory write\n1 events\ndecision\n3 events\nblocked\n2 events\nerror\n1 events\ndone\n1 events\nAll\nNone\nCritical\n\nPlanner / thinking / Plan debug run\n\ncursor 0\nvisible 30/30\nbalanced\n100%\nRUN SUMMARY\nEvents\n30\nAgents\n5\nHandoffs\n3\nTool calls\n8\nMemory actions\n3\nBlocked\n2\nErrors\n1\nFirst blocked: failure-009\nFirst error: failure-008\nBefore error: failure-007\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: failure-000\nSelected event: none\n\nSelected Agent\n\nClick an agent in Town View.\n\nSelected Event\n\nClick a bubble or timeline event.\n\nTIMELINE\nPrev\nPlay\nNext\nSpeed\n0.7x\n1x\n2x\n1 / 30 \u00b7 failure-000\n#00 \u00b7 13:00\nPlanner \u00b7 thinking\nPlan debug run\n#01 \u00b7 13:01\nPlanner \u00b7 decision\nReproduce first\n#02 \u00b7 13:02\nPlanner \u00b7 handoff\nAssign research\n#03 \u00b7 13:03\nResearcher \u00b7 memory_read\nRead schema note\n#04 \u00b7 13:04\nResearcher \u00b7 tool_call\nRead M1 spec\n#05 \u00b7 13:05\nResearcher \u00b7 message\nReport invariant\n#06 \u00b7 13:06\nCoder \u00b7 thinking\nInspect fixture\n#07 \u00b7 13:07\nCoder \u00b7 tool_call\nRun ordering check\n#08 \u00b7 13:08\nCoder \u00b7 error\nDuplicate sequence\n#09 \u00b7 13:09\nCoder \u00b7 blocked\nNeeds source decision\n#10 \u00b7 13:10\nCoder \u00b7 message\nAsk planner\n#11 \u00b7 13:11\nPlanner \u00b7 decision\nSequence wins\n#12 \u00b7 13:12\nPlanner \u00b7 handoff\nSend repair task\n#13 \u00b7 13:13\nCoder \u00b7 tool_call\nPatch fixture\n#14 \u00b7 13:14\nCoder \u00b7 tool_call\nRun ordering check again\n#15 \u00b7 13:15\nCoder \u00b7 message\nRepair ready\n#16 \u00b7 13:16\nReviewer \u00b7 tool_call\nReview repair\n#17 \u00b7 13:17\nReviewer \u00b7 blocked\nMissing memory note\n#18 \u00b7 13:18\nReviewer \u00b7 handoff\nRequest memory write\n#19 \u00b7 13:19\nMemory \u00b7 memory_write\nSave sequence policy\n#20 \u00b7 13:20\nMemory \u00b7 message\nPolicy saved\n#21 \u00b7 13:21\nReviewer \u00b7 tool_call\nRun final review\n#22 \u00b7 13:22\nReviewer \u00b7 message\nApprove repair\n#23 \u00b7 13:23\nResearcher \u00b7 tool_call\nCheck docs\n#24 \u00b7 13:24\nResearcher \u00b7 message\nDocs confirmed\n#25 \u00b7 13:25\nPlanner \u00b7 decision\nResume finalization\n#26 \u00b7 13:26\nCoder \u00b7 tool_call\nCapture failure evidence\n#27 \u00b7 13:27\nMemory \u00b7 memory_read\nRead final state\n#28 \u00b7 13:28\nReviewer \u00b7 message\nReady to close\n#29 \u00b7 13:29\nPlanner \u00b7 done\nFailure run repaired",
+      "sourceLine": "mock \u00b7 30 events",
+      "runId": "run-failure-agent-town-001",
+      "eventCount": "30",
+      "cursorMetric": "1 / 30",
+      "statusAccepted": false,
+      "warningsZero": true,
+      "memoryBank75": false,
+      "hasLlmPlannerMetadata": false,
+      "hasSelectedMemoryIds": false,
+      "hasValidateTool": false,
+      "toolbarCursor": "0",
+      "toolbarVisible": "30/30",
+      "toolbarDensity": "balanced",
+      "toolbarZoom": "100%",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "horizontalOverflow": 0,
+      "canvas": {
+        "width": 1040,
+        "height": 900,
+        "clientWidth": 773,
+        "clientHeight": 669
+      }
+    },
+    "routine": {
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-smallville-routine-001\nStatus\npaused\nCursor\n1 / 150\nEvents\n150\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nroutine \u00b7 150 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nRoutine day\nIntervention\nMemory\nMemory plan\nLLM plan\nWS sample\n\nMemory bank \u00b7 75 records\n\nConnect\nDisconnect\nRoutine day run loaded.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / town_hall\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n19 events\nmessage\n17 events\ntool call\n3 events\nhandoff\n5 events\nmemory read\n25 events\nmemory write\n50 events\ndecision\n25 events\nblocked\n6 events\nerror\n0 events\ndone\n0 events\nAll\nNone\nCritical\n\nIsabella / memory_write / Observe daily intention\n\ncursor 0\nvisible 150/150\nbalanced\n100%\nRUN SUMMARY\nEvents\n150\nAgents\n25\nHandoffs\n5\nTool calls\n3\nMemory actions\n75\nBlocked\n6\nErrors\n0\nFirst blocked: routine-098\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: routine-000\nSelected event: routine-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nworking\nLocation\ntown_hall\nSelected Event\nID\nroutine-000\nSequence\n0\nTimestamp\n2026-07-04T17:00:00.000Z\nRun ID\nrun-smallville-routine-001\nTask ID\ntask-smallville-routine-scheduler\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_write\nStatus\nrunning\nSummary\nObserve daily intention\nContent\nIsabella starts the day intending to host a small Valentine's gathering by the fountain.\nTarget\nagent=none; task=task-smallville-routine-scheduler\nTool\nnone\nTool input\nnone\nTool output\nnone\nArtifacts\nnone\nFile path\nnone\nMetrics\nnone\nMetadata\n{\"source\":\"mock\",\"tags\":[\"smallville-routine\",\"observation\",\"wake\",\"town_hall_table\"],\"cognitiveStage\":\"observation\",\"subLocationId\":\"town_hall_table\",\"activity\":\"checks daily routine\",\"persona\":\"Hosts civic rituals and turns one suggestion into a coordinated plan.\",\"relationships\":[\"agent-klaus\",\"agent-mei\",\"agent-sam\"],\"routine\":{\"dayId\":\"smallville-routine-day-2026-07-04\",\"phase\":\"wake\",\"segmentId\":\"agent-isabella-wake\",\"startMinute\":480,\"endMinute\":485,\"scheduledLocation\":\"town_hall\",\"scheduledSubLocationId\":\"town_hall_table\",\"plannedActivity\":\"checks daily routine\",\"intention\":\"host a small Valentine's gathering by the fountain\"},\"memoryKind\":\"observation\",\"memoryId\":\"agent-isabella-observation-000\",\"importance\":8}\n{\n  \"id\": \"routine-000\",\n  \"runId\": \"run-smallville-routine-001\",\n  \"taskId\": \"task-smallville-routine-scheduler\",\n  \"timestamp\": \"2026-07-04T17:00:00.000Z\",\n  \"sequence\": 0,\n  \"agentId\": \"agent-isabella\",\n  \"agentName\": \"Isabella\",\n  \"agentRole\": \"planner\",\n  \"type\": \"memory_write\",\n  \"content\": \"Isabella starts the day intending to host a small Valentine's gathering by the fountain.\",\n  \"summary\": \"Observe daily intention\",\n  \"targetTaskId\": \"task-smallville-routine-scheduler\",\n  \"locationHint\": \"town_hall\",\n  \"status\": \"running\",\n  \"metadata\": {\n    \"source\": \"mock\",\n    \"tags\": [\n      \"smallville-routine\",\n      \"observation\",\n      \"wake\",\n      \"town_hall_table\"\n    ],\n    \"cognitiveStage\": \"observation\",\n    \"subLocationId\": \"town_hall_table\",\n    \"activity\": \"checks daily routine\",\n    \"persona\": \"Hosts civic rituals and turns one suggestion into a coordinated plan.\",\n    \"relationships\": [\n      \"agent-klaus\",\n      \"agent-mei\",\n      \"agent-sam\"\n    ],\n    \"routine\": {\n      \"dayId\": \"smallville-routine-day-2026-07-04\",\n      \"phase\": \"wake\",\n      \"segmentId\": \"agent-isabella-wake\",\n      \"startMinute\": 480,\n      \"endMinute\": 485,\n      \"scheduledLocation\": \"town_hall\",\n      \"scheduledSubLocationId\": \"town_hall_table\",\n      \"plannedActivity\": \"checks daily routine\",\n      \"intention\": \"host a small Valentine's gathering by the fountain\"\n    },\n    \"memoryKind\": \"observation\",\n    \"memoryId\": \"agent-isabella-observation-000\",\n    \"importance\": 8\n  }\n}\nTIMELINE\nPrev\nPlay\nNext\nSpeed\n0.7x\n1x\n2x\n1 / 150 \u00b7 routine-000\n#00 \u00b7 17:00\nIsabella \u00b7 memory_write\nObserve daily intention\n#01 \u00b7 17:01\nIsabella \u00b7 memory_",
+      "sourceLine": "routine \u00b7 150 events",
+      "runId": "run-smallville-routine-001",
+      "eventCount": "150",
+      "cursorMetric": "1 / 150",
+      "statusAccepted": false,
+      "warningsZero": true,
+      "memoryBank75": true,
+      "hasLlmPlannerMetadata": false,
+      "hasSelectedMemoryIds": false,
+      "hasValidateTool": false,
+      "toolbarCursor": "0",
+      "toolbarVisible": "150/150",
+      "toolbarDensity": "balanced",
+      "toolbarZoom": "100%",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "horizontalOverflow": 0,
+      "canvas": {
+        "width": 1040,
+        "height": 900,
+        "clientWidth": 773,
+        "clientHeight": 669
+      }
+    },
+    "loaded": {
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-llm-plan-dd2d8632\nStatus\npaused\nCursor\n1 / 8\nEvents\n8\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nllm-plan \u00b7 8 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nRoutine day\nIntervention\nMemory\nMemory plan\nLLM plan\nWS sample\n\nMemory bank \u00b7 75 records\n\nConnect\nDisconnect\nLLM planner contract: 8 events accepted.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / archive\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n2 events\nmessage\n1 events\ntool call\n1 events\nhandoff\n0 events\nmemory read\n1 events\nmemory write\n1 events\ndecision\n1 events\nblocked\n0 events\nerror\n0 events\ndone\n1 events\nAll\nNone\nCritical\n\nIsabella / memory_read / Retrieve LLM planning context\n\ncursor 0\nvisible 8/8\nbalanced\n100%\nRUN SUMMARY\nEvents\n8\nAgents\n4\nHandoffs\n0\nTool calls\n1\nMemory actions\n2\nBlocked\n0\nErrors\n0\nFirst blocked: none\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: run-llm-plan-dd2d8632-000\nSelected event: run-llm-plan-dd2d8632-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nworking\nLocation\narchive\nSelected Event\nID\nrun-llm-plan-dd2d8632-000\nSequence\n0\nTimestamp\n2026-07-04T19:00:00.000Z\nRun ID\nrun-llm-plan-dd2d8632\nTask ID\ntask-llm-planner-contract\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_read\nStatus\nrunning\nSummary\nRetrieve LLM planning context\nContent\nIsabella reviews model-planning context with memory:run-smallville-routine-001:routine-000, memory:run-smallville-routine-001:routine-006, memory:run-smallville-routine-001:routine-012.\nTarget\nagent=none; task=none\nTool\nnone\nTool input\nnone\nTool output\nnone\nArtifacts\nnone\nFile path\nnone\nMetrics\nnone\nMetadata\n{\"source\":\"llm\",\"tags\":[\"llm-planner\",\"smallville-contract\",\"retrieval\",\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\"],\"cognitiveStage\":\"retrieval\",\"subLocationId\":\"archive_shelves\",\"activity\":\"retrieves planner contract\",\"selectedMemoryRecordIds\":[\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\",\"memory:run-smallville-routine-001:routine-024\",\"memory:run-smallville-routine-001:routine-030\",\"memory:run-smallville-routine-001:routine-036\",\"memory:run-smallville-routine-001:routine-042\",\"memory:run-smallville-routine-001:routine-048\",\"memory:run-smallville-routine-001:routine-054\",\"memory:run-smallville-routine-001:routine-060\",\"memory:run-smallville-routine-001:routine-066\"],\"llmPlanner\":{\"schemaVersion\":1,\"contractVersion\":1,\"requestId\":\"llm-plan-request-dd2d8632\",\"responseRequestId\":\"llm-plan-request-dd2d8632\",\"promptHash\":\"dd2d8632\",\"model\":\"deterministic-contract-fixture\",\"modelRole\":\"planner\",\"generatedAt\":\"2026-07-04T19:00:00.000Z\",\"generatedBy\":\"deterministic-contract-fixture\",\"stepIndex\":0,\"responseStepId\":\"retrieve-context\",\"previousRunId\":\"run-smallville-routine-001\",\"previousEventCount\":150,\"selectedMemoryRecordIds\":[\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\",\"memory:run-smallville-routine-001:routine-024\",\"memory:run-smallville-routine-001:routine-030\",\"memory:run-smallville-routine-001:routine-036\",\"memory:run-smallville-routine-001:routine-042\",\"memory:run-smallville-routine-001:routine-048\",\"memory:run-smallville-routine-001:routine-054\",\"memory:run-smallville-routine-001:routine-060\",\"memory:run-smallville-routine-001:routine-066\"]}}\n{\n  \"id\": \"run-llm-plan-dd2d8632-000\",\n  \"runId\": \"run-llm-plan-dd2d8632\",\n  \"taskId\": \"task-llm-planner-contract\",\n  \"timestamp\": \"2026-07-04T19:00:00.000Z\",\n  \"sequence\": 0,\n  \"agentId\": \"agent-isabella\",\n  \"agentName\": \"Isabella\",\n  \"agentRole\": \"planner\",\n  \"type\": ",
+      "sourceLine": "llm-plan \u00b7 8 events",
+      "runId": "run-llm-plan-dd2d8632",
+      "eventCount": "8",
+      "cursorMetric": "1 / 8",
+      "statusAccepted": true,
+      "warningsZero": true,
+      "memoryBank75": true,
+      "hasLlmPlannerMetadata": true,
+      "hasSelectedMemoryIds": true,
+      "hasValidateTool": false,
+      "toolbarCursor": "0",
+      "toolbarVisible": "8/8",
+      "toolbarDensity": "balanced",
+      "toolbarZoom": "100%",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "horizontalOverflow": 0,
+      "canvas": {
+        "width": 1040,
+        "height": 900,
+        "clientWidth": 773,
+        "clientHeight": 669
+      }
+    },
+    "afterZoom": {
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-llm-plan-dd2d8632\nStatus\npaused\nCursor\n1 / 8\nEvents\n8\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nllm-plan \u00b7 8 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nRoutine day\nIntervention\nMemory\nMemory plan\nLLM plan\nWS sample\n\nMemory bank \u00b7 75 records\n\nConnect\nDisconnect\nLLM planner contract: 8 events accepted.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n105%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / archive\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n2 events\nmessage\n1 events\ntool call\n1 events\nhandoff\n0 events\nmemory read\n1 events\nmemory write\n1 events\ndecision\n1 events\nblocked\n0 events\nerror\n0 events\ndone\n1 events\nAll\nNone\nCritical\n\nIsabella / memory_read / Retrieve LLM planning context\n\ncursor 0\nvisible 8/8\nbalanced\n105%\nRUN SUMMARY\nEvents\n8\nAgents\n4\nHandoffs\n0\nTool calls\n1\nMemory actions\n2\nBlocked\n0\nErrors\n0\nFirst blocked: none\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: run-llm-plan-dd2d8632-000\nSelected event: run-llm-plan-dd2d8632-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nworking\nLocation\narchive\nSelected Event\nID\nrun-llm-plan-dd2d8632-000\nSequence\n0\nTimestamp\n2026-07-04T19:00:00.000Z\nRun ID\nrun-llm-plan-dd2d8632\nTask ID\ntask-llm-planner-contract\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_read\nStatus\nrunning\nSummary\nRetrieve LLM planning context\nContent\nIsabella reviews model-planning context with memory:run-smallville-routine-001:routine-000, memory:run-smallville-routine-001:routine-006, memory:run-smallville-routine-001:routine-012.\nTarget\nagent=none; task=none\nTool\nnone\nTool input\nnone\nTool output\nnone\nArtifacts\nnone\nFile path\nnone\nMetrics\nnone\nMetadata\n{\"source\":\"llm\",\"tags\":[\"llm-planner\",\"smallville-contract\",\"retrieval\",\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\"],\"cognitiveStage\":\"retrieval\",\"subLocationId\":\"archive_shelves\",\"activity\":\"retrieves planner contract\",\"selectedMemoryRecordIds\":[\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\",\"memory:run-smallville-routine-001:routine-024\",\"memory:run-smallville-routine-001:routine-030\",\"memory:run-smallville-routine-001:routine-036\",\"memory:run-smallville-routine-001:routine-042\",\"memory:run-smallville-routine-001:routine-048\",\"memory:run-smallville-routine-001:routine-054\",\"memory:run-smallville-routine-001:routine-060\",\"memory:run-smallville-routine-001:routine-066\"],\"llmPlanner\":{\"schemaVersion\":1,\"contractVersion\":1,\"requestId\":\"llm-plan-request-dd2d8632\",\"responseRequestId\":\"llm-plan-request-dd2d8632\",\"promptHash\":\"dd2d8632\",\"model\":\"deterministic-contract-fixture\",\"modelRole\":\"planner\",\"generatedAt\":\"2026-07-04T19:00:00.000Z\",\"generatedBy\":\"deterministic-contract-fixture\",\"stepIndex\":0,\"responseStepId\":\"retrieve-context\",\"previousRunId\":\"run-smallville-routine-001\",\"previousEventCount\":150,\"selectedMemoryRecordIds\":[\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\",\"memory:run-smallville-routine-001:routine-024\",\"memory:run-smallville-routine-001:routine-030\",\"memory:run-smallville-routine-001:routine-036\",\"memory:run-smallville-routine-001:routine-042\",\"memory:run-smallville-routine-001:routine-048\",\"memory:run-smallville-routine-001:routine-054\",\"memory:run-smallville-routine-001:routine-060\",\"memory:run-smallville-routine-001:routine-066\"]}}\n{\n  \"id\": \"run-llm-plan-dd2d8632-000\",\n  \"runId\": \"run-llm-plan-dd2d8632\",\n  \"taskId\": \"task-llm-planner-contract\",\n  \"timestamp\": \"2026-07-04T19:00:00.000Z\",\n  \"sequence\": 0,\n  \"agentId\": \"agent-isabella\",\n  \"agentName\": \"Isabella\",\n  \"agentRole\": \"planner\",\n  \"type\": ",
+      "sourceLine": "llm-plan \u00b7 8 events",
+      "runId": "run-llm-plan-dd2d8632",
+      "eventCount": "8",
+      "cursorMetric": "1 / 8",
+      "statusAccepted": true,
+      "warningsZero": true,
+      "memoryBank75": true,
+      "hasLlmPlannerMetadata": true,
+      "hasSelectedMemoryIds": true,
+      "hasValidateTool": false,
+      "toolbarCursor": "0",
+      "toolbarVisible": "8/8",
+      "toolbarDensity": "balanced",
+      "toolbarZoom": "105%",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "horizontalOverflow": 0,
+      "canvas": {
+        "width": 1040,
+        "height": 900,
+        "clientWidth": 773,
+        "clientHeight": 669
+      }
+    },
+    "afterFilter": {
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-llm-plan-dd2d8632\nStatus\npaused\nCursor\n1 / 8\nEvents\n8\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nllm-plan \u00b7 8 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nRoutine day\nIntervention\nMemory\nMemory plan\nLLM plan\nWS sample\n\nMemory bank \u00b7 75 records\n\nConnect\nDisconnect\nLLM planner contract: 8 events accepted.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n105%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / archive\nEVENT FILTERS\n\n4 / 10 types visible in Timeline.\n\nthinking\n2 events\nmessage\n1 events\ntool call\n1 events\nhandoff\n0 events\nmemory read\n1 events\nmemory write\n1 events\ndecision\n1 events\nblocked\n0 events\nerror\n0 events\ndone\n1 events\nAll\nNone\nCritical\n\nIsabella / memory_read / Retrieve LLM planning context\n\ncursor 0\nvisible 1/8\nbalanced\n105%\nRUN SUMMARY\nEvents\n8\nAgents\n4\nHandoffs\n0\nTool calls\n1\nMemory actions\n2\nBlocked\n0\nErrors\n0\nFirst blocked: none\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: run-llm-plan-dd2d8632-000\nSelected event: run-llm-plan-dd2d8632-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nworking\nLocation\narchive\nSelected Event\nID\nrun-llm-plan-dd2d8632-000\nSequence\n0\nTimestamp\n2026-07-04T19:00:00.000Z\nRun ID\nrun-llm-plan-dd2d8632\nTask ID\ntask-llm-planner-contract\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_read\nStatus\nrunning\nSummary\nRetrieve LLM planning context\nContent\nIsabella reviews model-planning context with memory:run-smallville-routine-001:routine-000, memory:run-smallville-routine-001:routine-006, memory:run-smallville-routine-001:routine-012.\nTarget\nagent=none; task=none\nTool\nnone\nTool input\nnone\nTool output\nnone\nArtifacts\nnone\nFile path\nnone\nMetrics\nnone\nMetadata\n{\"source\":\"llm\",\"tags\":[\"llm-planner\",\"smallville-contract\",\"retrieval\",\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\"],\"cognitiveStage\":\"retrieval\",\"subLocationId\":\"archive_shelves\",\"activity\":\"retrieves planner contract\",\"selectedMemoryRecordIds\":[\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\",\"memory:run-smallville-routine-001:routine-024\",\"memory:run-smallville-routine-001:routine-030\",\"memory:run-smallville-routine-001:routine-036\",\"memory:run-smallville-routine-001:routine-042\",\"memory:run-smallville-routine-001:routine-048\",\"memory:run-smallville-routine-001:routine-054\",\"memory:run-smallville-routine-001:routine-060\",\"memory:run-smallville-routine-001:routine-066\"],\"llmPlanner\":{\"schemaVersion\":1,\"contractVersion\":1,\"requestId\":\"llm-plan-request-dd2d8632\",\"responseRequestId\":\"llm-plan-request-dd2d8632\",\"promptHash\":\"dd2d8632\",\"model\":\"deterministic-contract-fixture\",\"modelRole\":\"planner\",\"generatedAt\":\"2026-07-04T19:00:00.000Z\",\"generatedBy\":\"deterministic-contract-fixture\",\"stepIndex\":0,\"responseStepId\":\"retrieve-context\",\"previousRunId\":\"run-smallville-routine-001\",\"previousEventCount\":150,\"selectedMemoryRecordIds\":[\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\",\"memory:run-smallville-routine-001:routine-024\",\"memory:run-smallville-routine-001:routine-030\",\"memory:run-smallville-routine-001:routine-036\",\"memory:run-smallville-routine-001:routine-042\",\"memory:run-smallville-routine-001:routine-048\",\"memory:run-smallville-routine-001:routine-054\",\"memory:run-smallville-routine-001:routine-060\",\"memory:run-smallville-routine-001:routine-066\"]}}\n{\n  \"id\": \"run-llm-plan-dd2d8632-000\",\n  \"runId\": \"run-llm-plan-dd2d8632\",\n  \"taskId\": \"task-llm-planner-contract\",\n  \"timestamp\": \"2026-07-04T19:00:00.000Z\",\n  \"sequence\": 0,\n  \"agentId\": \"agent-isabella\",\n  \"agentName\": \"Isabella\",\n  \"agentRole\": \"planner\",\n  \"type\": \"",
+      "sourceLine": "llm-plan \u00b7 8 events",
+      "runId": "run-llm-plan-dd2d8632",
+      "eventCount": "8",
+      "cursorMetric": "1 / 8",
+      "statusAccepted": true,
+      "warningsZero": true,
+      "memoryBank75": true,
+      "hasLlmPlannerMetadata": true,
+      "hasSelectedMemoryIds": true,
+      "hasValidateTool": false,
+      "toolbarCursor": "0",
+      "toolbarVisible": "1/8",
+      "toolbarDensity": "balanced",
+      "toolbarZoom": "105%",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "horizontalOverflow": 0,
+      "canvas": {
+        "width": 1040,
+        "height": 900,
+        "clientWidth": 773,
+        "clientHeight": 669
+      }
+    },
+    "afterNext": {
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-llm-plan-dd2d8632\nStatus\npaused\nCursor\n2 / 8\nEvents\n8\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nllm-plan \u00b7 8 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nRoutine day\nIntervention\nMemory\nMemory plan\nLLM plan\nWS sample\n\nMemory bank \u00b7 75 records\n\nConnect\nDisconnect\nLLM planner contract: 8 events accepted.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n105%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / thinking / town_hall\nEVENT FILTERS\n\n4 / 10 types visible in Timeline.\n\nthinking\n2 events\nmessage\n1 events\ntool call\n1 events\nhandoff\n0 events\nmemory read\n1 events\nmemory write\n1 events\ndecision\n1 events\nblocked\n0 events\nerror\n0 events\ndone\n1 events\nAll\nNone\nCritical\n\nIsabella / thinking / Reflect on event boundary\n\ncursor 1\nvisible 1/8\nbalanced\n105%\nRUN SUMMARY\nEvents\n8\nAgents\n4\nHandoffs\n0\nTool calls\n1\nMemory actions\n2\nBlocked\n0\nErrors\n0\nFirst blocked: none\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: run-llm-plan-dd2d8632-001\nSelected event: run-llm-plan-dd2d8632-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nthinking\nLocation\ntown_hall\nSelected Event\nID\nrun-llm-plan-dd2d8632-000\nSequence\n0\nTimestamp\n2026-07-04T19:00:00.000Z\nRun ID\nrun-llm-plan-dd2d8632\nTask ID\ntask-llm-planner-contract\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_read\nStatus\nrunning\nSummary\nRetrieve LLM planning context\nContent\nIsabella reviews model-planning context with memory:run-smallville-routine-001:routine-000, memory:run-smallville-routine-001:routine-006, memory:run-smallville-routine-001:routine-012.\nTarget\nagent=none; task=none\nTool\nnone\nTool input\nnone\nTool output\nnone\nArtifacts\nnone\nFile path\nnone\nMetrics\nnone\nMetadata\n{\"source\":\"llm\",\"tags\":[\"llm-planner\",\"smallville-contract\",\"retrieval\",\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\"],\"cognitiveStage\":\"retrieval\",\"subLocationId\":\"archive_shelves\",\"activity\":\"retrieves planner contract\",\"selectedMemoryRecordIds\":[\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\",\"memory:run-smallville-routine-001:routine-024\",\"memory:run-smallville-routine-001:routine-030\",\"memory:run-smallville-routine-001:routine-036\",\"memory:run-smallville-routine-001:routine-042\",\"memory:run-smallville-routine-001:routine-048\",\"memory:run-smallville-routine-001:routine-054\",\"memory:run-smallville-routine-001:routine-060\",\"memory:run-smallville-routine-001:routine-066\"],\"llmPlanner\":{\"schemaVersion\":1,\"contractVersion\":1,\"requestId\":\"llm-plan-request-dd2d8632\",\"responseRequestId\":\"llm-plan-request-dd2d8632\",\"promptHash\":\"dd2d8632\",\"model\":\"deterministic-contract-fixture\",\"modelRole\":\"planner\",\"generatedAt\":\"2026-07-04T19:00:00.000Z\",\"generatedBy\":\"deterministic-contract-fixture\",\"stepIndex\":0,\"responseStepId\":\"retrieve-context\",\"previousRunId\":\"run-smallville-routine-001\",\"previousEventCount\":150,\"selectedMemoryRecordIds\":[\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\",\"memory:run-smallville-routine-001:routine-024\",\"memory:run-smallville-routine-001:routine-030\",\"memory:run-smallville-routine-001:routine-036\",\"memory:run-smallville-routine-001:routine-042\",\"memory:run-smallville-routine-001:routine-048\",\"memory:run-smallville-routine-001:routine-054\",\"memory:run-smallville-routine-001:routine-060\",\"memory:run-smallville-routine-001:routine-066\"]}}\n{\n  \"id\": \"run-llm-plan-dd2d8632-000\",\n  \"runId\": \"run-llm-plan-dd2d8632\",\n  \"taskId\": \"task-llm-planner-contract\",\n  \"timestamp\": \"2026-07-04T19:00:00.000Z\",\n  \"sequence\": 0,\n  \"agentId\": \"agent-isabella\",\n  \"agentName\": \"Isabella\",\n  \"agentRole\": \"planner\",\n  \"type\": \"m",
+      "sourceLine": "llm-plan \u00b7 8 events",
+      "runId": "run-llm-plan-dd2d8632",
+      "eventCount": "8",
+      "cursorMetric": "2 / 8",
+      "statusAccepted": true,
+      "warningsZero": true,
+      "memoryBank75": true,
+      "hasLlmPlannerMetadata": true,
+      "hasSelectedMemoryIds": true,
+      "hasValidateTool": false,
+      "toolbarCursor": "1",
+      "toolbarVisible": "1/8",
+      "toolbarDensity": "balanced",
+      "toolbarZoom": "105%",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "horizontalOverflow": 0,
+      "canvas": {
+        "width": 1040,
+        "height": 900,
+        "clientWidth": 773,
+        "clientHeight": 669
+      }
+    },
+    "afterPlay": {
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-llm-plan-dd2d8632\nStatus\nrunning\nCursor\n2 / 8\nEvents\n8\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nllm-plan \u00b7 8 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nRoutine day\nIntervention\nMemory\nMemory plan\nLLM plan\nWS sample\n\nMemory bank \u00b7 75 records\n\nConnect\nDisconnect\nLLM planner contract: 8 events accepted.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n105%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / thinking / town_hall\nEVENT FILTERS\n\n4 / 10 types visible in Timeline.\n\nthinking\n2 events\nmessage\n1 events\ntool call\n1 events\nhandoff\n0 events\nmemory read\n1 events\nmemory write\n1 events\ndecision\n1 events\nblocked\n0 events\nerror\n0 events\ndone\n1 events\nAll\nNone\nCritical\n\nIsabella / thinking / Reflect on event boundary\n\ncursor 1\nvisible 1/8\nbalanced\n105%\nRUN SUMMARY\nEvents\n8\nAgents\n4\nHandoffs\n0\nTool calls\n1\nMemory actions\n2\nBlocked\n0\nErrors\n0\nFirst blocked: none\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: run-llm-plan-dd2d8632-001\nSelected event: run-llm-plan-dd2d8632-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nthinking\nLocation\ntown_hall\nSelected Event\nID\nrun-llm-plan-dd2d8632-000\nSequence\n0\nTimestamp\n2026-07-04T19:00:00.000Z\nRun ID\nrun-llm-plan-dd2d8632\nTask ID\ntask-llm-planner-contract\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_read\nStatus\nrunning\nSummary\nRetrieve LLM planning context\nContent\nIsabella reviews model-planning context with memory:run-smallville-routine-001:routine-000, memory:run-smallville-routine-001:routine-006, memory:run-smallville-routine-001:routine-012.\nTarget\nagent=none; task=none\nTool\nnone\nTool input\nnone\nTool output\nnone\nArtifacts\nnone\nFile path\nnone\nMetrics\nnone\nMetadata\n{\"source\":\"llm\",\"tags\":[\"llm-planner\",\"smallville-contract\",\"retrieval\",\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\"],\"cognitiveStage\":\"retrieval\",\"subLocationId\":\"archive_shelves\",\"activity\":\"retrieves planner contract\",\"selectedMemoryRecordIds\":[\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\",\"memory:run-smallville-routine-001:routine-024\",\"memory:run-smallville-routine-001:routine-030\",\"memory:run-smallville-routine-001:routine-036\",\"memory:run-smallville-routine-001:routine-042\",\"memory:run-smallville-routine-001:routine-048\",\"memory:run-smallville-routine-001:routine-054\",\"memory:run-smallville-routine-001:routine-060\",\"memory:run-smallville-routine-001:routine-066\"],\"llmPlanner\":{\"schemaVersion\":1,\"contractVersion\":1,\"requestId\":\"llm-plan-request-dd2d8632\",\"responseRequestId\":\"llm-plan-request-dd2d8632\",\"promptHash\":\"dd2d8632\",\"model\":\"deterministic-contract-fixture\",\"modelRole\":\"planner\",\"generatedAt\":\"2026-07-04T19:00:00.000Z\",\"generatedBy\":\"deterministic-contract-fixture\",\"stepIndex\":0,\"responseStepId\":\"retrieve-context\",\"previousRunId\":\"run-smallville-routine-001\",\"previousEventCount\":150,\"selectedMemoryRecordIds\":[\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\",\"memory:run-smallville-routine-001:routine-024\",\"memory:run-smallville-routine-001:routine-030\",\"memory:run-smallville-routine-001:routine-036\",\"memory:run-smallville-routine-001:routine-042\",\"memory:run-smallville-routine-001:routine-048\",\"memory:run-smallville-routine-001:routine-054\",\"memory:run-smallville-routine-001:routine-060\",\"memory:run-smallville-routine-001:routine-066\"]}}\n{\n  \"id\": \"run-llm-plan-dd2d8632-000\",\n  \"runId\": \"run-llm-plan-dd2d8632\",\n  \"taskId\": \"task-llm-planner-contract\",\n  \"timestamp\": \"2026-07-04T19:00:00.000Z\",\n  \"sequence\": 0,\n  \"agentId\": \"agent-isabella\",\n  \"agentName\": \"Isabella\",\n  \"agentRole\": \"planner\",\n  \"type\": \"",
+      "sourceLine": "llm-plan \u00b7 8 events",
+      "runId": "run-llm-plan-dd2d8632",
+      "eventCount": "8",
+      "cursorMetric": "2 / 8",
+      "statusAccepted": true,
+      "warningsZero": true,
+      "memoryBank75": true,
+      "hasLlmPlannerMetadata": true,
+      "hasSelectedMemoryIds": true,
+      "hasValidateTool": false,
+      "toolbarCursor": "1",
+      "toolbarVisible": "1/8",
+      "toolbarDensity": "balanced",
+      "toolbarZoom": "105%",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "horizontalOverflow": 0,
+      "canvas": {
+        "width": 1040,
+        "height": 900,
+        "clientWidth": 773,
+        "clientHeight": 669
+      }
+    },
+    "consoleErrors": [],
+    "consoleWarnings": [
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x10400544800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+        "location": {
+          "url": "http://localhost:5173/",
+          "line": 0,
+          "column": 0,
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x10400549600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+        "location": {
+          "url": "http://localhost:5173/",
+          "line": 0,
+          "column": 0,
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x1040054f600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+        "location": {
+          "url": "http://localhost:5173/",
+          "line": 0,
+          "column": 0,
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x10400549600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+        "location": {
+          "url": "http://localhost:5173/",
+          "line": 0,
+          "column": 0,
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      }
+    ],
+    "pageErrors": []
+  },
+  "mobile": {
+    "loaded": {
+      "bodyTextSample": "AT\nAgent Town\n\nAgentEvent-driven runtime projection\n\nRun ID\nrun-llm-plan-dd2d8632\nStatus\npaused\nCursor\n1 / 8\nEvents\n8\nWarnings\n0\nQuarantine\n0\nIMPORT SOURCE\n\nllm-plan \u00b7 8 events\n\nMock\nJSONL\nTown day\nCognitive\nSocial day\nRoutine day\nIntervention\nMemory\nMemory plan\nLLM plan\nWS sample\n\nMemory bank \u00b7 75 records\n\nConnect\nDisconnect\nLLM planner contract: 8 events accepted.\nwarnings=0; quarantined=0\nPROJECTION CONTROLS\n\nTune how WorldState becomes the town view.\n\nLayout density\nCompact\nBalanced\nExpanded\nTown zoom\n100%\n-\n+\nShow bubbles\nShow handoff edges\nReset projection\nAGENT FOCUS\n\n1 agents reconstructed from replay.\n\nIsabella\nplanner / working / archive\nEVENT FILTERS\n\n10 / 10 types visible in Timeline.\n\nthinking\n2 events\nmessage\n1 events\ntool call\n1 events\nhandoff\n0 events\nmemory read\n1 events\nmemory write\n1 events\ndecision\n1 events\nblocked\n0 events\nerror\n0 events\ndone\n1 events\nAll\nNone\nCritical\n\nIsabella / memory_read / Retrieve LLM planning context\n\ncursor 0\nvisible 8/8\nbalanced\n100%\nRUN SUMMARY\nEvents\n8\nAgents\n4\nHandoffs\n0\nTool calls\n1\nMemory actions\n2\nBlocked\n0\nErrors\n0\nFirst blocked: none\nFirst error: none\nBefore error: none\nEVENT / AGENT DETAIL\nPlayback\n\nCurrent event: run-llm-plan-dd2d8632-000\nSelected event: run-llm-plan-dd2d8632-000\n\nSelected Agent\nName\nIsabella\nRole\nplanner\nStatus\nworking\nLocation\narchive\nSelected Event\nID\nrun-llm-plan-dd2d8632-000\nSequence\n0\nTimestamp\n2026-07-04T19:00:00.000Z\nRun ID\nrun-llm-plan-dd2d8632\nTask ID\ntask-llm-planner-contract\nAgent\nIsabella (agent-isabella)\nRole\nplanner\nType\nmemory_read\nStatus\nrunning\nSummary\nRetrieve LLM planning context\nContent\nIsabella reviews model-planning context with memory:run-smallville-routine-001:routine-000, memory:run-smallville-routine-001:routine-006, memory:run-smallville-routine-001:routine-012.\nTarget\nagent=none; task=none\nTool\nnone\nTool input\nnone\nTool output\nnone\nArtifacts\nnone\nFile path\nnone\nMetrics\nnone\nMetadata\n{\"source\":\"llm\",\"tags\":[\"llm-planner\",\"smallville-contract\",\"retrieval\",\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\"],\"cognitiveStage\":\"retrieval\",\"subLocationId\":\"archive_shelves\",\"activity\":\"retrieves planner contract\",\"selectedMemoryRecordIds\":[\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\",\"memory:run-smallville-routine-001:routine-024\",\"memory:run-smallville-routine-001:routine-030\",\"memory:run-smallville-routine-001:routine-036\",\"memory:run-smallville-routine-001:routine-042\",\"memory:run-smallville-routine-001:routine-048\",\"memory:run-smallville-routine-001:routine-054\",\"memory:run-smallville-routine-001:routine-060\",\"memory:run-smallville-routine-001:routine-066\"],\"llmPlanner\":{\"schemaVersion\":1,\"contractVersion\":1,\"requestId\":\"llm-plan-request-dd2d8632\",\"responseRequestId\":\"llm-plan-request-dd2d8632\",\"promptHash\":\"dd2d8632\",\"model\":\"deterministic-contract-fixture\",\"modelRole\":\"planner\",\"generatedAt\":\"2026-07-04T19:00:00.000Z\",\"generatedBy\":\"deterministic-contract-fixture\",\"stepIndex\":0,\"responseStepId\":\"retrieve-context\",\"previousRunId\":\"run-smallville-routine-001\",\"previousEventCount\":150,\"selectedMemoryRecordIds\":[\"memory:run-smallville-routine-001:routine-000\",\"memory:run-smallville-routine-001:routine-006\",\"memory:run-smallville-routine-001:routine-012\",\"memory:run-smallville-routine-001:routine-018\",\"memory:run-smallville-routine-001:routine-024\",\"memory:run-smallville-routine-001:routine-030\",\"memory:run-smallville-routine-001:routine-036\",\"memory:run-smallville-routine-001:routine-042\",\"memory:run-smallville-routine-001:routine-048\",\"memory:run-smallville-routine-001:routine-054\",\"memory:run-smallville-routine-001:routine-060\",\"memory:run-smallville-routine-001:routine-066\"]}}\n{\n  \"id\": \"run-llm-plan-dd2d8632-000\",\n  \"runId\": \"run-llm-plan-dd2d8632\",\n  \"taskId\": \"task-llm-planner-contract\",\n  \"timestamp\": \"2026-07-04T19:00:00.000Z\",\n  \"sequence\": 0,\n  \"agentId\": \"agent-isabella\",\n  \"agentName\": \"Isabella\",\n  \"agentRole\": \"planner\",\n  \"type\": ",
+      "sourceLine": "llm-plan \u00b7 8 events",
+      "runId": "run-llm-plan-dd2d8632",
+      "eventCount": "8",
+      "cursorMetric": "1 / 8",
+      "statusAccepted": true,
+      "warningsZero": true,
+      "memoryBank75": true,
+      "hasLlmPlannerMetadata": true,
+      "hasSelectedMemoryIds": true,
+      "hasValidateTool": false,
+      "toolbarCursor": "0",
+      "toolbarVisible": "8/8",
+      "toolbarDensity": "balanced",
+      "toolbarZoom": "100%",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "horizontalOverflow": 0,
+      "canvas": {
+        "width": 1040,
+        "height": 900,
+        "clientWidth": 372,
+        "clientHeight": 322
+      }
+    },
+    "canvasClip": {
+      "x": 9,
+      "y": 260.578125,
+      "width": 371.984375,
+      "height": 321.921875
+    },
+    "consoleErrors": [],
+    "consoleWarnings": [],
+    "pageErrors": []
+  },
+  "assertions": {
+    "desktopLoadedLlmPlan": true,
+    "desktopAcceptedEightEvents": true,
+    "desktopMemoryContextSeeded": true,
+    "desktopMetadataVisible": true,
+    "desktopSelectedMemoryIdsVisible": true,
+    "desktopNoHorizontalOverflow": true,
+    "desktopZoomChanged": true,
+    "criticalFilterChangedVisibleCount": true,
+    "nextChangedCursor": true,
+    "playAdvancedOrStarted": true,
+    "desktopNoConsoleErrors": true,
+    "mobileLoadedLlmPlan": true,
+    "mobileNoHorizontalOverflow": true,
+    "mobileNoConsoleErrors": true
+  },
+  "screenshots": {
+    "desktop": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-llm-plan-desktop.png",
+    "interaction": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-llm-plan-interaction.png",
+    "mobile": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-llm-plan-mobile.png",
+    "mobile_map": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-llm-plan-mobile-map.png"
+  }
+}

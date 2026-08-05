@@ -1,0 +1,133 @@
+{
+  "all_nonblank": true,
+  "checks": [
+    {
+      "file": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-cognitive-desktop.png",
+      "width": 1440,
+      "height": 960,
+      "mean": [
+        91.57,
+        104.34,
+        93.32
+      ],
+      "extrema": [
+        [
+          6,
+          255
+        ],
+        [
+          10,
+          255
+        ],
+        [
+          11,
+          255
+        ]
+      ],
+      "average_pixel": [
+        107,
+        119,
+        106
+      ],
+      "has_nonblank_bbox": true,
+      "unique_colors_64x64": 1710,
+      "nonblank": true
+    },
+    {
+      "file": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-cognitive-interaction.png",
+      "width": 1440,
+      "height": 960,
+      "mean": [
+        90.34,
+        103.25,
+        92.1
+      ],
+      "extrema": [
+        [
+          12,
+          255
+        ],
+        [
+          19,
+          255
+        ],
+        [
+          19,
+          255
+        ]
+      ],
+      "average_pixel": [
+        105,
+        118,
+        104
+      ],
+      "has_nonblank_bbox": true,
+      "unique_colors_64x64": 1663,
+      "nonblank": true
+    },
+    {
+      "file": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-cognitive-mobile.png",
+      "width": 780,
+      "height": 1688,
+      "mean": [
+        27.18,
+        40.13,
+        41.09
+      ],
+      "extrema": [
+        [
+          6,
+          245
+        ],
+        [
+          9,
+          255
+        ],
+        [
+          10,
+          244
+        ]
+      ],
+      "average_pixel": [
+        28,
+        41,
+        42
+      ],
+      "has_nonblank_bbox": true,
+      "unique_colors_64x64": 759,
+      "nonblank": true
+    },
+    {
+      "file": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-cognitive-mobile-map.png",
+      "width": 780,
+      "height": 1688,
+      "mean": [
+        87.81,
+        102.63,
+        90.5
+      ],
+      "extrema": [
+        [
+          14,
+          255
+        ],
+        [
+          20,
+          255
+        ],
+        [
+          20,
+          255
+        ]
+      ],
+      "average_pixel": [
+        99,
+        113,
+        99
+      ],
+      "has_nonblank_bbox": true,
+      "unique_colors_64x64": 1399,
+      "nonblank": true
+    }
+  ]
+}

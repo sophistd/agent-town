@@ -151,6 +151,276 @@ covered by the WebSocket mapping table above. The app's Import Source panel can
 connect to that URL, and every accepted message is appended to the current
 WebSocket run before replay.
 
+## LLM Planner Contract Adapter
+
+`src/adapters/llmPlannerAdapter.ts` implements the current LLM planner contract
+path.
+
+Rules:
+
+- The request builder summarizes prior canonical events and durable memory
+  records into a model-ready JSON contract.
+- The request builder retrieves memory per agent by relevance, importance,
+  recency, and agent affinity instead of passing only a global memory list.
+- The parser accepts either an object or JSON string response.
+- Each response step must map to one canonical `AgentEvent`.
+- Missing required event fields are quarantined.
+- `message` and `handoff` steps without `targetAgentId` are quarantined.
+- `tool_call` steps without `toolName` are quarantined.
+- Duplicate event IDs and duplicate `(runId, sequence)` pairs are quarantined.
+- Accepted events receive `metadata.source = "llm"` and
+  `metadata.llmPlanner` with request id, prompt hash, model role, model name,
+  response step id, prior-run context, selected memory record IDs, selected
+  memory source event IDs, and agent-addressable retrieval counts.
+- Accepted events also receive `metadata.agentAddressableMemory` with selected
+  memory records, retrieval scores, per-agent retrieval snapshots, source event
+  IDs, selected-for agent IDs, and retrieval weights.
+- `buildOpenAiResponsesPlannerBody` builds an OpenAI Responses request with
+  `store: false`, JSON schema output formatting, developer/user messages,
+  planner metadata, and the same agent-addressable memory retrieval evidence.
+- `callOpenAiLlmPlanner` is the provider-backed boundary. It requires an API
+  key supplied by the local runtime, calls the Responses API through injected or
+  runtime `fetch`, extracts `output_text`, then sends the model text through the
+  same parser, validation, and quarantine path.
+- The current UI source still uses a deterministic model-shaped fixture
+  response. Browser code does not receive API keys and does not call the live
+  provider.
+- Tests use an injected mock `fetch` to prove provider request construction and
+  provider output parsing. A live provider call requires `OPENAI_API_KEY` in the
+  local runtime.
+
+## Adaptive Routine Adapter
+
+`src/adapters/adaptiveRoutineAdapter.ts` implements the current adaptive daily
+plan path.
+
+Rules:
+
+- The adapter reads prior canonical routine events and external town
+  observations.
+- If the supplied stream has no `metadata.routine` evidence, it returns a
+  warning and uses the deterministic Routine day seed so the UI source remains
+  runnable without silently claiming current-run provenance.
+- It emits revised observation, memory retrieval, reflection, planning, action,
+  and memory writeback events for up to 25 agents.
+- Accepted events use `metadata.source = "custom"` and carry
+  `metadata.routine`, `metadata.routineRevision`, `metadata.cognitiveStage`,
+  `metadata.subLocationId`, and `metadata.activity`.
+- `metadata.routineRevision` records the previous run id, previous event id,
+  prior routine event ids, selected memory event ids, previous location,
+  revised location, source observation, reason, schema version, and generator
+  boundary.
+- The adapter validates generated events before replay and quarantines invalid
+  generated events instead of letting them enter `WorldState`.
+- Phaser, map objects, sprites, and React state do not revise schedules. They
+  only project the accepted `AgentEvent -> WorldState` result.
+
+## File-Backed Persistent Memory Store
+
+`src/state/filePersistentMemoryStore.ts` extends persistent memory beyond the
+browser-only storage boundary for local or server-side runtimes.
+
+Rules:
+
+- It uses the same `PersistentMemoryRecord` and versioned snapshot schema as
+  `src/state/persistentMemoryStore.ts`.
+- It writes snapshots to a caller-provided file path with an atomic temporary
+  file plus rename.
+- It can merge incoming canonical memory records into the file-backed snapshot
+  through `mergePersistentMemoryRecords`.
+- Missing, unreadable, invalid, or unwritable files return explicit adapter
+  warnings; they are not treated as silent success.
+- File-backed memory remains an adapter/backing-store boundary. The renderer
+  still receives only canonical `AgentEvent[]` replayed into `WorldState`.
+
+`src/adapters/worldMemoryRuntime.ts` is the local/server runtime API over that
+store.
+
+Rules:
+
+- `ingestEventsIntoFileWorldMemory` validates incoming event-shaped input,
+  quarantines invalid events, extracts only canonical `memory_read` /
+  `memory_write` records, and merges them into the file-backed store.
+- `buildFileWorldMemoryRecallResult` loads records from the file-backed store
+  and emits canonical recall events through the existing memory adapter path.
+- `buildFileWorldMemoryPlanResult` loads records from the file-backed store and
+  emits agent-addressable retrieval, reflection, and planning events.
+- Non-memory event streams produce an explicit
+  `world_memory_ingest_no_memory_events` warning instead of fabricating durable
+  memory.
+- This API is not a long-running server process by itself. It is the boundary a
+  local/server runtime can call without giving files or the renderer ownership
+  of world facts.
+
+`src/server/worldMemoryHttpServer.ts` exposes that runtime as a long-running
+local/server HTTP process. `pnpm world-memory:server` starts it through the
+existing Vite toolchain without adding a new runtime dependency.
+
+Routes:
+
+- `GET /health`
+- `POST /memory/ingest`
+- `GET /memory/recall`
+- `POST /memory/plan`
+- `POST /provider-loop`
+
+Rules:
+
+- The server requires `AGENT_TOWN_WORLD_MEMORY_FILE` or a file path argument so
+  the durable memory location is explicit.
+- The default bind host is `127.0.0.1`; callers may override host or port for a
+  local/server deployment.
+- `/memory/ingest` accepts event-shaped JSON, validates it through the canonical
+  event validator, quarantines invalid events, and persists only canonical
+  memory events.
+- `/memory/plan` also validates `previousEvents` before using them as planning
+  context. Invalid context events are quarantined as
+  `invalid_world_memory_plan_context_event`.
+- `/memory/recall` and `/memory/plan` return adapter-shaped canonical event
+  output. Callers still have to replay those events into `WorldState`; the HTTP
+  process does not own projection facts.
+- `/provider-loop` accepts live HTTP sender events, runs the same
+  server-backed provider loop, and returns canonical provider events plus a
+  secret-free summary.
+- `/provider-loop` rejects API keys in request bodies. Provider credentials, if
+  used, must come from local/server configuration such as `OPENAI_API_KEY`.
+- Local browser CORS is allowed for loopback HTTP origins such as Vite dev
+  servers. Remote origins are not granted CORS access.
+- Malformed JSON and oversized request bodies return explicit JSON errors
+  instead of being silently accepted.
+
+`src/adapters/worldMemoryProviderLoop.ts` connects the long-running
+world-memory process to the existing provider planner boundary.
+
+Loop order:
+
+1. Validate the external event stream locally for planner context.
+2. Send the raw event-shaped stream to `/memory/ingest` so the server persists
+   only canonical memory evidence.
+3. Call `/memory/recall` and reconstruct provider request records from the
+   canonical recall events, including `metadata.durableMemory`.
+4. Call `/memory/plan` to get server-backed agent-addressable memory context as
+   canonical events.
+5. Build `buildSmallvilleLlmPlannerRequest` from accepted input events, server
+   Memory plan events, and reconstructed durable records.
+6. Call `callOpenAiLlmPlanner`, preserving the existing API-key, fetch,
+   provider-response parsing, and quarantine behavior.
+
+Rules:
+
+- The loop does not read the memory file directly.
+- The loop does not accept server state as `WorldState`.
+- Missing API keys produce the existing `missing_openai_api_key` warning and do
+  not call the provider.
+- Invalid input events are quarantined as
+  `invalid_world_memory_provider_loop_input_event`.
+- Provider output still has to pass through `parseLlmPlannerResponse` and
+  canonical event validation before replay.
+
+`POST /provider-loop` exposes the same loop as a live HTTP sender path on the
+long-running world-memory process.
+
+Live sender rules:
+
+- The request body is JSON with `events`, plus optional non-secret controls such
+  as `maxAgents`, `maxMemoryRecords`, `maxOutputTokens`, `maxRecords`,
+  `memoriesPerAgent`, `memoryPlanMaxAgents`, `model`, `now`, and `savedAt`.
+- The route validates and quarantines event-shaped input through
+  `runWorldMemoryProviderLoop`; HTTP state does not become `WorldState`.
+- The route calls its own `/memory/ingest`, `/memory/recall`, and
+  `/memory/plan` routes, so durable memory remains in the existing server
+  boundary.
+- The response includes canonical provider events, recall events, Memory plan
+  events, warnings, quarantines, and a secret-free summary.
+- Request bodies containing `apiKey`, `openAiApiKey`, or `OPENAI_API_KEY` are
+  rejected so secrets do not enter runtime sender payloads or evidence logs.
+
+`src/adapters/providerLoopHttpAdapter.ts` is the browser/workbench adapter for
+that live route.
+
+Workbench rules:
+
+- The Import Source panel posts the current canonical event stream to the
+  configured `/provider-loop` URL.
+- The adapter never sends provider credentials.
+- The adapter validates returned recall, Memory plan, and provider events again
+  before replay.
+- If no API key is configured on the local server, provider events may be empty,
+  but returned recall and Memory plan events can still become replayable
+  canonical evidence.
+- Fetch failures and server error envelopes become warnings instead of hidden
+  success.
+
+`src/server/worldMemoryProviderLoopRunner.ts` and
+`pnpm world-memory:provider-loop` make the provider loop runnable from an
+external JSONL event stream.
+
+Runner rules:
+
+- The input is the existing native JSONL format: one canonical `AgentEvent`
+  object per non-empty line.
+- JSONL parsing uses `parseNativeJsonl`; malformed lines and invalid events are
+  quarantined before the loop receives accepted events.
+- The runner starts a local world-memory server for the configured memory file,
+  runs the provider loop, closes the server, and prints a secret-free summary.
+- The summary includes event counts, warning codes, quarantine codes, provider
+  request IDs, prompt hash, and memory counts. It does not include API keys.
+- `AGENT_TOWN_PROVIDER_LOOP_OUTPUT` can write the same summary to a file for
+  evidence capture.
+
+`src/server/smallvilleExternalRuntimeStreamRunner.ts` and
+`pnpm smallville:runtime-stream` make the route runnable as a deterministic
+external runtime stream.
+
+External runtime stream rules:
+
+- The runner emits canonical `AgentEvent` batches over multiple ticks.
+- Emitted events use `metadata.source: "custom"` and
+  `metadata.externalRuntime` to preserve original event provenance, scenario,
+  and stream identity.
+- Each tick posts only that tick's canonical batch to `/provider-loop`; durable
+  memory accumulates in the local/server file-backed world-memory store.
+- The runner writes a secret-free summary and can write the emitted event log as
+  JSONL for evidence capture.
+- Without a local/server API key, provider events remain empty and
+  `missing_openai_api_key` is returned as a warning instead of being hidden.
+- The stream is deterministic runtime evidence, not a live LLM-backed
+  autonomous simulation claim.
+
+`src/server/smallvilleAutonomousSchedulerRunner.ts` and
+`pnpm smallville:scheduler` add a bounded world-clock scheduler on top of the
+same route.
+
+Autonomous scheduler rules:
+
+- The scheduler cycles through explicit routine, cognitive, and social phases.
+- Each phase emits canonical `AgentEvent` batches with
+  `metadata.source: "custom"` and `metadata.scheduler` provenance.
+- `metadata.scheduler` records phase, phase intent, scenario, virtual clock,
+  original event provenance, and tick identity; it does not create `WorldState`
+  directly.
+- Each tick posts only canonical events to `/provider-loop`; the local/server
+  file-backed world-memory store is what carries memory across ticks.
+- `AGENT_TOWN_SCHEDULER_TICKS`, `AGENT_TOWN_SCHEDULER_EVENTS_PER_TICK`,
+  `AGENT_TOWN_SCHEDULER_TICK_MINUTES`, and
+  `AGENT_TOWN_SCHEDULER_TICK_DELAY_MS` bound the run for repeatable evidence.
+- `AGENT_TOWN_SCHEDULER_MAX_ELAPSED_MS` adds a supervised wall-clock window.
+  The scheduler completes the current canonical tick, writes the checkpoint,
+  then records `supervision.stopReason` as
+  `"elapsed_time_limit_reached"` if the elapsed-time limit is reached.
+- `AGENT_TOWN_SCHEDULER_CHECKPOINT` writes a checkpoint after each completed
+  tick.
+- `AGENT_TOWN_SCHEDULER_RESUME=true` resumes from the checkpoint's
+  `nextTickIndex` and inherits scheduler settings from the checkpoint unless
+  they are explicitly configured.
+- Resume fails fast if explicit schedule id, start time, tick size, tick
+  duration, memory file, or phase plan conflicts with the checkpoint.
+- The scheduler writes a secret-free summary and can write emitted events as
+  JSONL.
+- Without a local/server API key, provider events remain empty and
+  `missing_openai_api_key` is returned as a warning instead of being hidden.
+- This is bounded scheduler evidence, not a live LLM-backed free-running town.
+
 ## Adding Another Source
 
 1. Create `src/adapters/<source>Adapter.ts`.

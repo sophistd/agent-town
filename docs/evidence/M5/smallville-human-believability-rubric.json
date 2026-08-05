@@ -1,0 +1,1255 @@
+{
+  "date": "2026-07-10",
+  "branch": "codex/smallville-asset-pipeline",
+  "source": "evaluateSmallvilleRun canonical AgentEvent plus replayed WorldState",
+  "note": "Human-review rubric evidence only; this is not a completed human-subject study.",
+  "scenarios": [
+    {
+      "id": "generic_failure",
+      "runId": "run-failure-agent-town-001",
+      "eventCount": 30,
+      "agentCount": 5,
+      "relationshipCount": 6,
+      "isSmallvilleLike": false,
+      "structuralScore": 33,
+      "topStructuralGaps": [
+        {
+          "key": "adaptive_routine",
+          "status": "missing",
+          "score": 0
+        },
+        {
+          "key": "llm_contract",
+          "status": "missing",
+          "score": 0
+        },
+        {
+          "key": "observation",
+          "status": "missing",
+          "score": 0
+        },
+        {
+          "key": "persistent_memory",
+          "status": "missing",
+          "score": 0
+        }
+      ],
+      "humanReviewRubric": {
+        "overallScore": 19,
+        "summary": "1/8 human-review criteria are review-ready from canonical event evidence.",
+        "criteria": [
+          {
+            "key": "identity_continuity",
+            "label": "Identity continuity",
+            "status": "missing",
+            "score": 0,
+            "evidenceCount": 0,
+            "targetCount": 5,
+            "evidenceEventIds": [],
+            "evidenceAgentIds": [],
+            "finding": "No persona evidence is available for human identity review.",
+            "remainingRisk": "Persona evidence is metadata-level continuity; it is not yet a free-form interview or diary study."
+          },
+          {
+            "key": "experience_action_chain",
+            "label": "Experience-to-action chain",
+            "status": "missing",
+            "score": 0,
+            "evidenceCount": 0,
+            "targetCount": 5,
+            "evidenceEventIds": [],
+            "evidenceAgentIds": [],
+            "finding": "No agent has the full observation-to-action chain required for believable review.",
+            "remainingRisk": "The chain proves traceability, not that an outside human would judge the content natural."
+          },
+          {
+            "key": "memory_grounding",
+            "label": "Memory grounding",
+            "status": "missing",
+            "score": 0,
+            "evidenceCount": 0,
+            "targetCount": 5,
+            "evidenceEventIds": [],
+            "evidenceAgentIds": [],
+            "finding": "No retrieval-to-plan memory chain is available.",
+            "remainingRisk": "Memory ranking is deterministic evidence; persistent provider-backed recall still needs external runtime proof."
+          },
+          {
+            "key": "social_propagation",
+            "label": "Social propagation",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 6,
+            "targetCount": 5,
+            "evidenceEventIds": [],
+            "evidenceAgentIds": [],
+            "finding": "No social diffusion evidence is present.",
+            "remainingRisk": "Social spread is fixture/provider event evidence, not an empirical emergent-behavior benchmark."
+          },
+          {
+            "key": "routine_continuity",
+            "label": "Routine continuity",
+            "status": "missing",
+            "score": 0,
+            "evidenceCount": 0,
+            "targetCount": 6,
+            "evidenceEventIds": [],
+            "evidenceAgentIds": [],
+            "finding": "No day-scale routine phases are available.",
+            "remainingRisk": "Routine phases are bounded and deterministic; longer unsupervised days remain future work."
+          },
+          {
+            "key": "adaptive_response",
+            "label": "Adaptive response",
+            "status": "missing",
+            "score": 0,
+            "evidenceCount": 0,
+            "targetCount": 5,
+            "evidenceEventIds": [],
+            "evidenceAgentIds": [],
+            "finding": "No intervention or adaptation evidence is present.",
+            "remainingRisk": "Adaptation evidence is inspected after replay; live provider-backed autonomy is still gated separately."
+          },
+          {
+            "key": "spatial_continuity",
+            "label": "Spatial continuity",
+            "status": "missing",
+            "score": 0,
+            "evidenceCount": 0,
+            "targetCount": 1,
+            "evidenceEventIds": [],
+            "evidenceAgentIds": [],
+            "finding": "No stable town-location evidence is available for spatial review.",
+            "remainingRisk": "Spatial continuity is event-derived; Phaser/Tiled objects still cannot create runtime facts."
+          },
+          {
+            "key": "reviewability",
+            "label": "Reviewability",
+            "status": "partial",
+            "score": 2,
+            "evidenceCount": 8,
+            "targetCount": 20,
+            "evidenceEventIds": [],
+            "evidenceAgentIds": [],
+            "finding": "5 capability rows and 3 ablation rows expose auditable evidence or gaps.",
+            "remainingRisk": "This is a deterministic review rubric, not a completed human-subject evaluation."
+          }
+        ],
+        "topReviewGaps": [
+          {
+            "key": "adaptive_response",
+            "status": "missing",
+            "score": 0
+          },
+          {
+            "key": "experience_action_chain",
+            "status": "missing",
+            "score": 0
+          },
+          {
+            "key": "identity_continuity",
+            "status": "missing",
+            "score": 0
+          },
+          {
+            "key": "memory_grounding",
+            "status": "missing",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "smallville_social",
+      "runId": "run-smallville-social-001",
+      "eventCount": 150,
+      "agentCount": 25,
+      "relationshipCount": 66,
+      "isSmallvilleLike": true,
+      "structuralScore": 67,
+      "topStructuralGaps": [
+        {
+          "key": "adaptive_routine",
+          "status": "missing",
+          "score": 0
+        },
+        {
+          "key": "llm_contract",
+          "status": "missing",
+          "score": 0
+        },
+        {
+          "key": "persistent_memory",
+          "status": "missing",
+          "score": 0
+        },
+        {
+          "key": "routine_schedule",
+          "status": "missing",
+          "score": 0
+        }
+      ],
+      "humanReviewRubric": {
+        "overallScore": 72,
+        "summary": "5/8 human-review criteria are review-ready from canonical event evidence.",
+        "criteria": [
+          {
+            "key": "identity_continuity",
+            "label": "Identity continuity",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 25,
+            "targetCount": 25,
+            "evidenceEventIds": [
+              "social-000",
+              "social-001",
+              "social-002",
+              "social-003",
+              "social-004",
+              "social-005",
+              "social-006",
+              "social-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-anika",
+              "agent-celine",
+              "agent-diego",
+              "agent-elena",
+              "agent-haruto",
+              "agent-iris",
+              "agent-isabella",
+              "agent-june",
+              "agent-klaus",
+              "agent-lina",
+              "agent-marco",
+              "agent-maria",
+              "agent-mei",
+              "agent-noah",
+              "agent-nora",
+              "agent-omar",
+              "agent-pavel",
+              "agent-priya",
+              "agent-rafa",
+              "agent-sam",
+              "agent-sol",
+              "agent-teo",
+              "agent-victor",
+              "agent-yuna",
+              "agent-zara"
+            ],
+            "finding": "25/25 target agents expose persona evidence in canonical events.",
+            "remainingRisk": "Persona evidence is metadata-level continuity; it is not yet a free-form interview or diary study."
+          },
+          {
+            "key": "experience_action_chain",
+            "label": "Experience-to-action chain",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 25,
+            "targetCount": 25,
+            "evidenceEventIds": [
+              "social-000",
+              "social-001",
+              "social-002",
+              "social-003",
+              "social-004",
+              "social-005",
+              "social-006",
+              "social-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-anika",
+              "agent-celine",
+              "agent-diego",
+              "agent-elena",
+              "agent-haruto",
+              "agent-iris",
+              "agent-isabella",
+              "agent-june",
+              "agent-klaus",
+              "agent-lina",
+              "agent-marco",
+              "agent-maria",
+              "agent-mei",
+              "agent-noah",
+              "agent-nora",
+              "agent-omar",
+              "agent-pavel",
+              "agent-priya",
+              "agent-rafa",
+              "agent-sam",
+              "agent-sol",
+              "agent-teo",
+              "agent-victor",
+              "agent-yuna",
+              "agent-zara"
+            ],
+            "finding": "25/25 target agents have a complete event-derived cognitive chain.",
+            "remainingRisk": "The chain proves traceability, not that an outside human would judge the content natural."
+          },
+          {
+            "key": "memory_grounding",
+            "label": "Memory grounding",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 25,
+            "targetCount": 25,
+            "evidenceEventIds": [
+              "social-001",
+              "social-002",
+              "social-004",
+              "social-006",
+              "social-007",
+              "social-009",
+              "social-011",
+              "social-012"
+            ],
+            "evidenceAgentIds": [
+              "agent-anika",
+              "agent-celine",
+              "agent-diego",
+              "agent-elena",
+              "agent-haruto",
+              "agent-iris",
+              "agent-isabella",
+              "agent-june",
+              "agent-klaus",
+              "agent-lina",
+              "agent-marco",
+              "agent-maria",
+              "agent-mei",
+              "agent-noah",
+              "agent-nora",
+              "agent-omar",
+              "agent-pavel",
+              "agent-priya",
+              "agent-rafa",
+              "agent-sam",
+              "agent-sol",
+              "agent-teo",
+              "agent-victor",
+              "agent-yuna",
+              "agent-zara"
+            ],
+            "finding": "25/25 target agents connect retrieval to derived or executed memory evidence.",
+            "remainingRisk": "Memory ranking is deterministic evidence; persistent provider-backed recall still needs external runtime proof."
+          },
+          {
+            "key": "social_propagation",
+            "label": "Social propagation",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 66,
+            "targetCount": 25,
+            "evidenceEventIds": [
+              "social-000",
+              "social-001",
+              "social-002",
+              "social-003",
+              "social-004",
+              "social-005",
+              "social-006",
+              "social-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-anika",
+              "agent-celine",
+              "agent-diego",
+              "agent-elena",
+              "agent-haruto",
+              "agent-iris",
+              "agent-isabella",
+              "agent-june",
+              "agent-klaus",
+              "agent-lina",
+              "agent-marco",
+              "agent-maria",
+              "agent-mei",
+              "agent-noah",
+              "agent-nora",
+              "agent-omar",
+              "agent-pavel",
+              "agent-priya",
+              "agent-rafa",
+              "agent-sam",
+              "agent-sol",
+              "agent-teo",
+              "agent-victor",
+              "agent-yuna",
+              "agent-zara"
+            ],
+            "finding": "25 agents carry social diffusion evidence and replay derives 66 relationships.",
+            "remainingRisk": "Social spread is fixture/provider event evidence, not an empirical emergent-behavior benchmark."
+          },
+          {
+            "key": "routine_continuity",
+            "label": "Routine continuity",
+            "status": "missing",
+            "score": 0,
+            "evidenceCount": 0,
+            "targetCount": 6,
+            "evidenceEventIds": [],
+            "evidenceAgentIds": [],
+            "finding": "No day-scale routine phases are available.",
+            "remainingRisk": "Routine phases are bounded and deterministic; longer unsupervised days remain future work."
+          },
+          {
+            "key": "adaptive_response",
+            "label": "Adaptive response",
+            "status": "partial",
+            "score": 1,
+            "evidenceCount": 1,
+            "targetCount": 8,
+            "evidenceEventIds": [
+              "social-000"
+            ],
+            "evidenceAgentIds": [
+              "agent-isabella"
+            ],
+            "finding": "1 events show intervention, conflict, routine revision, or planner adaptation evidence.",
+            "remainingRisk": "Adaptation evidence is inspected after replay; live provider-backed autonomy is still gated separately."
+          },
+          {
+            "key": "spatial_continuity",
+            "label": "Spatial continuity",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 150,
+            "targetCount": 75,
+            "evidenceEventIds": [
+              "social-000",
+              "social-001",
+              "social-002",
+              "social-003",
+              "social-004",
+              "social-005",
+              "social-006",
+              "social-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-isabella",
+              "agent-klaus"
+            ],
+            "finding": "150 Smallville-like events have stable location and sub-location evidence.",
+            "remainingRisk": "Spatial continuity is event-derived; Phaser/Tiled objects still cannot create runtime facts."
+          },
+          {
+            "key": "reviewability",
+            "label": "Reviewability",
+            "status": "partial",
+            "score": 2,
+            "evidenceCount": 13,
+            "targetCount": 20,
+            "evidenceEventIds": [
+              "social-000",
+              "social-001",
+              "social-002",
+              "social-003",
+              "social-004",
+              "social-005",
+              "social-006",
+              "social-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-isabella",
+              "agent-klaus"
+            ],
+            "finding": "8 capability rows and 5 ablation rows expose auditable evidence or gaps.",
+            "remainingRisk": "This is a deterministic review rubric, not a completed human-subject evaluation."
+          }
+        ],
+        "topReviewGaps": [
+          {
+            "key": "routine_continuity",
+            "status": "missing",
+            "score": 0
+          },
+          {
+            "key": "adaptive_response",
+            "status": "partial",
+            "score": 1
+          },
+          {
+            "key": "reviewability",
+            "status": "partial",
+            "score": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "smallville_routine",
+      "runId": "run-smallville-routine-001",
+      "eventCount": 150,
+      "agentCount": 25,
+      "relationshipCount": 66,
+      "isSmallvilleLike": true,
+      "structuralScore": 67,
+      "topStructuralGaps": [
+        {
+          "key": "adaptive_routine",
+          "status": "missing",
+          "score": 0
+        },
+        {
+          "key": "llm_contract",
+          "status": "missing",
+          "score": 0
+        },
+        {
+          "key": "persistent_memory",
+          "status": "missing",
+          "score": 0
+        },
+        {
+          "key": "social_coordination",
+          "status": "missing",
+          "score": 0
+        }
+      ],
+      "humanReviewRubric": {
+        "overallScore": 91,
+        "summary": "7/8 human-review criteria are review-ready from canonical event evidence.",
+        "criteria": [
+          {
+            "key": "identity_continuity",
+            "label": "Identity continuity",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 25,
+            "targetCount": 25,
+            "evidenceEventIds": [
+              "routine-000",
+              "routine-001",
+              "routine-002",
+              "routine-003",
+              "routine-004",
+              "routine-005",
+              "routine-006",
+              "routine-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-anika",
+              "agent-celine",
+              "agent-diego",
+              "agent-elena",
+              "agent-haruto",
+              "agent-iris",
+              "agent-isabella",
+              "agent-june",
+              "agent-klaus",
+              "agent-lina",
+              "agent-marco",
+              "agent-maria",
+              "agent-mei",
+              "agent-noah",
+              "agent-nora",
+              "agent-omar",
+              "agent-pavel",
+              "agent-priya",
+              "agent-rafa",
+              "agent-sam",
+              "agent-sol",
+              "agent-teo",
+              "agent-victor",
+              "agent-yuna",
+              "agent-zara"
+            ],
+            "finding": "25/25 target agents expose persona evidence in canonical events.",
+            "remainingRisk": "Persona evidence is metadata-level continuity; it is not yet a free-form interview or diary study."
+          },
+          {
+            "key": "experience_action_chain",
+            "label": "Experience-to-action chain",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 25,
+            "targetCount": 25,
+            "evidenceEventIds": [
+              "routine-000",
+              "routine-001",
+              "routine-002",
+              "routine-003",
+              "routine-004",
+              "routine-005",
+              "routine-006",
+              "routine-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-anika",
+              "agent-celine",
+              "agent-diego",
+              "agent-elena",
+              "agent-haruto",
+              "agent-iris",
+              "agent-isabella",
+              "agent-june",
+              "agent-klaus",
+              "agent-lina",
+              "agent-marco",
+              "agent-maria",
+              "agent-mei",
+              "agent-noah",
+              "agent-nora",
+              "agent-omar",
+              "agent-pavel",
+              "agent-priya",
+              "agent-rafa",
+              "agent-sam",
+              "agent-sol",
+              "agent-teo",
+              "agent-victor",
+              "agent-yuna",
+              "agent-zara"
+            ],
+            "finding": "25/25 target agents have a complete event-derived cognitive chain.",
+            "remainingRisk": "The chain proves traceability, not that an outside human would judge the content natural."
+          },
+          {
+            "key": "memory_grounding",
+            "label": "Memory grounding",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 25,
+            "targetCount": 25,
+            "evidenceEventIds": [
+              "routine-001",
+              "routine-002",
+              "routine-004",
+              "routine-007",
+              "routine-008",
+              "routine-010",
+              "routine-013",
+              "routine-014"
+            ],
+            "evidenceAgentIds": [
+              "agent-anika",
+              "agent-celine",
+              "agent-diego",
+              "agent-elena",
+              "agent-haruto",
+              "agent-iris",
+              "agent-isabella",
+              "agent-june",
+              "agent-klaus",
+              "agent-lina",
+              "agent-marco",
+              "agent-maria",
+              "agent-mei",
+              "agent-noah",
+              "agent-nora",
+              "agent-omar",
+              "agent-pavel",
+              "agent-priya",
+              "agent-rafa",
+              "agent-sam",
+              "agent-sol",
+              "agent-teo",
+              "agent-victor",
+              "agent-yuna",
+              "agent-zara"
+            ],
+            "finding": "25/25 target agents connect retrieval to derived or executed memory evidence.",
+            "remainingRisk": "Memory ranking is deterministic evidence; persistent provider-backed recall still needs external runtime proof."
+          },
+          {
+            "key": "social_propagation",
+            "label": "Social propagation",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 66,
+            "targetCount": 25,
+            "evidenceEventIds": [],
+            "evidenceAgentIds": [],
+            "finding": "No social diffusion evidence is present.",
+            "remainingRisk": "Social spread is fixture/provider event evidence, not an empirical emergent-behavior benchmark."
+          },
+          {
+            "key": "routine_continuity",
+            "label": "Routine continuity",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 6,
+            "targetCount": 6,
+            "evidenceEventIds": [
+              "routine-000",
+              "routine-001",
+              "routine-002",
+              "routine-003",
+              "routine-004",
+              "routine-005",
+              "routine-006",
+              "routine-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-isabella",
+              "agent-klaus"
+            ],
+            "finding": "6/6 routine phases are present in event metadata.",
+            "remainingRisk": "Routine phases are bounded and deterministic; longer unsupervised days remain future work."
+          },
+          {
+            "key": "adaptive_response",
+            "label": "Adaptive response",
+            "status": "passed",
+            "score": 3,
+            "evidenceCount": 6,
+            "targetCount": 8,
+            "evidenceEventIds": [
+              "routine-098",
+              "routine-104",
+              "routine-116",
+              "routine-122",
+              "routine-134",
+              "routine-140"
+            ],
+            "evidenceAgentIds": [
+              "agent-anika",
+              "agent-elena",
+              "agent-haruto",
+              "agent-noah",
+              "agent-rafa",
+              "agent-yuna"
+            ],
+            "finding": "6 events show intervention, conflict, routine revision, or planner adaptation evidence.",
+            "remainingRisk": "Adaptation evidence is inspected after replay; live provider-backed autonomy is still gated separately."
+          },
+          {
+            "key": "spatial_continuity",
+            "label": "Spatial continuity",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 150,
+            "targetCount": 75,
+            "evidenceEventIds": [
+              "routine-000",
+              "routine-001",
+              "routine-002",
+              "routine-003",
+              "routine-004",
+              "routine-005",
+              "routine-006",
+              "routine-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-isabella",
+              "agent-klaus"
+            ],
+            "finding": "150 Smallville-like events have stable location and sub-location evidence.",
+            "remainingRisk": "Spatial continuity is event-derived; Phaser/Tiled objects still cannot create runtime facts."
+          },
+          {
+            "key": "reviewability",
+            "label": "Reviewability",
+            "status": "partial",
+            "score": 2,
+            "evidenceCount": 14,
+            "targetCount": 20,
+            "evidenceEventIds": [
+              "routine-000",
+              "routine-001",
+              "routine-002",
+              "routine-003",
+              "routine-004",
+              "routine-005",
+              "routine-006",
+              "routine-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-isabella",
+              "agent-klaus"
+            ],
+            "finding": "8 capability rows and 6 ablation rows expose auditable evidence or gaps.",
+            "remainingRisk": "This is a deterministic review rubric, not a completed human-subject evaluation."
+          }
+        ],
+        "topReviewGaps": [
+          {
+            "key": "reviewability",
+            "status": "partial",
+            "score": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "adaptive_routine",
+      "runId": "run-smallville-adaptive-routine-001",
+      "eventCount": 150,
+      "agentCount": 25,
+      "relationshipCount": 66,
+      "isSmallvilleLike": true,
+      "structuralScore": 75,
+      "topStructuralGaps": [
+        {
+          "key": "llm_contract",
+          "status": "missing",
+          "score": 0
+        },
+        {
+          "key": "persistent_memory",
+          "status": "missing",
+          "score": 0
+        },
+        {
+          "key": "social_coordination",
+          "status": "missing",
+          "score": 0
+        }
+      ],
+      "humanReviewRubric": {
+        "overallScore": 97,
+        "summary": "8/8 human-review criteria are review-ready from canonical event evidence.",
+        "criteria": [
+          {
+            "key": "identity_continuity",
+            "label": "Identity continuity",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 25,
+            "targetCount": 25,
+            "evidenceEventIds": [
+              "run-smallville-adaptive-routine-001-000",
+              "run-smallville-adaptive-routine-001-001",
+              "run-smallville-adaptive-routine-001-002",
+              "run-smallville-adaptive-routine-001-003",
+              "run-smallville-adaptive-routine-001-004",
+              "run-smallville-adaptive-routine-001-005",
+              "run-smallville-adaptive-routine-001-006",
+              "run-smallville-adaptive-routine-001-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-anika",
+              "agent-celine",
+              "agent-diego",
+              "agent-elena",
+              "agent-haruto",
+              "agent-iris",
+              "agent-isabella",
+              "agent-june",
+              "agent-klaus",
+              "agent-lina",
+              "agent-marco",
+              "agent-maria",
+              "agent-mei",
+              "agent-noah",
+              "agent-nora",
+              "agent-omar",
+              "agent-pavel",
+              "agent-priya",
+              "agent-rafa",
+              "agent-sam",
+              "agent-sol",
+              "agent-teo",
+              "agent-victor",
+              "agent-yuna",
+              "agent-zara"
+            ],
+            "finding": "25/25 target agents expose persona evidence in canonical events.",
+            "remainingRisk": "Persona evidence is metadata-level continuity; it is not yet a free-form interview or diary study."
+          },
+          {
+            "key": "experience_action_chain",
+            "label": "Experience-to-action chain",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 25,
+            "targetCount": 25,
+            "evidenceEventIds": [
+              "run-smallville-adaptive-routine-001-000",
+              "run-smallville-adaptive-routine-001-001",
+              "run-smallville-adaptive-routine-001-002",
+              "run-smallville-adaptive-routine-001-003",
+              "run-smallville-adaptive-routine-001-004",
+              "run-smallville-adaptive-routine-001-005",
+              "run-smallville-adaptive-routine-001-006",
+              "run-smallville-adaptive-routine-001-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-anika",
+              "agent-celine",
+              "agent-diego",
+              "agent-elena",
+              "agent-haruto",
+              "agent-iris",
+              "agent-isabella",
+              "agent-june",
+              "agent-klaus",
+              "agent-lina",
+              "agent-marco",
+              "agent-maria",
+              "agent-mei",
+              "agent-noah",
+              "agent-nora",
+              "agent-omar",
+              "agent-pavel",
+              "agent-priya",
+              "agent-rafa",
+              "agent-sam",
+              "agent-sol",
+              "agent-teo",
+              "agent-victor",
+              "agent-yuna",
+              "agent-zara"
+            ],
+            "finding": "25/25 target agents have a complete event-derived cognitive chain.",
+            "remainingRisk": "The chain proves traceability, not that an outside human would judge the content natural."
+          },
+          {
+            "key": "memory_grounding",
+            "label": "Memory grounding",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 25,
+            "targetCount": 25,
+            "evidenceEventIds": [
+              "run-smallville-adaptive-routine-001-001",
+              "run-smallville-adaptive-routine-001-002",
+              "run-smallville-adaptive-routine-001-007",
+              "run-smallville-adaptive-routine-001-008",
+              "run-smallville-adaptive-routine-001-013",
+              "run-smallville-adaptive-routine-001-014",
+              "run-smallville-adaptive-routine-001-019",
+              "run-smallville-adaptive-routine-001-020"
+            ],
+            "evidenceAgentIds": [
+              "agent-anika",
+              "agent-celine",
+              "agent-diego",
+              "agent-elena",
+              "agent-haruto",
+              "agent-iris",
+              "agent-isabella",
+              "agent-june",
+              "agent-klaus",
+              "agent-lina",
+              "agent-marco",
+              "agent-maria",
+              "agent-mei",
+              "agent-noah",
+              "agent-nora",
+              "agent-omar",
+              "agent-pavel",
+              "agent-priya",
+              "agent-rafa",
+              "agent-sam",
+              "agent-sol",
+              "agent-teo",
+              "agent-victor",
+              "agent-yuna",
+              "agent-zara"
+            ],
+            "finding": "25/25 target agents connect retrieval to derived or executed memory evidence.",
+            "remainingRisk": "Memory ranking is deterministic evidence; persistent provider-backed recall still needs external runtime proof."
+          },
+          {
+            "key": "social_propagation",
+            "label": "Social propagation",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 66,
+            "targetCount": 25,
+            "evidenceEventIds": [],
+            "evidenceAgentIds": [],
+            "finding": "No social diffusion evidence is present.",
+            "remainingRisk": "Social spread is fixture/provider event evidence, not an empirical emergent-behavior benchmark."
+          },
+          {
+            "key": "routine_continuity",
+            "label": "Routine continuity",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 6,
+            "targetCount": 6,
+            "evidenceEventIds": [
+              "run-smallville-adaptive-routine-001-000",
+              "run-smallville-adaptive-routine-001-001",
+              "run-smallville-adaptive-routine-001-002",
+              "run-smallville-adaptive-routine-001-003",
+              "run-smallville-adaptive-routine-001-004",
+              "run-smallville-adaptive-routine-001-005",
+              "run-smallville-adaptive-routine-001-006",
+              "run-smallville-adaptive-routine-001-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-isabella",
+              "agent-klaus"
+            ],
+            "finding": "6/6 routine phases are present in event metadata.",
+            "remainingRisk": "Routine phases are bounded and deterministic; longer unsupervised days remain future work."
+          },
+          {
+            "key": "adaptive_response",
+            "label": "Adaptive response",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 175,
+            "targetCount": 8,
+            "evidenceEventIds": [
+              "run-smallville-adaptive-routine-001-000",
+              "run-smallville-adaptive-routine-001-001",
+              "run-smallville-adaptive-routine-001-002",
+              "run-smallville-adaptive-routine-001-003",
+              "run-smallville-adaptive-routine-001-004",
+              "run-smallville-adaptive-routine-001-005",
+              "run-smallville-adaptive-routine-001-006",
+              "run-smallville-adaptive-routine-001-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-isabella",
+              "agent-klaus"
+            ],
+            "finding": "150 events show intervention, conflict, routine revision, or planner adaptation evidence.",
+            "remainingRisk": "Adaptation evidence is inspected after replay; live provider-backed autonomy is still gated separately."
+          },
+          {
+            "key": "spatial_continuity",
+            "label": "Spatial continuity",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 150,
+            "targetCount": 75,
+            "evidenceEventIds": [
+              "run-smallville-adaptive-routine-001-000",
+              "run-smallville-adaptive-routine-001-001",
+              "run-smallville-adaptive-routine-001-002",
+              "run-smallville-adaptive-routine-001-003",
+              "run-smallville-adaptive-routine-001-004",
+              "run-smallville-adaptive-routine-001-005",
+              "run-smallville-adaptive-routine-001-006",
+              "run-smallville-adaptive-routine-001-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-isabella",
+              "agent-klaus"
+            ],
+            "finding": "150 Smallville-like events have stable location and sub-location evidence.",
+            "remainingRisk": "Spatial continuity is event-derived; Phaser/Tiled objects still cannot create runtime facts."
+          },
+          {
+            "key": "reviewability",
+            "label": "Reviewability",
+            "status": "passed",
+            "score": 3,
+            "evidenceCount": 16,
+            "targetCount": 20,
+            "evidenceEventIds": [
+              "run-smallville-adaptive-routine-001-000",
+              "run-smallville-adaptive-routine-001-001",
+              "run-smallville-adaptive-routine-001-002",
+              "run-smallville-adaptive-routine-001-003",
+              "run-smallville-adaptive-routine-001-004",
+              "run-smallville-adaptive-routine-001-005",
+              "run-smallville-adaptive-routine-001-006",
+              "run-smallville-adaptive-routine-001-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-isabella",
+              "agent-klaus"
+            ],
+            "finding": "9 capability rows and 7 ablation rows expose auditable evidence or gaps.",
+            "remainingRisk": "This is a deterministic review rubric, not a completed human-subject evaluation."
+          }
+        ],
+        "topReviewGaps": []
+      }
+    },
+    {
+      "id": "deterministic_llm_plan",
+      "runId": "run-llm-plan-142b4be1",
+      "eventCount": 8,
+      "agentCount": 4,
+      "relationshipCount": 1,
+      "isSmallvilleLike": true,
+      "structuralScore": 44,
+      "topStructuralGaps": [
+        {
+          "key": "adaptive_routine",
+          "status": "missing",
+          "score": 0
+        },
+        {
+          "key": "observation",
+          "status": "missing",
+          "score": 0
+        },
+        {
+          "key": "routine_schedule",
+          "status": "missing",
+          "score": 0
+        },
+        {
+          "key": "social_coordination",
+          "status": "missing",
+          "score": 0
+        }
+      ],
+      "humanReviewRubric": {
+        "overallScore": 34,
+        "summary": "2/8 human-review criteria are review-ready from canonical event evidence.",
+        "criteria": [
+          {
+            "key": "identity_continuity",
+            "label": "Identity continuity",
+            "status": "missing",
+            "score": 0,
+            "evidenceCount": 0,
+            "targetCount": 4,
+            "evidenceEventIds": [],
+            "evidenceAgentIds": [],
+            "finding": "No persona evidence is available for human identity review.",
+            "remainingRisk": "Persona evidence is metadata-level continuity; it is not yet a free-form interview or diary study."
+          },
+          {
+            "key": "experience_action_chain",
+            "label": "Experience-to-action chain",
+            "status": "missing",
+            "score": 0,
+            "evidenceCount": 0,
+            "targetCount": 4,
+            "evidenceEventIds": [],
+            "evidenceAgentIds": [],
+            "finding": "No agent has the full observation-to-action chain required for believable review.",
+            "remainingRisk": "The chain proves traceability, not that an outside human would judge the content natural."
+          },
+          {
+            "key": "memory_grounding",
+            "label": "Memory grounding",
+            "status": "missing",
+            "score": 0,
+            "evidenceCount": 0,
+            "targetCount": 4,
+            "evidenceEventIds": [],
+            "evidenceAgentIds": [],
+            "finding": "No retrieval-to-plan memory chain is available.",
+            "remainingRisk": "Memory ranking is deterministic evidence; persistent provider-backed recall still needs external runtime proof."
+          },
+          {
+            "key": "social_propagation",
+            "label": "Social propagation",
+            "status": "partial",
+            "score": 1,
+            "evidenceCount": 1,
+            "targetCount": 4,
+            "evidenceEventIds": [],
+            "evidenceAgentIds": [],
+            "finding": "No social diffusion evidence is present.",
+            "remainingRisk": "Social spread is fixture/provider event evidence, not an empirical emergent-behavior benchmark."
+          },
+          {
+            "key": "routine_continuity",
+            "label": "Routine continuity",
+            "status": "missing",
+            "score": 0,
+            "evidenceCount": 0,
+            "targetCount": 6,
+            "evidenceEventIds": [],
+            "evidenceAgentIds": [],
+            "finding": "No day-scale routine phases are available.",
+            "remainingRisk": "Routine phases are bounded and deterministic; longer unsupervised days remain future work."
+          },
+          {
+            "key": "adaptive_response",
+            "label": "Adaptive response",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 8,
+            "targetCount": 4,
+            "evidenceEventIds": [
+              "run-llm-plan-142b4be1-000",
+              "run-llm-plan-142b4be1-001",
+              "run-llm-plan-142b4be1-002",
+              "run-llm-plan-142b4be1-003",
+              "run-llm-plan-142b4be1-004",
+              "run-llm-plan-142b4be1-005",
+              "run-llm-plan-142b4be1-006",
+              "run-llm-plan-142b4be1-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-isabella",
+              "agent-maria",
+              "agent-mei",
+              "agent-sam"
+            ],
+            "finding": "8 events show intervention, conflict, routine revision, or planner adaptation evidence.",
+            "remainingRisk": "Adaptation evidence is inspected after replay; live provider-backed autonomy is still gated separately."
+          },
+          {
+            "key": "spatial_continuity",
+            "label": "Spatial continuity",
+            "status": "passed",
+            "score": 4,
+            "evidenceCount": 8,
+            "targetCount": 8,
+            "evidenceEventIds": [
+              "run-llm-plan-142b4be1-000",
+              "run-llm-plan-142b4be1-001",
+              "run-llm-plan-142b4be1-002",
+              "run-llm-plan-142b4be1-003",
+              "run-llm-plan-142b4be1-004",
+              "run-llm-plan-142b4be1-005",
+              "run-llm-plan-142b4be1-006",
+              "run-llm-plan-142b4be1-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-isabella",
+              "agent-maria",
+              "agent-mei",
+              "agent-sam"
+            ],
+            "finding": "8 Smallville-like events have stable location and sub-location evidence.",
+            "remainingRisk": "Spatial continuity is event-derived; Phaser/Tiled objects still cannot create runtime facts."
+          },
+          {
+            "key": "reviewability",
+            "label": "Reviewability",
+            "status": "partial",
+            "score": 2,
+            "evidenceCount": 13,
+            "targetCount": 20,
+            "evidenceEventIds": [
+              "run-llm-plan-142b4be1-000",
+              "run-llm-plan-142b4be1-001",
+              "run-llm-plan-142b4be1-002",
+              "run-llm-plan-142b4be1-003",
+              "run-llm-plan-142b4be1-004",
+              "run-llm-plan-142b4be1-005",
+              "run-llm-plan-142b4be1-006",
+              "run-llm-plan-142b4be1-007"
+            ],
+            "evidenceAgentIds": [
+              "agent-isabella",
+              "agent-maria",
+              "agent-mei",
+              "agent-sam"
+            ],
+            "finding": "8 capability rows and 5 ablation rows expose auditable evidence or gaps.",
+            "remainingRisk": "This is a deterministic review rubric, not a completed human-subject evaluation."
+          }
+        ],
+        "topReviewGaps": [
+          {
+            "key": "experience_action_chain",
+            "status": "missing",
+            "score": 0
+          },
+          {
+            "key": "identity_continuity",
+            "status": "missing",
+            "score": 0
+          },
+          {
+            "key": "memory_grounding",
+            "status": "missing",
+            "score": 0
+          },
+          {
+            "key": "routine_continuity",
+            "status": "missing",
+            "score": 0
+          }
+        ]
+      }
+    }
+  ]
+}

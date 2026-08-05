@@ -1,0 +1,109 @@
+{
+  "url": "http://localhost:5173/",
+  "desktop": {
+    "canvas": {
+      "width": 1040,
+      "height": 900,
+      "clientWidth": 773,
+      "clientHeight": 669
+    },
+    "hasMapLabel": true,
+    "hasAdaptiveSource": true,
+    "hasAcceptedStatus": true,
+    "hasRevisionCount": true,
+    "hasFirstTimelineEvent": true,
+    "horizontalOverflow": false,
+    "viewport": {
+      "width": 1440,
+      "height": 960
+    }
+  },
+  "interaction": {
+    "beforeCursor": "1 / 150",
+    "afterNextCursor": "2 / 150",
+    "afterPlayCursor": "3 / 150",
+    "zoomState": {
+      "has105": true
+    },
+    "bubbleAriaPressedAfterToggle": "false",
+    "edgeAriaPressedAfterToggle": "false",
+    "filterState": {
+      "visibleCount": 5,
+      "hasCritical": true
+    }
+  },
+  "mobile": {
+    "canvas": {
+      "width": 1040,
+      "height": 900,
+      "clientWidth": 372,
+      "clientHeight": 322
+    },
+    "hasMapLabel": true,
+    "hasAdaptiveSource": true,
+    "hasAcceptedStatus": true,
+    "hasRevisionCount": true,
+    "hasFirstTimelineEvent": true,
+    "horizontalOverflow": false,
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  "console": {
+    "desktopWarningsOrErrors": [
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x12c00544800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x12c00547e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x12c00550e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+      },
+      {
+        "type": "warning",
+        "text": "[.WebGL-0x12c00547e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+      }
+    ],
+    "desktopPageErrors": [],
+    "mobileWarningsOrErrors": [],
+    "mobilePageErrors": [],
+    "knownBenignBrowserWarnings": "Desktop warnings are Chromium WebGL ReadPixels performance warnings emitted during screenshot capture; no app pageerror or Phaser/React runtime error was observed in the fresh Playwright run."
+  },
+  "screenshots": {
+    "desktop": {
+      "path": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-adaptive-routine-desktop.png",
+      "bytes": 249485,
+      "pngSignature": "89504e470d0a1a0a",
+      "nonBlankBySize": true
+    },
+    "interaction": {
+      "path": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-adaptive-routine-interaction.png",
+      "bytes": 210202,
+      "pngSignature": "89504e470d0a1a0a",
+      "nonBlankBySize": true
+    },
+    "mobile": {
+      "path": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-adaptive-routine-mobile.png",
+      "bytes": 74697,
+      "pngSignature": "89504e470d0a1a0a",
+      "nonBlankBySize": true
+    },
+    "mobileMap": {
+      "path": "/Users/ronin/02 Projects/Code/agent \u5c0f\u9547/docs/evidence/M5/smallville-adaptive-routine-mobile-map.png",
+      "bytes": 60014,
+      "pngSignature": "89504e470d0a1a0a",
+      "nonBlankBySize": true,
+      "canvasVisible": true,
+      "horizontalOverflow": false
+    }
+  },
+  "browserPlugin": {
+    "usedFirst": true,
+    "domSnapshotIssue": "Browser plugin domSnapshot failed with TypeError: o.incrementalAriaSnapshot is not a function; Playwright used for clean console and interaction evidence."
+  }
+}

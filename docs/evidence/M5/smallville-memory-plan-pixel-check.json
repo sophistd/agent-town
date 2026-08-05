@@ -1,0 +1,32 @@
+{
+  "pixelChecks": [
+    {
+      "path": "docs/evidence/M5/smallville-memory-plan-desktop.png",
+      "width": 1440,
+      "height": 960,
+      "uniqueColorCount": 5668,
+      "nonblank": true
+    },
+    {
+      "path": "docs/evidence/M5/smallville-memory-plan-interaction.png",
+      "width": 1440,
+      "height": 960,
+      "uniqueColorCount": 4898,
+      "nonblank": true
+    },
+    {
+      "path": "docs/evidence/M5/smallville-memory-plan-mobile.png",
+      "width": 390,
+      "height": 844,
+      "uniqueColorCount": 1918,
+      "nonblank": true
+    },
+    {
+      "path": "docs/evidence/M5/smallville-memory-plan-mobile-map.png",
+      "width": 372,
+      "height": 323,
+      "uniqueColorCount": 994,
+      "nonblank": true
+    }
+  ]
+}

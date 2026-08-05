@@ -3,6 +3,7 @@ import Phaser from "phaser";
 import type { ProjectionEdge, WorldState } from "../events/types";
 import type { TownProjectionSettings } from "./projectionSettings";
 import { getAgentRenderPositions } from "./renderAgents";
+import type { TownMapDefinition } from "./townMap";
 
 function edgeColor(edge: ProjectionEdge): number {
   if (edge.kind === "handoff") {
@@ -85,8 +86,9 @@ export function renderEdges(
   layer: Phaser.GameObjects.Container,
   worldState: WorldState,
   settings: TownProjectionSettings,
+  townMap?: TownMapDefinition,
 ): void {
-  const positions = getAgentRenderPositions(worldState);
+  const positions = getAgentRenderPositions(worldState, townMap);
   const edgeLimit =
     settings.density === "compact" ? 5 : settings.density === "expanded" ? 18 : 12;
   const edges = worldState.edges.slice(-edgeLimit);

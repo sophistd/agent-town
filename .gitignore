@@ -3,3 +3,12 @@ dist/
 .DS_Store
 .vite/
 coverage/
+
+# 环境变量与密钥（2026-08-05 统一补齐）
+# 起因：全工作区实测 24 个仓库不挡 .env。当时都还没有 .env 文件，
+# 但远端是唯一冗余层，密钥一旦推上去即使删除也可能已被缓存索引——不可逆。
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template

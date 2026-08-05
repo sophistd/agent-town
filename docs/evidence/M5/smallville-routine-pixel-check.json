@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-07-04T20:43:39.119Z",
+  "source": "Routine day",
+  "screenshots": [
+    {
+      "file": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-routine-desktop.png",
+      "width": 1440,
+      "height": 960,
+      "sampledUniqueColors": 343,
+      "nonWhiteRatio": 1,
+      "transparentRatio": 0,
+      "nonblank": true
+    },
+    {
+      "file": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-routine-interaction.png",
+      "width": 1440,
+      "height": 960,
+      "sampledUniqueColors": 297,
+      "nonWhiteRatio": 1,
+      "transparentRatio": 0,
+      "nonblank": true
+    },
+    {
+      "file": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-routine-mobile.png",
+      "width": 780,
+      "height": 1688,
+      "sampledUniqueColors": 138,
+      "nonWhiteRatio": 1,
+      "transparentRatio": 0,
+      "nonblank": true
+    },
+    {
+      "file": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-routine-mobile-map.png",
+      "width": 780,
+      "height": 1688,
+      "sampledUniqueColors": 170,
+      "nonWhiteRatio": 1,
+      "transparentRatio": 0,
+      "nonblank": true
+    }
+  ],
+  "canvas": {
+    "desktop": {
+      "canvasCount": 1,
+      "width": 774,
+      "height": 669,
+      "nonblank": true,
+      "sampledUniqueColors": 179,
+      "sampledNonWhitePixels": 4354
+    },
+    "mobile": {
+      "canvasCount": 1,
+      "width": 744,
+      "height": 646,
+      "nonblank": true,
+      "sampledUniqueColors": 197,
+      "sampledNonWhitePixels": 4420
+    }
+  }
+}

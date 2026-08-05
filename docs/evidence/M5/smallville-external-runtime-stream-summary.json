@@ -1,0 +1,144 @@
+{
+  "apiKeyProvided": false,
+  "batchSize": 15,
+  "emittedEventCount": 45,
+  "eventLogPath": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-external-runtime-stream-events.jsonl",
+  "memoryFilePath": "/tmp/agent-town-external-runtime-stream-evidence-memory.json",
+  "outputPath": "/Users/ronin/02 Projects/Code/agent 小镇/docs/evidence/M5/smallville-external-runtime-stream-summary.json",
+  "runId": "run-external-runtime-social",
+  "scenario": "social",
+  "server": {
+    "url": "http://127.0.0.1:52568"
+  },
+  "source": "smallville-external-runtime-stream",
+  "startTimestamp": "2026-07-04T22:00:00.000Z",
+  "taskId": "task-external-runtime-social",
+  "tickCount": 3,
+  "ticks": [
+    {
+      "acceptedInputEventCount": 15,
+      "batchId": "runtime-tick-00",
+      "emittedEventCount": 15,
+      "firstSequence": 0,
+      "lastSequence": 14,
+      "memoryPlanEventCount": 9,
+      "providerRecordCount": 6,
+      "providerRequest": {
+        "memoryRecordCount": 6,
+        "promptHash": "30601877",
+        "requestId": "llm-plan-request-30601877",
+        "retrievalCount": 3,
+        "selectedRecordCount": 6
+      },
+      "providerResult": {
+        "eventCount": 0,
+        "quarantineCodes": [],
+        "warningCodes": [
+          "missing_openai_api_key"
+        ]
+      },
+      "quarantinedEventCodes": [],
+      "recallEventCount": 6,
+      "tickIndex": 0,
+      "warningCodes": [
+        "persistent_memory_file_missing",
+        "missing_openai_api_key"
+      ],
+      "worldMemoryIngest": {
+        "acceptedEventCount": 15,
+        "incomingRecordCount": 6,
+        "persistedRecordCount": 6,
+        "quarantineCodes": [],
+        "warningCodes": [
+          "persistent_memory_file_missing"
+        ]
+      }
+    },
+    {
+      "acceptedInputEventCount": 15,
+      "batchId": "runtime-tick-01",
+      "emittedEventCount": 15,
+      "firstSequence": 15,
+      "lastSequence": 29,
+      "memoryPlanEventCount": 9,
+      "providerRecordCount": 12,
+      "providerRequest": {
+        "memoryRecordCount": 12,
+        "promptHash": "34d96c7a",
+        "requestId": "llm-plan-request-34d96c7a",
+        "retrievalCount": 3,
+        "selectedRecordCount": 8
+      },
+      "providerResult": {
+        "eventCount": 0,
+        "quarantineCodes": [],
+        "warningCodes": [
+          "missing_openai_api_key"
+        ]
+      },
+      "quarantinedEventCodes": [],
+      "recallEventCount": 12,
+      "tickIndex": 1,
+      "warningCodes": [
+        "missing_openai_api_key"
+      ],
+      "worldMemoryIngest": {
+        "acceptedEventCount": 15,
+        "incomingRecordCount": 6,
+        "persistedRecordCount": 12,
+        "quarantineCodes": [],
+        "warningCodes": []
+      }
+    },
+    {
+      "acceptedInputEventCount": 15,
+      "batchId": "runtime-tick-02",
+      "emittedEventCount": 15,
+      "firstSequence": 30,
+      "lastSequence": 44,
+      "memoryPlanEventCount": 9,
+      "providerRecordCount": 18,
+      "providerRequest": {
+        "memoryRecordCount": 18,
+        "promptHash": "0ab831d2",
+        "requestId": "llm-plan-request-0ab831d2",
+        "retrievalCount": 3,
+        "selectedRecordCount": 9
+      },
+      "providerResult": {
+        "eventCount": 0,
+        "quarantineCodes": [],
+        "warningCodes": [
+          "missing_openai_api_key"
+        ]
+      },
+      "quarantinedEventCodes": [],
+      "recallEventCount": 18,
+      "tickIndex": 2,
+      "warningCodes": [
+        "missing_openai_api_key"
+      ],
+      "worldMemoryIngest": {
+        "acceptedEventCount": 15,
+        "incomingRecordCount": 6,
+        "persistedRecordCount": 18,
+        "quarantineCodes": [],
+        "warningCodes": []
+      }
+    }
+  ],
+  "totals": {
+    "acceptedInputEventCount": 45,
+    "finalPersistedRecordCount": 18,
+    "memoryPlanEventCount": 27,
+    "providerEventCount": 0,
+    "providerRecordCount": 36,
+    "quarantinedEventCount": 0,
+    "recallEventCount": 36,
+    "warningCount": 4
+  },
+  "warningCodes": [
+    "persistent_memory_file_missing",
+    "missing_openai_api_key"
+  ]
+}

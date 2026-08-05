@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-07-04T21:28:27.888Z",
+  "checks": [
+    {
+      "file": "docs/evidence/M5/smallville-relationships-desktop.png",
+      "bytes": 241183,
+      "sampledUniqueByteValues": 256,
+      "nonblankBySizeAndSample": true
+    },
+    {
+      "file": "docs/evidence/M5/smallville-relationships-interaction.png",
+      "bytes": 203421,
+      "sampledUniqueByteValues": 256,
+      "nonblankBySizeAndSample": true
+    },
+    {
+      "file": "docs/evidence/M5/smallville-relationships-mobile.png",
+      "bytes": 957639,
+      "sampledUniqueByteValues": 256,
+      "nonblankBySizeAndSample": true
+    },
+    {
+      "file": "docs/evidence/M5/smallville-relationships-mobile-map.png",
+      "bytes": 56661,
+      "sampledUniqueByteValues": 256,
+      "nonblankBySizeAndSample": true
+    }
+  ]
+}

@@ -1,4 +1,11 @@
-import type { AgentEvent, AgentState, ProjectionEdge, RunSummary, WorldState } from "./types";
+import type {
+  AgentEvent,
+  AgentState,
+  ProjectionEdge,
+  RelationshipState,
+  RunSummary,
+  WorldState,
+} from "./types";
 
 function findEventById(events: readonly AgentEvent[], id: string | undefined): AgentEvent | undefined {
   if (id === undefined) {
@@ -43,6 +50,46 @@ export function selectVisibleBubbles(state: WorldState): WorldState["visibleBubb
 
 export function selectEdges(state: WorldState): ProjectionEdge[] {
   return state.edges;
+}
+
+function sortRelationships(relationships: readonly RelationshipState[]): RelationshipState[] {
+  return [...relationships].sort((left, right) => {
+    if (left.strength !== right.strength) {
+      return right.strength - left.strength;
+    }
+
+    if (left.lastSequence !== right.lastSequence) {
+      return right.lastSequence - left.lastSequence;
+    }
+
+    return left.relationshipId.localeCompare(right.relationshipId);
+  });
+}
+
+export function selectRelationships(state: WorldState): RelationshipState[] {
+  return sortRelationships(Object.values(state.relationships));
+}
+
+export function selectRelationshipCount(state: WorldState): number {
+  return Object.keys(state.relationships).length;
+}
+
+export function selectTopRelationships(
+  state: WorldState,
+  limit = 5,
+): RelationshipState[] {
+  return selectRelationships(state).slice(0, limit);
+}
+
+export function selectAgentRelationships(
+  state: WorldState,
+  agentId: string,
+): RelationshipState[] {
+  return sortRelationships(
+    Object.values(state.relationships).filter((relationship) =>
+      relationship.agentIds.includes(agentId),
+    ),
+  );
 }
 
 export function selectBlockedEvents(events: readonly AgentEvent[]): AgentEvent[] {

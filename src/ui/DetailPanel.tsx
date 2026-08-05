@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 
-import type { AgentEvent, WorldState } from "../events/types";
+import { selectAgentRelationships } from "../events/selectors";
+import type { AgentEvent, RelationshipState, WorldState } from "../events/types";
 import { useSelection } from "../state/selectionStore";
 
 const sectionTitleStyle = {
@@ -47,6 +48,27 @@ const preStyle = {
   maxHeight: "260px",
 } satisfies CSSProperties;
 
+const relationshipListStyle = {
+  display: "grid",
+  gap: "8px",
+  marginTop: "10px",
+} satisfies CSSProperties;
+
+const relationshipRowStyle = {
+  borderTop: "1px solid rgba(143, 170, 157, 0.18)",
+  paddingTop: "8px",
+  color: "#d8e2dc",
+  fontSize: "12px",
+  lineHeight: 1.4,
+} satisfies CSSProperties;
+
+const relationshipMetaStyle = {
+  display: "block",
+  marginTop: "2px",
+  color: "#95aaa0",
+  overflowWrap: "anywhere",
+} satisfies CSSProperties;
+
 type DetailPanelProps = {
   currentEvent?: AgentEvent;
   events: readonly AgentEvent[];
@@ -73,6 +95,21 @@ function formatValue(value: unknown): string {
   return JSON.stringify(value);
 }
 
+function formatAgentName(worldState: WorldState, agentId: string): string {
+  return worldState.agents[agentId]?.agentName ?? agentId;
+}
+
+function formatRelationshipPeer(
+  relationship: RelationshipState,
+  agentId: string,
+  worldState: WorldState,
+): string {
+  const peerAgentId =
+    relationship.agentIds[0] === agentId ? relationship.agentIds[1] : relationship.agentIds[0];
+
+  return formatAgentName(worldState, peerAgentId);
+}
+
 export function DetailPanel({ currentEvent, events, worldState }: DetailPanelProps) {
   const selection = useSelection();
   const selectedEvent = findEvent(events, selection.selectedEventId);
@@ -80,6 +117,10 @@ export function DetailPanel({ currentEvent, events, worldState }: DetailPanelPro
     selection.selectedAgentId === undefined
       ? undefined
       : worldState.agents[selection.selectedAgentId];
+  const selectedAgentRelationships =
+    selectedAgent === undefined
+      ? []
+      : selectAgentRelationships(worldState, selectedAgent.agentId).slice(0, 5);
 
   return (
     <>
@@ -118,6 +159,28 @@ export function DetailPanel({ currentEvent, events, worldState }: DetailPanelPro
               <strong>Location</strong>
               <span style={valueStyle}>{selectedAgent.location}</span>
             </div>
+            <div style={dataRowStyle}>
+              <strong>Relations</strong>
+              <span style={valueStyle}>{selectedAgentRelationships.length}</span>
+            </div>
+            {selectedAgentRelationships.length === 0 ? (
+              <p style={mutedTextStyle}>No relationship evidence has replayed yet.</p>
+            ) : (
+              <div style={relationshipListStyle} aria-label="Selected agent relationships">
+                {selectedAgentRelationships.map((relationship) => (
+                  <div key={relationship.relationshipId} style={relationshipRowStyle}>
+                    <strong>
+                      {formatRelationshipPeer(relationship, selectedAgent.agentId, worldState)}
+                    </strong>{" "}
+                    strength {relationship.strength}
+                    <span style={relationshipMetaStyle}>
+                      {relationship.lastInteractionKind}; events={relationship.interactionCount};
+                      last={relationship.lastEventId}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </>
         )}
       </section>

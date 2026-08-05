@@ -4,7 +4,11 @@ Agent Town renders `WorldState`; it does not create business facts inside the re
 
 ## Location Mapping
 
-Coordinates are canonical in `src/events/routing.ts`. The renderer imports those coordinates and only adds labels, colors, and placeholder building shapes.
+Stable location IDs and routing coordinates are canonical in
+`src/events/routing.ts`. The renderer loads `public/maps/town-v1.tiled.json` as
+a Tiled-compatible projection asset and verifies that its location object layer
+preserves the same stable IDs and anchors. If the map cannot load or parse, the
+renderer falls back to the generated in-code map with the same IDs.
 
 | Stable zone | Location ID | Label | Projection role |
 | --- | --- | --- | --- |
@@ -16,12 +20,137 @@ Coordinates are canonical in `src/events/routing.ts`. The renderer imports those
 | queue | `dispatch_board` | Dispatch Board | Handoffs and queued work |
 | final square | `square` | Square | Current shared surface and done state |
 
-S14 defers Tiled import. Any later Tiled map must preserve these location IDs
-in its object layer before replacing the generated placeholder layout.
+The current asset session introduces a project-authored Tiled-compatible map, a
+generated terrain tileset, generated agent/building sprite sheets, and a baked
+pixel-town background. These assets are projection metadata and presentation
+surfaces only: they may define tile layers, building footprints, visual anchors,
+and sprite frames, but they do not create runtime facts. Agent role, status,
+event type, selected event, selected agent, and cursor state still come from
+`AgentEvent -> WorldState`.
+
+The object layer must preserve these `locationId` values:
+
+- `town_hall`
+- `library`
+- `workshop`
+- `archive`
+- `review_room`
+- `dispatch_board`
+- `square`
+- `unknown` remains a routing fallback and is not rendered as a normal town
+  building.
+
+## Interior Anchor Mapping
+
+The current map also contains an `interiors` object layer. Interior objects are
+projection targets inside stable zones; they do not introduce new runtime
+locations and they do not change the canonical `AgentLocation` vocabulary.
+
+`AgentEvent.metadata.subLocationId` may point to one of these generated
+interior anchors. The reducer preserves that value as `AgentState.subLocationId`
+and the renderer resolves it against `town-v1.tiled.json` when drawing agents,
+bubbles, edges, and movement trails. If an event omits `subLocationId` or points
+to an unknown anchor, the renderer falls back to the stable zone anchor from
+`src/events/routing.ts`.
+
+| Stable zone | Interior IDs |
+| --- | --- |
+| `dispatch_board` | `dispatch_queue`, `dispatch_notice_wall` |
+| `town_hall` | `town_hall_table`, `town_hall_office` |
+| `library` | `library_stacks`, `library_reading_nook` |
+| `archive` | `archive_shelves`, `archive_writing_desk` |
+| `square` | `square_cafe`, `square_fountain_edge` |
+| `workshop` | `workshop_bench`, `workshop_debug_desk` |
+| `review_room` | `review_table`, `review_evidence_wall` |
+
+`AgentEvent.metadata.activity` may be displayed as an activity label in expanded
+density. It is descriptive event metadata, not a renderer-inferred business
+fact.
 
 ## Agent Mapping
 
 Agent identity comes from `WorldState.agents`.
+
+`public/sprites/agent-roles-v1.png` provides the current project-authored agent
+sprite sheet. Sprite columns follow the role order below. Sprite rows represent
+visual status families: idle/waiting, active, blocked/error, and done. The
+renderer chooses a frame from `AgentState.role` and `AgentState.status`; it does
+not infer those values from the sprite.
+
+`src/events/mockSmallvilleDayRun.ts` provides a deterministic "Town day" run
+that exercises the interior anchors with five named agents and day-phase event
+metadata. It is still a canonical `AgentEvent` fixture; selecting it in the UI
+does not activate a separate simulation engine.
+
+`src/events/generativeRuntime.ts` provides the deterministic "Cognitive" run.
+It exercises observation, memory retrieval, reflection, planning, action, and
+closure metadata while still emitting canonical `AgentEvent[]`. Selecting it in
+the UI proves that Smallville-oriented cognition evidence can flow through the
+same projection path without renderer-specific branches.
+
+The same module also provides the deterministic "Social day" run. It scales the
+fixture to 25 agents and emits a user-seeded Valentine's invitation diffusion
+chain as canonical `AgentEvent[]`. Relationship IDs, invite waves, source
+agents, and attendance evidence live in event metadata for inspection; the town
+canvas still only projects the replayed `WorldState`.
+
+Replay now derives `WorldState.relationships` from social metadata plus
+`message` / `handoff` targets. Run Summary and Detail may display relationship
+strength, interaction counts, and evidence event IDs, but those facts still come
+from canonical events reduced into `WorldState`. Phaser proximity, sprite
+choice, map objects, and selected UI state must not create relationships.
+The dedicated Graph View uses the same `WorldState.relationships` projection for
+relationship search, kind filtering, selected-agent filtering, compact graph
+rendering, and evidence-event jumps. Those controls inspect and navigate
+canonical event evidence; they do not mutate the event stream or create social
+facts.
+
+The same module also provides the deterministic "Routine day" run. It keeps the
+same 25-agent population and emits routine phases, memory retrieval,
+deterministic crowding conflicts, plans, actions, and routine memory writeback
+as canonical `AgentEvent[]`. `metadata.routine` and
+`metadata.routineConflict` are inspection evidence; the map and renderer only
+consume the resulting `WorldState` location, sub-location, status, bubble, and
+edge projections.
+
+`src/adapters/adaptiveRoutineAdapter.ts` provides the deterministic "Adaptive
+routine" source. It reads prior routine evidence plus new town observations and
+emits revised schedule evidence as canonical `AgentEvent[]` with
+`metadata.routineRevision`. The old location, revised location, selected memory
+event IDs, and observation reason are available to Detail and Run Summary, but
+the renderer still only consumes replayed `WorldState`. The source intentionally
+does not make Phaser, Tiled objects, sprite names, or local UI state responsible
+for schedule revision.
+
+`src/adapters/interventionAdapter.ts` provides the deterministic
+natural-language "Intervention" source. It converts an operator prompt plus the
+currently loaded run summary into canonical `AgentEvent[]` before replay. The
+prompt text, inferred intent, prior run evidence, and target projection anchor
+live in event metadata; the text area and renderer do not own intervention
+facts.
+
+`src/adapters/persistentMemoryAdapter.ts` and
+`src/state/persistentMemoryStore.ts` provide the deterministic "Memory" source.
+Memory records are extracted only from canonical `memory_read` /
+`memory_write` events, persisted in versioned browser storage, and recalled as
+new canonical `memory_read` events. The renderer receives only replayed
+`WorldState`; localStorage never becomes a projection fact.
+
+The same adapter provides the deterministic "Memory plan" source. It takes
+durable records, enriches matching agents with current run context when
+available, builds an agent-scoped query for each durable-memory agent, scores
+records by relevance, importance, recency, and agent affinity, then emits
+`memory_read`, `thinking`, and `decision` events. The town canvas still sees
+only `WorldState`; query scores and selected record IDs live in event metadata
+for Detail inspection.
+
+`src/adapters/llmPlannerAdapter.ts` provides the deterministic "LLM plan"
+contract source. It builds a JSON request for future model-backed planning and
+parses a model-shaped JSON response into canonical `AgentEvent[]` with
+`metadata.llmPlanner`. Accepted steps replay through the same `WorldState`
+path; rejected JSON or invalid steps are quarantined. The current source uses a
+deterministic fixture response and does not let a model, prompt, or renderer
+own runtime facts.
 
 | Role | Default visible identity |
 | --- | --- |
@@ -71,13 +200,29 @@ S08 includes a status legend for idle, thinking, waiting, blocked, error, and do
 
 ## Boundary Notes
 
-- `src/game/renderLocations.ts` renders locations from `LOCATION_COORDINATES`.
-- `src/game/renderAgents.ts` renders agent identity, role color, status marker, and label from `WorldState`.
+- `public/maps/town-v1.tiled.json` is the current project-authored map asset.
+- `public/maps/town-v1-preview.png` is the baked pixel-town background used when
+  the asset map loads.
+- `public/tilesets/agent-town-v1.png` is the project-authored terrain tileset
+  referenced by the Tiled JSON.
+- `public/sprites/buildings-v1.png` and `public/sprites/agent-roles-v1.png` are
+  generated sprite sheets used by the projection renderer.
+- `src/game/townMap.ts` parses map properties, tilesets, tile layers, object
+  layers, and provides the generated fallback.
+- `src/game/renderTownMap.ts` renders the baked background first, then falls
+  back to tile layers or generated Phaser graphics if assets are unavailable.
+- `src/game/renderLocations.ts` renders projection labels/anchors over the
+  baked map, or building sprites / generated footprints in fallback paths,
+  while tests keep map anchors aligned with `LOCATION_COORDINATES`.
+- `src/game/renderAgents.ts` renders agent sprites, status marker, selected
+  state, activity label, movement trail, and label from `WorldState`.
+- `src/events/reducer.ts` preserves `subLocationId`, `activity`, and previous
+  route coordinates from event metadata so the renderer can project interior
+  activity without inventing runtime facts.
 - `src/game/visualMapping.ts` contains visual labels/colors only. It does not route events.
 - `src/events/routing.ts` remains the source of event-to-location routing.
-- Placeholder rendering remains the fallback for M5. It uses generated Phaser
-  shapes, labels, status markers, bubbles, and edges; no external asset owns
-  runtime facts.
+- Generated rendering remains the fallback. It uses local Phaser shapes, labels,
+  status markers, bubbles, and edges; no visual asset owns runtime facts.
 
 ## Visual Density Rules
 
@@ -96,6 +241,19 @@ M5 keeps density rules explicit so a busy run remains inspectable:
 - Projection boundary: visual density rules must never introduce runtime facts
   that are absent from `AgentEvent` or derived `WorldState`.
 
-Current limitation: there is no dedicated search/filter input yet. S15 records
-the rule and preserves Timeline/detail-based inspection; a later session can add
-filter UI if product review makes that the highest-risk gap.
+Current limitations:
+
+- The assets are original and generated for this repository; they are not copied
+  Stanford Smallville art and not a third-party asset pack.
+- The map is visually closer to a Smallville-like projection and now includes
+  interior anchors plus a deterministic day-run fixture, but it is still a
+  compact prototype map rather than a complete generative-agents world with
+  autonomous schedules, server-backed persistent memories, animation cycles, or
+  editable large-world Tiled authoring. Adaptive routine revision now exists as
+  adapter-produced event evidence, not as autonomous live simulation.
+- The `LLM plan` source proves model-output parsing and projection through
+  canonical events, but it is not a live provider-backed behavior generator.
+- Relationship inspection now has a dedicated Graph View with text search,
+  relationship-kind toggles, selected-agent filtering, and evidence jumps. Other
+  future projection views should follow the same rule: inspect replayed
+  `WorldState`, never invent runtime facts.

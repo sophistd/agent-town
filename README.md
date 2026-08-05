@@ -69,6 +69,134 @@ Open the Vite URL printed by the command, usually:
 http://127.0.0.1:5173/
 ```
 
+Run the local world-memory server:
+
+```bash
+AGENT_TOWN_WORLD_MEMORY_FILE=/tmp/agent-town-world-memory.json pnpm world-memory:server
+```
+
+The server binds to `127.0.0.1:8787` by default. Override it with `HOST`,
+`PORT`, `AGENT_TOWN_WORLD_MEMORY_HOST`, or `AGENT_TOWN_WORLD_MEMORY_PORT`.
+
+It exposes:
+
+- `GET /health`
+- `POST /memory/ingest`
+- `GET /memory/recall`
+- `POST /memory/plan`
+- `POST /provider-loop`
+
+The server accepts event-shaped JSON input, validates it through the canonical
+event validator, persists only canonical memory events, and returns recall or
+planning output as canonical `AgentEvent` evidence. The file remains a backing
+store; it does not become `WorldState` or renderer-owned truth.
+
+`src/adapters/worldMemoryProviderLoop.ts` connects that server to the existing
+provider planner boundary: it sends external event streams into the
+world-memory server, recalls durable memory as canonical events, rebuilds
+provider request records from that recall evidence, asks the server for a
+Memory plan context, and then calls the same OpenAI Responses planner adapter.
+Without an API key it still builds inspectable server-backed provider request
+evidence but does not call the provider.
+
+The long-running server can also accept live HTTP sender events directly:
+
+```bash
+curl -X POST http://127.0.0.1:8787/provider-loop \
+  -H 'content-type: application/json' \
+  --data '{"events":[...],"maxAgents":2}'
+```
+
+`/provider-loop` accepts canonical event-shaped JSON, rejects API keys in the
+request body, runs the same server-backed provider loop, and returns canonical
+provider events plus a secret-free summary. Provider credentials, if used, must
+come from the local/server environment such as `OPENAI_API_KEY`; without them
+the route returns the existing `missing_openai_api_key` warning and does not
+call the provider.
+
+The Import Source panel includes a `Provider HTTP` action that posts the current
+workbench event stream to `http://127.0.0.1:8787/provider-loop`. The server only
+allows local browser CORS origins. With no API key, the workbench still replays
+the returned recall and Memory plan events as canonical evidence.
+
+Run the JSONL external-sender provider loop:
+
+```bash
+AGENT_TOWN_WORLD_MEMORY_FILE=/tmp/agent-town-provider-loop-memory.json \
+  pnpm world-memory:provider-loop docs/samples/sample-native.jsonl
+```
+
+This starts a temporary local world-memory server, sends the JSONL events
+through the provider loop, and prints a secret-free summary. Set
+`OPENAI_API_KEY` only in the local/server environment to attempt a live provider
+call; without it, the runner still produces request evidence and returns the
+existing `missing_openai_api_key` warning.
+
+Run a deterministic external runtime stream:
+
+```bash
+AGENT_TOWN_WORLD_MEMORY_FILE=/tmp/agent-town-runtime-stream-memory.json \
+  pnpm smallville:runtime-stream
+```
+
+The runtime stream emits canonical `AgentEvent` batches over multiple ticks,
+annotates them with `metadata.externalRuntime`, posts each tick to the live
+local `/provider-loop` route, and prints a secret-free summary. This proves the
+external runtime sender path without introducing a new event schema. Without a
+local/server API key, provider events remain empty and
+`missing_openai_api_key` is surfaced instead of being hidden.
+
+Run a bounded Smallville-style scheduler:
+
+```bash
+AGENT_TOWN_WORLD_MEMORY_FILE=/tmp/agent-town-scheduler-memory.json \
+  pnpm smallville:scheduler
+```
+
+The scheduler adds a virtual world clock and phase plan over routine,
+cognitive, and social ticks. Each tick still emits canonical `AgentEvent`
+batches and sends them to `/provider-loop`; the scheduler summary only records
+phase counts, virtual time, memory/provider-loop counts, warnings, and
+provenance. Without a local/server API key, provider events remain empty and
+`missing_openai_api_key` is surfaced instead of being hidden.
+
+Persist and resume the scheduler:
+
+```bash
+AGENT_TOWN_WORLD_MEMORY_FILE=/tmp/agent-town-scheduler-memory.json \
+AGENT_TOWN_SCHEDULER_CHECKPOINT=/tmp/agent-town-scheduler-checkpoint.json \
+AGENT_TOWN_SCHEDULER_TICKS=2 \
+  pnpm smallville:scheduler
+
+AGENT_TOWN_WORLD_MEMORY_FILE=/tmp/agent-town-scheduler-memory.json \
+AGENT_TOWN_SCHEDULER_CHECKPOINT=/tmp/agent-town-scheduler-checkpoint.json \
+AGENT_TOWN_SCHEDULER_RESUME=true \
+AGENT_TOWN_SCHEDULER_TICKS=4 \
+  pnpm smallville:scheduler
+```
+
+Resume inherits `eventsPerTick`, `tickMinutes`, phase plan, schedule id, start
+time, and memory file from the checkpoint unless explicitly configured. If an
+explicit resume setting conflicts with the checkpoint, the scheduler fails fast
+instead of silently restarting or changing the run shape.
+
+Run the scheduler inside a supervised elapsed-time window:
+
+```bash
+AGENT_TOWN_WORLD_MEMORY_FILE=/tmp/agent-town-scheduler-memory.json \
+AGENT_TOWN_SCHEDULER_CHECKPOINT=/tmp/agent-town-scheduler-checkpoint.json \
+AGENT_TOWN_SCHEDULER_TICKS=10 \
+AGENT_TOWN_SCHEDULER_TICK_DELAY_MS=20 \
+AGENT_TOWN_SCHEDULER_MAX_ELAPSED_MS=55 \
+  pnpm smallville:scheduler
+```
+
+`AGENT_TOWN_SCHEDULER_MAX_ELAPSED_MS` is a supervision control, not a replay
+fact. The scheduler finishes the current canonical tick, writes a checkpoint,
+then stops with `supervision.stopReason:
+"elapsed_time_limit_reached"` when the wall-clock window is exhausted. Resume
+uses the same checkpoint path and continues from the next tick.
+
 Required checks before finishing code or evidence work:
 
 ```bash
@@ -88,10 +216,21 @@ The current surface includes:
 - a Phaser town canvas that renders `WorldState`
 - stable town zones for planning, research, production, memory, review, queue,
   and final state
+- a project-authored Tiled-compatible pixel map with generated tiles, buildings,
+  agents, and interior anchors
 - agent marks, role colors, status markers, bubbles, and handoff/message edges
+- replay-derived relationship state for social runs, surfaced in Run Summary
+  and Detail without renderer-owned facts
+- a dedicated Graph View that filters replay-derived relationships by kind,
+  selected agent, text query, and evidence event jumps
+- a Run Summary `Smallville Eval` projection that scores structural
+  capability evidence, top gaps, and ablation coverage from `AgentEvent` plus
+  replayed `WorldState`
 - a Timeline with playback, cursor jumping, and current-event selection
 - a Detail panel for the selected event and run summary
-- an Import Source panel for mock, native JSONL, and WebSocket-shaped input
+- an Import Source panel for mock, Town day, Cognitive, Social day,
+  Routine day, natural-language Intervention, persistent Memory, Memory plan,
+  LLM plan, native JSONL, WebSocket-shaped input, and Provider HTTP
 - adapter warnings and quarantine counts
 
 ## Architecture
@@ -128,11 +267,69 @@ Quick path:
 4. Start from the default mock failure run.
 5. Use Timeline to jump through planning, research, coding, error, blocked,
    repair, review, memory write, and done events.
-6. Use Detail to inspect the selected event fields.
-7. Use Import Source -> JSONL to import the native JSONL sample in the text
+6. Use Import Source -> Town day to inspect the Smallville-like day fixture:
+   five agents moving through stable zones, interior anchors, bubbles, handoff
+   edges, and activity labels.
+7. Use Import Source -> Cognitive to inspect the deterministic cognitive-loop
+   fixture: observation, memory retrieval, reflection, planning, action, and
+   closure evidence all represented as canonical `AgentEvent` metadata.
+8. Use Import Source -> Social day to inspect the 25-agent invitation diffusion
+   fixture: a user-seeded Valentine's gathering spreads through relationships
+   as canonical observation, retrieval, reflection, planning, message, and
+   attendance events. Run Summary, Graph View, and Detail expose replay-derived
+   relationship strength, kind counts, filters, and evidence jumps from
+   `WorldState.relationships`.
+9. Use Import Source -> Routine day to inspect the 25-agent routine scheduler
+   fixture: every agent observes an intention, retrieves memory, reflects on
+   schedule fit, resolves deterministic crowding conflicts, plans, acts, and
+   writes back routine memory as canonical `AgentEvent` evidence.
+10. Use Import Source -> Intervention to turn a natural-language operator
+   prompt into canonical `AgentEvent` evidence. The adapter uses the current run
+   as prior context, then emits observation, retrieval, reflection, planning,
+   message, action, and closure events.
+11. Use Import Source -> Memory to recall the memory stream persisted from
+   previous imported runs. The browser store is a source boundary; recall still
+   becomes canonical `memory_read` events before projection.
+12. Use Import Source -> Memory plan to let each durable-memory agent retrieve
+   relevant records by agent identity, query relevance, importance, and
+   recency, then emit retrieval, reflection, and planning evidence as canonical
+   events.
+13. Use Import Source -> LLM plan to inspect the model-planner contract path:
+   the request is built from prior events plus agent-addressable memory
+   retrieval evidence, then a model-shaped JSON response is parsed, validated,
+   quarantined if invalid, and replayed only as canonical `AgentEvent`
+   evidence. This is still a deterministic contract fixture in the browser, not
+   a live model provider call.
+14. Use Run Summary -> Smallville Eval on Cognitive, Social day, Routine day,
+    Memory plan, or LLM plan sources to inspect the structural score, top gaps,
+    ablation coverage, and human-review believability rubric. This is a
+    projection report that makes evidence reviewable; it is not a completed
+    human-subject believability study.
+15. Use Detail to inspect the selected event fields.
+16. Use Import Source -> JSONL to import the native JSONL sample in the text
    area.
-8. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
+17. Use Import Source -> WS sample to prove the WebSocket adapter path reaches
    the same projection pipeline.
+18. Start `pnpm world-memory:server`, then use Import Source -> Provider HTTP
+    to post the current run to `/provider-loop`. With no local API key, the
+    workbench should still replay server-backed recall and Memory plan evidence
+    and show `missing_openai_api_key` as a warning.
+19. Run `pnpm smallville:runtime-stream` with an explicit
+    `AGENT_TOWN_WORLD_MEMORY_FILE` to prove a deterministic external runtime can
+    emit ticked canonical event batches into the live `/provider-loop` route.
+20. Run `pnpm smallville:scheduler` with an explicit
+    `AGENT_TOWN_WORLD_MEMORY_FILE` to prove a bounded world-clock schedule can
+    cycle routine, cognitive, and social ticks through the same provider-loop
+    route while memory accumulates across ticks.
+21. Rerun `pnpm smallville:scheduler` with
+    `AGENT_TOWN_SCHEDULER_CHECKPOINT` and `AGENT_TOWN_SCHEDULER_RESUME=true`
+    to prove the same schedule can continue from the next tick across process
+    invocations without resetting memory.
+22. Run `pnpm smallville:scheduler` with
+    `AGENT_TOWN_SCHEDULER_MAX_ELAPSED_MS` and
+    `AGENT_TOWN_SCHEDULER_TICK_DELAY_MS` to prove a supervised wall-clock
+    window can stop the scheduler after completed ticks, write a checkpoint,
+    and resume from that checkpoint.
 
 Relevant screenshots and evidence:
 
@@ -140,7 +337,13 @@ Relevant screenshots and evidence:
 - `docs/evidence/M5/visual-layout.md`
 - `docs/evidence/M5/performance-200-events.md`
 - `docs/evidence/M5/final-demo-notes.md`
+- `docs/evidence/M5/smallville-graph-view.md`
+- `docs/evidence/M5/smallville-external-runtime-stream.md`
+- `docs/evidence/M5/smallville-autonomous-scheduler.md`
+- `docs/evidence/M5/smallville-supervised-scheduler-resume.md`
+- `docs/evidence/M5/smallville-supervised-scheduler-elapsed.md`
 - `docs/evidence/M4/source-switcher.png`
+- `docs/SMALLVILLE_PARITY.md`
 
 ## JSONL Import
 
@@ -207,11 +410,21 @@ Buildings are projection targets for event locations.
    the new location.
 4. Update labels, colors, or placeholder shapes in `src/game/visualMapping.ts`
    and renderer helpers.
-5. Document the new zone in `docs/VISUAL_MAPPING.md`.
-6. Add screenshot evidence if the change is visual.
+5. Update `public/maps/town-v1.tiled.json` if the rendered object map needs a
+   new building footprint or anchor.
+6. Document the new zone in `docs/VISUAL_MAPPING.md`.
+7. Add screenshot evidence if the change is visual.
 
-If a later session introduces a Tiled map, the Tiled object layer must preserve
-the stable location IDs documented in `docs/VISUAL_MAPPING.md`.
+The current Tiled-compatible object map must preserve the stable location IDs
+documented in `docs/VISUAL_MAPPING.md`. Map object names, sprite names, and
+building labels are projection metadata only; they must not create runtime
+facts.
+
+Interior anchors follow the same rule. `public/maps/town-v1.tiled.json` may
+define generated objects such as `library_stacks` or `workshop_bench`, but an
+agent only renders there when an `AgentEvent` carries matching
+`metadata.subLocationId`. The renderer must fall back to the stable zone when
+that metadata is missing or unknown.
 
 ## Adding An Agent Role
 
@@ -228,6 +441,25 @@ Agent roles are stable runtime identities, not visual-only labels.
 
 Do not infer a role from sprite choice or building position. Role must come
 from the event stream and derived `WorldState`.
+
+## Moving Toward Smallville
+
+`docs/SMALLVILLE_PARITY.md` tracks the actual gap to Stanford Smallville-style
+generative agents. The current `Cognitive`, `Social day`, `Routine day`,
+`Intervention`, `Memory`, `Memory plan`, and `LLM plan` sources are deterministic: they emit
+observation, memory retrieval, reflection, planning, action/conversation, social
+diffusion, routine scheduling, deterministic routine-conflict resolution,
+natural-language intervention, durable memory recall, agent-addressable memory
+planning, model-planner requests that include agent-addressable retrieval
+scores, model-planner contract parsing/quarantine, and closure as canonical
+`AgentEvent` records. Run Summary also derives a human-review rubric from those
+events plus replayed `WorldState`, so reviewers can inspect identity continuity,
+experience-to-action chains, memory grounding, social propagation, routines,
+adaptation, spatial continuity, and review gaps without reading renderer state.
+They are testable event contracts for future live provider-backed behavior, not
+a claim that the app already has autonomous social emergence, adaptive
+schedules, complete persistent agent cognition, or a completed human
+believability study.
 
 ## Adding An Adapter
 
@@ -263,20 +495,56 @@ Detailed mapping lives in `docs/VISUAL_MAPPING.md`.
 
 ## Known Limitations
 
-- The current visual system uses generated Phaser placeholders. Tiled and
-  external art are explicitly deferred by S14.
+- The current visual system uses a project-authored Tiled-compatible JSON map,
+  generated pixel tileset, generated agent/building sprite sheets, and a baked
+  pixel-town background. External or third-party visual assets remain deferred
+  until license and fallback behavior are recorded.
 - The app does not yet include a modal onboarding surface. The first-run copy is
   documented here, in `docs/DEMO_SCRIPT.md`, and in final demo notes for the M5
   review.
 - The WebSocket demo path has a built-in sample; a real runtime sender still
   needs to emit canonical or supported source-shaped messages.
+- Persistent memory currently uses versioned browser storage for canonical
+  `memory_read` / `memory_write` evidence extracted from imported runs. The
+  `Memory plan` source can retrieve those records per agent by query relevance,
+  importance, recency, and agent affinity. `src/state/filePersistentMemoryStore.ts`
+  adds a local/server-side file-backed store using the same snapshot schema, and
+  `src/adapters/worldMemoryRuntime.ts` can ingest canonical event streams into
+  that file store before building recall or Memory plan output.
+  `src/server/worldMemoryHttpServer.ts` and `pnpm world-memory:server` expose
+  that boundary as a long-running local/server HTTP process.
+  `src/adapters/worldMemoryProviderLoop.ts` can feed server-backed durable
+  memory into the OpenAI planner boundary, and
+  `pnpm world-memory:provider-loop` can drive that path from canonical JSONL
+  event streams. The long-running server also exposes `POST /provider-loop` for
+  live HTTP sender events without accepting secrets in request bodies, and the
+  browser workbench can post its current event stream to that route as a
+  Provider HTTP source. `pnpm smallville:runtime-stream` can emit deterministic
+  external runtime ticks into the same route. `pnpm smallville:scheduler` adds
+  a bounded world-clock phase plan over routine, cognitive, and social ticks
+  while keeping each tick replayable as canonical events. The scheduler can
+  also write a checkpoint, resume from it across process invocations, and stop
+  after a supervised elapsed-time window without resetting the file-backed
+  memory store. This is still not a multi-user database or full autonomous
+  memory engine.
+- Routine scheduling is still deterministic fixture evidence plus a bounded
+  scheduler runner. The app can show routine phases and crowding-resolution
+  events for 25 agents, but it is not yet an unbounded autonomous day planner.
+- The `LLM plan` source proves the request/response parser contract and the
+  adapter now includes an OpenAI Responses provider boundary for local or
+  server-side runtimes. Provider requests now include agent-addressable memory
+  retrieval snapshots, selected records, source event IDs, and retrieval
+  weights. The browser UI still uses a deterministic fixture and does not
+  receive API keys; a live provider run requires `OPENAI_API_KEY` outside
+  browser code.
 - The graph and memory views are represented through current projection data,
-  detail, summary, edges, and memory events; separate dedicated tabs are future
-  work.
+  detail, summary, edges, persistent memory recall, and memory events; separate
+  dedicated tabs are future work.
 - Performance evidence covers deterministic 200-event replay and local demo
   usability. It is not a browser frame-rate benchmark.
-- This repository currently has no remote configured; commits are local-only
-  unless a remote is added later.
+- This public repository currently has no formal open-source `LICENSE` file.
+  Do not import external art or publish asset-license claims until that choice
+  is explicit.
 
 ## Next Phase
 

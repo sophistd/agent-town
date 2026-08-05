@@ -1,0 +1,111 @@
+{
+  "generatedAt": "2026-07-04T19:14:36.823Z",
+  "baseUrl": "http://127.0.0.1:5173/",
+  "source": "Social day",
+  "browserAttempt": {
+    "tool": "Codex Browser plugin",
+    "title": "Agent Town",
+    "socialLoaded": true,
+    "domSnapshotError": "Error: Browser Use encountered an error interacting with this webpage: TypeError: o.incrementalAriaSnapshot is not a function"
+  },
+  "screenshots": {
+    "desktop": "docs/evidence/M5/smallville-social-desktop.png",
+    "interaction": "docs/evidence/M5/smallville-social-interaction.png",
+    "mobile": "docs/evidence/M5/smallville-social-mobile.png",
+    "mobileMap": "docs/evidence/M5/smallville-social-mobile-map.png"
+  },
+  "desktop": {
+    "title": "Agent Town",
+    "horizontalOverflow": 0,
+    "canvasCount": 1,
+    "canvasRects": [
+      {
+        "x": 311,
+        "y": 110,
+        "width": 773,
+        "height": 669
+      }
+    ],
+    "frameworkOverlayPresent": false,
+    "viewport": {
+      "width": 1440,
+      "height": 960,
+      "devicePixelRatio": 1
+    },
+    "toolbarBefore": {
+      "activeSource": true,
+      "statusCopy": true,
+      "runId": true,
+      "headerCursor": true,
+      "toolbarCursor": true,
+      "visibleAll": true,
+      "balanced": true,
+      "zoom100": true,
+      "summaryEvents": true,
+      "summaryAgents": true,
+      "memoryActions": true,
+      "blockedZero": true,
+      "errorsZero": true,
+      "socialMetadata": true,
+      "interventionMetadata": true
+    },
+    "interaction": {
+      "expandedPressed": true,
+      "zoomChangedTo105": true,
+      "bubblesPressedAfterToggle": "false",
+      "edgesPressedAfterToggle": "false",
+      "criticalFilterVisibleCount": true,
+      "nextChangedCursor": true,
+      "playChangedState": true
+    },
+    "assetResponses": {
+      "/maps/town-v1-preview.png": 200,
+      "/tilesets/agent-town-v1.png": 200,
+      "/sprites/agent-roles-v1.png": 200,
+      "/sprites/buildings-v1.png": 200,
+      "/maps/town-v1.tiled.json": 200
+    },
+    "pageErrors": [],
+    "relevantConsoleIssues": [],
+    "gpuWarningCount": 4
+  },
+  "mobile": {
+    "top": {
+      "title": "Agent Town",
+      "horizontalOverflow": 0,
+      "canvasCount": 1,
+      "canvasRects": [
+        {
+          "x": 9,
+          "y": 1678,
+          "width": 372,
+          "height": 322
+        }
+      ],
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "devicePixelRatio": 2
+      },
+      "socialLoaded": true
+    },
+    "map": {
+      "horizontalOverflow": 0,
+      "canvasCount": 1,
+      "canvasRects": [
+        {
+          "x": 9,
+          "y": 261,
+          "width": 372,
+          "height": 322
+        }
+      ]
+    }
+  },
+  "consoleSummary": {
+    "totalMessages": 9,
+    "relevantConsoleIssuesCount": 0,
+    "pageErrorCount": 0,
+    "gpuWarningCount": 4
+  }
+}

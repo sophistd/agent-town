@@ -1,0 +1,49 @@
+{
+  "date": "2026-07-04",
+  "desktop": {
+    "social": {
+      "present": true,
+      "width": 773.0625,
+      "height": 669,
+      "nonblank": true,
+      "sampleCount": 576
+    },
+    "routine": {
+      "present": true,
+      "width": 773.0625,
+      "height": 669,
+      "nonblank": true,
+      "sampleCount": 576
+    },
+    "llm": {
+      "present": true,
+      "width": 773.0625,
+      "height": 669,
+      "nonblank": true,
+      "sampleCount": 576
+    }
+  },
+  "mobile": {
+    "social": {
+      "present": true,
+      "width": 371.984375,
+      "height": 321.921875,
+      "nonblank": true,
+      "sampleCount": 576
+    },
+    "routine": {
+      "present": true,
+      "width": 371.984375,
+      "height": 321.921875,
+      "nonblank": true,
+      "sampleCount": 576
+    },
+    "llm": {
+      "present": true,
+      "width": 371.984375,
+      "height": 321.921875,
+      "nonblank": true,
+      "sampleCount": 576
+    }
+  }
+}

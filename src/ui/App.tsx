@@ -7,19 +7,43 @@ import {
 } from "react";
 
 import { parseNativeJsonl } from "../adapters/jsonlAdapter";
+import { buildAdaptiveRoutinePlanResult } from "../adapters/adaptiveRoutineAdapter";
 import type { AdapterQuarantinedEvent, AdapterResult, AdapterWarning } from "../adapters/types";
+import { callProviderLoopHttp } from "../adapters/providerLoopHttpAdapter";
 import {
   connectWebSocketIngest,
   parseWebSocketMessages,
   type WebSocketIngestConnection,
 } from "../adapters/websocketAdapter";
+import {
+  buildAgentAddressableMemoryPlanResult,
+  buildPersistentMemoryRecallResult,
+} from "../adapters/persistentMemoryAdapter";
+import { buildDeterministicLlmPlannerResult } from "../adapters/llmPlannerAdapter";
+import { parseNaturalLanguageIntervention } from "../adapters/interventionAdapter";
+import {
+  mockSmallvilleCognitiveRun,
+  mockSmallvilleRoutineRun,
+  mockSmallvilleSocialRun,
+} from "../events/generativeRuntime";
 import { mockFailureRun } from "../events/mockFailureRun";
 import { mockEvents } from "../events/mockEvents";
+import {
+  extractPersistentMemoryRecords,
+  mergePersistentMemoryRecords,
+  type PersistentMemoryRecord,
+} from "../events/persistentMemory";
+import { mockSmallvilleDayRun } from "../events/mockSmallvilleDayRun";
 import { replay } from "../events/reducer";
 import { selectCurrentEvent } from "../events/selectors";
 import type { AgentEvent } from "../events/types";
 import { DEFAULT_TOWN_PROJECTION_SETTINGS } from "../game/projectionSettings";
 import { advancePlayback, setPlaybackCursor, usePlayback } from "../state/playbackStore";
+import {
+  loadPersistentMemoryRecords,
+  savePersistentMemoryRecords,
+  type StorageLike,
+} from "../state/persistentMemoryStore";
 import { selectAgent, selectEvent, useSelection } from "../state/selectionStore";
 import { DetailPanel } from "./DetailPanel";
 import { ImportPanel, type ImportPanelStatus, type ImportSourceKind } from "./ImportPanel";
@@ -29,6 +53,7 @@ import {
   EventFilterPanel,
   ProjectionControls,
 } from "./ProjectionControls";
+import { RelationshipGraphPanel } from "./RelationshipGraphPanel";
 import { RunSummary } from "./RunSummary";
 import { Timeline } from "./Timeline";
 import { TownCanvas } from "./TownCanvas";
@@ -39,6 +64,7 @@ import {
 } from "./projectionFilters";
 
 const DEFAULT_WEBSOCKET_URL = "ws://localhost:8765/events";
+const DEFAULT_PROVIDER_LOOP_HTTP_URL = "http://127.0.0.1:8787/provider-loop";
 
 const jsonlSampleEvents = mockEvents.slice(0, 3).map((event) => ({
   ...event,
@@ -53,6 +79,9 @@ const jsonlSampleEvents = mockEvents.slice(0, 3).map((event) => ({
 })) satisfies AgentEvent[];
 
 const INITIAL_JSONL_INPUT = jsonlSampleEvents.map((event) => JSON.stringify(event)).join("\n");
+
+const INITIAL_INTERVENTION_PROMPT =
+  "Move the Valentine's gathering to the library reading nook and ask Mei to preserve the memory.";
 
 const websocketSampleMessages = [
   JSON.stringify({
@@ -85,6 +114,38 @@ const mockStatus = {
   level: "idle",
   message: "Mock failure run loaded.",
 } satisfies ImportPanelStatus;
+
+const smallvilleDayStatus = {
+  level: "ok",
+  message: "Town day run loaded.",
+} satisfies ImportPanelStatus;
+
+const cognitiveRunStatus = {
+  level: "ok",
+  message: "Cognitive loop run loaded.",
+} satisfies ImportPanelStatus;
+
+const socialRunStatus = {
+  level: "ok",
+  message: "Social diffusion run loaded.",
+} satisfies ImportPanelStatus;
+
+const routineRunStatus = {
+  level: "ok",
+  message: "Routine day run loaded.",
+} satisfies ImportPanelStatus;
+
+function getBrowserMemoryStorage(): StorageLike | undefined {
+  if (typeof window === "undefined") {
+    return undefined;
+  }
+
+  try {
+    return window.localStorage;
+  } catch {
+    return undefined;
+  }
+}
 
 function HeaderMetric({
   label,
@@ -149,15 +210,22 @@ export function App() {
     DEFAULT_EVENT_TYPE_FILTERS,
   );
   const [importStatus, setImportStatus] = useState<ImportPanelStatus>(mockStatus);
+  const [isProviderLoopLoading, setIsProviderLoopLoading] = useState(false);
   const [projectionSettings, setProjectionSettings] = useState(
     DEFAULT_TOWN_PROJECTION_SETTINGS,
   );
+  const [persistentMemoryRecords, setPersistentMemoryRecords] = useState<
+    readonly PersistentMemoryRecord[]
+  >(() => loadPersistentMemoryRecords(getBrowserMemoryStorage()).records);
   const [warnings, setWarnings] = useState<readonly AdapterWarning[]>([]);
   const [quarantinedEvents, setQuarantinedEvents] = useState<
     readonly AdapterQuarantinedEvent[]
   >([]);
   const eventsRef = useRef<readonly AgentEvent[]>(mockFailureRun);
   const activeSourceRef = useRef<ImportSourceKind>("mock");
+  const persistentMemoryRecordsRef = useRef<readonly PersistentMemoryRecord[]>(
+    persistentMemoryRecords,
+  );
   const websocketConnectionRef = useRef<WebSocketIngestConnection | null>(null);
   const currentState = useMemo(() => {
     const replayState = replay(events, playback.cursor);
@@ -197,6 +265,30 @@ export function App() {
       setWarnings(nextWarnings);
       setQuarantinedEvents(nextQuarantinedEvents);
       setPlaybackCursor(0, nextEvents.length);
+
+      if (source !== "memory" && source !== "memory-plan" && source !== "llm-plan") {
+        const savedAt = new Date().toISOString();
+        const incomingMemoryRecords = extractPersistentMemoryRecords(nextEvents, savedAt);
+
+        if (incomingMemoryRecords.length > 0) {
+          const nextMemoryRecords = mergePersistentMemoryRecords(
+            persistentMemoryRecordsRef.current,
+            incomingMemoryRecords,
+          );
+          const saveWarnings = savePersistentMemoryRecords(
+            getBrowserMemoryStorage(),
+            nextMemoryRecords,
+            savedAt,
+          );
+
+          persistentMemoryRecordsRef.current = nextMemoryRecords;
+          setPersistentMemoryRecords(nextMemoryRecords);
+
+          if (saveWarnings.length > 0) {
+            setWarnings([...nextWarnings, ...saveWarnings]);
+          }
+        }
+      }
 
       const firstEvent = nextEvents[0];
       if (firstEvent !== undefined) {
@@ -279,6 +371,37 @@ export function App() {
     commitEventSource("mock", mockFailureRun, mockStatus);
   }, [commitEventSource, disconnectWebSocket]);
 
+  const loadSmallvilleDay = useCallback(() => {
+    disconnectWebSocket();
+    commitEventSource("smallville", mockSmallvilleDayRun, smallvilleDayStatus);
+  }, [commitEventSource, disconnectWebSocket]);
+
+  const loadCognitiveRun = useCallback(() => {
+    disconnectWebSocket();
+    commitEventSource("cognitive", mockSmallvilleCognitiveRun, cognitiveRunStatus);
+  }, [commitEventSource, disconnectWebSocket]);
+
+  const loadSocialRun = useCallback(() => {
+    disconnectWebSocket();
+    commitEventSource("social", mockSmallvilleSocialRun, socialRunStatus);
+  }, [commitEventSource, disconnectWebSocket]);
+
+  const loadRoutineRun = useCallback(() => {
+    disconnectWebSocket();
+    commitEventSource("routine", mockSmallvilleRoutineRun, routineRunStatus);
+  }, [commitEventSource, disconnectWebSocket]);
+
+  const loadAdaptiveRoutineRun = useCallback(() => {
+    disconnectWebSocket();
+    applyAdapterResult(
+      "adaptive-routine",
+      buildAdaptiveRoutinePlanResult({
+        previousEvents: eventsRef.current,
+      }),
+      "Adaptive routine plan",
+    );
+  }, [applyAdapterResult, disconnectWebSocket]);
+
   const importJsonl = useCallback(
     (input: string) => {
       disconnectWebSocket();
@@ -286,6 +409,54 @@ export function App() {
     },
     [applyAdapterResult, disconnectWebSocket],
   );
+
+  const importIntervention = useCallback(
+    (prompt: string) => {
+      disconnectWebSocket();
+      applyAdapterResult(
+        "intervention",
+        parseNaturalLanguageIntervention({
+          prompt,
+          previousEvents: eventsRef.current,
+        }),
+        "Intervention import",
+      );
+    },
+    [applyAdapterResult, disconnectWebSocket],
+  );
+
+  const loadPersistentMemory = useCallback(() => {
+    disconnectWebSocket();
+    applyAdapterResult(
+      "memory",
+      buildPersistentMemoryRecallResult(persistentMemoryRecordsRef.current),
+      "Persistent memory recall",
+    );
+  }, [applyAdapterResult, disconnectWebSocket]);
+
+  const loadAgentMemoryPlan = useCallback(() => {
+    disconnectWebSocket();
+    applyAdapterResult(
+      "memory-plan",
+      buildAgentAddressableMemoryPlanResult({
+        previousEvents: eventsRef.current,
+        records: persistentMemoryRecordsRef.current,
+      }),
+      "Agent-addressable memory plan",
+    );
+  }, [applyAdapterResult, disconnectWebSocket]);
+
+  const loadLlmPlannerRun = useCallback(() => {
+    disconnectWebSocket();
+    applyAdapterResult(
+      "llm-plan",
+      buildDeterministicLlmPlannerResult({
+        previousEvents: eventsRef.current,
+        records: persistentMemoryRecordsRef.current,
+      }),
+      "LLM planner contract",
+    );
+  }, [applyAdapterResult, disconnectWebSocket]);
 
   const loadWebSocketSample = useCallback(() => {
     disconnectWebSocket();
@@ -317,6 +488,41 @@ export function App() {
       });
     },
     [appendWebSocketResult, disconnectWebSocket],
+  );
+
+  const runProviderLoopHttp = useCallback(
+    async (url: string) => {
+      disconnectWebSocket();
+
+      if (url.trim().length === 0) {
+        setImportStatus({ level: "error", message: "Provider HTTP URL is empty." });
+        return;
+      }
+
+      setIsProviderLoopLoading(true);
+      setImportStatus({
+        level: "idle",
+        message: "Provider HTTP request running.",
+      });
+
+      try {
+        const result = await callProviderLoopHttp({
+          events: eventsRef.current,
+          maxAgents: 3,
+          maxMemoryRecords: 12,
+          url: url.trim(),
+        });
+
+        applyAdapterResult(
+          "provider-loop-http",
+          result,
+          "Provider HTTP loop",
+        );
+      } finally {
+        setIsProviderLoopLoading(false);
+      }
+    },
+    [applyAdapterResult, disconnectWebSocket],
   );
 
   const jumpToEvent = useCallback((event: AgentEvent) => {
@@ -379,12 +585,28 @@ export function App() {
           <ImportPanel
             activeSource={activeSource}
             eventCount={events.length}
+            initialInterventionPrompt={INITIAL_INTERVENTION_PROMPT}
             initialJsonlInput={INITIAL_JSONL_INPUT}
+            isProviderLoopLoading={isProviderLoopLoading}
             onConnectWebSocket={connectWebSocket}
             onDisconnectWebSocket={disconnectWebSocket}
+            onImportIntervention={importIntervention}
             onImportJsonl={importJsonl}
+            onLoadCognitiveRun={loadCognitiveRun}
+            onLoadAgentMemoryPlan={loadAgentMemoryPlan}
+            onLoadAdaptiveRoutineRun={loadAdaptiveRoutineRun}
+            onLoadLlmPlannerRun={loadLlmPlannerRun}
+            onLoadPersistentMemory={loadPersistentMemory}
             onLoadMock={loadMock}
+            onLoadRoutineRun={loadRoutineRun}
+            onLoadSocialRun={loadSocialRun}
+            onLoadSmallvilleDay={loadSmallvilleDay}
             onLoadWebSocketSample={loadWebSocketSample}
+            onRunProviderLoopHttp={(url) => {
+              void runProviderLoopHttp(url);
+            }}
+            persistentMemoryCount={persistentMemoryRecords.length}
+            providerLoopHttpUrl={DEFAULT_PROVIDER_LOOP_HTTP_URL}
             quarantinedEvents={quarantinedEvents}
             status={importStatus}
             warnings={warnings}
@@ -419,6 +641,12 @@ export function App() {
           <RunSummary
             events={events}
             onJumpToEvent={jumpToEvent}
+            worldState={summaryState}
+          />
+          <RelationshipGraphPanel
+            events={events}
+            onJumpToEvent={jumpToEvent}
+            selectedAgentId={selection.selectedAgentId}
             worldState={summaryState}
           />
           <DetailPanel
